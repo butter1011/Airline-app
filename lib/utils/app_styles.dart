@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class AppStyles {
   static Color mainButtonColor = const Color(0xFF3FEA9C);
   static TextStyle mainTextStyle = GoogleFonts.getFont(
-    "Space Grotesk",
+    "Schibsted Grotesk",
     fontSize: 16,
-    fontWeight: FontWeight.w900,
+    fontWeight: FontWeight.bold,
   );
   static BoxDecoration avatarDecoration = BoxDecoration(
       shape: BoxShape.circle,
