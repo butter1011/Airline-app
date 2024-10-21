@@ -1,3 +1,16 @@
-The Flight and Airport Review Platform is designed to deliver a seamless, automated review experience for users, removing any need for manual input of flight details. The app will be built using Flutter for cross-platform compatibility (iOS and Android) and will leverage MongoDB for data storage. Key integrations include Apple Wallet, Google Wallet, and the OAG Flight Info API to automatically verify flight details and eliminate the need for users to input any flight information manually.
+# airline_app
 
-The platform will be structured as a bolt-on module for existing airline apps, ensuring compatibility with current systems and providing a smooth integration for airlines. The goal is to offer a frictionless experience where all flight and review information is extracted and verified automatically, minimizing user effort.
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
