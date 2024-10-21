@@ -3,11 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   static Color mainButtonColor = const Color(0xFF3FEA9C);
-  static TextStyle mainTextStyle = GoogleFonts.getFont(
-    "Schibsted Grotesk",
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle mainTextStyle = GoogleFonts.getFont("Schibsted Grotesk",
+      fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.5);
+  static TextStyle itemButtonTextStyle = GoogleFonts.getFont(
+      "Schibsted Grotesk",
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -0.5);
   static BoxDecoration avatarDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color
