@@ -10,9 +10,15 @@ class AppStyles {
       fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.5);
   static TextStyle itemButtonTextStyle = GoogleFonts.getFont(
       "Schibsted Grotesk",
+      color: Colors.black,
       fontSize: 14,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w800,
       letterSpacing: -0.5);
+  static TextStyle normalTextStyle = GoogleFonts.getFont("Schibsted Grotesk",
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: -0.5,
+      color: Colors.black.withOpacity(0.6));
   static TextStyle titleTextStyle = GoogleFonts.getFont("Schibsted Grotesk",
       fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.5);
   static TextStyle subtitleTextStyle = GoogleFonts.getFont("Schibsted Grotesk",

@@ -3,6 +3,7 @@ import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailAirport extends StatefulWidget {
   const DetailAirport({super.key});
@@ -205,7 +206,56 @@ class _DetailAirportState extends State<DetailAirport> {
                   ],
                 ),
               ),
-              CategoryReviews()
+              CategoryReviews(),
+              Container(
+                decoration: BoxDecoration(
+                  // color: Colors.red,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.black.withOpacity(0.8),
+                      width: 2,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  child: Container(
+                    // Diameter of the circular avatar
+                    height: 56, // Diameter of the circular avatar
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppStyles.mainButtonColor, // Background color
+                      border: Border.all(
+                          width: 2, color: Colors.black), // Border color
+                      boxShadow: [
+                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Leave a review",
+                              style: GoogleFonts.getFont("Schibsted Grotesk",
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.3),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Image.asset('assets/icons/edit.png')
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ]),
           )
         ],

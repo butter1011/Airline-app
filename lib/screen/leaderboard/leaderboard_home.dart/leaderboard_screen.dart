@@ -1,7 +1,7 @@
 import 'package:airline_app/screen/leaderboard/widgets/airport_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/itemButton.dart';
-import 'package:airline_app/utils/airportList_json.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-        children: [
+      children: [
         SingleChildScrollView(
           child: Column(
             children: [
@@ -142,15 +142,15 @@ class LeaderboardScreen extends StatelessWidget {
                 thickness: 5,
                 color: Colors.black,
               ),
-              Column(
-                children: airportList.map((singleAirline) {
-                  return AirportCard(
-                    title: singleAirline["title"],
-                    imagePath: singleAirline["imagePath"],
-                    reviewStatus: singleAirline["reviewStatus"],
-                  );
-                }).toList(),
-              )
+              // Column(
+              //   children: airportList.map((singleAirline) {
+              //     return AirportCard(
+              //       title: singleAirline["title"],
+              //       imagePath: singleAirline["imagePath"],
+              //       reviewStatus: singleAirline["reviewStatus"],
+              //     );
+              //   }).toList(),
+              // )
             ],
           ),
         ),
