@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/leaderboard_detail/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -130,12 +131,81 @@ class _DetailAirportState extends State<DetailAirport> {
                             icon: Image.asset('assets/icons/switch.png'))
                       ],
                     ),
-                    DetailButton(
-                        text: "Seat Comfort 10/10",
-                        color: AppStyles.mainButtonColor),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        DetailButton(
+                          text: "Seat Comfort",
+                          color: AppStyles.mainButtonColor,
+                          score: 10,
+                        ),
+                        const DetailButton(
+                          text: "Cleanliness",
+                          color: Colors.white,
+                          score: 9,
+                        ),
+                      ],
+                    ),
+                    const DetailButton(
+                      text: "Booking Experience",
+                      color: Colors.white,
+                      score: 9,
+                    ),
+                    const DetailButton(
+                      text: "Additional Services",
+                      color: Colors.white,
+                      score: 9,
+                    ),
+                    const DetailButton(
+                      text: "Lounge Access",
+                      color: Colors.white,
+                      score: 8,
+                    ),
+                    const DetailButton(
+                      text: "Boarding Process",
+                      color: Colors.white,
+                      score: 8,
+                    ),
+                    const DetailButton(
+                      text: "Food & Beverage",
+                      color: Colors.white,
+                      score: 8,
+                    ),
+                    const DetailButton(
+                      text: "Cabin Crew Service  ",
+                      color: Colors.white,
+                      score: 4,
+                    ),
+                    const DetailButton(
+                      text: "Wi-Fi",
+                      color: Colors.white,
+                      score: 3,
+                    ),
+                    const DetailButton(
+                      text: "In-Flight Entertainment",
+                      color: Colors.white,
+                      score: 2,
+                    ),
+                    SizedBox(
+                      height: 19,
+                    ),
+                    Center(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Show less categories",
+                            style: AppStyles.subtitleTextStyle
+                                .copyWith(fontSize: 15)),
+                        Icon(Icons.expand_less),
+                      ],
+                    ))
                   ],
                 ),
-              )
+              ),
+              CategoryReviews()
             ]),
           )
         ],

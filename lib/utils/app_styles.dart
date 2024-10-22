@@ -16,7 +16,7 @@ class AppStyles {
   static TextStyle titleTextStyle = GoogleFonts.getFont("Schibsted Grotesk",
       fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.5);
   static TextStyle subtitleTextStyle = GoogleFonts.getFont("Schibsted Grotesk",
-      fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.5);
+      fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.5);
 
   /// Box style
   static BoxDecoration avatarDecoration = BoxDecoration(
