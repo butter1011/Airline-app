@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
   final double mywidth;
-  final Color mycolor;
+  final Color myColor;
   final String travelname;
   final double myheight;
 
@@ -10,22 +10,38 @@ class Button extends StatelessWidget {
       {Key? key,
       required this.mywidth,
       required this.myheight,
-      required this.mycolor,
+      required this.myColor,
       required this.travelname})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: mycolor,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
-      ),
-      height: myheight,
       width: mywidth,
-      color: mycolor,
+      height: myheight,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Text(
+            '$travelname',
+            style: TextStyle(
+                fontFamily: 'Clash Grotesk',
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        color: myColor,
+        borderRadius: BorderRadius.circular(27),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            offset: Offset(2, 2),
+          )
+        ],
+      ),
     );
   }
 }
