@@ -14,7 +14,7 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-        children: [
+      children: [
         SingleChildScrollView(
           child: Column(
             children: [
