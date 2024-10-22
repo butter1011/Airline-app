@@ -1,5 +1,5 @@
 import 'package:airline_app/screen/leaderboard/widgets/airport_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/itemButton.dart';
 import 'package:airline_app/utils/airportList_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -14,7 +14,7 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      children: [
+        children: [
         SingleChildScrollView(
           child: Column(
             children: [
@@ -108,8 +108,8 @@ class LeaderboardScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Button(text: "Airports", color: Colors.white),
-                        Button(text: "Airline", color: Colors.white),
+                        MainButton(text: "Airports", color: Colors.white),
+                        MainButton(text: "Airline", color: Colors.white),
                         SizedBox(
                           width: 20,
                         ),

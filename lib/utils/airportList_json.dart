@@ -1,7 +1,7 @@
 List<Map<String, dynamic>> airportList = [
   {
     'title': "Abu Dhabi Airport",
-    'imagePath': "assets/images/Abu_Dhabi_Terminal.png",
+    'imagePath': "assets/images/Abu Dhabi.png",
     'reviewStatus': true
   },
   {

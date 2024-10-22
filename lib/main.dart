@@ -1,4 +1,5 @@
-import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
+import 'package:airline_app/screen/leaderboard/leaderboard_detail/detail_airport.dart';
+import 'package:airline_app/screen/leaderboard/leaderboard_home.dart/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         AppRoutes.leaderboarderscreen: (context) => LeaderboardScreen(),
-        AppRoutes.profilescreen: (context) => ProfileScreen()
+        AppRoutes.profilescreen: (context) => ProfileScreen(),
+        AppRoutes.detailairport: (context) => DetailAirport(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Airline App',

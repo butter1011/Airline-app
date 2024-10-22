@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Button extends StatelessWidget {
-  const Button({super.key, required this.text, required this.color});
+class MainButton extends StatelessWidget {
+  const MainButton({super.key, required this.text, required this.color});
 
   final String text;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {},
       child: Container(
         // Diameter of the circular avatar
