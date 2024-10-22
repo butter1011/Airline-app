@@ -19,138 +19,52 @@ class LeaderboardScreen extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(22),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.profilescreen,
-                            );
-                          },
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            // Add padding for a border effect
-                            decoration: BoxDecoration(
-                                color: Colors.white, // Border color
-                                // borderRadius: BorderRadius.circular(25),
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(width: 2, color: Colors.black),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Colors.black, offset: Offset(2, 2))
-                                ]),
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage:
-                                  AssetImage('assets/images/avatar1.png'),
-                            ),
+                  padding: const EdgeInsets.only(top: 8, left: 24, right: 24),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MainButton(text: "All", color: AppStyles.mainButtonColor),
+                      const MainButton(text: "Airports", color: Colors.white),
+                      const MainButton(text: "Airline", color: Colors.white),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: 50, // Diameter of the circular avatar
+                        height: 50, // Diameter of the circular avatar
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white, // Background color
+                          border: Border.all(
+                              width: 2, color: Colors.black), // Border color
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/icons/setting.png', // Local image asset
+                            // fit: BoxFit.cover,
                           ),
                         ),
-                        Container(
-                          width: 50, // Diameter of the circular avatar
-                          height: 50, // Diameter of the circular avatar
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/icons/notification.png', // Local image asset
-                              // fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          // Diameter of the circular avatar
-                          height: 48, // Diameter of the circular avatar
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color:
-                                AppStyles.mainButtonColor, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Center(
-                              child: Text(
-                                "All",
-                                style: GoogleFonts.getFont("Schibsted Grotesk",
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1),
-                              ),
-                            ),
-                          ),
-                        ),
-                        MainButton(text: "Airports", color: Colors.white),
-                        MainButton(text: "Airline", color: Colors.white),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 50, // Diameter of the circular avatar
-                          height: 50, // Diameter of the circular avatar
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/icons/setting.png', // Local image asset
-                              // fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Divider(
+                      ),
+                    ],
+                  )),
+              const Divider(
                 thickness: 5,
                 color: Colors.black,
               ),
-              // Column(
-              //   children: airportList.map((singleAirline) {
-              //     return AirportCard(
-              //       title: singleAirline["title"],
-              //       imagePath: singleAirline["imagePath"],
-              //       reviewStatus: singleAirline["reviewStatus"],
-              //     );
-              //   }).toList(),
-              // )
+              Column(
+                children: airportList.map((singleAirline) {
+                  int index = airportList.indexOf(singleAirline);
+                  return AirportCard(
+                    title: singleAirline["country"],
+                    imagePath: singleAirline["imagePath"],
+                    reviewStatus: singleAirline["reviewStatus"],
+                    index: index,
+                  );
+                }).toList(),
+              )
             ],
           ),
         ),

@@ -8,10 +8,12 @@ class AirportCard extends StatefulWidget {
       {super.key,
       required this.title,
       required this.imagePath,
-      required this.reviewStatus});
+      required this.reviewStatus,
+      required this.index});
   final String title;
   final String imagePath;
   final bool reviewStatus;
+  final int index;
 
   @override
   State<AirportCard> createState() => _AirportCardState();
@@ -26,7 +28,7 @@ class _AirportCardState extends State<AirportCard> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detailairport);
+          Navigator.pushNamed(context, AppRoutes.detailairport, arguments: {'index':widget.index});
         },
         child: Column(
           children: [

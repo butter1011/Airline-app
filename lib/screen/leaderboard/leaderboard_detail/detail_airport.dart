@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/leaderboard/leaderboard_detail/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,8 +15,23 @@ class DetailAirport extends StatefulWidget {
 
 class _DetailAirportState extends State<DetailAirport> {
   bool _clickedBoolmark = false;
+  late int airportIndex = 0;
+
+  @override
+  void didChangeDependencies() {
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      var args = ModalRoute.of(context)!.settings.arguments as Map;
+      print(" Passed index ==========> ${args['index']}");
+      airportIndex = args['index'];
+      print("🏅🏅🏅  ===> ${airportList[0]}");
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
+    List reviews = airportList[airportIndex]['reviews']['Seat Comfort'];
+    print("😉😉😉😉😉😉 ${reviews[1]}");
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -28,7 +44,7 @@ class _DetailAirportState extends State<DetailAirport> {
                   Navigator.pop(context);
                 },
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -43,7 +59,7 @@ class _DetailAirportState extends State<DetailAirport> {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      'assets/images/Abu Dhabi.png',
+                      airportList[airportIndex]['imagePath'],
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -60,7 +76,7 @@ class _DetailAirportState extends State<DetailAirport> {
                             Colors
                                 .transparent, // Gradient color from 30px downwards
                           ],
-                          stops: [
+                          stops: const [
                             0.1,
                             1
                           ], // Adjust stops to control where the gradient starts and ends
@@ -114,7 +130,7 @@ class _DetailAirportState extends State<DetailAirport> {
                       height: 9,
                     ),
                     Text(
-                      'Abu Dhabi Airport',
+                      airportList[airportIndex]['country'],
                       style: AppStyles.titleTextStyle,
                     ),
                     SizedBox(
@@ -206,7 +222,15 @@ class _DetailAirportState extends State<DetailAirport> {
                   ],
                 ),
               ),
-              CategoryReviews(),
+              Column(
+                children: reviews.map((singleReview) {
+                  print("🧨🧨🧨🧨 $singleReview");
+                  return CategoryReviews(
+                    review: singleReview,
+                  );
+                }).toList(),
+              ),
+              // CategoryReviews(review: airportList[airportIndex]['review']),
               Container(
                 decoration: BoxDecoration(
                   // color: Colors.red,

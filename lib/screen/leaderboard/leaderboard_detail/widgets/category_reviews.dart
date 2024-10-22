@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryReviews extends StatelessWidget {
-  const CategoryReviews({super.key});
+  const CategoryReviews({super.key, required this.review});
+
+  final Map review;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,8 @@ class CategoryReviews extends StatelessWidget {
                 decoration: AppStyles.avatarDecoration,
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/images/avatar1.png'),
+                  backgroundImage:
+                      AssetImage('assets/images/${review['Avatar']}'),
                 ),
               ),
               SizedBox(
@@ -42,11 +45,11 @@ class CategoryReviews extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Benedict Cumberbatch',
+                    review['Name'],
                     style: AppStyles.itemButtonTextStyle,
                   ),
                   Text(
-                    'Rated 9/10 on 16.09.24',
+                    review['Date'],
                     style: AppStyles.normalTextStyle,
                   )
                 ],
@@ -60,22 +63,24 @@ class CategoryReviews extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          ClipRRect(
-            borderRadius:
-                BorderRadius.circular(20.0), // Set your desired border radius
-            child: Container(
-              height: 260.0, // Set the height to 300 pixels
-              child: Image.asset(
-                'assets/images/Ethiopian/Ethiopian.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          review['Images'] != null && review['Images'].isNotEmpty
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      20.0), // Set your desired border radius
+                  child: Container(
+                    height: 260.0, // Set the height to 300 pixels
+                    child: Image.asset(
+                      'assets/images/${review['Images'][0]}',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              : Text(""),
           SizedBox(
             height: 11,
           ),
           Text(
-            "Loved the adjustable headrest and soft cushioning. Made the trip very relaxing",
+            review['Content'],
             style: AppStyles.normalTextStyle,
           ),
           SizedBox(
@@ -109,6 +114,15 @@ class CategoryReviews extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ReviewCard extends StatelessWidget {
+  const ReviewCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
 
