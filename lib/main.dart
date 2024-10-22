@@ -1,7 +1,6 @@
 import 'package:airline_app/screen/logIn/SignUpName.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/widget/Button.dart';
-=======
 import 'package:airline_app/screen/leaderboard/leaderboard_detail/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_home.dart/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
@@ -43,14 +42,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Login(),
       routes: {
-        AppRoutes.leaderboarderscreen: (context) => LeaderboardScreen(),
+        AppRoutes.loginscreen: (context) => Login(),
+        AppRoutes.leaderboardscreen: (context) => LeaderboardScreen(),
         AppRoutes.profilescreen: (context) => ProfileScreen(),
         AppRoutes.detailairport: (context) => DetailAirport(),
       },
       debugShowCheckedModeBanner: false,
-      title: 'Airline App',
     );
   }
 }

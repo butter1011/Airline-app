@@ -24,12 +24,16 @@ class DetailButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Center(
-              child: Text(
-                text,
-                style: GoogleFonts.getFont("Familjen Grotesk",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.7),
+              child: Row(
+                children: [
+                  Center(child: Image.asset('assets/icons/rocket.png')),
+                  Text(text,
+                      style: GoogleFonts.getFont("Familjen Grotesk",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.7),
+                      textAlign: TextAlign.center),
+                ],
               ),
             ),
           ),
