@@ -1,7 +1,7 @@
 List<Map<String, dynamic>> airportList = [
   {
     'country': "Abu Dhabi Airport",
-    'logo':'logo_abudhabi.png',
+    'logo': 'logo_abudhabi.png',
     'imagePath': "assets/images/Abu Dhabi.png",
     'reviewStatus': true,
     'reviews': {
@@ -45,7 +45,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Hawaiian Airlines",
-    'logo':'logo_hawaiian.png',
+    'logo': 'logo_hawaiian.png',
     'imagePath': "assets/images/Hawaiian.png",
     'reviewStatus': false,
     'reviews': {
@@ -89,7 +89,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Japan Airlines",
-    'logo':'logo_japan.png',
+    'logo': 'logo_japan.png',
     'imagePath': "assets/images/Japan.png",
     'reviewStatus': true,
     'reviews': {
@@ -133,7 +133,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Ethiopian Airlines",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Ethiopian.png",
     'reviewStatus': false,
     'reviews': {
@@ -177,7 +177,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Fiji Airways",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Fiji.png",
     'reviewStatus': false,
     'reviews': {
@@ -221,7 +221,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Air Canada",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Air Canada.png",
     'reviewStatus': false,
     'reviews': {
@@ -265,7 +265,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Azerbaijan Airlines",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Azerbaijan.png",
     'reviewStatus': false,
     'reviews': {
@@ -309,7 +309,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Finnair",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Finnair.png",
     'reviewStatus': false,
     'reviews': {
@@ -353,7 +353,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "SriLankan Airlines",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/SriLankan.png",
     'reviewStatus': false,
     'reviews': {
@@ -397,7 +397,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Singapore Airlines",
-    'logo':'',
+    'logo': '',
     'imagePath': "assets/images/Singapore.png",
     'reviewStatus': false,
     'reviews': {
@@ -438,5 +438,38 @@ List<Map<String, dynamic>> airportList = [
       'Cleanliness': {},
       'Booking Experience': {}
     }
+  },
+];
+
+List<Map<String, dynamic>> trendingFeedbackList = [
+  {
+    'Name': 'Benedict Cumberbatch',
+    'Avatar': 'avatar_1.png',
+    'Date': '16.09.24',
+    'Used Airport': 'Abu Dhabi Airport',
+    'Path': 'Tokyo -> Bucharest',
+    'Content':
+        'Loved the adjustable headrest, soft  cushioning. Made the trip very relaxing.',
+    'Image': 'review_abudhabi_1.png'
+  },
+  {
+    'Name': 'Andy Cumberbatch',
+    'Avatar': 'avatar_2.png',
+    'Date': '16.08.24',
+    'Used Airport': 'Abu Dhabi Airport',
+    'Path': 'Tokyo -> Bucharest',
+    'Content':
+        'Liked the adjustable headrest, soft cushioning. Made the trip very relaxing.',
+    'Image': 'review_ethiopian_2.png'
+  },
+  {
+    'Name': 'Amanda Russel',
+    'Avatar': 'avatar_3.png',
+    'Date': '16.07.24',
+    'Used Airport': 'Abu Dhabi Airport',
+    'Path': 'Tokyo -> Bucharest',
+    'Content':
+        'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',
+    'Image': 'review_turkish_1.png'
   },
 ];

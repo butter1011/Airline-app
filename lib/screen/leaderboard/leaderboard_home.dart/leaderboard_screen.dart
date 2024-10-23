@@ -1,3 +1,6 @@
+import 'package:airline_app/provider/airportlist_expand_provider.dart';
+import 'package:airline_app/provider/button_expand_provider.dart';
+import 'package:airline_app/screen/leaderboard/leaderboard_home.dart/leaderboard_home_widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
@@ -6,6 +9,7 @@ import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -90,14 +94,13 @@ class LeaderboardScreen extends StatelessWidget {
                           'Filter by category',
                           style: TextStyle(
                             fontFamily: 'Clash Grotesk',
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             fontSize: 15,
                           ),
                         ),
                       ],
                     ),
                   ),
-
                   SingleChildScrollView(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
                     scrollDirection: Axis.horizontal,
@@ -146,7 +149,6 @@ class LeaderboardScreen extends StatelessWidget {
                   SizedBox(
                     height: 14,
                   ),
-
                   Divider(
                     thickness: 5,
                     color: AppStyles.littleBlackColor,
@@ -160,24 +162,82 @@ class LeaderboardScreen extends StatelessWidget {
                           'Trending Airlines & Airports',
                           style: AppStyles.smallTitleTextStyle,
                         ),
-                        Column(
-                          children: airportList.map((singleAirport) {
-                            int index = airportList.indexOf(singleAirport);
-                            return AirportList(
-                                country: singleAirport['country'],
-                                reviewStatus: singleAirport['reviewStatus'],
-                                logo:singleAirport['logo'],
-                                index: index);
-                          }).toList(),
-                        )
+                        AirportListSection(),
+                        SizedBox(
+                          height: 28,
+                        ),
+                        Text(
+                          'Trending Feedback',
+                          style: AppStyles.smallTitleTextStyle,
+                        ),
+                        SizedBox(
+                          height: 17,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              children:
+                                  trendingFeedbackList.map((singleFeedback) {
+                            return FeedbackCard(
+                              singleFeedback: singleFeedback,
+                            );
+                          }).toList()),
+                        ),
                       ],
                     ),
                   )
-
                 ],
               ),
             ),
           ],
         ));
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+class AirportListSection extends ConsumerWidget {
+  const AirportListSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(buttonExpandNotifierProvider);
+    return Column(
+      children: [
+        Column(
+          children: airportList.map((singleAirport) {
+            int index = airportList.indexOf(singleAirport);
+            if (provider || index < 5) {
+              return AirportList(
+                  country: singleAirport['country'],
+                  reviewStatus: singleAirport['reviewStatus'],
+                  logo: singleAirport['logo'],
+                  index: index);
+            }
+            return const SizedBox.shrink();
+          }).toList(),
+        ),
+        Center(
+          child: InkWell(
+            onTap: () {
+              ref
+                  .watch(buttonExpandNotifierProvider.notifier)
+                  .toggleButton(provider);
+              print("✈✈=====>$provider");
+            },
+            child: IntrinsicWidth(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(provider ? "Expand less" : "Expand more",
+                      style:
+                          AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
+                  Icon(provider ? Icons.expand_less : Icons.expand_more),
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

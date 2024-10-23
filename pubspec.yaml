@@ -83,8 +83,12 @@ flutter:
       fonts:
         # - asset: fonts/ClashGrotesk-variable.ttf
         - asset: fonts/ClashGrotesk-Regular.otf
+        - asset: fonts/ClashGrotesk-Light.otf
+        - asset: fonts/ClashGrotesk-Extralight.otf
+        - asset: fonts/ClashGrotesk-Medium.otf
+        - asset: fonts/ClashGrotesk-Semibold.otf
         - asset: fonts/ClashGrotesk-Bold.otf
-          weight: 700
+
   # fonts:
   #   - family: Schyler
   #     fonts:

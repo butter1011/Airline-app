@@ -16,7 +16,7 @@ class AppStyles {
   static TextStyle itemButtonTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle cardTextStyle = const TextStyle(
@@ -35,13 +35,13 @@ class AppStyles {
   static TextStyle titleTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 24,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle subtitleTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 18,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle smallTitleTextStyle = const TextStyle(

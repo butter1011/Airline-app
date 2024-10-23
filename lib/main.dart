@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/media_full_screen/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/SignUpName.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/widget/Button.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.leaderboardscreen: (context) => LeaderboardScreen(),
         AppRoutes.profilescreen: (context) => ProfileScreen(),
         AppRoutes.detailairport: (context) => DetailAirport(),
+        AppRoutes.mediafullscreen: (context) => MediaFullScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
