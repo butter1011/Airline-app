@@ -39,6 +39,7 @@ dependencies:
   riverpod_annotation: ^2.6.1
   riverpod_generator: ^2.6.1
   build_runner: ^2.4.13
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

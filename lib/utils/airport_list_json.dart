@@ -12,7 +12,11 @@ List<Map<String, dynamic>> airportList = [
           'Date': '16.09.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
-          'Images': ['review_abudhabi_1.png']
+          'Images': [
+            'review_abudhabi_1.png',
+            'review_canada_1.png',
+            'review_turkish_1.png'
+          ]
         },
         {
           'Name': 'Andy Cumberbatch',

@@ -57,4 +57,9 @@ class AppStyles {
       color: Colors.white, // Border color
       border: Border.all(width: 2, color: Colors.black),
       boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(2, 2))]);
+  static BoxDecoration slideButtonDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.white, // Border color
+      border: Border.all(width: 2, color: Colors.black),
+      boxShadow: const [BoxShadow(color: Color(0xff181818) , offset: Offset(2, 2))]);
 }
