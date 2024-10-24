@@ -1,9 +1,11 @@
+import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_detail/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DetailAirport extends StatefulWidget {
@@ -15,6 +17,7 @@ class DetailAirport extends StatefulWidget {
 
 class _DetailAirportState extends State<DetailAirport> {
   bool _clickedBoolmark = false;
+  bool isExpanded = false;
   late int airportIndex = 0;
 
   @override
@@ -151,74 +154,7 @@ class _DetailAirportState extends State<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        DetailButton(
-                          text: "Seat Comfort",
-                          color: AppStyles.mainButtonColor,
-                          score: 10,
-                        ),
-                        const DetailButton(
-                          text: "Cleanliness",
-                          color: Colors.white,
-                          score: 9,
-                        ),
-                      ],
-                    ),
-                    const DetailButton(
-                      text: "Booking Experience",
-                      color: Colors.white,
-                      score: 9,
-                    ),
-                    const DetailButton(
-                      text: "Additional Services",
-                      color: Colors.white,
-                      score: 9,
-                    ),
-                    const DetailButton(
-                      text: "Lounge Access",
-                      color: Colors.white,
-                      score: 8,
-                    ),
-                    const DetailButton(
-                      text: "Boarding Process",
-                      color: Colors.white,
-                      score: 8,
-                    ),
-                    const DetailButton(
-                      text: "Food & Beverage",
-                      color: Colors.white,
-                      score: 8,
-                    ),
-                    const DetailButton(
-                      text: "Cabin Crew Service  ",
-                      color: Colors.white,
-                      score: 4,
-                    ),
-                    const DetailButton(
-                      text: "Wi-Fi",
-                      color: Colors.white,
-                      score: 3,
-                    ),
-                    const DetailButton(
-                      text: "In-Flight Entertainment",
-                      color: Colors.white,
-                      score: 2,
-                    ),
-                    SizedBox(
-                      height: 19,
-                    ),
-                    Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Show less categories",
-                            style: AppStyles.subtitleTextStyle
-                                .copyWith(fontSize: 15)),
-                        Icon(Icons.expand_less),
-                      ],
-                    ))
+                    ExpandButtons(),
                   ],
                 ),
               ),
@@ -284,6 +220,112 @@ class _DetailAirportState extends State<DetailAirport> {
           )
         ],
       ),
+    );
+  }
+}
+
+class ExpandButtons extends ConsumerWidget {
+  const ExpandButtons({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(buttonExpandNotifierProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Visibility(
+          visible: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DetailButton(
+                    text: "Seat Comfort",
+                    color: AppStyles.mainButtonColor,
+                    score: 10,
+                  ),
+                  const DetailButton(
+                    text: "Cleanliness",
+                    color: Colors.white,
+                    score: 9,
+                  ),
+                ],
+              ),
+              const DetailButton(
+                text: "Booking Experience",
+                color: Colors.white,
+                score: 9,
+              ),
+              const DetailButton(
+                text: "Additional Services",
+                color: Colors.white,
+                score: 9,
+              ),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: provider,
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DetailButton(
+                text: "Lounge Access",
+                color: Colors.white,
+                score: 8,
+              ),
+              DetailButton(
+                text: "Boarding Process",
+                color: Colors.white,
+                score: 8,
+              ),
+              DetailButton(
+                text: "Food & Beverage",
+                color: Colors.white,
+                score: 8,
+              ),
+              DetailButton(
+                text: "Cabin Crew Service  ",
+                color: Colors.white,
+                score: 4,
+              ),
+              DetailButton(
+                text: "Wi-Fi",
+                color: Colors.white,
+                score: 3,
+              ),
+              DetailButton(
+                text: "In-Flight Entertainment",
+                color: Colors.white,
+                score: 2,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 19,
+        ),
+        Center(
+            child: InkWell(
+          onTap: () {
+            ref
+                .watch(buttonExpandNotifierProvider.notifier)
+                .toggleButton(provider);
+          },
+          child: IntrinsicWidth(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(provider ? "Show less categories" : "Show more categories",
+                    style: AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
+                Icon(provider ? Icons.expand_less : Icons.expand_more),
+              ],
+            ),
+          ),
+        ))
+      ],
     );
   }
 }

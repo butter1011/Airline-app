@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/media_full_screen/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/SignUpName.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/widget/Button.dart';
@@ -7,9 +8,10 @@ import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,8 +47,9 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.loginscreen: (context) => Login(),
         AppRoutes.leaderboardscreen: (context) => LeaderboardScreen(),
-        AppRoutes.profilescreen: (context) => ProfileScreen(),
         AppRoutes.detailairport: (context) => DetailAirport(),
+        AppRoutes.mediafullscreen: (context) => MediaFullScreen(),
+        AppRoutes.profilescreen: (context) => ProfileScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

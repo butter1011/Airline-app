@@ -27,8 +27,7 @@ class _ReviewStatusState extends State<ReviewStatus> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
-              Text('9/10 from 382 reviews',
-                  style: AppStyles.itemButtonTextStyle),
+              Text('9/10 from 382 reviews', style: AppStyles.cardTextStyle),
               const SizedBox(
                 width: 3,
               ),

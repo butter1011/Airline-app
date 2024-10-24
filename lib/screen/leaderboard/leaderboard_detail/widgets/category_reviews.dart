@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,7 +47,7 @@ class CategoryReviews extends StatelessWidget {
                 children: [
                   Text(
                     review['Name'],
-                    style: AppStyles.itemButtonTextStyle,
+                    style: AppStyles.cardTextStyle,
                   ),
                   Text(
                     review['Date'],
@@ -67,11 +68,19 @@ class CategoryReviews extends StatelessWidget {
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(
                       20.0), // Set your desired border radius
-                  child: Container(
-                    height: 260.0, // Set the height to 300 pixels
-                    child: Image.asset(
-                      'assets/images/${review['Images'][0]}',
-                      fit: BoxFit.cover,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                          arguments: review);
+                    },
+                    child: Container(
+                      height: 260.0,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image:
+                            AssetImage('assets/images/${review['Images'][0]}'),
+                        fit: BoxFit.cover,
+                      )), // Set the height to 300 pixels
                     ),
                   ),
                 )
@@ -101,7 +110,7 @@ class CategoryReviews extends StatelessWidget {
                   ),
                   Text(
                     "9998",
-                    style: AppStyles.itemButtonTextStyle,
+                    style: AppStyles.cardTextStyle,
                   )
                 ],
               )
@@ -114,15 +123,6 @@ class CategoryReviews extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
 
