@@ -7,24 +7,7 @@ class AppStyles {
   static Color littleBlackColor = const Color(0xff181818);
 
   ///Text style
-  static TextStyle mainTextStyle = const TextStyle(
-    fontFamily: 'Clash Grotesk',
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: Colors.black,
-  );
-  static TextStyle itemButtonTextStyle = const TextStyle(
-    fontFamily: 'Clash Grotesk',
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    color: Colors.black,
-  );
-  static TextStyle cardTextStyle = const TextStyle(
-    fontFamily: 'Clash Grotesk',
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    color: Color(0xFF181818),
-  );
+
   static TextStyle normalTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
@@ -32,15 +15,21 @@ class AppStyles {
     color: Colors.black,
   );
 
-  static TextStyle titleTextStyle = const TextStyle(
+  static TextStyle cardTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
-    fontSize: 24,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
-    color: Colors.black,
+    color: Color(0xFF181818),
   );
-  static TextStyle subtitleTextStyle = const TextStyle(
+  static TextStyle textButtonStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF181818),
+  );
+  static TextStyle mainTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 16,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
@@ -49,6 +38,18 @@ class AppStyles {
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: Color(0xFF38433E),
+  );
+  static TextStyle subtitleTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+  static TextStyle titleTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
   );
 
   /// Box style
@@ -61,5 +62,7 @@ class AppStyles {
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border.all(width: 2, color: Colors.black),
-      boxShadow: const [BoxShadow(color: Color(0xff181818) , offset: Offset(2, 2))]);
+      boxShadow: const [
+        BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
+      ]);
 }

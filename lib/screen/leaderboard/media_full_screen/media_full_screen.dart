@@ -137,7 +137,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                       children: [
                         Text(
                           args['Name'],
-                          style: AppStyles.itemButtonTextStyle,
+                          style: AppStyles.cardTextStyle,
                         ),
                         Text(
                           args['Date'],
@@ -177,7 +177,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                         ),
                         Text(
                           "9998",
-                          style: AppStyles.itemButtonTextStyle,
+                          style: AppStyles.cardTextStyle,
                         )
                       ],
                     )

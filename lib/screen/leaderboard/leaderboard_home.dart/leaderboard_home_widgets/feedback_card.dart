@@ -35,7 +35,7 @@ class FeedbackCard extends StatelessWidget {
                   children: [
                     Text(
                       'Benedict Cumberbatch',
-                      style: AppStyles.itemButtonTextStyle,
+                      style: AppStyles.cardTextStyle,
                     ),
                     Text(
                       'Rated 9/10 on ${singleFeedback['Date']}',
@@ -124,7 +124,7 @@ class FeedbackCard extends StatelessWidget {
                     ),
                     Text(
                       "9998",
-                      style: AppStyles.itemButtonTextStyle,
+                      style: AppStyles.cardTextStyle,
                     )
                   ],
                 )

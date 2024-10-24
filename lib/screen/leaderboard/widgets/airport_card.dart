@@ -108,7 +108,7 @@ class _AirportCardState extends State<AirportCard> {
                             child: Row(
                               children: [
                                 Text('9/10 from 382 reviews',
-                                    style: AppStyles.itemButtonTextStyle),
+                                    style: AppStyles.cardTextStyle),
                                 const SizedBox(
                                   width: 3,
                                 ),

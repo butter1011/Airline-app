@@ -47,7 +47,7 @@ class CategoryReviews extends StatelessWidget {
                 children: [
                   Text(
                     review['Name'],
-                    style: AppStyles.itemButtonTextStyle,
+                    style: AppStyles.cardTextStyle,
                   ),
                   Text(
                     review['Date'],
@@ -70,7 +70,8 @@ class CategoryReviews extends StatelessWidget {
                       20.0), // Set your desired border radius
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.mediafullscreen, arguments:review );
+                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                          arguments: review);
                     },
                     child: Container(
                       height: 260.0,
@@ -109,7 +110,7 @@ class CategoryReviews extends StatelessWidget {
                   ),
                   Text(
                     "9998",
-                    style: AppStyles.itemButtonTextStyle,
+                    style: AppStyles.cardTextStyle,
                   )
                 ],
               )

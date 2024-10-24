@@ -18,179 +18,155 @@ class LeaderboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: ListView(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 271,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
-                            boxShadow: [
-                              BoxShadow(
-                                  color: AppStyles.littleBlackColor,
-                                  offset: const Offset(2, 2))
-                            ],
-                          ),
-                          child: const Center(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                hintStyle: TextStyle(
-                                  fontFamily: 'Clash Grotesk',
-                                  fontSize: 14,
-                                  // color: Color(0xff38433E)
-                                ),
-                                contentPadding: EdgeInsets.all(0),
-                                prefixIcon: Icon(Icons.search),
-                                border:
-                                    InputBorder.none, // Remove the underline
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 40, // Diameter of the circular avatar
-                          height: 40, // Diameter of the circular avatar
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/icons/setting.png', // Local image asset
-                              // fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // This section will always stay at the top
+          SizedBox(
+            height: 44,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 271,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white, // Background color
+                    border: Border.all(
+                        width: 2, color: Colors.black), // Border color
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          offset: Offset(2, 2))
+                    ],
+                  ),
+                  child: const Center(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                            fontFamily: 'Clash Grotesk', fontSize: 14),
+                        contentPadding: EdgeInsets.all(0),
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none, // Remove the underline
+                      ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Filter by category',
-                          style: TextStyle(
-                            fontFamily: 'Clash Grotesk',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
+                ),
+                Container(
+                  width: 40, // Diameter of the circular avatar
+                  height: 40, // Diameter of the circular avatar
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white, // Background color
+                    border: Border.all(
+                        width: 2, color: Colors.black), // Border color
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                    ],
                   ),
-                  SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        MainButton(
-                            text: "All", color: AppStyles.mainButtonColor),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        const MainButton(
-                          text: "Airline",
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        const MainButton(
-                          text: "Airports",
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const MainButton(
-                          text: "Cleanlines",
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const MainButton(
-                          text: "Onboard",
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const MainButton(
-                          text: "Airline",
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
+                  child: ClipOval(
+                    child: Image.asset(
+                        'assets/icons/setting.png'), // Local image asset
                   ),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Divider(
-                    thickness: 5,
-                    color: AppStyles.littleBlackColor,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Trending Airlines & Airports',
-                          style: AppStyles.smallTitleTextStyle,
-                        ),
-                        AirportListSection(),
-                        SizedBox(
-                          height: 28,
-                        ),
-                        Text(
-                          'Trending Feedback',
-                          style: AppStyles.smallTitleTextStyle,
-                        ),
-                        SizedBox(
-                          height: 17,
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              children:
-                                  trendingFeedbackList.map((singleFeedback) {
-                            return FeedbackCard(
-                              singleFeedback: singleFeedback,
-                            );
-                          }).toList()),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Text(
+                  'Filter by category',
+                  style: TextStyle(
+                      fontFamily: 'Clash Grotesk',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                MainButton(
+                    text: "All",
+                    color: AppStyles
+                        .mainButtonColor), // Replace with your button widget
+                SizedBox(width: 8),
+                const MainButton(text: "Airline", color: Colors.white),
+                SizedBox(width: 8),
+                const MainButton(text: "Airports", color: Colors.white),
+                const SizedBox(width: 8),
+                const MainButton(text: "Cleanliness", color: Colors.white),
+                const SizedBox(width: 8),
+                const MainButton(text: "Onboard", color: Colors.white),
+              ],
+            ),
+          ),
+          SizedBox(height: 14),
+          Container(
+            height: 5,
+            decoration: BoxDecoration(color: AppStyles.littleBlackColor),
+          ),
+          // Divider(thickness: 5, color: AppStyles.littleBlackColor),
+
+          // The rest of your content goes here inside a scrollable area
+          Expanded(
+              child: SingleChildScrollView(
+                  child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Trending Airlines & Airports',
+                        style: TextStyle(fontSize: 20)),
+                    AirportListSection(), // Your custom widget
+                    SizedBox(height: 28),
+                    Text('Trending Feedback', style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 17),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: trendingFeedbackList.map((singleFeedback) {
+                        return FeedbackCard(
+                            singleFeedback:
+                                singleFeedback); // Your custom widget
+                      }).toList()),
+                    ),
+                    SizedBox(
+                      height: 18,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "See all feedback",
+                          style: AppStyles.textButtonStyle,
+                        ),
+                        Icon(Icons.arrow_forward)
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          )))
+        ],
+      ),
+    );
   }
 }
 
