@@ -18,7 +18,9 @@ class MainButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           color: color, // Background color
           border: Border.all(width: 2, color: Colors.black), // Border color
-          boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(2, 2))],
+          boxShadow: const [
+            BoxShadow(color: Colors.black, offset: Offset(2, 2))
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

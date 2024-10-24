@@ -20,7 +20,7 @@ class AirportCard extends StatefulWidget {
 }
 
 class _AirportCardState extends State<AirportCard> {
-  bool clickedBookmark = false;
+  bool clickedBookmark = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,8 @@ class _AirportCardState extends State<AirportCard> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, AppRoutes.detailairport, arguments: {'index':widget.index});
+          Navigator.pushNamed(context, AppRoutes.detailairport,
+              arguments: {'index': widget.index});
         },
         child: Column(
           children: [
@@ -107,7 +108,7 @@ class _AirportCardState extends State<AirportCard> {
                             child: Row(
                               children: [
                                 Text('9/10 from 382 reviews',
-                                    style: AppStyles.itemButtonTextStyle),
+                                    style: AppStyles.cardTextStyle),
                                 const SizedBox(
                                   width: 3,
                                 ),
