@@ -1,6 +1,6 @@
 class AppRoutes {
-  static const leaderboardscreen = "/leaderboardscreen";
+  static const leaderboardscreen = "/";
   static const loginscreen = "/loginscreen";
-  static const profilescreen = "/";
+  static const profilescreen = "/profile_screen";
   static const detailairport = "/detailairport";
 }

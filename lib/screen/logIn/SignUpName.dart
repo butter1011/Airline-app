@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUpUserName extends StatefulWidget {
+  const SignUpUserName({super.key});
+
   @override
   State<SignUpUserName> createState() => _SignUpUserNameState();
 }
