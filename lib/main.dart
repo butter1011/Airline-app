@@ -47,9 +47,9 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.loginscreen: (context) => Login(),
         AppRoutes.leaderboardscreen: (context) => LeaderboardScreen(),
-        AppRoutes.profilescreen: (context) => ProfileScreen(),
         AppRoutes.detailairport: (context) => DetailAirport(),
         AppRoutes.mediafullscreen: (context) => MediaFullScreen(),
+        AppRoutes.profilescreen: (context) => ProfileScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
