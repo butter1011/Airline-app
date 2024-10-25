@@ -26,14 +26,14 @@ class _DetailAirportState extends State<DetailAirport> {
       var args = ModalRoute.of(context)!.settings.arguments as Map;
       print(" Passed index ==========> ${args['index']}");
       airportIndex = args['index'];
-      print("🏅🏅🏅  ===> ${airportList[0]}");
+      print("🏅🏅🏅  ===> ${airportReviewList[0]}");
     }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    List reviews = airportList[airportIndex]['reviews']['Seat Comfort'];
+    List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
     print("😉😉😉😉😉😉 ${reviews[1]}");
     return Scaffold(
       body: CustomScrollView(
@@ -62,7 +62,7 @@ class _DetailAirportState extends State<DetailAirport> {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      airportList[airportIndex]['imagePath'],
+                      airportReviewList[airportIndex]['imagePath'],
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -133,7 +133,7 @@ class _DetailAirportState extends State<DetailAirport> {
                       height: 9,
                     ),
                     Text(
-                      airportList[airportIndex]['country'],
+                      airportReviewList[airportIndex]['country'],
                       style: AppStyles.titleTextStyle,
                     ),
                     SizedBox(

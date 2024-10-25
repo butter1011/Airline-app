@@ -58,21 +58,26 @@ class LeaderboardScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: 40, // Diameter of the circular avatar
-                  height: 40, // Diameter of the circular avatar
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, // Background color
-                    border: Border.all(
-                        width: 2, color: Colors.black), // Border color
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                        'assets/icons/setting.png'), // Local image asset
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                  },
+                  child: Container(
+                    width: 40, // Diameter of the circular avatar
+                    height: 40, // Diameter of the circular avatar
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white, // Background color
+                      border: Border.all(
+                          width: 2, color: Colors.black), // Border color
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                          'assets/icons/setting.png'), // Local image asset
+                    ),
                   ),
                 ),
               ],
@@ -180,8 +185,8 @@ class AirportListSection extends ConsumerWidget {
     return Column(
       children: [
         Column(
-          children: airportList.map((singleAirport) {
-            int index = airportList.indexOf(singleAirport);
+          children: airportReviewList.map((singleAirport) {
+            int index = airportReviewList.indexOf(singleAirport);
             if (provider || index < 5) {
               return AirportList(
                   country: singleAirport['country'],
