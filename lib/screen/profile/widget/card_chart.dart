@@ -1,5 +1,5 @@
 import 'package:airline_app/screen/profile/utils/card_chart_json.dart';
-import 'package:airline_app/screen/profile/widget/Button1.dart';
+import 'package:airline_app/screen/profile/widget/button1.dart';
 import 'package:flutter/material.dart';
 
 class CardChart extends StatelessWidget {

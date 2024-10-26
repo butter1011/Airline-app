@@ -149,7 +149,7 @@ class Login extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/images/mail.png',
+                        'assets/icons/mail.png',
                         width: 20,
                         height: 20,
                       ),
