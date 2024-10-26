@@ -9,4 +9,7 @@ class AppRoutes {
   static const mediafullscreen = "/mediafullscreen";
   static const filterscreen = "/filterscreen";
   static const chatbotscreen = "/chatbotscreen";
+  static const prodetailairport = "/prodetailairport";
+  static const bookmarkprofilescreen = "/bookmarkprofilescreen";
+  static const cardnotificationscreen = "/cardnotificationscreen";
 }

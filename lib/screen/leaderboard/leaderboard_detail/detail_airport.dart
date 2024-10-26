@@ -230,6 +230,7 @@ class ExpandButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(buttonExpandNotifierProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,7 +321,9 @@ class ExpandButtons extends ConsumerWidget {
               children: [
                 Text(provider ? "Show less categories" : "Show more categories",
                     style: AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
-                Icon(provider ? Icons.expand_less : Icons.expand_more),
+                Icon(
+                  provider ? Icons.expand_less : Icons.expand_more,
+                ),
               ],
             ),
           ),

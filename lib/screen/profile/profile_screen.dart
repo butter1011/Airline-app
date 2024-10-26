@@ -1,5 +1,5 @@
-import 'package:airline_app/screen/profile/utils/profile_buttonList_json.dart';
-import 'package:airline_app/screen/profile/widget/card_chart.dart';
+import 'package:airline_app/screen/profile/widget/card_airport.dart';
+
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(
-                          height: 60,
+                          height: 28,
                         ),
                         Row(
                           children: [
@@ -256,49 +256,17 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(
                     height: 24,
                   ),
-                  Container(
-                    width: 352,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          offset: Offset(3, 3),
-                        ),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: profile_buttonList.map((profilevalue) {
-                          return ProfileCard(
-                            iconPath: profilevalue["imagePath"],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
+                  ProfileCardList(),
                 ],
               ),
-              SingleChildScrollView(child: CardChart()),
+              // SingleChildScrollView(child: CardChart()),
+              // SingleChildScrollView(child: CLeaderboardScreen()),
+              // CairMap(),
+              // CardBookMark(),
+              // CardNotifications(),
             ],
           ),
         ]),
-        Positioned(
-            bottom: 0,
-            height: 30,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.white,
-            )),
       ]),
     );
   }
