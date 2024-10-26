@@ -1,4 +1,6 @@
+import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -42,21 +44,11 @@ class ReviewsubmissionScreen extends StatelessWidget {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TypeButton(
-                      text: "All",
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    TypeButton(
-                      text: "Flights",
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    TypeButton(
-                      text: "Airports",
-                    ),
+                    TypeButton(text: "All"),
+                    SizedBox(width: 8),
+                    TypeButton(text: "Flights"),
+                    SizedBox(width: 8),
+                    TypeButton(text: "Airports"),
                   ],
                 ),
                 SizedBox(
@@ -68,10 +60,14 @@ class ReviewsubmissionScreen extends StatelessWidget {
                 )
               ],
             ),
-            Container(
-              height:148,
-              decoration: BoxDecoration(),
-            )
+            SizedBox(
+              height: 24,
+            ),
+            Column(
+              children: airportReviewList.map((singleairport) {
+                return ReviewAirportCard();
+              }).toList(),
+            ),
           ],
         ),
       ),

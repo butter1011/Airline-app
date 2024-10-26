@@ -7,12 +7,27 @@ class AppStyles {
   static Color whiteColor = const Color(0xffffffff);
 
   ///Text style
+   
+   
+   
+   static TextStyle flagTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );  
 
   static TextStyle normalTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: Colors.black,
+  );
+   static TextStyle litteBlackTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xff38433E),
   );
 
   static TextStyle cardTextStyle = const TextStyle(
@@ -82,10 +97,12 @@ class AppStyles {
         BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
       ]);
   static BoxDecoration cardDecoration = BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white, // Border color
-        border: Border.all(width: 2, color: Colors.black),
-        boxShadow: const [
-          BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
-        ]);
+      color: Colors.white, // Border color
+      borderRadius: BorderRadius.circular(24),
+      border: Border(
+        top: BorderSide(color: Colors.black, width: 2.0),
+        left: BorderSide(color: Colors.black, width: 2.0),
+        bottom: BorderSide(color: Colors.black, width: 4.0),
+        right: BorderSide(color: Colors.black, width: 4.0),
+      ));
 }

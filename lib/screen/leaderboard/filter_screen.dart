@@ -1,5 +1,5 @@
-import 'package:airline_app/screen/leaderboard/filter/widgets/airports_each_continent.dart';
-import 'package:airline_app/screen/leaderboard/filter/widgets/filter_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/airports_each_continent.dart';
+import 'package:airline_app/screen/leaderboard/widgets/filter_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';

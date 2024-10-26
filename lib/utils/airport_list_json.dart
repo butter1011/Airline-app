@@ -1,3 +1,96 @@
+Map<String, dynamic> airportList = {
+  'Africa': ['North Africa', 'Sub-Saharan Africa'],
+  'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
+  'Europe': [
+    'Western Europe',
+    'Eastern Europe',
+    'Northern Europe',
+    'Southern Europe',
+    'Central Europe'
+  ],
+  'North America': [
+    'United States',
+    'Canada',
+    'Mexico',
+    'Central America',
+    'Caribbean'
+  ],
+  'South America': ['South America', 'Southern Cone', 'Amazon Basin'],
+  'Australia': [
+    'Australia and New Zealand',
+    'Melanesia',
+    'Micronesia',
+    'Polynesia'
+  ]
+};
+
+List<Map<String, dynamic>> airportCardList = [
+  {
+    'origin': {
+      'country': 'Japan',
+      'city': 'Tokyo',
+      'flag': 'assets/icons/flag_Japan.png',
+      'time': '17:55'
+    },
+    'destination': {
+      'country': 'Romania',
+      'city': 'Bucharest',
+      'flag': 'assets/icons/flag_Romania.png',
+      'time': '20:55'
+    },
+    'flight number': 'UO 2923',
+    'visit status': 'Recent Flight'
+  },
+  {
+    'origin': {
+      'country': 'Romania',
+      'city': 'Bucharest',
+      'flag': 'assets/icons/flag_Romania.png',
+      'time': '20:55'
+    },
+    'destination': {
+      'country': 'UK',
+      'city': 'London',
+      'flag': 'assets/icons/flag_UK.png',
+      'time': '14:55'
+    },
+    'flight number': 'U1 3933',
+    'visit status': 'Recent Flight'
+  },
+  {
+    'origin': {
+      'country': 'United Arab Emirates',
+      'city': 'Abu Dhabi Airport',
+      'flag': 'assets/icons/flag_United Arab Emirates.png',
+      'time': ''
+    },
+    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
+    'flight number': '',
+    'visit status': 'Visited recently'
+  },
+  {
+    'origin': {
+      'country': 'Moldova',
+      'city': 'Tokyo',
+      'flag': 'assets/icons/flag_Moldova.png',
+      'time': '20:55'
+    },
+    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
+    'flight number': '',
+    'visit status': 'Visited recently'
+  },
+  {
+    'origin': {
+      'country': 'UK',
+      'city': 'Heathrow',
+      'flag': 'assets/icons/flag_UK.png',
+      'time': '17:55'
+    },
+    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
+    'flight number': '',
+    'visit status': 'Upcoming visit'
+  },
+];
 List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
@@ -444,7 +537,6 @@ List<Map<String, dynamic>> airportReviewList = [
     }
   },
 ];
-
 List<Map<String, dynamic>> trendingFeedbackList = [
   {
     'Name': 'Benedict Cumberbatch',
@@ -477,29 +569,3 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Image': 'review_turkish_1.png'
   },
 ];
-
-Map<String, dynamic> airportList = {
-  'Africa': ['North Africa', 'Sub-Saharan Africa'],
-  'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
-  'Europe': [
-    'Western Europe',
-    'Eastern Europe',
-    'Northern Europe',
-    'Southern Europe',
-    'Central Europe'
-  ],
-  'North America': [
-    'United States',
-    'Canada',
-    'Mexico',
-    'Central America',
-    'Caribbean'
-  ],
-  'South America': ['South America', 'Southern Cone', 'Amazon Basin'],
-  'Australia': [
-    'Australia and New Zealand',
-    'Melanesia',
-    'Micronesia',
-    'Polynesia'
-  ]
-};

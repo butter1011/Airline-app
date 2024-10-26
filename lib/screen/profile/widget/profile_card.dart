@@ -92,7 +92,7 @@ class _ProfileCardListState extends State<ProfileCardList> {
 
     final List<Widget> PCardList = [
       SingleChildScrollView(child: CLeaderboardScreen()),
-      CairMap(),
+      // CairMap(),
       Column(
         children: [
           SizedBox(

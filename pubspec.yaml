@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mapbox_maps_flutter: ^2.0.0 # Ensure this is correctly formatted
+  # mapbox_maps_flutter: ^2.0.0 # Ensure this is correctly formatted
   # Add other dependencies here
 
   # The following adds the Cupertino Icons font to your application.

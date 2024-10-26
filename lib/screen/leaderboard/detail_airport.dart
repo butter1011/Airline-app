@@ -1,5 +1,5 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/leaderboard/leaderboard_detail/widgets/category_reviews.dart';
+import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -26,7 +26,6 @@ class _DetailAirportState extends State<DetailAirport> {
       var args = ModalRoute.of(context)!.settings.arguments as Map;
       print(" Passed index ==========> ${args['index']}");
       airportIndex = args['index'];
-      print("🏅🏅🏅  ===> ${airportReviewList[0]}");
     }
     super.didChangeDependencies();
   }

@@ -1,16 +1,13 @@
-import 'package:airline_app/provider/airportlist_expand_provider.dart';
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/leaderboard/leaderboard_home.dart/leaderboard_home_widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/airport_card.dart';
+import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
-import 'package:airline_app/screen/leaderboard/widgets/itemButton.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -19,6 +16,9 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 0,
+      ),
       body: Column(
         children: [
           // This section will always stay at the top
@@ -103,16 +103,24 @@ class LeaderboardScreen extends StatelessWidget {
             child: Row(
               children: [
                 MainButton(
-                    text: "All",
-                  ), // Replace with your button widget
+                  text: "All",
+                ), // Replace with your button widget
                 SizedBox(width: 8),
-                MainButton(text: "Airline",),
+                MainButton(
+                  text: "Airline",
+                ),
                 SizedBox(width: 8),
-                MainButton(text: "Airports",),
+                MainButton(
+                  text: "Airports",
+                ),
                 SizedBox(width: 8),
-                MainButton(text: "Cleanliness",),
+                MainButton(
+                  text: "Cleanliness",
+                ),
                 SizedBox(width: 8),
-                MainButton(text: "Onboard",),
+                MainButton(
+                  text: "Onboard",
+                ),
               ],
             ),
           ),
@@ -202,7 +210,6 @@ class AirportListSection extends ConsumerWidget {
               ref
                   .watch(buttonExpandNotifierProvider.notifier)
                   .toggleButton(provider);
-              print("✈✈=====>$provider");
             },
             child: IntrinsicWidth(
               child: Row(
