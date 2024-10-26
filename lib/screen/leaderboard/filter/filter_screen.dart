@@ -37,7 +37,7 @@ class FilterScreen extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 2, // Set the height to match the thickness you want
+            height: 4, // Set the height to match the thickness you want
             color: AppStyles.littleBlackColor, // Use your desired color
           ),
           Expanded(
@@ -236,7 +236,7 @@ class FilterScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 2, // Set the height to match the thickness you want
+            height: 4, // Set the height to match the thickness you want
             color: AppStyles.littleBlackColor, // Use your desired color
           ),
           Padding(

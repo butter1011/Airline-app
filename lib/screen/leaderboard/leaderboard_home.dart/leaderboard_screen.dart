@@ -97,23 +97,22 @@ class LeaderboardScreen extends StatelessWidget {
               ],
             ),
           ),
-          SingleChildScrollView(
+          const SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 MainButton(
                     text: "All",
-                    color: AppStyles
-                        .mainButtonColor), // Replace with your button widget
+                  ), // Replace with your button widget
                 SizedBox(width: 8),
-                const MainButton(text: "Airline", color: Colors.white),
+                MainButton(text: "Airline",),
                 SizedBox(width: 8),
-                const MainButton(text: "Airports", color: Colors.white),
-                const SizedBox(width: 8),
-                const MainButton(text: "Cleanliness", color: Colors.white),
-                const SizedBox(width: 8),
-                const MainButton(text: "Onboard", color: Colors.white),
+                MainButton(text: "Airports",),
+                SizedBox(width: 8),
+                MainButton(text: "Cleanliness",),
+                SizedBox(width: 8),
+                MainButton(text: "Onboard",),
               ],
             ),
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class AppStyles {
   ///Color style
   static Color mainButtonColor = const Color(0xFF3FEA9C);
@@ -26,6 +25,12 @@ class AppStyles {
     fontFamily: 'Clash Grotesk',
     fontSize: 15,
     fontWeight: FontWeight.w600,
+    color: Color(0xFF181818),
+  );
+  static TextStyle messageTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
     color: Color(0xFF181818),
   );
   static TextStyle mainTextStyle = const TextStyle(
@@ -58,8 +63,17 @@ class AppStyles {
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-      boxShadow: [BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))]);
+      boxShadow: [
+        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+      ]);
   static BoxDecoration slideButtonDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.white, // Border color
+      border: Border.all(width: 2, color: Colors.black),
+      boxShadow: const [
+        BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
+      ]);
+  static BoxDecoration cardDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border.all(width: 2, color: Colors.black),

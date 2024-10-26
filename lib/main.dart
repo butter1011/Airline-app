@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/leaderboard/filter/filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/signup.dart';
@@ -28,7 +29,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       routes: {
@@ -41,6 +46,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.mediafullscreen: (context) => const MediaFullScreen(),
         AppRoutes.profilescreen: (context) => const ProfileScreen(),
         AppRoutes.filterscreen: (context) => const FilterScreen(),
+        AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

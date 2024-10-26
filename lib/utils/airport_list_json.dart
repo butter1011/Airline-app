@@ -137,7 +137,7 @@ List<Map<String, dynamic>> airportReviewList = [
   },
   {
     'country': "Ethiopian Airlines",
-    'logo': '',
+    'logo': 'logo_ethiopian.png',
     'imagePath': "assets/images/Ethiopian.png",
     'reviewStatus': false,
     'reviews': {
@@ -181,7 +181,7 @@ List<Map<String, dynamic>> airportReviewList = [
   },
   {
     'country': "Fiji Airways",
-    'logo': '',
+    'logo': 'logo_fiji.png',
     'imagePath': "assets/images/Fiji.png",
     'reviewStatus': false,
     'reviews': {

@@ -8,4 +8,5 @@ class AppRoutes {
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
   static const filterscreen = "/filterscreen";
+  static const chatbotscreen = "/chatbotscreen";
 }
