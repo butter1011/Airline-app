@@ -1,4 +1,4 @@
-List<Map<String, dynamic>> airportList = [
+List<Map<String, dynamic>> reviewjsonlist = [
   {
     'country': "Abu Dhabi Airport",
     'logo': 'logo_abudhabi.png',

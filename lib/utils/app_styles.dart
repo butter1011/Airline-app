@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   ///Color style
@@ -62,6 +61,14 @@ class AppStyles {
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border.all(width: 2, color: Colors.black),
+      boxShadow: const [
+        BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
+      ]);
+  static BoxDecoration notificationDecoration = BoxDecoration(
+      shape: BoxShape.rectangle,
+      color: Colors.white, // Border color
+      border: Border.all(width: 2, color: Colors.black),
+      borderRadius: BorderRadius.circular(24),
       boxShadow: const [
         BoxShadow(color: Color(0xff181818), offset: Offset(2, 2))
       ]);
