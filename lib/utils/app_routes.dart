@@ -1,6 +1,6 @@
 class AppRoutes {
-  static const bottomnavbar = "/";
-  static const startscreen = "/startscreen";
+  static const bottomnavbar = "/bottomnavbar";
+  static const startscreen = "/";
   static const loginscreen = "/loginscreen";
   static const signupscreen = "/signupscreen";
   static const leaderboardscreen = "/leaderboardscreen";
