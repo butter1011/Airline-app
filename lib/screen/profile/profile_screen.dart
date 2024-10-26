@@ -1,5 +1,4 @@
-import 'package:airline_app/screen/profile/widget/card_airport.dart';
-
+import 'package:airline_app/screen/bottom_nav_bar.dart';
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +9,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(currentIndex: 4),
       body: Stack(children: [
         ListView(children: [
           Column(
@@ -259,11 +259,6 @@ class ProfileScreen extends StatelessWidget {
                   ProfileCardList(),
                 ],
               ),
-              // SingleChildScrollView(child: CardChart()),
-              // SingleChildScrollView(child: CLeaderboardScreen()),
-              // CairMap(),
-              // CardBookMark(),
-              // CardNotifications(),
             ],
           ),
         ]),

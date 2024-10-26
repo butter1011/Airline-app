@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/bottom_nav_bar.dart';
 import 'package:airline_app/screen/feed/widgets/feed_card.dart';
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -12,6 +13,7 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(currentIndex: 3),
       body: Column(
         children: [
           // This section will always stay at the top

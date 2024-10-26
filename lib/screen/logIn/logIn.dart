@@ -25,42 +25,47 @@ class Login extends StatelessWidget {
               const SizedBox(
                 height: 32,
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Container(
-                    width: 327,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(27),
-                      border: Border.all(
-                        width: 2,
-                        color: AppStyles.littleBlackColor,
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            color: AppStyles.littleBlackColor,
-                            offset: const Offset(3, 3))
-                      ],
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/google.png',
-                            width: 20,
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Sign in with Google',
-                              style: AppStyles.textButtonStyle),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+                },
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Container(
+                      width: 327,
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(27),
+                        border: Border.all(
+                          width: 2,
+                          color: AppStyles.littleBlackColor,
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: AppStyles.littleBlackColor,
+                              offset: const Offset(3, 3))
                         ],
                       ),
-                    ),
-                  )),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/google.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Sign in with Google',
+                                style: AppStyles.textButtonStyle),
+                          ],
+                        ),
+                      ),
+                    )),
+              ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
                 child: Row(children: <Widget>[

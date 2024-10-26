@@ -1,5 +1,7 @@
+import 'package:airline_app/screen/bottom_nav_bar.dart';
 import 'package:airline_app/screen/chatbot/widgets/received_message_box.dart';
 import 'package:airline_app/screen/chatbot/widgets/sent_message_box.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class ChatbotScreen extends StatelessWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
           child: const Icon(
             Icons.arrow_back_ios,

@@ -1,31 +1,18 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            credentials {
-                username = "mapbox"
-                password = System.getenv("pk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJveTJjeGswOWQwMnJyMWswc3M0dnRlIn0.BOeTo1YFWtT-ots4KA15-A") // Use environment variable for token
-            }
-        }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2' // Ensure this is a valid version
-        classpath 'com.google.gms:google-services:4.3.10' // Adjust as necessary
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            credentials {
-                username = "mapbox"
-                password = System.getenv("SDK_REGISTRY_TOKEN") // Use environment variable for token
-            }
-        }
     }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
 }
