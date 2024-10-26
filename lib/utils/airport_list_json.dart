@@ -1,4 +1,4 @@
-List<Map<String, dynamic>> airportList = [
+List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
     'logo': 'logo_abudhabi.png',
@@ -137,7 +137,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Ethiopian Airlines",
-    'logo': '',
+    'logo': 'logo_ethiopian.png',
     'imagePath': "assets/images/Ethiopian.png",
     'reviewStatus': false,
     'reviews': {
@@ -181,7 +181,7 @@ List<Map<String, dynamic>> airportList = [
   },
   {
     'country': "Fiji Airways",
-    'logo': '',
+    'logo': 'logo_fiji.png',
     'imagePath': "assets/images/Fiji.png",
     'reviewStatus': false,
     'reviews': {
@@ -477,3 +477,29 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Image': 'review_turkish_1.png'
   },
 ];
+
+Map<String, dynamic> airportList = {
+  'Africa': ['North Africa', 'Sub-Saharan Africa'],
+  'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
+  'Europe': [
+    'Western Europe',
+    'Eastern Europe',
+    'Northern Europe',
+    'Southern Europe',
+    'Central Europe'
+  ],
+  'North America': [
+    'United States',
+    'Canada',
+    'Mexico',
+    'Central America',
+    'Caribbean'
+  ],
+  'South America': ['South America', 'Southern Cone', 'Amazon Basin'],
+  'Australia': [
+    'Australia and New Zealand',
+    'Melanesia',
+    'Micronesia',
+    'Polynesia'
+  ]
+};

@@ -1,16 +1,16 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class MainButton extends StatefulWidget {
-  const MainButton({super.key, required this.text});
+class FeedFilterButton extends StatefulWidget {
+  const FeedFilterButton({super.key, required this.text});
 
   final String text;
 
   @override
-  State<MainButton> createState() => _MainButtonState();
+  State<FeedFilterButton> createState() => _FeedFilterButtonState();
 }
 
-class _MainButtonState extends State<MainButton> {
+class _FeedFilterButtonState extends State<FeedFilterButton> {
   late bool _isSelected = false;
   @override
   void initState() {
