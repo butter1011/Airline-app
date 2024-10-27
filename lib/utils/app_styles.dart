@@ -7,15 +7,13 @@ class AppStyles {
   static Color whiteColor = const Color(0xffffffff);
 
   ///Text style
-   
-   
-   
-   static TextStyle flagTextStyle = const TextStyle(
+
+  static TextStyle flagTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 13,
     fontWeight: FontWeight.w600,
     color: Colors.black,
-  );  
+  );
 
   static TextStyle normalTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
@@ -23,13 +21,18 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
-   static TextStyle litteBlackTextStyle = const TextStyle(
+  static TextStyle litteBlackTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: Color(0xff38433E),
   );
-
+  static TextStyle litteGrayTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: Color(0xff38433E),
+  );
   static TextStyle cardTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,

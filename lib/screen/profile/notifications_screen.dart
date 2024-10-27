@@ -1,7 +1,6 @@
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/screen/profile/widget/basic_button.dart';
-import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 
 import 'package:airline_app/utils/app_styles.dart';
 
