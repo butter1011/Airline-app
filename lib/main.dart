@@ -10,6 +10,7 @@ import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/book_mark_screen.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/flight_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
@@ -68,8 +69,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        AppRoutes.manualinput:(context)=> ManualInputScreen(),
-        AppRoutes.flightinput:(context)=>FlightInputScreen(),
+        AppRoutes.manualinput: (context) => ManualInputScreen(),
+        AppRoutes.flightinput: (context) => FlightInputScreen(),
+
       },
       debugShowCheckedModeBanner: false,
     );

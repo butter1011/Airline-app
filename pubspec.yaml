@@ -43,7 +43,9 @@ dependencies:
   build_runner: ^2.4.13
   carousel_slider: ^5.0.0
   button_animations: ^2.0.0+3
-  
+  calendar_date_picker2: ^1.1.7
+  table_calendar: ^3.1.2
+  syncfusion_flutter_datepicker: ^27.1.56
 
 dev_dependencies:
   flutter_test:

@@ -21,6 +21,7 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
+
   static TextStyle litteBlackTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
@@ -32,7 +33,13 @@ class AppStyles {
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
     fontWeight: FontWeight.w600,
-    color: Color(0xFF181818),
+    color: Color(0xFF000000),
+  );
+  static TextStyle normalTextStyle2 = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
   );
   static TextStyle textButtonStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
@@ -46,6 +53,7 @@ class AppStyles {
     fontWeight: FontWeight.w500,
     color: Color(0xFF181818),
   );
+
   static TextStyle mainTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 16,
@@ -104,10 +112,11 @@ class AppStyles {
         right: BorderSide(color: Colors.black, width: 4.0),
       ));
   static BoxDecoration buttonDecoration = BoxDecoration(
+      color: Color(0xFF3FEA9C),
       border: Border(
-    top: BorderSide(color: Colors.black, width: 2.0),
-    left: BorderSide(color: Colors.black, width: 2.0),
-    bottom: BorderSide(color: Colors.black, width: 4.0),
-    right: BorderSide(color: Colors.black, width: 4.0),
-  ));
+        top: BorderSide(color: Colors.black, width: 2.0),
+        left: BorderSide(color: Colors.black, width: 2.0),
+        bottom: BorderSide(color: Colors.black, width: 4.0),
+        right: BorderSide(color: Colors.black, width: 4.0),
+      ));
 }
