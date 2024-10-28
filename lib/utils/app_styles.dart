@@ -7,15 +7,13 @@ class AppStyles {
   static Color whiteColor = const Color(0xffffffff);
 
   ///Text style
-   
-   
-   
-   static TextStyle flagTextStyle = const TextStyle(
+
+  static TextStyle flagTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 13,
     fontWeight: FontWeight.w600,
     color: Colors.black,
-  );  
+  );
 
   static TextStyle normalTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
@@ -23,7 +21,7 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
-   static TextStyle litteBlackTextStyle = const TextStyle(
+  static TextStyle litteBlackTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
     fontWeight: FontWeight.w500,
@@ -105,4 +103,11 @@ class AppStyles {
         bottom: BorderSide(color: Colors.black, width: 4.0),
         right: BorderSide(color: Colors.black, width: 4.0),
       ));
+  static BoxDecoration buttonDecoration = BoxDecoration(
+      border: Border(
+    top: BorderSide(color: Colors.black, width: 2.0),
+    left: BorderSide(color: Colors.black, width: 2.0),
+    bottom: BorderSide(color: Colors.black, width: 4.0),
+    right: BorderSide(color: Colors.black, width: 4.0),
+  ));
 }

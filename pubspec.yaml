@@ -43,6 +43,7 @@ dependencies:
   build_runner: ^2.4.13
   carousel_slider: ^5.0.0
   button_animations: ^2.0.0+3
+  
 
 dev_dependencies:
   flutter_test:
