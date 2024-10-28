@@ -1,27 +1,44 @@
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
-
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapExpandScreen extends StatefulWidget {
   const MapExpandScreen({super.key});
-
   @override
-  State<MapExpandScreen> createState() => _MapScreenState();
+  State<MapExpandScreen> createState() => _MapExpandScreenState();
 }
 
-class _MapScreenState extends State<MapExpandScreen> {
-  final List<Marker> _markers = [];
-  final MapController controller = MapController();
-  LatLng latLng = const LatLng(48.8584, 16.2945);
+class _MapExpandScreenState extends State<MapExpandScreen> {
+  final MapController _mapController = MapController();
+  Position? _currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition();
+
+    setState(() {
+      _currentPosition = position;
+    });
+
+    _mapController.move(
+        LatLng(_currentPosition!.latitude, _currentPosition!.longitude), 4.0);
+  }
+
+  // LatLng latLng = const LatLng(48.8584, 16.2945);
 
   @override
   Widget build(BuildContext context) {
-    final PageController pgcontroller = PageController(viewportFraction: 0.8);
+    final PageController pgcontroller = PageController(viewportFraction: 0.9);
     return Scaffold(
       body: Container(
         // Ensure the child is clipped to the border radius
@@ -29,11 +46,13 @@ class _MapScreenState extends State<MapExpandScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: FlutterMap(
-              mapController: controller,
+              mapController: _mapController,
               options: MapOptions(
-                initialCenter: latLng,
-                initialZoom: 8,
-                onTap: (tapPosition, point) => {_addMarker(point)},
+                initialCenter: _currentPosition != null
+                    ? LatLng(
+                        _currentPosition!.latitude, _currentPosition!.longitude)
+                    : LatLng(22, 22),
+                initialZoom: 4,
               ),
               children: [
                 TileLayer(
@@ -45,7 +64,10 @@ class _MapScreenState extends State<MapExpandScreen> {
                 MarkerLayer(
                   markers: [
                     Marker(
-                      point: latLng,
+                      point: _currentPosition != null
+                          ? LatLng(_currentPosition!.latitude,
+                              _currentPosition!.longitude)
+                          : LatLng(22, 22),
                       width: 60,
                       height: 60,
                       alignment: Alignment.topCenter,
@@ -54,7 +76,7 @@ class _MapScreenState extends State<MapExpandScreen> {
                         color: Colors.red.shade700,
                         size: 60,
                       ),
-                    ),
+                    )
                   ],
                 ),
               ],
@@ -81,7 +103,7 @@ class _MapScreenState extends State<MapExpandScreen> {
               left: 8,
               right: 0,
               child: Container(
-                height: 140,
+                height: 130,
                 // width: 200,
                 child: PageView.builder(
                     controller: pgcontroller,
@@ -134,14 +156,5 @@ class _MapScreenState extends State<MapExpandScreen> {
         ]),
       ),
     );
-  }
-
-  void _addMarker(LatLng point) {
-    setState(() {
-      _markers.add(Marker(
-        point: point,
-        child: Icon(Icons.location_on, color: Colors.red),
-      ));
-    });
   }
 }
