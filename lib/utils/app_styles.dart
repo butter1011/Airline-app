@@ -84,6 +84,13 @@ class AppStyles {
       boxShadow: [
         BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
       ]);
+  static BoxDecoration avatarExpandDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: AppStyles.mainButtonColor, // Border color
+      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+      boxShadow: [
+        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+      ]);
   static BoxDecoration slideButtonDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color

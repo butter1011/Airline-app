@@ -1,7 +1,7 @@
 import 'package:airline_app/screen/profile/map_expand_screen.dart';
 import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
-import 'package:airline_app/screen/profile/widget/button1.dart';
+
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -15,12 +15,13 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  final List<Marker> _markers = [];
   final MapController controller = MapController();
-  LatLng latLng = const LatLng(48.8584, 26.2945);
+  LatLng latLng = const LatLng(48.8584, 16.2945);
 
   @override
   Widget build(BuildContext context) {
-    final PageController pgcontroller = PageController(viewportFraction: 0.97);
+    final PageController pgcontroller = PageController(viewportFraction: 0.9);
     return Container(
       // Ensure the child is clipped to the border radius
       child: Stack(children: [
@@ -30,7 +31,8 @@ class _MapScreenState extends State<MapScreen> {
             mapController: controller,
             options: MapOptions(
               initialCenter: latLng,
-              initialZoom: 13,
+              initialZoom: 8,
+              onTap: (tapPosition, point) => {_addMarker(point)},
             ),
             children: [
               TileLayer(
@@ -68,74 +70,76 @@ class _MapScreenState extends State<MapScreen> {
               },
               child: Container(
                 decoration: AppStyles.avatarDecoration,
-                // color: Colors.blue,
                 width: 40,
                 height: 40,
                 child: Image.asset('assets/icons/1.png'),
               ),
             )),
         Positioned(
-            bottom: 24,
-            left: 24,
-            right: 24,
+            bottom: 8,
+            left: 8,
+            right: 0,
             child: Container(
-              height: 120,
+              height: 130,
               // width: 200,
               child: PageView.builder(
                   controller: pgcontroller,
                   itemCount: mabboxVisitConfirmedList.length,
                   itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          width: 278,
-                          // height: 117,
-                          decoration: AppStyles.cardDecoration,
-                          child: Column(
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.all(16),
+                      width: 278,
+                      // height: 117,
+                      decoration: AppStyles.cardDecoration,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  BasicMapbutton(
-                                      mywidth: 133,
-                                      myheight: 24,
-                                      iconpath: 'assets/icons/check.png',
-                                      btntext: 'Visit Confirmed'),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Long AirPort Name goes here',
-                                    style: AppStyles.textButtonStyle,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Your scored 9/10',
-                                    style: AppStyles.litteGrayTextStyle,
-                                  ),
-                                ],
+                              BasicMapbutton(
+                                  mywidth: 133,
+                                  myheight: 24,
+                                  iconpath: 'assets/icons/check.png',
+                                  btntext: 'Visit Confirmed'),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Long AirPort Name goes here',
+                                style: AppStyles.textButtonStyle,
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        )
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Your scored 9/10',
+                                style: AppStyles.litteGrayTextStyle,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   }),
             ))
       ]),
     );
+  }
+
+  void _addMarker(LatLng point) {
+    setState(() {
+      _markers.add(Marker(
+        point: point,
+        child: Icon(Icons.location_on, color: Colors.red),
+      ));
+    });
   }
 }
