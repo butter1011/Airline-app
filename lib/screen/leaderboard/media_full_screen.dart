@@ -141,7 +141,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                         ),
                         Text(
                           args['Date'],
-                          style: AppStyles.normalTextStyle
+                          style: AppStyles.textStyle_14_400
                               .copyWith(color: Color(0xFF02020A)),
                         )
                       ],
@@ -157,7 +157,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                 ),
                 Text(
                   args['Content'],
-                  style: AppStyles.normalTextStyle,
+                  style: AppStyles.textStyle_14_400,
                 ),
                 SizedBox(
                   height: 16,

@@ -91,7 +91,7 @@ class ChatbotScreen extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Type your message...',
-                hintStyle: AppStyles.normalTextStyle
+                hintStyle: AppStyles.textStyle_14_400
                     .copyWith(color: Color(0xff38433E)),
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 16, vertical: 8),

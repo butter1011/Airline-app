@@ -133,7 +133,7 @@ class _DetailAirportState extends State<DetailAirport> {
                     ),
                     Text(
                       airportReviewList[airportIndex]['country'],
-                      style: AppStyles.titleTextStyle,
+                      style: AppStyles.textStyle_24_600,
                     ),
                     SizedBox(
                       height: 23,

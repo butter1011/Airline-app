@@ -24,73 +24,65 @@ Map<String, dynamic> airportList = {
   ]
 };
 
-List<Map<String, dynamic>> airportCardList = [
-  {
-    'origin': {
-      'country': 'Japan',
-      'city': 'Tokyo',
-      'flag': 'assets/icons/flag_Japan.png',
-      'time': '17:55'
+Map<String, dynamic> airportCardList = {
+  'flights': [
+    {
+      'origin': {
+        'country': 'Japan',
+        'city': 'Tokyo',
+        'flag': 'assets/icons/flag_Japan.png',
+        'time': '17:55'
+      },
+      'destination': {
+        'country': 'Romania',
+        'city': 'Bucharest',
+        'flag': 'assets/icons/flag_Romania.png',
+        'time': '20:55'
+      },
+      'flight number': 'UO 2923',
+      'visit status': 'Recent Flight'
     },
-    'destination': {
-      'country': 'Romania',
-      'city': 'Bucharest',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
+    {
+      'origin': {
+        'country': 'Romania',
+        'city': 'Bucharest',
+        'flag': 'assets/icons/flag_Romania.png',
+        'time': '20:55'
+      },
+      'destination': {
+        'country': 'UK',
+        'city': 'London',
+        'flag': 'assets/icons/flag_UK.png',
+        'time': '14:55'
+      },
+      'flight number': 'U1 3933',
+      'visit status': 'Recent Flight'
     },
-    'flight number': 'UO 2923',
-    'visit status': 'Recent Flight'
-  },
-  {
-    'origin': {
-      'country': 'Romania',
-      'city': 'Bucharest',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
-    },
-    'destination': {
-      'country': 'UK',
-      'city': 'London',
-      'flag': 'assets/icons/flag_UK.png',
-      'time': '14:55'
-    },
-    'flight number': 'U1 3933',
-    'visit status': 'Recent Flight'
-  },
-  {
-    'origin': {
+  ],
+  'airports': [
+    {
       'country': 'United Arab Emirates',
-      'city': 'Abu Dhabi Airport',
+      'airport': 'Abu Dhabi Airport',
       'flag': 'assets/icons/flag_United Arab Emirates.png',
-      'time': ''
+      'visit status': 'Visited recently',
+      'time':'17:55'
     },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Visited recently'
-  },
-  {
-    'origin': {
+    {
       'country': 'Moldova',
-      'city': 'Tokyo',
+      'airport': 'Chisinau Airport',
       'flag': 'assets/icons/flag_Moldova.png',
+      'visit status': 'Visited recently',
       'time': '20:55'
     },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Visited recently'
-  },
-  {
-    'origin': {
+    {
       'country': 'UK',
-      'city': 'Heathrow',
+      'airport': 'Heathrow Airport',
       'flag': 'assets/icons/flag_UK.png',
+      'visit status': 'Upcoming visit',
       'time': '17:55'
     },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Upcoming visit'
-  },
-];
+  ]
+};
 List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
