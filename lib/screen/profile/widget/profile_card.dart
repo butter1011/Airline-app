@@ -1,10 +1,8 @@
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
 import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
 import 'package:airline_app/screen/profile/widget/card_chart.dart';
-import 'package:airline_app/screen/profile/widget/card_map.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:airline_app/utils/cairport_list_json.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatefulWidget {

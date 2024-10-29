@@ -39,7 +39,7 @@ class FeedCard extends StatelessWidget {
                 ),
                 Text(
                   'Rated 9/10 on ${singleFeedback['Date']}',
-                  style: AppStyles.normalTextStyle,
+                  style: AppStyles.textStyle_14_400,
                 )
               ],
             )
@@ -56,7 +56,7 @@ class FeedCard extends StatelessWidget {
           children: [
             Text(
               'Flex with',
-              style: AppStyles.normalTextStyle,
+              style: AppStyles.textStyle_14_400,
             ),
             SizedBox(
               width: 6,
@@ -74,7 +74,7 @@ class FeedCard extends StatelessWidget {
           children: [
             Text(
               'Flex with',
-              style: AppStyles.normalTextStyle,
+              style: AppStyles.textStyle_14_400,
             ),
             SizedBox(
               width: 6,
@@ -107,7 +107,7 @@ class FeedCard extends StatelessWidget {
         ),
         Text(
           singleFeedback['Content'],
-          style: AppStyles.normalTextStyle,
+          style: AppStyles.textStyle_14_400,
         ),
         SizedBox(
           height: 16,

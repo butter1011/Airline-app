@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   ///Color style
@@ -15,7 +16,7 @@ class AppStyles {
     color: Colors.black,
   );
 
-  static TextStyle normalTextStyle = const TextStyle(
+  static TextStyle textStyle_14_400 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -72,11 +73,26 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
-  static TextStyle titleTextStyle = const TextStyle(
+  static TextStyle textStyle_24_600 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: Colors.black,
+  );
+  static TextStyle textStyle_32_600 = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 32,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+  static TextStyle reviewTitleTextStyle = GoogleFonts.getFont(
+    'Oswald',
+    textStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      color: Colors.white,
+      fontSize: 15,
+    ),
   );
 
   /// Box style

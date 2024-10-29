@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class FlightInputScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
 
@@ -112,7 +113,7 @@ class FlightInputScreen extends StatelessWidget {
           labelText: "From",
           hintText: "departure Airport",
         ),
-        const SizedBox(height: 18)         ,
+        const SizedBox(height: 18),
         CustomDropdownButton(
           labelText: "To",
           hintText: "destination Airport",
@@ -161,7 +162,7 @@ class FlightInputScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigationBar() {
+  Widget _buildBottomNavigationBar(context) {
     return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures it takes only the required space
@@ -172,18 +173,23 @@ class FlightInputScreen extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Container(
-            height: 56,
-            decoration: AppStyles.buttonDecoration.copyWith(
-              borderRadius: BorderRadius.circular(28),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Next", style: AppStyles.textButtonStyle),
-                  Icon(Icons.arrow_forward_outlined)
-                ],
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
+            },
+            child: Container(
+              height: 56,
+              decoration: AppStyles.buttonDecoration.copyWith(
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Next", style: AppStyles.textButtonStyle),
+                    Icon(Icons.arrow_forward_outlined)
+                  ],
+                ),
               ),
             ),
           ),

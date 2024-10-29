@@ -1,6 +1,5 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:button_animations/button_animations.dart';
 
 class FilterButton extends StatefulWidget {
   const FilterButton({super.key, required this.text});

@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -75,6 +76,7 @@ class __InputCardState extends State<_InputCard> {
       setState(() {
         _isClicked = false;
       });
+      Navigator.pushNamed(context, AppRoutes.flightinput);
     });
   }
 
@@ -102,7 +104,7 @@ class __InputCardState extends State<_InputCard> {
               const SizedBox(height: 8),
               Text(
                 widget.title,
-                style: AppStyles.titleTextStyle,
+                style: AppStyles.textStyle_24_600,
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -98,18 +99,23 @@ class ReviewsubmissionScreen extends StatelessWidget {
             height: 2, // Height of the black line
             color: Colors.black, // Color of the line
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Container(
-              height: 56,
-              decoration: AppStyles.buttonDecoration.copyWith(
-                borderRadius: BorderRadius.circular(28),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.syncedscreen);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Container(
+                height: 56,
+                decoration: AppStyles.buttonDecoration.copyWith(
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: Center(
+                    child: Text(
+                  "Not here?",
+                  style: AppStyles.textButtonStyle,
+                )),
               ),
-              child: Center(
-                  child: Text(
-                "Not here?",
-                style: AppStyles.textButtonStyle,
-              )),
             ),
           ),
         ],

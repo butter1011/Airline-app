@@ -1,10 +1,11 @@
+import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class QuestionFirstScreen extends StatelessWidget {
-  const QuestionFirstScreen({super.key});
+class QuestionSecondScreen extends StatelessWidget {
+  const QuestionSecondScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class QuestionFirstScreen extends StatelessWidget {
               ),
               SizedBox(height: 32),
               Text(
-                "Tell us what you liked about your journey.",
+                "What could be improved?",
                 style: AppStyles.subtitleTextStyle
                     .copyWith(color: Color(0xffF9F9F9)),
               ),
@@ -186,7 +187,7 @@ class QuestionFirstScreen extends StatelessWidget {
                     text: 'Next',
                     onPressed: () {
                       Navigator.pushNamed(
-                          context, AppRoutes.questionsecondscreen);
+                          context, AppRoutes.questionthirdscreen);
                     },
                     icon: Icons.arrow_forward),
               )

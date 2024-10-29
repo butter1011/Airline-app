@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/widget/button.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,7 +57,7 @@ class _SignUpState extends State<SignUp> {
                 child: Center(
                   child: Text(
                     'Account Creation',
-                    style: AppStyles.titleTextStyle,
+                    style: AppStyles.textStyle_24_600,
                   ),
                 ),
               ),
@@ -312,35 +313,42 @@ class _SignUpState extends State<SignUp> {
               thickness: 3,
             ),
           ),
-          Container(
-            width: 327,
-            height: 54,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(27),
-              color: AppStyles.mainButtonColor,
-              border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-              boxShadow: [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
-            ),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Finish',
-                    style: TextStyle(
-                        fontFamily: 'Clash Grotesk',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset(
-                    'assets/icons/right.png',
-                    width: 20,
-                    height: 20,
-                  ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+            },
+            child: Container(
+              width: 327,
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: AppStyles.mainButtonColor,
+                border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+                boxShadow: [
+                  BoxShadow(color: Colors.black, offset: Offset(3, 3))
                 ],
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Finish',
+                      style: TextStyle(
+                          fontFamily: 'Clash Grotesk',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset(
+                      'assets/icons/right.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

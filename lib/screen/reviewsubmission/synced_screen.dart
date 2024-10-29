@@ -36,7 +36,7 @@ class SyncedScreen extends StatelessWidget {
           children: [
             Text(
               "Nothing to show here",
-              style: AppStyles.titleTextStyle,
+              style: AppStyles.textStyle_24_600,
             ),
             Text(
                 "Here, you can synchronize your calendar and wallet or manually input the review details.",
@@ -54,8 +54,8 @@ class SyncedScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 24,
-                  ),
-                  NavButton(
+                  ),     
+                  NavButton( 
                     text: "Input manually",
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);

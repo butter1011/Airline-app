@@ -188,13 +188,6 @@ class NotificationsScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // Expanded(
-          //     child: SingleChildScrollView(
-          //         child: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [],
-          // )))
         ],
       ),
     );
