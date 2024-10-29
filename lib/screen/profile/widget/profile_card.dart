@@ -4,7 +4,7 @@ import 'package:airline_app/screen/profile/widget/card_chart.dart';
 import 'package:airline_app/screen/profile/widget/card_map.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:airline_app/utils/cairport_list_json.dart';
+
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatefulWidget {
@@ -92,7 +92,24 @@ class _ProfileCardListState extends State<ProfileCardList> {
 
     final List<Widget> PCardList = [
       SingleChildScrollView(child: CLeaderboardScreen()),
-      // CairMap(),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 24,
+            ),
+            Container(
+                height: 558,
+                // width: 327,
+                decoration: AppStyles.cardDecoration,
+                child: MapScreen()),
+            SizedBox(
+              height: 13,
+            )
+          ],
+        ),
+      ),
       Column(
         children: [
           SizedBox(
