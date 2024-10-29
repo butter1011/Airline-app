@@ -29,7 +29,12 @@ class AppStyles {
     fontWeight: FontWeight.w500,
     color: Color(0xff38433E),
   );
-
+  static TextStyle litteGrayTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: Color(0xff38433E),
+  );
   static TextStyle cardTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
@@ -99,6 +104,13 @@ class AppStyles {
   static BoxDecoration avatarDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color
+      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+      boxShadow: [
+        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+      ]);
+  static BoxDecoration avatarExpandDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: AppStyles.mainButtonColor, // Border color
       border: Border.all(width: 2, color: AppStyles.littleBlackColor),
       boxShadow: [
         BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
