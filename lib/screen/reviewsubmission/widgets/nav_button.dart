@@ -36,7 +36,7 @@ class _NavButtonState extends State<NavButton> {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          overlayColor: AppStyles.mainButtonColor,
+          overlayColor: AppStyles.mainColor,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),

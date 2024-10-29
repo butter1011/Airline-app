@@ -54,8 +54,8 @@ class _CalendarExampleState extends State<CalendarExample> {
             selectionRadius: 56,
             selectionTextStyle: TextStyle(color: Colors.black),
             // selectionShape: DateRangePickerSelectionShape.rectangle,
-            startRangeSelectionColor: AppStyles.mainButtonColor,
-            endRangeSelectionColor: AppStyles.mainButtonColor,
+            startRangeSelectionColor: AppStyles.mainColor,
+            endRangeSelectionColor: AppStyles.mainColor,
             headerStyle: DateRangePickerHeaderStyle(
                 textAlign: TextAlign.center,
                 backgroundColor: Colors.white,

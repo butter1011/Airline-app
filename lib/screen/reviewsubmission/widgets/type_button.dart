@@ -34,7 +34,7 @@ class _TypeButtonButtonState extends State<TypeButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: _isSelected
-              ? AppStyles.mainButtonColor
+              ? AppStyles.mainColor
               : AppStyles.whiteColor, // Background color
           border: Border.all(width: 2, color: Colors.black), // Border color
           boxShadow: const [

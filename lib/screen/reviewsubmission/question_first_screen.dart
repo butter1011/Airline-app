@@ -224,7 +224,7 @@ class _FeedbackOptionState extends State<FeedbackOption> {
       child: Container(
         decoration: AppStyles.cardDecoration.copyWith(
           color: _isClicked
-              ? AppStyles.mainButtonColor
+              ? AppStyles.mainColor
               : Colors.white, // Change color based on click state
         ),
         padding: EdgeInsets.only(
@@ -236,7 +236,7 @@ class _FeedbackOptionState extends State<FeedbackOption> {
               height: 48,
               width: 48,
               decoration: AppStyles.cardDecoration.copyWith(
-                color: AppStyles.mainButtonColor,
+                color: AppStyles.mainColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Image.asset(widget.iconUrl, height: 40),

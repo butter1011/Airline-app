@@ -322,7 +322,7 @@ class _SignUpState extends State<SignUp> {
               height: 54,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(27),
-                color: AppStyles.mainButtonColor,
+                color: AppStyles.mainColor,
                 border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                 boxShadow: [
                   BoxShadow(color: Colors.black, offset: Offset(3, 3))

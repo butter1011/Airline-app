@@ -10,7 +10,7 @@ class SentMessageBox extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-              color: AppStyles.mainButtonColor,
+              color: AppStyles.mainColor,
               border: Border.all(width: 2, color: Colors.black),
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),

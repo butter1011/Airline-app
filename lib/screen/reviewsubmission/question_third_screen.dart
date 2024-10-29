@@ -300,8 +300,8 @@ class __ReviewScoreIconState extends State<_ReviewScoreIcon> {
       },
       child: Container(
         height: 40,
-        decoration: AppStyles.avatarDecoration.copyWith(
-            color: _isSelected ? AppStyles.mainButtonColor : Colors.white),
+        decoration: AppStyles.avatarDecoration
+            .copyWith(color: _isSelected ? AppStyles.mainColor : Colors.white),
         child: Image.asset(widget.iconUrl),
       ),
     );

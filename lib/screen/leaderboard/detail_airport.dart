@@ -184,7 +184,7 @@ class _DetailAirportState extends State<DetailAirport> {
                     height: 56, // Diameter of the circular avatar
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: AppStyles.mainButtonColor, // Background color
+                      color: AppStyles.mainColor, // Background color
                       border: Border.all(
                           width: 2, color: Colors.black), // Border color
                       boxShadow: [
@@ -243,7 +243,7 @@ class ExpandButtons extends ConsumerWidget {
                 children: [
                   DetailButton(
                     text: "Seat Comfort",
-                    color: AppStyles.mainButtonColor,
+                    color: AppStyles.mainColor,
                     score: 10,
                   ),
                   const DetailButton(

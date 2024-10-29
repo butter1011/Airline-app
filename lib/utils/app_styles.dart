@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   ///Color style
-  static Color mainButtonColor = const Color(0xFF3FEA9C);
+  static Color mainColor = const Color(0xFF3FEA9C);
   static Color littleBlackColor = const Color(0xff181818);
   static Color whiteColor = const Color(0xffffffff);
 
@@ -110,7 +110,7 @@ class AppStyles {
       ]);
   static BoxDecoration avatarExpandDecoration = BoxDecoration(
       shape: BoxShape.circle,
-      color: AppStyles.mainButtonColor, // Border color
+      color: AppStyles.mainColor, // Border color
       border: Border.all(width: 2, color: AppStyles.littleBlackColor),
       boxShadow: [
         BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))

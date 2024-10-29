@@ -29,7 +29,7 @@ class _FilterButtonState extends State<FilterButton> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: _isSelected
-                ? AppStyles.mainButtonColor
+                ? AppStyles.mainColor
                 : AppStyles.whiteColor, // Change color based on selection
             border: Border.all(
               width: 2,
@@ -49,7 +49,7 @@ class _FilterButtonState extends State<FilterButton> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: _isSelected
-                  ? AppStyles.mainButtonColor
+                  ? AppStyles.mainColor
                   : AppStyles.whiteColor, // Change color based on selection
             ),
             child: Padding(

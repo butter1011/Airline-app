@@ -1,8 +1,6 @@
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -10,7 +8,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppStyles.mainButtonColor,
+        backgroundColor: AppStyles.mainColor,
         body: Center(
           // width: double.infinity,
           child: Column(

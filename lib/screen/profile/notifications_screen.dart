@@ -75,7 +75,7 @@ class NotificationsScreen extends StatelessWidget {
               BasicButton(
                   mywidth: 49,
                   myheight: 40,
-                  myColor: AppStyles.mainButtonColor,
+                  myColor: AppStyles.mainColor,
                   btntext: "All"),
               BasicButton(
                   mywidth: 112,

@@ -89,7 +89,7 @@ class FlightInputScreen extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
-          foregroundColor: AppStyles.mainButtonColor,
+          foregroundColor: AppStyles.mainColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

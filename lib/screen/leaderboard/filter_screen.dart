@@ -245,7 +245,7 @@ class FilterScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.87,
               height: 56,
               decoration: BoxDecoration(
-                  color: AppStyles.mainButtonColor,
+                  color: AppStyles.mainColor,
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
                   borderRadius: BorderRadius.circular(28),

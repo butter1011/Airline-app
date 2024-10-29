@@ -8,7 +8,7 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppStyles.mainButtonColor,
+        backgroundColor: AppStyles.mainColor,
         body: Center(
           // width: double.infinity,
           child: Column(
