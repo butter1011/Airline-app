@@ -1,55 +1,158 @@
-// import 'package:flutter/material.dart';
-// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:airline_app/screen/profile/map_expand_screen.dart';
+import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
+import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
+import 'package:airline_app/utils/app_styles.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
-// class CairMap extends StatefulWidget {
-//   const CairMap({Key? key}) : super(key: key);
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
 
-//   @override
-//   State<CairMap> createState() => _CairMapState();
-// }
+class _MapScreenState extends State<MapScreen> {
+  final MapController _mapController = MapController();
+  Position? _currentPosition;
 
-// class _CairMapState extends State<CairMap> {
-//   MapboxMap? myMapboxMap;
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
 
-//   void _onMapCreated(MapboxMap map) {
-//     myMapboxMap = map;
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition();
 
-//     // Set initial camera position
-//     map.setCamera(CameraOptions(
-//       center: Point(coordinates: Position(-98.0, 39.5)), // Longitude, Latitude
-//       zoom: 2,
-//     ));
+    setState(() {
+      _currentPosition = position;
+    });
 
-//     // Optionally load a style (uncomment and choose a style)
-//     // map.loadStyleURI(Styles.MAPBOX_STREETS); // Load the Mapbox Streets style
-//   }
+    _mapController.move(
+        LatLng(_currentPosition!.latitude, _currentPosition!.longitude), 4.0);
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Cair Map'),
-//       ),
-//       body: MapWidget(
-//         onMapCreated: _onMapCreated,
-//         cameraOptions: CameraOptions(
-//           center: Point(
-//               coordinates: Position(-98.0, 39.5)), // Initial camera position
-//           zoom: 4,
-//         ),
-//       ),
-//     );
-//   }
-// }
+  // LatLng latLng = const LatLng(48.8584, 16.2945);
 
-// void main() {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   // Set your Mapbox access token from environment variable
-//   String ACCESS_TOKEN = const String.fromEnvironment("ACCESS_TOKEN");
-//   MapboxOptions.setAccessToken(ACCESS_TOKEN);
-
-//   runApp(MaterialApp(
-//     home: CairMap(),
-//   ));
-// }
+  @override
+  Widget build(BuildContext context) {
+    final PageController pgcontroller = PageController(viewportFraction: 0.9);
+    return Container(
+      // Ensure the child is clipped to the border radius
+      child: Stack(children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: _currentPosition != null
+                  ? LatLng(
+                      _currentPosition!.latitude, _currentPosition!.longitude)
+                  : LatLng(22, 22),
+              initialZoom: 4,
+            ),
+            children: [
+              TileLayer(
+                // tileBounds: bounds,
+                urlTemplate:
+                    "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJxN3J1a3owd2I1MmxzYjh1cmlrOTM1In0.Ezps4XCt-6SpPYpZY4jIog",
+                subdomains: ['a', 'b', 'c'],
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: _currentPosition != null
+                        ? LatLng(_currentPosition!.latitude,
+                            _currentPosition!.longitude)
+                        : LatLng(22, 22),
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.topCenter,
+                    child: Icon(
+                      Icons.location_pin,
+                      color: Colors.red.shade700,
+                      size: 60,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+            right: 8,
+            top: 8,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return MapExpandScreen();
+                }));
+              },
+              child: Container(
+                decoration: AppStyles.avatarDecoration,
+                width: 40,
+                height: 40,
+                child: Image.asset('assets/icons/1.png'),
+              ),
+            )),
+        Positioned(
+            bottom: 8,
+            left: 8,
+            right: 0,
+            child: Container(
+              height: 130,
+              // width: 200,
+              child: PageView.builder(
+                  controller: pgcontroller,
+                  itemCount: mabboxVisitConfirmedList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.all(16),
+                      width: 278,
+                      // height: 117,
+                      decoration: AppStyles.cardDecoration,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              BasicMapbutton(
+                                  mywidth: 133,
+                                  myheight: 24,
+                                  iconpath: 'assets/icons/check.png',
+                                  btntext: 'Visit Confirmed'),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Long AirPort Name goes here',
+                                style: AppStyles.textButtonStyle,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Your scored 9/10',
+                                style: AppStyles.litteGrayTextStyle,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+            ))
+      ]),
+    );
+  }
+}

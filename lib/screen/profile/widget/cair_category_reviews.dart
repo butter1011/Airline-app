@@ -82,7 +82,7 @@ class CairCategoryReviews extends StatelessWidget {
           ),
           Text(
             review['Content'],
-            style: AppStyles.normalTextStyle,
+            style: AppStyles.textStyle_14_400,
           ),
           SizedBox(
             height: 16,
