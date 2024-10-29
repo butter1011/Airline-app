@@ -1,16 +1,16 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class MainButton extends StatefulWidget {
-  const MainButton({super.key, required this.text});
+class TypeButton extends StatefulWidget {
+  const TypeButton({super.key, required this.text});
 
   final String text;
 
   @override
-  State<MainButton> createState() => _MainButtonState();
+  State<TypeButton> createState() => _TypeButtonButtonState();
 }
 
-class _MainButtonState extends State<MainButton> {
+class _TypeButtonButtonState extends State<TypeButton> {
   late bool _isSelected = false;
   @override
   void initState() {
@@ -30,9 +30,9 @@ class _MainButtonState extends State<MainButton> {
       },
       child: Container(
         // Diameter of the circular avatar
-        height: 48, // Diameter of the circular avatar
+        height: 40, // Diameter of the circular avatar
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20),
           color: _isSelected
               ? AppStyles.mainButtonColor
               : AppStyles.whiteColor, // Background color
@@ -42,7 +42,7 @@ class _MainButtonState extends State<MainButton> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Center(
             child: Text(
               widget.text,

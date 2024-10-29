@@ -1,5 +1,4 @@
-import 'package:airline_app/screen/profile/utils/profile_buttonList_json.dart';
-import 'package:airline_app/screen/profile/widget/card_chart.dart';
+import 'package:airline_app/screen/bottom_nav_bar.dart';
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +9,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(currentIndex: 4),
       body: Stack(children: [
         ListView(children: [
           Column(
@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(
-                          height: 60,
+                          height: 28,
                         ),
                         Row(
                           children: [
@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                               child: const CircleAvatar(
                                 radius: 36,
                                 backgroundImage:
-                                    AssetImage('assets/images/avatar1.png'),
+                                    AssetImage('assets/images/avatar_1.png'),
                               ),
                             ),
                             const SizedBox(
@@ -256,174 +256,12 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(
                     height: 24,
                   ),
-                  Container(
-                    width: 352,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          offset: Offset(3, 3),
-                        ),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: profile_buttonList.map((profilevalue) {
-                          return ProfileCard(
-                            iconPath: profilevalue["imagePath"],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
+                  ProfileCardList(),
                 ],
               ),
-              SingleChildScrollView(child: CardChart()),
             ],
           ),
         ]),
-        Positioned(
-            bottom: 0,
-            height: 30,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.white,
-            )),
-        Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Divider(
-                    thickness: 3,
-                    color: Colors.black,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(3, 3),
-                                ),
-                              ],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(36),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/icons/chart.png',
-                                height: 24,
-                                width: 24,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(3, 3),
-                                ),
-                              ],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(36),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/icons/ai.png',
-                                height: 24,
-                                width: 24,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              color: Color.fromARGB(
-                                255,
-                                63,
-                                234,
-                                156,
-                              ),
-                              borderRadius: BorderRadius.circular(36),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/icons/plus.png',
-                                height: 24,
-                                width: 24,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(3, 3),
-                                ),
-                              ],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(36),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/icons/check.png',
-                                height: 24,
-                                width: 24,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(36),
-                            ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/icons/user.png',
-                                height: 24,
-                                width: 24,
-                              ),
-                            ),
-                          ),
-                        ]),
-                  ),
-                ],
-              ),
-            )),
       ]),
     );
   }

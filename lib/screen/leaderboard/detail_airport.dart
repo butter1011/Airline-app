@@ -1,5 +1,5 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/leaderboard/leaderboard_detail/widgets/category_reviews.dart';
+import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -26,14 +26,13 @@ class _DetailAirportState extends State<DetailAirport> {
       var args = ModalRoute.of(context)!.settings.arguments as Map;
       print(" Passed index ==========> ${args['index']}");
       airportIndex = args['index'];
-      print("🏅🏅🏅  ===> ${airportList[0]}");
     }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    List reviews = airportList[airportIndex]['reviews']['Seat Comfort'];
+    List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
     print("😉😉😉😉😉😉 ${reviews[1]}");
     return Scaffold(
       body: CustomScrollView(
@@ -62,7 +61,7 @@ class _DetailAirportState extends State<DetailAirport> {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      airportList[airportIndex]['imagePath'],
+                      airportReviewList[airportIndex]['imagePath'],
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -133,7 +132,7 @@ class _DetailAirportState extends State<DetailAirport> {
                       height: 9,
                     ),
                     Text(
-                      airportList[airportIndex]['country'],
+                      airportReviewList[airportIndex]['country'],
                       style: AppStyles.titleTextStyle,
                     ),
                     SizedBox(
@@ -230,6 +229,7 @@ class ExpandButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(buttonExpandNotifierProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,7 +320,9 @@ class ExpandButtons extends ConsumerWidget {
               children: [
                 Text(provider ? "Show less categories" : "Show more categories",
                     style: AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
-                Icon(provider ? Icons.expand_less : Icons.expand_more),
+                Icon(
+                  provider ? Icons.expand_less : Icons.expand_more,
+                ),
               ],
             ),
           ),

@@ -1,16 +1,13 @@
-import 'package:airline_app/provider/airportlist_expand_provider.dart';
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/leaderboard/leaderboard_home.dart/leaderboard_home_widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/airport_card.dart';
+import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
-import 'package:airline_app/screen/leaderboard/widgets/itemButton.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -19,6 +16,9 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 0,
+      ),
       body: Column(
         children: [
           // This section will always stay at the top
@@ -58,21 +58,26 @@ class LeaderboardScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: 40, // Diameter of the circular avatar
-                  height: 40, // Diameter of the circular avatar
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, // Background color
-                    border: Border.all(
-                        width: 2, color: Colors.black), // Border color
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                        'assets/icons/setting.png'), // Local image asset
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                  },
+                  child: Container(
+                    width: 40, // Diameter of the circular avatar
+                    height: 40, // Diameter of the circular avatar
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white, // Background color
+                      border: Border.all(
+                          width: 2, color: Colors.black), // Border color
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                          'assets/icons/setting.png'), // Local image asset
+                    ),
                   ),
                 ),
               ],
@@ -92,23 +97,30 @@ class LeaderboardScreen extends StatelessWidget {
               ],
             ),
           ),
-          SingleChildScrollView(
+          const SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 MainButton(
-                    text: "All",
-                    color: AppStyles
-                        .mainButtonColor), // Replace with your button widget
+                  text: "All",
+                ), // Replace with your button widget
                 SizedBox(width: 8),
-                const MainButton(text: "Airline", color: Colors.white),
+                MainButton(
+                  text: "Airline",
+                ),
                 SizedBox(width: 8),
-                const MainButton(text: "Airports", color: Colors.white),
-                const SizedBox(width: 8),
-                const MainButton(text: "Cleanliness", color: Colors.white),
-                const SizedBox(width: 8),
-                const MainButton(text: "Onboard", color: Colors.white),
+                MainButton(
+                  text: "Airports",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Cleanliness",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Onboard",
+                ),
               ],
             ),
           ),
@@ -180,8 +192,8 @@ class AirportListSection extends ConsumerWidget {
     return Column(
       children: [
         Column(
-          children: airportList.map((singleAirport) {
-            int index = airportList.indexOf(singleAirport);
+          children: airportReviewList.map((singleAirport) {
+            int index = airportReviewList.indexOf(singleAirport);
             if (provider || index < 5) {
               return AirportList(
                   country: singleAirport['country'],
@@ -198,7 +210,6 @@ class AirportListSection extends ConsumerWidget {
               ref
                   .watch(buttonExpandNotifierProvider.notifier)
                   .toggleButton(provider);
-              print("✈✈=====>$provider");
             },
             child: IntrinsicWidth(
               child: Row(

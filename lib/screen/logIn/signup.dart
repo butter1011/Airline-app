@@ -1,16 +1,17 @@
 import 'package:airline_app/screen/logIn/logIn.dart';
-import 'package:airline_app/screen/logIn/widget/Button.dart';
+import 'package:airline_app/screen/logIn/widget/button.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignUpUserName extends StatefulWidget {
-  const SignUpUserName({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<SignUpUserName> createState() => _SignUpUserNameState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpUserNameState extends State<SignUpUserName> {
+class _SignUpState extends State<SignUp> {
   // Option 2
   String? selectedGender;
   String? selectedCountry;
@@ -45,21 +46,17 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                     }));
                   },
                   child: Image.asset(
-                    'assets/images/left.png', // Path to your arrow icon
+                    'assets/icons/left.png', // Path to your arrow icon
                     width: 24,
                     height: 24,
                   ),
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Text(
                     'Account Creation',
-                    style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppStyles.titleTextStyle,
                   ),
                 ),
               ),
@@ -320,12 +317,8 @@ class _SignUpUserNameState extends State<SignUpUserName> {
             height: 54,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(27),
-              color: Color.fromARGB(
-                255,
-                63,
-                234,
-                156,
-              ),
+              color: AppStyles.mainButtonColor,
+              border: Border.all(width: 2, color: AppStyles.littleBlackColor),
               boxShadow: [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
             ),
             child: Center(
@@ -343,7 +336,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                     width: 10,
                   ),
                   Image.asset(
-                    'assets/images/right.png',
+                    'assets/icons/right.png',
                     width: 20,
                     height: 20,
                   ),

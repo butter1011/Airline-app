@@ -1,97 +1,4 @@
-Map<String, dynamic> airportList = {
-  'Africa': ['North Africa', 'Sub-Saharan Africa'],
-  'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
-  'Europe': [
-    'Western Europe',
-    'Eastern Europe',
-    'Northern Europe',
-    'Southern Europe',
-    'Central Europe'
-  ],
-  'North America': [
-    'United States',
-    'Canada',
-    'Mexico',
-    'Central America',
-    'Caribbean'
-  ],
-  'South America': ['South America', 'Southern Cone', 'Amazon Basin'],
-  'Australia': [
-    'Australia and New Zealand',
-    'Melanesia',
-    'Micronesia',
-    'Polynesia'
-  ]
-};
-
-List<Map<String, dynamic>> airportCardList = [
-  {
-    'origin': {
-      'country': 'Japan',
-      'city': 'Tokyo',
-      'flag': 'assets/icons/flag_Japan.png',
-      'time': '17:55'
-    },
-    'destination': {
-      'country': 'Romania',
-      'city': 'Bucharest',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
-    },
-    'flight number': 'UO 2923',
-    'visit status': 'Recent Flight'
-  },
-  {
-    'origin': {
-      'country': 'Romania',
-      'city': 'Bucharest',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
-    },
-    'destination': {
-      'country': 'UK',
-      'city': 'London',
-      'flag': 'assets/icons/flag_UK.png',
-      'time': '14:55'
-    },
-    'flight number': 'U1 3933',
-    'visit status': 'Recent Flight'
-  },
-  {
-    'origin': {
-      'country': 'United Arab Emirates',
-      'city': 'Abu Dhabi Airport',
-      'flag': 'assets/icons/flag_United Arab Emirates.png',
-      'time': ''
-    },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Visited recently'
-  },
-  {
-    'origin': {
-      'country': 'Moldova',
-      'city': 'Tokyo',
-      'flag': 'assets/icons/flag_Moldova.png',
-      'time': '20:55'
-    },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Visited recently'
-  },
-  {
-    'origin': {
-      'country': 'UK',
-      'city': 'Heathrow',
-      'flag': 'assets/icons/flag_UK.png',
-      'time': '17:55'
-    },
-    'destination': {'country': '', 'city': '', 'flag': '', 'time': ''},
-    'flight number': '',
-    'visit status': 'Upcoming visit'
-  },
-];
-List<Map<String, dynamic>> airportReviewList = [
+List<Map<String, dynamic>> cairportList = [
   {
     'country': "Abu Dhabi Airport",
     'logo': 'logo_abudhabi.png',
@@ -113,7 +20,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -121,7 +28,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -129,7 +36,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -157,7 +64,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -165,7 +72,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -173,7 +80,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -201,7 +108,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -209,7 +116,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -217,7 +124,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -230,7 +137,7 @@ List<Map<String, dynamic>> airportReviewList = [
   },
   {
     'country': "Ethiopian Airlines",
-    'logo': 'logo_ethiopian.png',
+    'logo': '',
     'imagePath': "assets/images/Ethiopian.png",
     'reviewStatus': false,
     'reviews': {
@@ -245,7 +152,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -253,7 +160,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -261,7 +168,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -274,7 +181,7 @@ List<Map<String, dynamic>> airportReviewList = [
   },
   {
     'country': "Fiji Airways",
-    'logo': 'logo_fiji.png',
+    'logo': '',
     'imagePath': "assets/images/Fiji.png",
     'reviewStatus': false,
     'reviews': {
@@ -289,7 +196,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -297,7 +204,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -305,7 +212,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -333,7 +240,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -341,7 +248,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -349,7 +256,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -377,7 +284,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -385,7 +292,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -393,7 +300,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -421,7 +328,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -429,7 +336,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -437,7 +344,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -465,7 +372,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -473,7 +380,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -481,7 +388,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -509,7 +416,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Andy Cumberbatch',
-          'Avatar': 'avatar_2.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.08.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -517,7 +424,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Amanda Russel',
-          'Avatar': 'avatar_3.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.07.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -525,7 +432,7 @@ List<Map<String, dynamic>> airportReviewList = [
         },
         {
           'Name': 'Naomi Karas',
-          'Avatar': 'avatar_4.png',
+          'Avatar': 'avatar_1.png',
           'Date': '16.06.24',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
@@ -537,6 +444,7 @@ List<Map<String, dynamic>> airportReviewList = [
     }
   },
 ];
+
 List<Map<String, dynamic>> trendingFeedbackList = [
   {
     'Name': 'Benedict Cumberbatch',
@@ -550,7 +458,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
   },
   {
     'Name': 'Andy Cumberbatch',
-    'Avatar': 'avatar_2.png',
+    'Avatar': 'avatar_1.png',
     'Date': '16.08.24',
     'Used Airport': 'Abu Dhabi Airport',
     'Path': 'Tokyo -> Bucharest',
@@ -560,7 +468,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
   },
   {
     'Name': 'Amanda Russel',
-    'Avatar': 'avatar_3.png',
+    'Avatar': 'avatar_1.png',
     'Date': '16.07.24',
     'Used Airport': 'Abu Dhabi Airport',
     'Path': 'Tokyo -> Bucharest',
