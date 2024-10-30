@@ -51,7 +51,7 @@ class QuestionThirdScreen extends StatelessWidget {
               _buildHeaderTitle(),
               SizedBox(height: 32),
               _buildHeaderSubtitle(),
-              SizedBox(height: 20),
+              SizedBox(height: 20),  
               _buildFlightDetails(),
               Spacer(), // Pushes the following container to the bottom
               _buildBottomContainer(),

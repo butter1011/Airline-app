@@ -20,6 +20,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
     'assets/images/SriLankan.png',
     'assets/images/Fiji.png',
   ];
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -28,7 +29,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    print("This is argument 💎💎💎💎💎💎💎 ${screenWidth}");
+    print("This is argument 💎💎💎💎💎💎💎 ${args!['UsedAirport']}");
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,40 +59,6 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                 }).toList(),
                 carouselController: buttonCarouselController,
               ),
-              // ClipRRect(
-              //   // Set your desired border radius
-              //   child: Row(
-              //     children: [
-              //       CarouselSlider.builder(
-              //         itemCount: imgList.length,
-              //         itemBuilder: (context, index, realIndex) {
-              //           return Container(
-              //             height: 594,
-              //             decoration: BoxDecoration(
-              //                 border: Border(
-              //                     bottom: BorderSide(
-              //                         width: 4, color: Colors.black)),
-              //                 image: DecorationImage(
-              //                   image: AssetImage(
-              //                       'assets/images/${imgList[index]}'),
-              //                   fit: BoxFit.cover,
-              //                 )), // Set the height to 300 pixels
-              //           );
-              //         },
-              //         options: CarouselOptions(
-              //           height: 200,
-              //           initialPage: 0,
-              //           enableInfiniteScroll: false,
-              //           onPageChanged: (index, reason) {
-              //             setState(() {
-              //               _currentIndex = index;
-              //             });
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Positioned(
                 top: 281,
                 right: 24,
@@ -155,7 +122,27 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                 ),
                 VerifiedButton(),
                 SizedBox(
-                  height: 11,
+                  height: 14,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Was in ",
+                      style: AppStyles.textStyle_14_400
+                          .copyWith(color: Color(0xFF38433E)),
+                    ),
+                    Text(
+                      "${args['Usedairport']}, ",
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                    Text(
+                      'Premium Economy',
+                      style: AppStyles.textStyle_14_600,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Text(
                   args['Content'],

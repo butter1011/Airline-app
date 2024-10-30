@@ -158,9 +158,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 ),
 
                 child: _selectedIndex == 3
-                    ? Image.asset('assets/icons/star_white.png')
+                    ? Image.asset('assets/icons/message_white.png')
                     : Image.asset(
-                        'assets/icons/star.png'), // Icon inside the container
+                        'assets/icons/message.png'), // Icon inside the container
               ),
               label: 'Home',
             ),
@@ -184,10 +184,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ], // Rounded corners
                 ),
-                child: _selectedIndex == 4
-                    ? Image.asset('assets/icons/profile_white.png')
-                    : Image.asset(
-                        'assets/icons/profile.png'), // Icon inside the container
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/avatar_1.png'),
+                ), // Icon inside the container
               ),
               label: 'Profile',
             ),

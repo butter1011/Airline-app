@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 Map<String, dynamic> airportList = {
   'Africa': ['North Africa', 'Sub-Saharan Africa'],
   'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
@@ -88,6 +86,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
     'logo': 'logo_abudhabi.png',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Abu Dhabi.png",
     'reviewStatus': true,
     'reviews': {
@@ -96,6 +97,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adj ustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': [
@@ -108,6 +110,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -116,6 +119,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_abudhabi_2.png']
@@ -124,6 +128,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -136,6 +141,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Hawaiian Airlines",
     'logo': 'logo_hawaiian.png',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Hawaiian.png",
     'reviewStatus': false,
     'reviews': {
@@ -144,6 +152,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_hawaiian_1.png']
@@ -152,6 +161,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -160,6 +170,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_hawaiian_2.png']
@@ -168,6 +179,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -180,6 +192,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Japan Airlines",
     'logo': 'logo_japan.png',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Japan.png",
     'reviewStatus': true,
     'reviews': {
@@ -188,6 +203,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_japan_1.png']
@@ -196,6 +212,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -204,6 +221,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_japan_2.png']
@@ -212,6 +230,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -224,6 +243,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Ethiopian Airlines",
     'logo': 'logo_ethiopian.png',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Ethiopian.png",
     'reviewStatus': false,
     'reviews': {
@@ -232,6 +254,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_ethiopian_1.png']
@@ -240,6 +263,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -248,6 +272,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_ethiopian_2.png']
@@ -256,6 +281,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -268,6 +294,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Fiji Airways",
     'logo': 'logo_fiji.png',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Fiji.png",
     'reviewStatus': false,
     'reviews': {
@@ -276,6 +305,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_fiji_1.png']
@@ -284,6 +314,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -292,6 +323,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_fiji_2.png']
@@ -300,6 +332,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -312,6 +345,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Air Canada",
     'logo': '',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Air Canada.png",
     'reviewStatus': false,
     'reviews': {
@@ -320,6 +356,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_canada_1.png']
@@ -328,6 +365,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -336,6 +374,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_canada_2.png']
@@ -344,6 +383,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -356,6 +396,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Azerbaijan Airlines",
     'logo': '',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Azerbaijan.png",
     'reviewStatus': false,
     'reviews': {
@@ -364,6 +407,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_azerbaijan_1.png']
@@ -372,6 +416,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -380,6 +425,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_azerbaijan_2.png']
@@ -388,6 +434,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -400,6 +447,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Finnair",
     'logo': '',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Finnair.png",
     'reviewStatus': false,
     'reviews': {
@@ -408,6 +458,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_finnair_1.png']
@@ -416,6 +467,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -424,6 +476,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_finnair_2.png']
@@ -432,6 +485,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -444,6 +498,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "SriLankan Airlines",
     'logo': '',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/SriLankan.png",
     'reviewStatus': false,
     'reviews': {
@@ -452,6 +509,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_srilankan_1.png']
@@ -460,6 +518,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -468,6 +527,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_srilankan_2.png']
@@ -476,6 +536,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -488,6 +549,9 @@ List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Singapore Airlines",
     'logo': '',
+    'about': 'Very long  bio goes here pushing it to the second row',
+    'trending': 'New lounges, pet-friendly zones, or upgraded Wi-Fi!',
+    'perk': 'Spacious legroom, speedy check-in, and eco-friendly practices.',
     'imagePath': "assets/images/Singapore.png",
     'reviewStatus': false,
     'reviews': {
@@ -496,6 +560,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Benedict Cumberbatch',
           'Avatar': 'avatar_1.png',
           'Date': '16.09.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_singapore_1.png']
@@ -504,6 +569,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Andy Cumberbatch',
           'Avatar': 'avatar_2.png',
           'Date': '16.08.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -512,6 +578,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Amanda Russel',
           'Avatar': 'avatar_3.png',
           'Date': '16.07.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': ['review_singapore_2.png']
@@ -520,6 +587,7 @@ List<Map<String, dynamic>> airportReviewList = [
           'Name': 'Naomi Karas',
           'Avatar': 'avatar_4.png',
           'Date': '16.06.24',
+          'Usedairport': 'Japan Airways',
           'Content':
               'Loved the adjustable headrest and soft cushioning. Made the trip very relaxing.',
           'Images': []
@@ -535,7 +603,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Name': 'Benedict Cumberbatch',
     'Avatar': 'avatar_1.png',
     'Date': '16.09.24',
-    'Used Airport': 'Abu Dhabi Airport',
+    'Used Airport': 'Hawaiian Airlines',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft  cushioning. Made the trip very relaxing.',
@@ -549,7 +617,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Name': 'Andy Cumberbatch',
     'Avatar': 'avatar_2.png',
     'Date': '16.08.24',
-    'Used Airport': 'Abu Dhabi Airport',
+    'Used Airport': 'Hawaiian Airlines',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Liked the adjustable headrest, soft cushioning. Made the trip very relaxing.',
@@ -563,7 +631,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Name': 'Amanda Russel',
     'Avatar': 'avatar_3.png',
     'Date': '16.07.24',
-    'Used Airport': 'Abu Dhabi Airport',
+    'Used Airport': 'Hawaiian Airlines',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',

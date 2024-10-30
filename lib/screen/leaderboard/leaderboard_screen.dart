@@ -1,5 +1,5 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';

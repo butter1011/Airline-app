@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/leaderboard/widgets/airports_each_continent.dart';
 import 'package:airline_app/screen/leaderboard/widgets/filter_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,29 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   // Declare continents and selectedStates as instance variables
-  final List<String> continents = [
+  final List<String> airType = [
+    "All",
+    "Airports",
+    "Airline",
+  ];
+  final List<String> flyerClass = [
+    "All",
+    "First Class",
+    "Business",
+    "Premium economy",
+    "Economy",
+    "Presidential",
+  ];
+  final List<String> category = [
+    "All",
+    "First Class",
+    "Business",
+    "Premium economy",
+    "Economy",
+    "Presidential",
+  ];
+
+  final List<String> continent = [
     "All",
     "Africa",
     "Asia",
@@ -23,25 +44,45 @@ class _FilterScreenState extends State<FilterScreen> {
   ];
 
   // Track selection state for each continent button
-  late List<bool>
-      selectedStates; // Use 'late' to indicate it will be initialized later
+  late List<bool> selectedairTypeStates;
+
+  // Use 'late' to indicate it will be initialized later
+  late List<bool> selectedFlyerClassStates;
+  late List<bool> selectedCategoryStates;
+  late List<bool> selectedContinentStates;
+
+  bool typeIsExpanded = true;
+  bool flyerClassIsExpanded = true;
+  bool categoryIsExpanded = true;
+  bool rankIsExpanded = true;
+  bool continentIsExpanded = true;
 
   @override
   void initState() {
     super.initState();
     // Initialize selectedStates based on the number of continents
-    selectedStates = List.filled(continents.length, false);
+    selectedairTypeStates = List.filled(airType.length, false);
+    selectedFlyerClassStates = List.filled(flyerClass.length, false);
+    selectedCategoryStates = List.filled(category.length, false);
+    selectedContinentStates = List.filled(continent.length, false);
   }
 
-  void _toggleFilter(int index) {
+  void _toggleFilter(int index, List selectedStates) {
     setState(() {
       if (index == 0) {
-        // If "All" is clicked, select it and deselect others
-        selectedStates[0] = !selectedStates[0]; // Toggle "All"
+        // If "All" is clicked
         if (selectedStates[0]) {
-          // If "All" is selected, deselect all others
+          // If "All" is already selected, deselect it and all others
+          selectedStates[0] = false;
           for (int i = 1; i < selectedStates.length; i++) {
-            selectedStates[i] = true;
+            selectedStates[i] = false;
+          }
+        } else {
+          // Toggle "All" on
+          selectedStates[0] = true;
+          // Deselect all others
+          for (int i = 1; i < selectedStates.length; i++) {
+            selectedStates[i] = true; // Select all others
           }
         }
       } else {
@@ -68,16 +109,6 @@ class _FilterScreenState extends State<FilterScreen> {
     });
   }
 
-  List<String> getSelectedContinents() {
-    List<String> selectedContinents = [];
-    for (int i = 1; i < selectedStates.length; i++) {
-      if (selectedStates[i]) {
-        selectedContinents.add(continents[i]);
-      }
-    }
-    return selectedContinents;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,31 +126,31 @@ class _FilterScreenState extends State<FilterScreen> {
             child: Icon(Icons.search, size: 24),
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(4.0),
+          child: Container(color: Colors.black, height: 4.0),
+        ),
       ),
-      body: Column(
-        children: [
-          Container(height: 4, color: AppStyles.littleBlackColor),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  _buildTypeCategory(),
-                  const SizedBox(height: 25),
-                  _buildGlobalRegionalLeaderboards(),
-                  const SizedBox(height: 18),
-                  _buildCategorySpecificLeaderboards(
-                      "Category-Specific Leaderboards"),
-                  const SizedBox(height: 25),
-                  _buildClassSpecificLeaderboards(
-                      "Class-Specific Leaderboards"),
-                ],
-              ),
-            ),
+      body: Expanded(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              _buildTypeCategory(),
+              const SizedBox(height: 17),
+              _buildFlyerClassLeaderboards(),
+              const SizedBox(height: 17),
+              _buildCategoryLeaderboards(),
+              const SizedBox(height: 17),
+              _buildRankLeaderboards(),
+              const SizedBox(height: 10),
+              _buildContinentLeaderboards(),
+              const SizedBox(height: 85),
+            ],
           ),
-          _buildApplyButton(),
-        ],
+        ),
       ),
+      bottomSheet: _buildApplyButton(),
     );
   }
 
@@ -130,43 +161,159 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Type", style: AppStyles.textStyle_18_600),
-            const Icon(Icons.expand_less),
+            Text('Type', style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    typeIsExpanded = !typeIsExpanded;
+                  });
+                },
+                icon: Icon(
+                    typeIsExpanded ? Icons.expand_more : Icons.expand_less)),
           ],
         ),
-        const SizedBox(height: 16),
-        const Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            FilterButton(text: 'All'),
-            FilterButton(text: 'Airports'),
-            FilterButton(text: 'Airline'),
-          ],
-        ),
+        Visibility(
+            visible: typeIsExpanded,
+            child: Column(
+              children: [
+                const SizedBox(height: 17),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                      airType.length,
+                      (index) => ContinentFilterButton(
+                            text: airType[index],
+                            isSelected: selectedairTypeStates[index],
+                            onTap: () =>
+                                _toggleFilter(index, selectedairTypeStates),
+                          )),
+                ),
+              ],
+            ))
       ],
     );
   }
 
-  Widget _buildGlobalRegionalLeaderboards() {
+  Widget _buildFlyerClassLeaderboards() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Global & Regional Leaderboards",
-                style: AppStyles.textStyle_18_600),
-            const Icon(Icons.expand_less),
+            Text('Flyer Class', style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    flyerClassIsExpanded = !flyerClassIsExpanded;
+                  });
+                },
+                icon: Icon(flyerClassIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
           ],
         ),
-        const SizedBox(height: 10),
-        _buildContinentsSection(),
+        Visibility(
+          visible: flyerClassIsExpanded,
+          child: Column(
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
+                    flyerClass.length,
+                    (index) => ContinentFilterButton(
+                          text: flyerClass[index],
+                          isSelected: selectedFlyerClassStates[index],
+                          onTap: () =>
+                              _toggleFilter(index, selectedFlyerClassStates),
+                        )),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildContinentsSection() {
+  Widget _buildCategoryLeaderboards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Categories', style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    categoryIsExpanded = !categoryIsExpanded;
+                  });
+                },
+                icon: Icon(categoryIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
+          ],
+        ),
+        Visibility(
+            visible: categoryIsExpanded,
+            child: Column(
+              children: [
+                const SizedBox(height: 17),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                      category.length,
+                      (index) => ContinentFilterButton(
+                            text: category[index],
+                            isSelected: selectedCategoryStates[index],
+                            onTap: () =>
+                                _toggleFilter(index, selectedCategoryStates),
+                          )),
+                ),
+              ],
+            ))
+      ],
+    );
+  }
+
+  Widget _buildRankLeaderboards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Filter Rank', style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    rankIsExpanded = !rankIsExpanded;
+                  });
+                },
+                icon: Icon(
+                    rankIsExpanded ? Icons.expand_more : Icons.expand_less)),
+          ],
+        ),
+        // const SizedBox(height: 17),
+        // Wrap(
+        //   spacing: 8,
+        //   runSpacing: 8,
+        //   children: List.generate(
+        //       category.length,
+        //       (index) => ContinentFilterButton(
+        //             text: category[index],
+        //             isSelected: selectedCategoryStates[index],
+        //             onTap: () => _toggleFilter(index, selectedCategoryStates),
+        //           )),
+        // ),
+      ],
+    );
+  }
+
+  Widget _buildContinentLeaderboards() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -174,81 +321,36 @@ class _FilterScreenState extends State<FilterScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Best by Continents', style: AppStyles.textStyle_16_600),
-            const Icon(Icons.expand_less),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    continentIsExpanded = !continentIsExpanded;
+                  });
+                },
+                icon: Icon(continentIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
           ],
         ),
-        const SizedBox(height: 17),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: List.generate(
-              continents.length,
-              (index) => ContinentFilterButton(
-                    text: continents[index],
-                    isSelected: selectedStates[index],
-                    onTap: () => _toggleFilter(index),
-                  )),
-        ),
-        const SizedBox(height: 18),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: getSelectedContinents()
-              .map((singleKey) => AirportsEachContinent(continent: singleKey))
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCategorySpecificLeaderboards(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: AppStyles.textStyle_18_600),
-            const Icon(Icons.expand_less),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            FilterButton(text: "All"),
-            FilterButton(text: "Best Wi-Fi"),
-            FilterButton(text: "Best Food"),
-            FilterButton(text: "Best Seat Comfort"),
-            FilterButton(text: "Cleanliness"),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildClassSpecificLeaderboards(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title, style: AppStyles.textStyle_18_600),
-            const Icon(Icons.expand_less),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            FilterButton(text: "All"),
-            FilterButton(text: "Best First Class"),
-            FilterButton(text: "Best Business Class"),
-            FilterButton(text: "Best Economy Class"),
-          ],
-        ),
+        Visibility(
+            visible: continentIsExpanded,
+            child: Column(
+              children: [
+                const SizedBox(height: 17),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                      continent.length,
+                      (index) => ContinentFilterButton(
+                            text: continent[index],
+                            isSelected: selectedContinentStates[index],
+                            onTap: () =>
+                                _toggleFilter(index, selectedContinentStates),
+                          )),
+                ),
+              ],
+            ))
       ],
     );
   }
@@ -308,7 +410,9 @@ class ContinentFilterButton extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: isSelected ? AppStyles.mainColor : Colors.white,
+                color: text == "All"
+                    ? AppStyles.mainColor
+                    : (isSelected ? AppStyles.mainColor : Colors.white),
                 border: Border(
                   top: BorderSide(color: Colors.black, width: 2.0),
                   left: BorderSide(color: Colors.black, width: 2.0),

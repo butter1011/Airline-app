@@ -7,7 +7,12 @@ class AppStyles {
   static Color littleBlackColor = const Color(0xff181818);
 
   ///Text style
-
+  static TextStyle textStyle_12_600 = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
   static TextStyle textStyle_13_600 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 13,
@@ -57,7 +62,7 @@ class AppStyles {
     fontFamily: 'Clash Grotesk',
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: Color(0xFF181818),
+    color: Color(0xFF000000),
   );
   static TextStyle textStyle_18_600 = const TextStyle(
     fontFamily: 'Clash Grotesk',
