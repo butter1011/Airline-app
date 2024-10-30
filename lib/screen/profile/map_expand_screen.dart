@@ -100,7 +100,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
               )),
           Positioned(
               bottom: 8,
-              left: 8,
+              left: -8,
               right: 0,
               child: Container(
                 height: 130,

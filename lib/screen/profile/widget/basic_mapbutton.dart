@@ -22,7 +22,7 @@ class BasicMapbutton extends StatelessWidget {
       width: mywidth,
       height: myheight,
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(color: Colors.black, width: 2),
         color: Colors.white,
         borderRadius: BorderRadius.circular(27),
         boxShadow: [
@@ -43,7 +43,7 @@ class BasicMapbutton extends StatelessWidget {
               style: const TextStyle(
                   fontFamily: 'Clash Grotesk',
                   fontSize: 14,
-                  fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.w500),
             ),
             // ),
             Image.asset(

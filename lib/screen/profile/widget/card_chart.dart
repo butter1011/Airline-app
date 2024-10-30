@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/profile/utils/card_chart_json.dart';
 import 'package:airline_app/screen/profile/widget/button1.dart';
+import 'package:airline_app/screen/profile/widget/review_button.dart';
 import 'package:flutter/material.dart';
 
 class CardChart extends StatelessWidget {
@@ -7,22 +8,8 @@ class CardChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      children: btn_chartList.map((btnValue) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 4,
-          ),
-          child: ButtonChart(
-            iconpath: btnValue['iconpath'],
-            mywidth: btnValue['width'],
-            btntext: btnValue['text'],
-            // myColor: btnValue['myColor'],
-            myheight: btnValue['height'],
-          ),
-        );
-      }).toList(),
-    );
+    return Wrap(spacing: 16, children: [
+      ReviewButton(text: "Top Reviewer", color: Colors.white, score: 3)
+    ]);
   }
 }

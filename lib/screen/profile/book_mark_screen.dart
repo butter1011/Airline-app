@@ -13,38 +13,32 @@ class BookMarkScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 66,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ProfileScreen();
-                    }));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      'assets/icons/left.png', // Path to your arrow icon
-                      width: 24,
-                      height: 24,
-                    ),
-                  ),
-                ),
-                Expanded(
-                    child: Center(
-                        child: Text('Mexico (2)',
-                            style: AppStyles.mainTextStyle))),
-              ],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white, // Set background color
+        centerTitle: true, // This centers the title
+        title: Text(
+          'Mexico (2)',
+          style: AppStyles.mainTextStyle,
+        ),
+        leading: IconButton(
+          icon: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/icons/left.png', // Path to your arrow icon
+              width: 24,
+              height: 24,
             ),
           ),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ProfileScreen();
+            }));
+          },
+        ),
+      ),
+      body: Column(
+        children: [
           Divider(
             thickness: 4,
             color: Colors.black,

@@ -5,7 +5,6 @@ class AppStyles {
   ///Color style
   static Color mainButtonColor = const Color(0xFF3FEA9C);
   static Color littleBlackColor = const Color(0xff181818);
-  static Color whiteColor = const Color(0xffffffff);
 
   ///Text style
 
@@ -64,7 +63,7 @@ class AppStyles {
     fontFamily: 'Clash Grotesk',
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: Color(0xFF181818),
+    color: Colors.black,
   );
   static TextStyle smallTitleTextStyle = const TextStyle(
     fontFamily: 'Clash Grotesk',
@@ -104,17 +103,8 @@ class AppStyles {
   static BoxDecoration avatarDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color
-      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-      boxShadow: [
-        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-      ]);
-  static BoxDecoration avatarExpandDecoration = BoxDecoration(
-      shape: BoxShape.circle,
-      color: AppStyles.mainButtonColor, // Border color
-      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-      boxShadow: [
-        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-      ]);
+      border: Border.all(width: 2, color: Colors.black),
+      boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(2, 2))]);
   static BoxDecoration slideButtonDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color

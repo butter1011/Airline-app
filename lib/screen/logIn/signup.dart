@@ -5,14 +5,14 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class SignUpUserName extends StatefulWidget {
+  const SignUpUserName({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignUpUserName> createState() => _SignUpUserNameState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpUserNameState extends State<SignUpUserName> {
   // Option 2
   String? selectedGender;
   String? selectedCountry;
@@ -47,13 +47,13 @@ class _SignUpState extends State<SignUp> {
                     }));
                   },
                   child: Image.asset(
-                    'assets/icons/left.png', // Path to your arrow icon
+                    'assets/images/left.png', // Path to your arrow icon
                     width: 24,
                     height: 24,
                   ),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: Center(
                   child: Text(
                     'Account Creation',

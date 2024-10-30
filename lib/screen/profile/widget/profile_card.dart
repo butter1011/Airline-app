@@ -58,58 +58,61 @@ class ProfileCardList extends ConsumerWidget {
 
     return Column(
       children: [
-        Container(
-          width: 352,
-          height: 78,
-          decoration: BoxDecoration(
-            border: Border.all(),
-            boxShadow: [
-              BoxShadow(color: Colors.black, offset: Offset(2, 2)),
-            ],
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ProfileCard1(
-                  count: 0,
-                  iconPath: iconPaths[0],
-                  isActive: selectedIndex == 0,
-                  myfun: () => ref.read(selectedIndexProvider.notifier).state =
-                      0, // Update state
-                ),
-                ProfileCard2(
-                  count: 1,
-                  iconPath: iconPaths[1],
-                  isActive: selectedIndex == 1,
-                  myfun: () =>
-                      ref.read(selectedIndexProvider.notifier).state = 1,
-                ),
-                ProfileCard3(
-                  count: 2,
-                  iconPath: iconPaths[2],
-                  isActive: selectedIndex == 2,
-                  myfun: () =>
-                      ref.read(selectedIndexProvider.notifier).state = 2,
-                ),
-                ProfileCard4(
-                  count: 3,
-                  iconPath: iconPaths[3],
-                  isActive: selectedIndex == 3,
-                  myfun: () =>
-                      ref.read(selectedIndexProvider.notifier).state = 3,
-                ),
-                ProfileCard5(
-                  count: 4,
-                  iconPath: iconPaths[4],
-                  isActive: selectedIndex == 4,
-                  myfun: () =>
-                      ref.read(selectedIndexProvider.notifier).state = 4,
-                ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Container(
+            height: 72,
+            decoration: BoxDecoration(
+              border: Border.all(width: 2),
+              boxShadow: [
+                BoxShadow(color: Colors.black, offset: Offset(2, 2)),
               ],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ProfileCard1(
+                    count: 0,
+                    iconPath: iconPaths[0],
+                    isActive: selectedIndex == 0,
+                    myfun: () => ref
+                        .read(selectedIndexProvider.notifier)
+                        .state = 0, // Update state
+                  ),
+                  ProfileCard2(
+                    count: 1,
+                    iconPath: iconPaths[1],
+                    isActive: selectedIndex == 1,
+                    myfun: () =>
+                        ref.read(selectedIndexProvider.notifier).state = 1,
+                  ),
+                  ProfileCard3(
+                    count: 2,
+                    iconPath: iconPaths[2],
+                    isActive: selectedIndex == 2,
+                    myfun: () =>
+                        ref.read(selectedIndexProvider.notifier).state = 2,
+                  ),
+                  ProfileCard4(
+                    count: 3,
+                    iconPath: iconPaths[3],
+                    isActive: selectedIndex == 3,
+                    myfun: () =>
+                        ref.read(selectedIndexProvider.notifier).state = 3,
+                  ),
+                  ProfileCard5(
+                    count: 4,
+                    iconPath: iconPaths[4],
+                    isActive: selectedIndex == 4,
+                    myfun: () =>
+                        ref.read(selectedIndexProvider.notifier).state = 4,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
