@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +138,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                       children: [
                         Text(
                           args['Name'],
-                          style: AppStyles.cardTextStyle,
+                          style: AppStyles.textStyle_14_600,
                         ),
                         Text(
                           args['Date'],
@@ -166,8 +167,12 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
-                        icon: Image.asset('assets/icons/telegram_black.png'),
+                        onPressed: () async {
+                          await BottomSheetHelper.showScoreBottomSheet(
+                            context,
+                          );
+                        },
+                        icon: Image.asset('assets/icons/share.png'),
                         color: Colors.black),
                     Row(
                       children: [
@@ -177,7 +182,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                         ),
                         Text(
                           "9998",
-                          style: AppStyles.cardTextStyle,
+                          style: AppStyles.textStyle_14_600,
                         )
                       ],
                     )

@@ -15,7 +15,7 @@ class VerifiedButton extends StatelessWidget {
       child: Center(
           child: Text(
         "Verified",
-        style: AppStyles.cardTextStyle.copyWith(color: AppStyles.whiteColor),
+        style: AppStyles.textStyle_14_600.copyWith(color: Colors.white),
       )),
     );
   }

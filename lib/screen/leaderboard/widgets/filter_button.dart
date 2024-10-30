@@ -30,7 +30,7 @@ class _FilterButtonState extends State<FilterButton> {
             borderRadius: BorderRadius.circular(30),
             color: _isSelected
                 ? AppStyles.mainColor
-                : AppStyles.whiteColor, // Change color based on selection
+                : Colors.white, // Change color based on selection
             border: Border.all(
               width: 2,
               color: AppStyles.littleBlackColor,
@@ -50,12 +50,12 @@ class _FilterButtonState extends State<FilterButton> {
               borderRadius: BorderRadius.circular(30),
               color: _isSelected
                   ? AppStyles.mainColor
-                  : AppStyles.whiteColor, // Change color based on selection
+                  : Colors.white, // Change color based on selection
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(
-                child: Text(widget.text, style: AppStyles.cardTextStyle),
+                child: Text(widget.text, style: AppStyles.textStyle_14_600),
               ),
             ),
           ),

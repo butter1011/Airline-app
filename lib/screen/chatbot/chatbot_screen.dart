@@ -25,7 +25,7 @@ class ChatbotScreen extends StatelessWidget {
           child: Text(
             "Sam - AI Flight Planner",
             textAlign: TextAlign.center,
-            style: AppStyles.mainTextStyle,
+            style: AppStyles.textStyle_16_600,
           ),
         ),
       ),

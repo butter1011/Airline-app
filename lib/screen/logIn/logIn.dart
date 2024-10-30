@@ -58,7 +58,7 @@ class Login extends StatelessWidget {
                               width: 10,
                             ),
                             Text('Sign in with Google',
-                                style: AppStyles.textButtonStyle),
+                                style: AppStyles.textStyle_15_600),
                           ],
                         ),
                       ),
@@ -87,7 +87,7 @@ class Login extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.signupscreen);
+                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
                 },
                 child: Container(
                   width: 327,
@@ -119,10 +119,7 @@ class Login extends StatelessWidget {
                         ),
                         Text(
                           'Register with email',
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                          style: AppStyles.textStyle_15_600,
                         ),
                       ],
                     ),

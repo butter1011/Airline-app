@@ -49,7 +49,7 @@ class FlightInputScreen extends StatelessWidget {
       ),
       centerTitle: true,
       title: Text('Input Manually',
-          style: AppStyles.mainTextStyle.copyWith(color: Colors.black)),
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),
         child: Container(color: Colors.black, height: 4.0),
@@ -60,7 +60,7 @@ class FlightInputScreen extends StatelessWidget {
   Widget _buildInfoText(String text) {
     return Text(
       text,
-      style: AppStyles.normalTextStyle2,
+      style: AppStyles.textStyle_15_400,
       textAlign: TextAlign.start,
     );
   }
@@ -68,7 +68,7 @@ class FlightInputScreen extends StatelessWidget {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: AppStyles.cardTextStyle,
+      style: AppStyles.textStyle_14_600,
     );
   }
 
@@ -99,7 +99,7 @@ class FlightInputScreen extends StatelessWidget {
           print('$label button pressed'); // Placeholder for functionality
         },
         child: Center(
-          child: Text(label, style: AppStyles.cardTextStyle),
+          child: Text(label, style: AppStyles.textStyle_14_600),
         ),
       ),
     );
@@ -128,7 +128,7 @@ class FlightInputScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Pick your class of travel:", style: AppStyles.cardTextStyle),
+        Text("Pick your class of travel:", style: AppStyles.textStyle_14_600),
         const SizedBox(height: 13),
         Wrap(
           spacing: 8,
@@ -147,7 +147,7 @@ class FlightInputScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Synchronize (Recommended):", style: AppStyles.cardTextStyle),
+        Text("Synchronize (Recommended):", style: AppStyles.textStyle_14_600),
         const SizedBox(height: 13),
         Wrap(
           spacing: 8,
@@ -186,7 +186,7 @@ class FlightInputScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Next", style: AppStyles.textButtonStyle),
+                    Text("Next", style: AppStyles.textStyle_15_600),
                     Icon(Icons.arrow_forward_outlined)
                   ],
                 ),
@@ -219,7 +219,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.labelText,
-            style: AppStyles.cardTextStyle), // Use label from constructor
+            style: AppStyles.textStyle_14_600), // Use label from constructor
         const SizedBox(height: 8),
         _buildDropdown(),
       ],
@@ -234,7 +234,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           hint: Text('Select ${widget.hintText}',
-              style: AppStyles.normalTextStyle2.copyWith(
+              style: AppStyles.textStyle_15_400.copyWith(
                   color:
                       Color(0xff38433E))), // Dynamic hint text based on label
           value: selectedItem,

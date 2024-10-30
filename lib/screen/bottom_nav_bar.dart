@@ -62,8 +62,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 0
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -91,8 +90,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 1
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -145,8 +143,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 3
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -174,8 +171,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 4
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),

@@ -33,7 +33,7 @@ class _ToggleButtonState extends State<ToggleBtn> {
             // Add functionality for syncing here
           },
           child: Center(
-            child: Text(widget.buttonText, style: AppStyles.cardTextStyle),
+            child: Text(widget.buttonText, style: AppStyles.textStyle_14_600),
           ),
         ),
       ),

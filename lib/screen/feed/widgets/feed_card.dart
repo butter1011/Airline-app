@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class FeedCard extends StatelessWidget {
               children: [
                 Text(
                   'Benedict Cumberbatch',
-                  style: AppStyles.cardTextStyle,
+                  style: AppStyles.textStyle_14_600,
                 ),
                 Text(
                   'Rated 9/10 on ${singleFeedback['Date']}',
@@ -63,7 +64,7 @@ class FeedCard extends StatelessWidget {
             ),
             Text(
               singleFeedback['Used Airport'],
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             )
           ],
         ),
@@ -81,7 +82,7 @@ class FeedCard extends StatelessWidget {
             ),
             Text(
               singleFeedback['Path'],
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             )
           ],
         ),
@@ -116,8 +117,12 @@ class FeedCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: () {},
-              child: Image.asset('assets/icons/telegram_black.png'),
+              onTap: () async {
+                await BottomSheetHelper.showScoreBottomSheet(
+                  context,
+                );
+              },
+              child: Image.asset('assets/icons/share.png'),
             ),
             Row(
               children: [
@@ -127,7 +132,7 @@ class FeedCard extends StatelessWidget {
                 ),
                 Text(
                   "9998",
-                  style: AppStyles.cardTextStyle,
+                  style: AppStyles.textStyle_14_600,
                 )
               ],
             )

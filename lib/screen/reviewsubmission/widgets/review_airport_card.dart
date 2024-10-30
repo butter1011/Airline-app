@@ -31,7 +31,7 @@ class ReviewAirportCard extends StatelessWidget {
                 ),
                 Text(
                   country + ', ' + time,
-                  style: AppStyles.flagTextStyle,
+                  style: AppStyles.textStyle_13_600,
                 )
               ],
             ),
@@ -43,7 +43,8 @@ class ReviewAirportCard extends StatelessWidget {
               children: [
                 Text(
                   airport,
-                  style: AppStyles.mainTextStyle.copyWith(color: Colors.black),
+                  style:
+                      AppStyles.textStyle_16_600.copyWith(color: Colors.black),
                 ),
                 Icon(Icons.arrow_forward)
               ],
@@ -65,7 +66,7 @@ class ReviewAirportCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       status,
-                      style: AppStyles.litteBlackTextStyle
+                      style: AppStyles.textStyle_14_500
                           .copyWith(color: Colors.white),
                     ),
                   ),

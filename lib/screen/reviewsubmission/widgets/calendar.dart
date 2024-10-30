@@ -40,7 +40,7 @@ class _CalendarExampleState extends State<CalendarExample> {
       children: <Widget>[
         Text(
           "Departure Date",
-          style: AppStyles.litteBlackTextStyle.copyWith(color: Colors.black),
+          style: AppStyles.textStyle_14_500.copyWith(color: Colors.black),
         ),
         const SizedBox(height: 8),
         Container(
@@ -59,7 +59,7 @@ class _CalendarExampleState extends State<CalendarExample> {
             headerStyle: DateRangePickerHeaderStyle(
                 textAlign: TextAlign.center,
                 backgroundColor: Colors.white,
-                textStyle: AppStyles.cardTextStyle),
+                textStyle: AppStyles.textStyle_14_600),
             controller: _controller,
             selectionMode: DateRangePickerSelectionMode.range,
             onSelectionChanged: selectionChanged,

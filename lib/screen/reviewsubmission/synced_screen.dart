@@ -19,7 +19,7 @@ class SyncedScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Reviews',
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
@@ -40,7 +40,7 @@ class SyncedScreen extends StatelessWidget {
             ),
             Text(
                 "Here, you can synchronize your calendar and wallet or manually input the review details.",
-                style: AppStyles.messageTextStyle
+                style: AppStyles.textStyle_15_500
                     .copyWith(color: Color(0xff38433E))),
             Expanded(
               child: Column(
@@ -54,8 +54,8 @@ class SyncedScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 24,
-                  ),     
-                  NavButton( 
+                  ),
+                  NavButton(
                     text: "Input manually",
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);

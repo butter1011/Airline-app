@@ -10,7 +10,8 @@ class AirportsEachContinent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("🥉🥉🥉 ${airportList[continent]}");
-    List airports = airportList[continent];
+    dynamic airports = airportList[continent];
+    print("this is airports ✈=====>$continent");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,8 +19,8 @@ class AirportsEachContinent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "South America",
-              style: AppStyles.cardTextStyle,
+              continent,
+              style: AppStyles.textStyle_14_600,
             ),
             Icon(Icons.expand_less)
           ],

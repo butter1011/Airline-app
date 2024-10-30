@@ -54,11 +54,11 @@ class QuestionFirstScreen extends StatelessWidget {
                     children: [
                       Text(
                         'JAPAN     ',
-                        style: AppStyles.reviewTitleTextStyle,
+                        style: AppStyles.oswaldTextStyle,
                       ),
                       Text(
                         ' AIRLINES',
-                        style: AppStyles.reviewTitleTextStyle,
+                        style: AppStyles.oswaldTextStyle,
                       )
                     ],
                   ),
@@ -67,12 +67,12 @@ class QuestionFirstScreen extends StatelessWidget {
               SizedBox(height: 32),
               Text(
                 "Tell us what you liked about your journey.",
-                style: AppStyles.subtitleTextStyle
+                style: AppStyles.textStyle_18_600
                     .copyWith(color: Color(0xffF9F9F9)),
               ),
               Text(
                 'Your feedback helps us improve!',
-                style: AppStyles.textButtonStyle
+                style: AppStyles.textStyle_15_600
                     .copyWith(color: Color(0xffC1C7C4)),
               ),
               SizedBox(
@@ -80,14 +80,14 @@ class QuestionFirstScreen extends StatelessWidget {
               ),
               Text(
                 'Japan Airways, 18/10/24, Premium Economy',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(
                 height: 4,
               ),
               Text(
                 'Tokyo > Bucharest',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               Spacer(), // This will push the following container to the bottom
               Container(
@@ -118,7 +118,7 @@ class QuestionFirstScreen extends StatelessWidget {
           children: [
             Text(
               'Select up to 4 positive aspects',
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),
             Expanded(
@@ -245,7 +245,7 @@ class _FeedbackOptionState extends State<FeedbackOption> {
             Text(
               widget.label,
               textAlign: TextAlign.center,
-              style: AppStyles.cardTextStyle, // Optional styling
+              style: AppStyles.textStyle_14_600, // Optional styling
             ),
           ],
         ),

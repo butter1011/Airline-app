@@ -41,7 +41,7 @@ class NotificationsScreen extends StatelessWidget {
                 Expanded(
                     child: Center(
                         child: Text('Notifications',
-                            style: AppStyles.mainTextStyle))),
+                            style: AppStyles.textStyle_16_600))),
               ],
             ),
           ),
@@ -59,7 +59,7 @@ class NotificationsScreen extends StatelessWidget {
               children: [
                 Text(
                   'Type',
-                  style: AppStyles.subtitleTextStyle,
+                  style: AppStyles.textStyle_18_600,
                 ),
               ],
             ),
@@ -116,14 +116,14 @@ class NotificationsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'E-mail Sync',
-                        style: AppStyles.mainTextStyle,
+                        style: AppStyles.textStyle_16_600,
                       ),
                       Icon(Icons.arrow_forward_sharp)
                     ],
                   ),
                   Text(
                     'Sub headline goes here where we explain the why we need it',
-                    style: AppStyles.cardTextStyle.copyWith(
+                    style: AppStyles.textStyle_14_600.copyWith(
                         fontWeight: FontWeight.w400, color: Colors.black),
                   ),
                   SizedBox(
@@ -159,14 +159,14 @@ class NotificationsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'E-mail Sync',
-                        style: AppStyles.mainTextStyle,
+                        style: AppStyles.textStyle_16_600,
                       ),
                       Icon(Icons.arrow_forward_sharp)
                     ],
                   ),
                   Text(
                     'Sub headline goes here where we explain the why we need it',
-                    style: AppStyles.cardTextStyle.copyWith(
+                    style: AppStyles.textStyle_14_600.copyWith(
                         fontWeight: FontWeight.w400, color: Colors.black),
                   ),
                   SizedBox(

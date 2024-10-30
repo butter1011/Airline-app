@@ -1,4 +1,7 @@
+import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackCard extends StatelessWidget {
@@ -27,15 +30,13 @@ class FeedbackCard extends StatelessWidget {
                         AssetImage('assets/images/${singleFeedback['Avatar']}'),
                   ),
                 ),
-                SizedBox(
-                  width: 8,
-                ),
+                SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Benedict Cumberbatch',
-                      style: AppStyles.cardTextStyle,
+                      style: AppStyles.textStyle_14_600,
                     ),
                     Text(
                       'Rated 9/10 on ${singleFeedback['Date']}',
@@ -45,87 +46,60 @@ class FeedbackCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(
-              height: 12,
-            ),
+            SizedBox(height: 12),
             Row(
               children: [
-                Text(
-                  'Flex with',
-                  style: AppStyles.textStyle_14_400,
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  singleFeedback['Used Airport'],
-                  style: AppStyles.cardTextStyle,
-                )
+                Text('Flex with', style: AppStyles.textStyle_14_400),
+                SizedBox(width: 6),
+                Text(singleFeedback['Used Airport'],
+                    style: AppStyles.textStyle_14_600)
               ],
             ),
-            SizedBox(
-              height: 7,
-            ),
+            SizedBox(height: 7),
             Row(
               children: [
-                Text(
-                  'Flex with',
-                  style: AppStyles.textStyle_14_400,
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  singleFeedback['Path'],
-                  style: AppStyles.cardTextStyle,
-                )
+                Text('Flex with', style: AppStyles.textStyle_14_400),
+                SizedBox(width: 6),
+                Text(singleFeedback['Path'], style: AppStyles.textStyle_14_600)
               ],
             ),
-            SizedBox(
-              height: 11,
-            ),
+            SizedBox(height: 11),
             ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(20.0), // Set your desired border radius
+              borderRadius: BorderRadius.circular(20.0),
               child: Container(
                 height: 189,
                 width: 299,
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/${singleFeedback['Image']}',
+                  image: DecorationImage(
+                    image:
+                        AssetImage('assets/images/${singleFeedback['Image']}'),
+                    fit: BoxFit.cover,
                   ),
-                  fit: BoxFit.cover,
-                )),
+                ),
               ),
             ),
-            SizedBox(
-              height: 11,
-            ),
-            Text(
-              singleFeedback['Content'],
-              style: AppStyles.textStyle_14_400,
-            ),
-            SizedBox(
-              height: 16,
-            ),
+            SizedBox(height: 11),
+            Text(singleFeedback['Content'], style: AppStyles.textStyle_14_400),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: () {},
-                  child: Image.asset('assets/icons/telegram_black.png'),
+                  onTap: () async {
+                    await BottomSheetHelper.showScoreBottomSheet(context);
+                  },
+                  child: Image.asset('assets/icons/share.png'),
                 ),
                 Row(
                   children: [
-                    Icon(Icons.thumb_up_outlined),
-                    SizedBox(
-                      width: 8,
+                    IconButton(
+                      onPressed: () async {
+                        await EmojiBox.showCustomDialog(context); // Pass context here
+                      },
+                      icon: Icon(Icons.thumb_up_outlined),
                     ),
-                    Text(
-                      "9998",
-                      style: AppStyles.cardTextStyle,
-                    )
+                    SizedBox(width: 8),
+                    Text("9998", style: AppStyles.textStyle_14_600)
                   ],
                 )
               ],
@@ -135,4 +109,7 @@ class FeedbackCard extends StatelessWidget {
       ),
     );
   }
+
 }
+
+

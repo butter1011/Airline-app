@@ -26,7 +26,7 @@ class SentMessageBox extends StatelessWidget {
               children: [
                 Text(
                   "Some messsage aboput City break",
-                  style: AppStyles.messageTextStyle,
+                  style: AppStyles.textStyle_15_500,
                   textAlign: TextAlign.left,
                 ),
                 Align(
@@ -36,7 +36,7 @@ class SentMessageBox extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 16),
                     child: Text(
                       "10:05 PM",
-                      style: AppStyles.messageTextStyle
+                      style: AppStyles.textStyle_15_500
                           .copyWith(color: const Color(0xff22762C)),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +94,11 @@ class _DetailAirportState extends State<DetailAirport> {
                     child: Column(
                       children: [
                         IconButton(
-                            onPressed: () {},
-                            icon: Image.asset('assets/icons/telegram.png')),
+                            onPressed: () async {
+                              await BottomSheetHelper.showScoreBottomSheet(
+                                  context);
+                            },
+                            icon: Image.asset('assets/icons/share.png')),
                         IconButton(
                           onPressed: () {},
                           icon: IconButton(
@@ -143,7 +147,7 @@ class _DetailAirportState extends State<DetailAirport> {
                       children: [
                         Text(
                           'Category Ratings',
-                          style: AppStyles.subtitleTextStyle,
+                          style: AppStyles.textStyle_18_600,
                         ),
                         IconButton(
                             onPressed: () {},
@@ -165,7 +169,6 @@ class _DetailAirportState extends State<DetailAirport> {
                   );
                 }).toList(),
               ),
-              // CategoryReviews(review: airportList[airportIndex]['review']),
               Container(
                 decoration: BoxDecoration(
                   // color: Colors.red,
@@ -319,7 +322,7 @@ class ExpandButtons extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(provider ? "Show less categories" : "Show more categories",
-                    style: AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
+                    style: AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
                 Icon(
                   provider ? Icons.expand_less : Icons.expand_more,
                 ),

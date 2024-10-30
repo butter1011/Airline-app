@@ -18,7 +18,7 @@ class ManualInputScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Input Manually',
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
@@ -123,7 +123,8 @@ Widget _buildOrDivider() {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Text(
           "Or",
-          style: AppStyles.flagTextStyle.copyWith(fontWeight: FontWeight.w700),
+          style:
+              AppStyles.textStyle_13_600.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       Expanded(child: Divider(color: Colors.black, thickness: 3)),

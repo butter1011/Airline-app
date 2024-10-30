@@ -70,8 +70,8 @@ class QuestionThirdScreen extends StatelessWidget {
         SizedBox(width: 8),
         Column(
           children: [
-            Text('JAPAN', style: AppStyles.reviewTitleTextStyle),
-            Text('AIRLINES', style: AppStyles.reviewTitleTextStyle),
+            Text('JAPAN', style: AppStyles.oswaldTextStyle),
+            Text('AIRLINES', style: AppStyles.oswaldTextStyle),
           ],
         ),
       ],
@@ -83,10 +83,10 @@ class QuestionThirdScreen extends StatelessWidget {
       children: [
         Text("Share your experience",
             style:
-                AppStyles.subtitleTextStyle.copyWith(color: Color(0xffF9F9F9))),
+                AppStyles.textStyle_18_600.copyWith(color: Color(0xffF9F9F9))),
         Text('Your feedback helps us improve!',
             style:
-                AppStyles.textButtonStyle.copyWith(color: Color(0xffC1C7C4))),
+                AppStyles.textStyle_15_600.copyWith(color: Color(0xffC1C7C4))),
       ],
     );
   }
@@ -95,10 +95,10 @@ class QuestionThirdScreen extends StatelessWidget {
     return Column(
       children: [
         Text('Japan Airways, 18/10/24, Premium Economy',
-            style: AppStyles.textButtonStyle.copyWith(color: Colors.white)),
+            style: AppStyles.textStyle_15_600.copyWith(color: Colors.white)),
         SizedBox(height: 4),
         Text('Tokyo > Bucharest',
-            style: AppStyles.textButtonStyle.copyWith(color: Colors.white)),
+            style: AppStyles.textStyle_15_600.copyWith(color: Colors.white)),
       ],
     );
   }
@@ -123,7 +123,7 @@ class QuestionThirdScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Share your experience with other users (Optional)',
-                style: AppStyles.cardTextStyle),
+                style: AppStyles.textStyle_14_600),
             SizedBox(height: 19),
             _buildMediaUploadOption(context),
             SizedBox(height: 20),
@@ -148,7 +148,7 @@ class QuestionThirdScreen extends StatelessWidget {
                 .copyWith(borderRadius: BorderRadius.circular(16)),
             child: Icon(Icons.file_upload_outlined)),
         SizedBox(height: 12),
-        Text("Choose your media for upload", style: AppStyles.textButtonStyle)
+        Text("Choose your media for upload", style: AppStyles.textStyle_15_600)
       ]),
     );
   }
@@ -157,7 +157,7 @@ class QuestionThirdScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Comments (Optional)", style: AppStyles.cardTextStyle),
+        Text("Comments (Optional)", style: AppStyles.textStyle_14_600),
         SizedBox(height: 6),
         Container(
             height: MediaQuery.of(context).size.height * 0.19,
@@ -281,7 +281,7 @@ class QuestionThirdScreen extends StatelessWidget {
 }
 
 class _ReviewScoreIcon extends StatefulWidget {
-  const _ReviewScoreIcon({super.key, required this.iconUrl});
+  const _ReviewScoreIcon({required this.iconUrl});
   final String iconUrl;
 
   @override

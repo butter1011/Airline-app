@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 Map<String, dynamic> airportList = {
   'Africa': ['North Africa', 'Sub-Saharan Africa'],
   'Asia': ['East Asia', 'Southeast Asia', 'South Asia', 'Central Asia'],
@@ -23,7 +25,6 @@ Map<String, dynamic> airportList = {
     'Polynesia'
   ]
 };
-
 Map<String, dynamic> airportCardList = {
   'flights': [
     {
@@ -65,7 +66,7 @@ Map<String, dynamic> airportCardList = {
       'airport': 'Abu Dhabi Airport',
       'flag': 'assets/icons/flag_United Arab Emirates.png',
       'visit status': 'Visited recently',
-      'time':'17:55'
+      'time': '17:55'
     },
     {
       'country': 'Moldova',
@@ -560,4 +561,11 @@ List<Map<String, dynamic>> trendingFeedbackList = [
         'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',
     'Image': 'review_turkish_1.png'
   },
+];
+List<Map<String, dynamic>> friendsList = [
+  {'Name': 'Linkedin', 'Avatar': 'assets/icons/linkedin.png'},
+  {'Name': 'Telegram', 'Avatar': 'assets/icons/telegram.png'},
+  {'Name': 'Discord', 'Avatar': 'assets/icons/discord.png'},
+  {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
+  {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
 ];

@@ -48,7 +48,7 @@ class _NavButtonState extends State<NavButton> {
         child: Center(
           child: Text(
             widget.text,
-            style: AppStyles.textButtonStyle, // Text color
+            style: AppStyles.textStyle_15_600, // Text color
           ),
         ),
       ),

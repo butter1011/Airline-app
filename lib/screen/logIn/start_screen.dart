@@ -161,9 +161,7 @@ class StartScreen extends StatelessWidget {
                 ]),
               ),
               InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.signupscreen);
-                },
+                onTap: () {},
                 child: Container(
                   width: 327,
                   height: 54,
@@ -194,10 +192,7 @@ class StartScreen extends StatelessWidget {
                         ),
                         Text(
                           'Register with email',
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                          style: AppStyles.textStyle_15_600,
                         ),
                       ],
                     ),
