@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -176,7 +177,13 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                         color: Colors.black),
                     Row(
                       children: [
-                        Icon(Icons.thumb_up_outlined),
+                        IconButton(
+                          onPressed: () async {
+                            await EmojiBox.showCustomDialog(
+                                context); // Pass context here
+                          },
+                          icon: Icon(Icons.thumb_up_outlined),
+                        ),
                         SizedBox(
                           width: 8,
                         ),

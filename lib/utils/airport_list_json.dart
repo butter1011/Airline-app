@@ -539,7 +539,11 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft  cushioning. Made the trip very relaxing.',
-    'Image': 'review_abudhabi_1.png'
+    'Image': [
+      'review_abudhabi_1.png',
+      'review_ethiopian_2.png',
+      'review_turkish_1.png'
+    ]
   },
   {
     'Name': 'Andy Cumberbatch',
@@ -549,7 +553,11 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Liked the adjustable headrest, soft cushioning. Made the trip very relaxing.',
-    'Image': 'review_ethiopian_2.png'
+    'Image': [
+      'review_ethiopian_2.png',
+      'review_abudhabi_1.png',
+      'review_turkish_1.png'
+    ]
   },
   {
     'Name': 'Amanda Russel',
@@ -559,7 +567,11 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',
-    'Image': 'review_turkish_1.png'
+    'Image': [
+      'review_turkish_1.png',
+      'review_ethiopian_2.png',
+      'review_abudhabi_1.png',
+    ]
   },
 ];
 List<Map<String, dynamic>> friendsList = [

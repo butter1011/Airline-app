@@ -162,15 +162,20 @@ class LeaderboardScreen extends StatelessWidget {
                       height: 18,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "See all feedback",
-                          style: AppStyles.textStyle_15_600,
-                        ),
-                        Icon(Icons.arrow_forward)
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.feedscreen);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "See all feedback",
+                            style: AppStyles.textStyle_15_600,
+                          ),
+                          Icon(Icons.arrow_forward)
+                        ],
+                      ),
                     )
                   ],
                 ),

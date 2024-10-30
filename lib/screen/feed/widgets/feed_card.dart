@@ -1,6 +1,11 @@
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
+import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
+import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class FeedCard extends StatelessWidget {
@@ -10,6 +15,10 @@ class FeedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> images = List<String>.from(
+        singleFeedback['Image']); // Ensure it's a List<String>
+    CarouselSliderController buttonCarouselController =
+        CarouselSliderController();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,19 +98,55 @@ class FeedCard extends StatelessWidget {
         SizedBox(
           height: 11,
         ),
-        ClipRRect(
-          borderRadius:
-              BorderRadius.circular(20.0), // Set your desired border radius
-          child: Container(
-            height: 260,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage(
-                'assets/images/${singleFeedback['Image']}',
+        Stack(
+          children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                viewportFraction: 1,
+                height: 189,
+                autoPlay: false, // Optional: Set to true if you want auto-play
               ),
-              fit: BoxFit.cover,
-            )),
-          ),
+              items: images.map((singleImage) {
+                return Builder(builder: (BuildContext context) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                        20.0), // Set your desired border radius
+                    child: Container(
+                      height: 260,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              'assets/images/$singleImage'), // Use singleImage directly
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              }).toList(), // Convert the mapped items to a list
+              carouselController: buttonCarouselController,
+            ),
+            Positioned(
+              top: 79,
+              right: 16,
+              child: InkWell(
+                onTap: () => buttonCarouselController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.linear),
+                child: const NextButton(),
+              ),
+            ),
+            Positioned(
+              top: 79,
+              left: 16,
+              child: InkWell(
+                onTap: () => buttonCarouselController.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.linear),
+                child: const PreviousButton(),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 11,
@@ -126,7 +171,13 @@ class FeedCard extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.thumb_up_outlined),
+                IconButton(
+                  onPressed: () async {
+                    await EmojiBox.showCustomDialog(
+                        context); // Pass context here
+                  },
+                  icon: Icon(Icons.thumb_up_outlined),
+                ),
                 SizedBox(
                   width: 8,
                 ),

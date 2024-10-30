@@ -1,6 +1,9 @@
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
+import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +14,11 @@ class FeedbackCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> images = List<String>.from(
+        singleFeedback['Image']); // Ensure it's a List<String>
+    CarouselSliderController buttonCarouselController =
+        CarouselSliderController();
+
     return Padding(
       padding: const EdgeInsets.only(right: 16),
       child: SizedBox(
@@ -64,19 +72,54 @@ class FeedbackCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 11),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Container(
-                height: 189,
-                width: 299,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image:
-                        AssetImage('assets/images/${singleFeedback['Image']}'),
-                    fit: BoxFit.cover,
+            Stack(
+              children: [
+                CarouselSlider(
+                  options: CarouselOptions(
+                    viewportFraction: 1,
+                    height: 189,
+                  ),
+                  items: images.map((singleImage) {
+                    return Builder(builder: (BuildContext context) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Container(
+                          height: 189,
+                          width: 299,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/$singleImage'), // Ensure image paths are correct
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+                  }).toList(),
+                  carouselController: buttonCarouselController,
+                ),
+                Positioned(
+                  top: 79,
+                  right: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const NextButton(),
                   ),
                 ),
-              ),
+                Positioned(
+                  top: 79,
+                  left: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const PreviousButton(),
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 11),
             Text(singleFeedback['Content'], style: AppStyles.textStyle_14_400),
@@ -94,7 +137,8 @@ class FeedbackCard extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        await EmojiBox.showCustomDialog(context); // Pass context here
+                        await EmojiBox.showCustomDialog(
+                            context); // Pass context here
                       },
                       icon: Icon(Icons.thumb_up_outlined),
                     ),
@@ -109,7 +153,4 @@ class FeedbackCard extends StatelessWidget {
       ),
     );
   }
-
 }
-
-
