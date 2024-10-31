@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BasicButton extends StatelessWidget {
+class BasicButtonRussian extends StatelessWidget {
   final double mywidth;
   final double myheight;
   final Color myColor;
 
   final String btntext;
 
-  const BasicButton(
+  const BasicButtonRussian(
       {Key? key,
       required this.mywidth,
       required this.myheight,

@@ -18,7 +18,7 @@ class BookMarkScreen extends StatelessWidget {
         backgroundColor: Colors.white, // Set background color
         centerTitle: true, // This centers the title
         title: Text(
-          'Mexico (2)',
+          'Dubai(2)',
           style: AppStyles.mainTextStyle,
         ),
         leading: IconButton(

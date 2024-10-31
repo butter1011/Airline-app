@@ -2,14 +2,18 @@ import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen.dart';
-import 'package:airline_app/screen/logIn/signup.dart';
+// import 'package:airline_app/screen/logIn/signup.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/start_screen.dart';
 import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
+import 'package:airline_app/screen/profile/about_app.dart';
 import 'package:airline_app/screen/profile/book_mark_screen.dart';
+import 'package:airline_app/screen/profile/edit_profile_screen.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'package:airline_app/screen/profile/support_screen.dart';
+import 'package:airline_app/screen/profile/terms_of_service.dart';
 
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
@@ -59,7 +63,6 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.startscreen: (context) => const StartScreen(),
         AppRoutes.loginscreen: (context) => const Login(),
-        AppRoutes.signupscreen: (context) => const SignUp(),
         AppRoutes.reviewsubmissionscreen: (context) =>
             const ReviewsubmissionScreen(),
         AppRoutes.syncedscreen: (context) => SyncedScreen(),
@@ -77,9 +80,12 @@ class MyApp extends StatelessWidget {
         AppRoutes.questionfirstscreen: (context) => QuestionFirstScreen(),
         AppRoutes.questionsecondscreen: (context) => QuestionSecondScreen(),
         AppRoutes.questionthirdscreen: (context) => QuestionThirdScreen(),
+        AppRoutes.profilesupportscreen: (context) => SupportScreen(),
+        AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
+        AppRoutes.aboutapp: (context) => AboutApp(),
+        AppRoutes.termsofservice: (context) => TermsOfService(),
       },
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

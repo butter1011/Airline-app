@@ -5,6 +5,7 @@ class AppStyles {
   ///Color style
   static Color mainButtonColor = const Color(0xFF3FEA9C);
   static Color littleBlackColor = const Color(0xff181818);
+  static Color whiteColor = const Color(0xffffffff);
 
   ///Text style
 
@@ -14,7 +15,19 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
-
+  static TextStyle normalTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+  static BoxDecoration avatarExpandDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: AppStyles.mainButtonColor, // Border color
+      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+      boxShadow: [
+        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+      ]);
   static TextStyle textStyle_14_400 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,

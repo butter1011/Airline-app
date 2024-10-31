@@ -49,7 +49,7 @@ class ProfileCardList extends ConsumerWidget {
       Column(
         children: [
           SizedBox(height: 24),
-          SingleChildScrollView(child: CardChart()),
+          CardChart(),
         ],
       ),
       CardBookMark(),

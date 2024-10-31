@@ -1,5 +1,3 @@
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';

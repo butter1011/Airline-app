@@ -1,60 +1,56 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class ReviewButton extends StatelessWidget {
-  const ReviewButton(
-      {super.key,
-      required this.text,
-      required this.color,
-      required this.score});
+class ReviewButton extends StatefulWidget {
+  final String iconUrl;
+  final String label;
 
-  final String text;
-  final Color color;
-  final int score;
+  ReviewButton({required this.iconUrl, required this.label});
+
+  @override
+  _ReviewButtonState createState() => _ReviewButtonState();
+}
+
+class _ReviewButtonState extends State<ReviewButton> {
+  bool _isClicked = false;
+
+  void _toggleClick() {
+    setState(() {
+      _isClicked = !_isClicked; // Toggle the click state
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
-      child: IntrinsicWidth(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Container(
-            // Diameter of the circular avatar
-            height: 40, // Diameter of the circular avatar
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: color, // Background color
-              border: Border.all(width: 2, color: Colors.black), // Border color
-              boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2))],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Center(
-                child: Row(
-                  children: [
-                    Center(
-                        child: score == 10
-                            ? Image.asset('assets/icons/rocket.png')
-                            : Icon(
-                                Icons.arrow_upward,
-                                size: 15,
-                                weight: 50,
-                              )),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text(text + " " + score.toString() + "/10",
-                        style: GoogleFonts.getFont("Familjen Grotesk",
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.2),
-                        textAlign: TextAlign.center),
-                  ],
-                ),
+      onTap: _toggleClick, // Change color on tap
+      child: Container(
+        decoration: AppStyles.cardDecoration.copyWith(
+          color: _isClicked
+              ? AppStyles.mainButtonColor
+              : Colors.white, // Change color based on click state
+        ),
+        padding: EdgeInsets.only(
+            bottom: 10, top: 16), // Add padding for better spacing
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 48,
+              width: 48,
+              decoration: AppStyles.cardDecoration.copyWith(
+                color: _isClicked ? Colors.white : AppStyles.mainButtonColor,
+                borderRadius: BorderRadius.circular(16),
               ),
+              child: Image.asset(widget.iconUrl, height: 40),
             ),
-          ),
+            SizedBox(height: 6),
+            Text(
+              widget.label,
+              textAlign: TextAlign.center,
+              style: AppStyles.cardTextStyle, // Optional styling
+            ),
+          ],
         ),
       ),
     );
