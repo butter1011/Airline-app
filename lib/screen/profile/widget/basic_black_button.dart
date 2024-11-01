@@ -8,12 +8,11 @@ class BasicBlackButton extends StatelessWidget {
   final String btntext;
 
   const BasicBlackButton(
-      {Key? key,
+      {super.key,
       required this.mywidth,
       required this.myheight,
       required this.myColor,
-      required this.btntext})
-      : super(key: key);
+      required this.btntext});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class BasicBlackButton extends StatelessWidget {
             //   child:
             Center(
           child: Text(
-            '$btntext',
+            btntext,
             style: const TextStyle(
                 fontFamily: 'Clash Grotesk',
                 fontSize: 14,

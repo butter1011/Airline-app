@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class VerifiedButton extends StatelessWidget {
   const VerifiedButton({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +17,7 @@ class VerifiedButton extends StatelessWidget {
       child: Center(
           child: Text(
         "Verified",
-        style: AppStyles.cardTextStyle.copyWith(color: AppStyles.whiteColor),
+        style: AppStyles.textStyle_14_600.copyWith(color: Colors.white),
       )),
     );
   }

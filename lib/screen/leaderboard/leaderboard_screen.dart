@@ -1,5 +1,5 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
@@ -83,16 +83,14 @@ class LeaderboardScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: [
                 Text(
                   'Filter by category',
-                  style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                  style:
+                      AppStyles.textStyle_15_500.copyWith(color: Colors.black),
                 ),
               ],
             ),
@@ -143,10 +141,13 @@ class LeaderboardScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Trending Airlines & Airports',
-                        style: TextStyle(fontSize: 20)),
-                    AirportListSection(), // Your custom widget
+                        style: AppStyles.textStyle_16_600
+                            .copyWith(color: Color(0xff38433E))),
+                    _AirportListSection(), // Your custom widget
                     SizedBox(height: 28),
-                    Text('Trending Feedback', style: TextStyle(fontSize: 20)),
+                    Text('Trending Feedback',
+                        style: AppStyles.textStyle_16_600
+                            .copyWith(color: Color(0xff38433E))),
                     SizedBox(height: 17),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -161,15 +162,20 @@ class LeaderboardScreen extends StatelessWidget {
                       height: 18,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "See all feedback",
-                          style: AppStyles.textButtonStyle,
-                        ),
-                        Icon(Icons.arrow_forward)
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.feedscreen);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "See all feedback",
+                            style: AppStyles.textStyle_15_600,
+                          ),
+                          Icon(Icons.arrow_forward)
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -183,9 +189,7 @@ class LeaderboardScreen extends StatelessWidget {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-class AirportListSection extends ConsumerWidget {
-  const AirportListSection({super.key});
-
+class _AirportListSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(buttonExpandNotifierProvider);
@@ -204,6 +208,9 @@ class AirportListSection extends ConsumerWidget {
             return const SizedBox.shrink();
           }).toList(),
         ),
+        SizedBox(
+          height: 19,
+        ),
         Center(
           child: InkWell(
             onTap: () {
@@ -216,9 +223,11 @@ class AirportListSection extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(provider ? "Expand less" : "Expand more",
-                      style:
-                          AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
-                  Icon(provider ? Icons.expand_less : Icons.expand_more),
+                      style: AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Icon(provider ? Icons.arrow_upward : Icons.arrow_downward),
                 ],
               ),
             ),

@@ -1,7 +1,6 @@
 class AppRoutes {
-  static const startscreen = "/";
   static const loginscreen = "/loginscreen";
-  static const signupscreen = "/signupscreen";
+  static const skipscreen = "/skipscreen";
   static const leaderboardscreen = "/leaderboardscreen";
   static const profilescreen = "/profile_screen";
   static const detailairport = "/detailairport";
@@ -16,7 +15,8 @@ class AppRoutes {
   static const syncedscreen = "/syncedscreen";
   static const manualinput = "/manualinput";
   static const flightinput = "/flightinput";
-  static const questionfirstscreen = "/questionfirstscreen";
+  static const questionfirstscreen = "/";
+  static const detailfirstscreen = "/detailfirstscreen";
   static const questionsecondscreen = "/questionsecondscreen";
   static const questionthirdscreen = "/questionthirdscreen";
   static const profilesupportscreen = "/supportscreen";

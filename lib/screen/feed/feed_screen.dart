@@ -1,4 +1,4 @@
-import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/feed/widgets/feed_card.dart';
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';

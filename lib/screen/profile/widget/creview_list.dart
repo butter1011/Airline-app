@@ -31,7 +31,7 @@ class CreviewList extends StatelessWidget {
               children: [
                 Container(
                   height: 40,
-                  decoration: AppStyles.avatarDecoration,
+                  decoration: AppStyles.circleDecoration,
                   child: CircleAvatar(
                     radius: 20,
                     backgroundImage: logo.isNotEmpty
@@ -47,11 +47,11 @@ class CreviewList extends StatelessWidget {
                   children: [
                     Text(
                       country,
-                      style: AppStyles.cardTextStyle,
+                      style: AppStyles.textStyle_14_600,
                     ),
                     Text(
                       'Airline',
-                      style: AppStyles.cardTextStyle
+                      style: AppStyles.textStyle_14_600
                           .copyWith(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                   ],
@@ -84,7 +84,7 @@ class CreviewList extends StatelessWidget {
                             children: [
                               Text(
                                 'Onboard Service',
-                                style: AppStyles.cardTextStyle.copyWith(
+                                style: AppStyles.textStyle_14_600.copyWith(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   color: const Color(0xff97a09c),
@@ -92,7 +92,7 @@ class CreviewList extends StatelessWidget {
                               ),
                               Text(
                                 '+100',
-                                style: AppStyles.cardTextStyle.copyWith(
+                                style: AppStyles.textStyle_14_600.copyWith(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   color: const Color(0xff38433e),

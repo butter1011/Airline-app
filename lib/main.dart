@@ -2,9 +2,9 @@ import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen.dart';
-// import 'package:airline_app/screen/logIn/signup.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
-import 'package:airline_app/screen/logIn/start_screen.dart';
+import 'package:airline_app/screen/logIn/skip_screen.dart';
+
 import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/about_app.dart';
@@ -14,7 +14,7 @@ import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
-
+import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_third_screen.dart';
@@ -22,7 +22,6 @@ import 'package:airline_app/screen/reviewsubmission/flight_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,12 +56,13 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
         ),
+        bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      routes: {
-        AppRoutes.startscreen: (context) => const StartScreen(),
+      routes: {        
         AppRoutes.loginscreen: (context) => const Login(),
+        AppRoutes.skipscreen: (context) => const SkipScreen(),
         AppRoutes.reviewsubmissionscreen: (context) =>
             const ReviewsubmissionScreen(),
         AppRoutes.syncedscreen: (context) => SyncedScreen(),
@@ -75,9 +75,10 @@ class MyApp extends StatelessWidget {
         AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        AppRoutes.manualinput: (context) => ManualInputScreen(),
+        AppRoutes.manualinput: (context) => ManualInputScreen(),        
         AppRoutes.flightinput: (context) => FlightInputScreen(),
         AppRoutes.questionfirstscreen: (context) => QuestionFirstScreen(),
+        AppRoutes.detailfirstscreen: (context) => DetailFirstScreen(),
         AppRoutes.questionsecondscreen: (context) => QuestionSecondScreen(),
         AppRoutes.questionthirdscreen: (context) => QuestionThirdScreen(),
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),

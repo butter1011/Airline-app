@@ -1,22 +1,31 @@
+import 'package:airline_app/provider/selected_counter_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuestionFirstScreen extends StatelessWidget {
+class QuestionFirstScreen extends ConsumerWidget {
   const QuestionFirstScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selections = ref.watch(itemSelectionProvider);
+    final int numberOfSelectedAspects =
+        ref.watch(itemSelectionProvider.notifier).numberOfSelectedAspects();
+    print("❤$numberOfSelectedAspects");
+    //
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: _buildHeader(context),
+        flexibleSpace: BuildQuestionHeader(),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildFeedbackOptions(),
+            _buildFeedbackOptions(selections, numberOfSelectedAspects),
             _buildNavigationButtons(context),
           ],
         ),
@@ -24,92 +33,10 @@ class QuestionFirstScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Japan.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          color:
-              Color(0xff181818).withOpacity(0.75), // Black overlay with opacity
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.052),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/icons/vector_japan.png"),
-                  SizedBox(width: 8),
-                  Column(
-                    children: [
-                      Text(
-                        'JAPAN     ',
-                        style: AppStyles.reviewTitleTextStyle,
-                      ),
-                      Text(
-                        ' AIRLINES',
-                        style: AppStyles.reviewTitleTextStyle,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 32),
-              Text(
-                "Tell us what you liked about your journey.",
-                style: AppStyles.subtitleTextStyle
-                    .copyWith(color: Color(0xffF9F9F9)),
-              ),
-              Text(
-                'Your feedback helps us improve!',
-                style: AppStyles.textButtonStyle
-                    .copyWith(color: Color(0xffC1C7C4)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Japan Airways, 18/10/24, Premium Economy',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                'Tokyo > Bucharest',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
-              ),
-              Spacer(), // This will push the following container to the bottom
-              Container(
-                height: 24,
-                width: double.infinity,
+  Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
+    final Map<String, dynamic> feedbackOptions = aspectsForElevation;
+    List<String> labelKeys = aspectsForElevation.keys.toList();
 
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(24),
-                        topLeft: Radius.circular(24))),
-
-                // Center text inside the container
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFeedbackOptions() {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
@@ -118,43 +45,28 @@ class QuestionFirstScreen extends StatelessWidget {
           children: [
             Text(
               'Select up to 4 positive aspects',
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),
             Expanded(
-              child: GridView.count(
+                child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.3,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                children: [
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_boarding.png',
-                    label: 'Boarding and\nArrival Experience',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_comfort.png',
-                    label: 'Comfort',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                    label: 'Cleanliness',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_onboard.png',
-                    label: 'Onboard Service',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_food.png',
-                    label: 'Food & Beverage',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_entertainment.png',
-                    label: 'In-Flight\nEntertainment',
-                  ),
-                ],
               ),
-            ),
+              itemCount: feedbackOptions.length, // Use the length of the list
+              itemBuilder: (context, index) {
+                return FeedbackOption(
+                  iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
+                  label: index,
+                  numberOfSelectedAspects:numberOfSelectedAspects,
+                  selectedNumber:
+                      selections[index].where((s) => s == true).length,
+                );
+              },
+            )),
           ],
         ),
       ),
@@ -198,58 +110,92 @@ class QuestionFirstScreen extends StatelessWidget {
   }
 }
 
-class FeedbackOption extends StatefulWidget {
-  final String iconUrl;
-  final String label;
-
-  FeedbackOption({required this.iconUrl, required this.label});
-
-  @override
-  _FeedbackOptionState createState() => _FeedbackOptionState();
-}
-
-class _FeedbackOptionState extends State<FeedbackOption> {
-  bool _isClicked = false;
-
-  void _toggleClick() {
-    setState(() {
-      _isClicked = !_isClicked; // Toggle the click state
-    });
-  }
+class BuildQuestionHeader extends StatelessWidget {
+  const BuildQuestionHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _toggleClick, // Change color on tap
-      child: Container(
-        decoration: AppStyles.cardDecoration.copyWith(
-          color: _isClicked
-              ? AppStyles.mainButtonColor
-              : Colors.white, // Change color based on click state
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/Japan.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-        padding: EdgeInsets.only(
-            bottom: 10, top: 16), // Add padding for better spacing
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration.copyWith(
-                color: AppStyles.mainButtonColor,
-                borderRadius: BorderRadius.circular(16),
+        Container(
+          color:
+              Color(0xff181818).withOpacity(0.75), // Black overlay with opacity
+        ),
+        Padding(
+          padding:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.052),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/icons/vector_japan.png"),
+                  SizedBox(width: 8),
+                  Column(
+                    children: [
+                      Text(
+                        'JAPAN     ',
+                        style: AppStyles.oswaldTextStyle,
+                      ),
+                      Text(
+                        ' AIRLINES',
+                        style: AppStyles.oswaldTextStyle,
+                      )
+                    ],
+                  ),
+                ],
               ),
-              child: Image.asset(widget.iconUrl, height: 40),
-            ),
-            SizedBox(height: 6),
-            Text(
-              widget.label,
-              textAlign: TextAlign.center,
-              style: AppStyles.cardTextStyle, // Optional styling
-            ),
-          ],
+              SizedBox(height: 32),
+              Text(
+                "Tell us what you liked about your journey.",
+                style: AppStyles.textStyle_18_600
+                    .copyWith(color: Color(0xffF9F9F9)),
+              ),
+              Text(
+                'Your feedback helps us improve!',
+                style: AppStyles.textStyle_15_600
+                    .copyWith(color: Color(0xffC1C7C4)),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Japan Airways, 18/10/24, Premium Economy',
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                'Tokyo > Bucharest',
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
+              ),
+              Spacer(), // This will push the following container to the bottom
+              Container(
+                height: 24,
+                width: double.infinity,
+
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(24),
+                        topLeft: Radius.circular(24))),
+
+                // Center text inside the container
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

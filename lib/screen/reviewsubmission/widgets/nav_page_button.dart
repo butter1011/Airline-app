@@ -41,9 +41,9 @@ class _NavPageButtonState extends State<NavPageButton> {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          overlayColor: AppStyles.mainButtonColor,
+          overlayColor: AppStyles.mainColor,
           backgroundColor:
-              widget.text == 'Next' ? AppStyles.mainButtonColor : Colors.white,
+              widget.text == 'Next' ? AppStyles.mainColor : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),
@@ -65,12 +65,12 @@ class _NavPageButtonState extends State<NavPageButton> {
                 ),
                 Text(
                   widget.text,
-                  style: AppStyles.textButtonStyle, // Text color
+                  style: AppStyles.textStyle_15_600, // Text color
                 ),
               ] else ...[
                 Text(
                   widget.text,
-                  style: AppStyles.textButtonStyle, // Text color
+                  style: AppStyles.textStyle_15_600, // Text color
                 ),
                 SizedBox(
                   width: 8,

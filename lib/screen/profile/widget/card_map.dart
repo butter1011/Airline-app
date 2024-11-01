@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                 }));
               },
               child: Container(
-                decoration: AppStyles.avatarDecoration,
+                decoration: AppStyles.circleDecoration,
                 width: 40,
                 height: 40,
                 child: Image.asset('assets/icons/1.png'),
@@ -134,7 +134,7 @@ class _MapScreenState extends State<MapScreen> {
                             children: [
                               Text(
                                 'Long AirPort Name goes here',
-                                style: AppStyles.textButtonStyle,
+                                style: AppStyles.textStyle_15_600,
                               ),
                             ],
                           ),
@@ -143,7 +143,7 @@ class _MapScreenState extends State<MapScreen> {
                             children: [
                               Text(
                                 'Your scored 9/10',
-                                style: AppStyles.litteGrayTextStyle,
+                                style: AppStyles.textStyle_15_500,
                               ),
                             ],
                           ),

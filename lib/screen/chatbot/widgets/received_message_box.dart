@@ -12,7 +12,7 @@ class ReceivedMessageBox extends StatelessWidget {
         Container(
           height: 40,
           width: 40,
-          decoration: AppStyles.avatarDecoration,
+          decoration: AppStyles.circleDecoration,
           child: CircleAvatar(
             radius: 20,
             backgroundImage: AssetImage('assets/icons/bot.png'),
@@ -44,7 +44,7 @@ class ReceivedMessageBox extends StatelessWidget {
                     children: [
                       Text(
                         "Hey, Sam here! Excited to help you fly. Im an obsessive with 3.5 million followers ell you where to go, what time of year to visit, what to do there...the list is endless. I'm on the edge of my seat, ask me anything.",
-                        style: AppStyles.messageTextStyle,
+                        style: AppStyles.textStyle_15_500,
                       ),
                       Align(
                         alignment: Alignment
@@ -53,7 +53,7 @@ class ReceivedMessageBox extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 16),
                           child: Text(
                             "10:05 PM",
-                            style: AppStyles.messageTextStyle
+                            style: AppStyles.textStyle_15_500
                                 .copyWith(color: const Color(0xff97A09C)),
                           ),
                         ),

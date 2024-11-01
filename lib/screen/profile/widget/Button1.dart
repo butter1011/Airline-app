@@ -8,13 +8,12 @@ class ButtonChart extends StatelessWidget {
   final String btntext;
 
   const ButtonChart(
-      {Key? key,
+      {super.key,
       required this.mywidth,
       required this.myheight,
       // required this.myColor,
       required this.iconpath,
-      required this.btntext})
-      : super(key: key);
+      required this.btntext});
 
   @override
   Widget build(BuildContext context) {

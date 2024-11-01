@@ -8,7 +8,7 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppStyles.mainButtonColor,
+        backgroundColor: AppStyles.mainColor,
         body: Center(
           // width: double.infinity,
           child: Column(
@@ -160,52 +160,10 @@ class StartScreen extends StatelessWidget {
                   )),
                 ]),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.signupscreen);
-                },
-                child: Container(
-                  width: 327,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(27),
-                    border: Border.all(
-                      width: 2,
-                      color: AppStyles.littleBlackColor,
-                    ),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: const Offset(3, 3))
-                    ],
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/mail.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Register with email',
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            
             ],
           ),
         ));
   }
+  
 }

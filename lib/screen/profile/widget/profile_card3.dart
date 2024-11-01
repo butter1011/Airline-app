@@ -9,12 +9,12 @@ class ProfileCard3 extends StatefulWidget {
   final int count;
 
   const ProfileCard3({
-    Key? key,
+    super.key,
     required this.iconPath,
     required this.isActive,
     required this.count,
     required this.myfun,
-  }) : super(key: key);
+  });
 
   @override
   State<ProfileCard3> createState() => _ProfileCardState();
@@ -37,7 +37,7 @@ class _ProfileCardState extends State<ProfileCard3> {
             ),
           ],
           color: widget.isActive
-              ? AppStyles.mainButtonColor
+              ? AppStyles.mainColor
               : Colors.white, // Change color based on active state
           borderRadius: BorderRadius.circular(36),
         ),

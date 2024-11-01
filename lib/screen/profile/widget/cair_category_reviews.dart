@@ -1,3 +1,5 @@
+import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -129,18 +131,28 @@ class CairCategoryReviews extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed: () {},
-                  icon: Image.asset('assets/icons/telegram_black.png'),
+                  onPressed: () async {
+                    await BottomSheetHelper.showScoreBottomSheet(
+                      context,
+                    );
+                  },
+                  icon: Image.asset('assets/icons/share.png'),
                   color: Colors.black),
               Row(
                 children: [
-                  Icon(Icons.thumb_up_outlined),
+                  IconButton(
+                    onPressed: () async {
+                      await EmojiBox.showCustomDialog(
+                          context); // Pass context here
+                    },
+                    icon: Icon(Icons.thumb_up_outlined),
+                  ),
                   SizedBox(
                     width: 8,
                   ),
                   Text(
                     "9998",
-                    style: AppStyles.cardTextStyle,
+                    style: AppStyles.textStyle_14_600,
                   )
                 ],
               )
