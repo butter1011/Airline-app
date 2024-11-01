@@ -37,7 +37,7 @@ class _ProfileCardState extends State<ProfileCard4> {
             ),
           ],
           color: widget.isActive
-              ? AppStyles.mainButtonColor
+              ? AppStyles.mainColor
               : Colors.white, // Change color based on active state
           borderRadius: BorderRadius.circular(36),
         ),

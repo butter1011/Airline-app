@@ -20,9 +20,8 @@ class _ToggleButtonState extends State<ToggleBtn> {
         decoration: AppStyles.cardDecoration,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-                isSelected ? AppStyles.mainButtonColor : Colors.white,
-            foregroundColor: AppStyles.mainButtonColor,
+            backgroundColor: isSelected ? AppStyles.mainColor : Colors.white,
+            foregroundColor: AppStyles.mainColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -34,7 +33,7 @@ class _ToggleButtonState extends State<ToggleBtn> {
             // Add functionality for syncing here
           },
           child: Center(
-            child: Text(widget.buttonText, style: AppStyles.cardTextStyle),
+            child: Text(widget.buttonText, style: AppStyles.textStyle_14_600),
           ),
         ),
       ),

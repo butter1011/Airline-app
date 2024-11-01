@@ -34,8 +34,8 @@ class _FeedFilterButtonState extends State<FeedFilterButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: _isSelected
-              ? AppStyles.mainButtonColor
-              : AppStyles.whiteColor, // Background color
+              ? AppStyles.mainColor
+              : Colors.white, // Background color
           border: Border.all(width: 2, color: Colors.black), // Border color
           boxShadow: const [
             BoxShadow(color: Colors.black, offset: Offset(2, 2))
@@ -46,7 +46,7 @@ class _FeedFilterButtonState extends State<FeedFilterButton> {
           child: Center(
             child: Text(
               widget.text,
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             ),
           ),
         ),

@@ -1,7 +1,6 @@
 class AppRoutes {
   static const startscreen = "/";
-  static const loginscreen = "/loginscreen";
-  static const signupscreen = "/signupscreen";
+  static const loginscreen = "/loginscreen";  
   static const leaderboardscreen = "/leaderboardscreen";
   static const profilescreen = "/profile_screen";
   static const detailairport = "/detailairport";

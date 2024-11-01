@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/app_widgets/feedbackoption.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -55,11 +56,11 @@ class QuestionSecondScreen extends StatelessWidget {
                     children: [
                       Text(
                         'JAPAN     ',
-                        style: AppStyles.reviewTitleTextStyle,
+                        style: AppStyles.oswaldTextStyle,
                       ),
                       Text(
                         ' AIRLINES',
-                        style: AppStyles.reviewTitleTextStyle,
+                        style: AppStyles.oswaldTextStyle,
                       )
                     ],
                   ),
@@ -68,12 +69,12 @@ class QuestionSecondScreen extends StatelessWidget {
               SizedBox(height: 32),
               Text(
                 "What could be improved?",
-                style: AppStyles.subtitleTextStyle
+                style: AppStyles.textStyle_18_600
                     .copyWith(color: Color(0xffF9F9F9)),
               ),
               Text(
                 'Your feedback helps us improve!',
-                style: AppStyles.textButtonStyle
+                style: AppStyles.textStyle_15_600
                     .copyWith(color: Color(0xffC1C7C4)),
               ),
               SizedBox(
@@ -81,14 +82,14 @@ class QuestionSecondScreen extends StatelessWidget {
               ),
               Text(
                 'Japan Airways, 18/10/24, Premium Economy',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(
                 height: 4,
               ),
               Text(
                 'Tokyo > Bucharest',
-                style: AppStyles.textButtonStyle.copyWith(color: Colors.white),
+                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               Spacer(), // This will push the following container to the bottom
               Container(
@@ -119,7 +120,7 @@ class QuestionSecondScreen extends StatelessWidget {
           children: [
             Text(
               'Select up to 4 positive aspects',
-              style: AppStyles.cardTextStyle,
+              style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),
             Expanded(
@@ -195,62 +196,6 @@ class QuestionSecondScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class FeedbackOption extends StatefulWidget {
-  final String iconUrl;
-  final String label;
-
-  FeedbackOption({required this.iconUrl, required this.label});
-
-  @override
-  _FeedbackOptionState createState() => _FeedbackOptionState();
-}
-
-class _FeedbackOptionState extends State<FeedbackOption> {
-  bool _isClicked = false;
-
-  void _toggleClick() {
-    setState(() {
-      _isClicked = !_isClicked; // Toggle the click state
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _toggleClick, // Change color on tap
-      child: Container(
-        decoration: AppStyles.cardDecoration.copyWith(
-          color: _isClicked
-              ? AppStyles.mainButtonColor
-              : Colors.white, // Change color based on click state
-        ),
-        padding: EdgeInsets.only(
-            bottom: 10, top: 16), // Add padding for better spacing
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration.copyWith(
-                color: AppStyles.mainButtonColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Image.asset(widget.iconUrl, height: 40),
-            ),
-            SizedBox(height: 6),
-            Text(
-              widget.label,
-              textAlign: TextAlign.center,
-              style: AppStyles.cardTextStyle, // Optional styling
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

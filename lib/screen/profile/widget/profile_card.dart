@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
 import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
 import 'package:airline_app/screen/profile/widget/card_chart.dart';
+import 'package:airline_app/screen/profile/widget/card_map.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

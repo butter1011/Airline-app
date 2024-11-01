@@ -36,7 +36,7 @@ class _NavButtonState extends State<NavButton> {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          overlayColor: AppStyles.mainButtonColor,
+          overlayColor: AppStyles.mainColor,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
@@ -48,7 +48,7 @@ class _NavButtonState extends State<NavButton> {
         child: Center(
           child: Text(
             widget.text,
-            style: AppStyles.textButtonStyle, // Text color
+            style: AppStyles.textStyle_15_600, // Text color
           ),
         ),
       ),
