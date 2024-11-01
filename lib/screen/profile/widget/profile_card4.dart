@@ -26,10 +26,10 @@ class _ProfileCardState extends State<ProfileCard4> {
     return GestureDetector(
       onTap: widget.myfun, // Call the passed function when tapped
       child: Container(
-        width: 60,
-        height: 60,
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(width: 2),
           boxShadow: [
             BoxShadow(
               color: Colors.black,
