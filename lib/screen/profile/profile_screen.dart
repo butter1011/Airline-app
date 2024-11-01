@@ -1,4 +1,5 @@
-import 'package:airline_app/screen/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
 

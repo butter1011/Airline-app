@@ -62,8 +62,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 0
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -91,8 +90,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 1
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -118,8 +116,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 width: 59,
                 height: 59,
                 decoration: BoxDecoration(
-                  color: AppStyles
-                      .mainButtonColor, // Background color for the container
+                  color:
+                      AppStyles.mainColor, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -145,8 +143,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 3
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -161,9 +158,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 ),
 
                 child: _selectedIndex == 3
-                    ? Image.asset('assets/icons/star_white.png')
+                    ? Image.asset('assets/icons/message_white.png')
                     : Image.asset(
-                        'assets/icons/star.png'), // Icon inside the container
+                        'assets/icons/message.png'), // Icon inside the container
               ),
               label: 'Home',
             ),
@@ -174,8 +171,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 4
                       ? AppStyles.littleBlackColor
-                      : AppStyles
-                          .whiteColor, // Background color for the container
+                      : Colors.white, // Background color for the container
                   borderRadius: BorderRadius.circular(30),
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
@@ -188,10 +184,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ], // Rounded corners
                 ),
-                child: _selectedIndex == 4
-                    ? Image.asset('assets/icons/profile_white.png')
-                    : Image.asset(
-                        'assets/icons/profile.png'), // Icon inside the container
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/avatar_1.png'),
+                ), // Icon inside the container
               ),
               label: 'Profile',
             ),

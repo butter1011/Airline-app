@@ -451,6 +451,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Avatar': 'avatar_1.png',
     'Date': '16.09.24',
     'Used Airport': 'Abu Dhabi Airport',
+    'level': 'Premium Economy',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft  cushioning. Made the trip very relaxing.',
@@ -461,6 +462,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Avatar': 'avatar_1.png',
     'Date': '16.08.24',
     'Used Airport': 'Abu Dhabi Airport',
+    'level': 'Premium Economy',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Liked the adjustable headrest, soft cushioning. Made the trip very relaxing.',
@@ -471,6 +473,7 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     'Avatar': 'avatar_1.png',
     'Date': '16.07.24',
     'Used Airport': 'Abu Dhabi Airport',
+    'level': 'Premium Economy',
     'Path': 'Tokyo -> Bucharest',
     'Content':
         'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',

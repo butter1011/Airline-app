@@ -24,7 +24,7 @@ class ReviewsubmissionScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Reviews',
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
@@ -47,7 +47,7 @@ class ReviewsubmissionScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(
                     "Type",
-                    style: AppStyles.subtitleTextStyle,
+                    style: AppStyles.textStyle_18_600,
                   ),
                 ),
                 SizedBox(height: 16),
@@ -113,7 +113,7 @@ class ReviewsubmissionScreen extends StatelessWidget {
                 child: Center(
                     child: Text(
                   "Not here?",
-                  style: AppStyles.textButtonStyle,
+                  style: AppStyles.textStyle_15_600,
                 )),
               ),
             ),

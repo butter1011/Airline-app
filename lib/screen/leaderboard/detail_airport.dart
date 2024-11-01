@@ -1,7 +1,9 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
+import 'package:airline_app/screen/app_widgets/feedbackoption.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +95,11 @@ class _DetailAirportState extends State<DetailAirport> {
                     child: Column(
                       children: [
                         IconButton(
-                            onPressed: () {},
-                            icon: Image.asset('assets/icons/telegram.png')),
+                            onPressed: () async {
+                              await BottomSheetHelper.showScoreBottomSheet(
+                                  context);
+                            },
+                            icon: Image.asset('assets/icons/share.png')),
                         IconButton(
                           onPressed: () {},
                           icon: IconButton(
@@ -136,14 +141,46 @@ class _DetailAirportState extends State<DetailAirport> {
                       style: AppStyles.textStyle_24_600,
                     ),
                     SizedBox(
-                      height: 23,
+                      height: 2,
+                    ),
+                    Text(
+                      airportReviewList[airportIndex]['about'],
+                      style: AppStyles.textStyle_15_400
+                          .copyWith(color: Color(0xff38433E)),
+                    ),
+                    SizedBox(
+                      height: 14,
+                    ),
+                    Text(
+                      "Trending now:",
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                    Text(
+                      airportReviewList[airportIndex]['trending'],
+                      style: AppStyles.textStyle_15_400
+                          .copyWith(color: Color(0xff38433E)),
+                    ),
+                    SizedBox(
+                      height: 14,
+                    ),
+                    Text(
+                      "Perks you'll love:",
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                    Text(
+                      airportReviewList[airportIndex]['perk'],
+                      style: AppStyles.textStyle_15_400
+                          .copyWith(color: Color(0xff38433E)),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Category Ratings',
-                          style: AppStyles.subtitleTextStyle,
+                          style: AppStyles.textStyle_18_600,
                         ),
                         IconButton(
                             onPressed: () {},
@@ -165,7 +202,6 @@ class _DetailAirportState extends State<DetailAirport> {
                   );
                 }).toList(),
               ),
-              // CategoryReviews(review: airportList[airportIndex]['review']),
               Container(
                 decoration: BoxDecoration(
                   // color: Colors.red,
@@ -184,7 +220,7 @@ class _DetailAirportState extends State<DetailAirport> {
                     height: 56, // Diameter of the circular avatar
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: AppStyles.mainButtonColor, // Background color
+                      color: AppStyles.mainColor, // Background color
                       border: Border.all(
                           width: 2, color: Colors.black), // Border color
                       boxShadow: [
@@ -228,105 +264,119 @@ class ExpandButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(buttonExpandNotifierProvider);
+    var isExpanded = ref.watch(buttonExpandNotifierProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Visibility(
-          visible: true,
+        SizedBox(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DetailButton(
-                    text: "Seat Comfort",
-                    color: AppStyles.mainButtonColor,
-                    score: 10,
+                  Expanded(
+                    child: FeedbackOption(
+                        iconUrl: 'assets/icons/review_icon_boarding.png',
+                        label: 'Boarding and\nArrival Experience',
+                        badgeScore: '10',),
                   ),
-                  const DetailButton(
-                    text: "Cleanliness",
-                    color: Colors.white,
-                    score: 9,
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: FeedbackOption(
+                        iconUrl: 'assets/icons/review_icon_comfort.png',
+                        label: 'Comfort',
+                      badgeScore: '10',
+                    ),
                   ),
                 ],
               ),
-              const DetailButton(
-                text: "Booking Experience",
-                color: Colors.white,
-                score: 9,
+              SizedBox(
+                height: 16,
               ),
-              const DetailButton(
-                text: "Additional Services",
-                color: Colors.white,
-                score: 9,
+              Row(
+                children: [
+                  Expanded(
+                    child: FeedbackOption(
+                        iconUrl: 'assets/icons/review_icon_cleanliness.png',
+                        label: 'Cleanliness',
+                      badgeScore: '10',
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: FeedbackOption(
+                        iconUrl: 'assets/icons/review_icon_onboard.png',
+                        label: 'Onboard Service',
+                      badgeScore: '9',
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        Visibility(
-          visible: provider,
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DetailButton(
-                text: "Lounge Access",
-                color: Colors.white,
-                score: 8,
-              ),
-              DetailButton(
-                text: "Boarding Process",
-                color: Colors.white,
-                score: 8,
-              ),
-              DetailButton(
-                text: "Food & Beverage",
-                color: Colors.white,
-                score: 8,
-              ),
-              DetailButton(
-                text: "Cabin Crew Service  ",
-                color: Colors.white,
-                score: 4,
-              ),
-              DetailButton(
-                text: "Wi-Fi",
-                color: Colors.white,
-                score: 3,
-              ),
-              DetailButton(
-                text: "In-Flight Entertainment",
-                color: Colors.white,
-                score: 2,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 19,
-        ),
-        Center(
-            child: InkWell(
-          onTap: () {
-            ref
-                .watch(buttonExpandNotifierProvider.notifier)
-                .toggleButton(provider);
-          },
-          child: IntrinsicWidth(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(provider ? "Show less categories" : "Show more categories",
-                    style: AppStyles.subtitleTextStyle.copyWith(fontSize: 15)),
-                Icon(
-                  provider ? Icons.expand_less : Icons.expand_more,
+              Visibility(
+                  visible: isExpanded,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FeedbackOption(
+                                iconUrl: 'assets/icons/review_icon_food.png',
+                                label: 'Food & Beverage',
+                              badgeScore: '8',
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: FeedbackOption(
+                                iconUrl:
+                                    'assets/icons/review_icon_entertainment.png',
+                                label: 'In-Flight\nEntertainment',
+                              badgeScore: '7',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+              const SizedBox(height: 19),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    ref
+                        .read(buttonExpandNotifierProvider.notifier)
+                        .toggleButton(isExpanded);
+                  },
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            isExpanded
+                                ? "Show less categories"
+                                : "Show more categories",
+                            style: AppStyles.textStyle_18_600
+                                .copyWith(fontSize: 15)),
+                        const SizedBox(width: 8),
+                        Icon(
+                            isExpanded ? Icons.expand_less : Icons.expand_more),
+                      ],
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              )
+            ],
           ),
-        ))
+        ),
       ],
     );
   }

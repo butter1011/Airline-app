@@ -1,5 +1,7 @@
+import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
     'assets/images/SriLankan.png',
     'assets/images/Fiji.png',
   ];
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -26,7 +29,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    print("This is argument 💎💎💎💎💎💎💎 ${screenWidth}");
+    print("This is argument 💎💎💎💎💎💎💎 ${args!['UsedAirport']}");
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,40 +59,6 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                 }).toList(),
                 carouselController: buttonCarouselController,
               ),
-              // ClipRRect(
-              //   // Set your desired border radius
-              //   child: Row(
-              //     children: [
-              //       CarouselSlider.builder(
-              //         itemCount: imgList.length,
-              //         itemBuilder: (context, index, realIndex) {
-              //           return Container(
-              //             height: 594,
-              //             decoration: BoxDecoration(
-              //                 border: Border(
-              //                     bottom: BorderSide(
-              //                         width: 4, color: Colors.black)),
-              //                 image: DecorationImage(
-              //                   image: AssetImage(
-              //                       'assets/images/${imgList[index]}'),
-              //                   fit: BoxFit.cover,
-              //                 )), // Set the height to 300 pixels
-              //           );
-              //         },
-              //         options: CarouselOptions(
-              //           height: 200,
-              //           initialPage: 0,
-              //           enableInfiniteScroll: false,
-              //           onPageChanged: (index, reason) {
-              //             setState(() {
-              //               _currentIndex = index;
-              //             });
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Positioned(
                 top: 281,
                 right: 24,
@@ -137,7 +106,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                       children: [
                         Text(
                           args['Name'],
-                          style: AppStyles.cardTextStyle,
+                          style: AppStyles.textStyle_14_600,
                         ),
                         Text(
                           args['Date'],
@@ -153,7 +122,27 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                 ),
                 VerifiedButton(),
                 SizedBox(
-                  height: 11,
+                  height: 14,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Was in ",
+                      style: AppStyles.textStyle_14_400
+                          .copyWith(color: Color(0xFF38433E)),
+                    ),
+                    Text(
+                      "${args['Usedairport']}, ",
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                    Text(
+                      'Premium Economy',
+                      style: AppStyles.textStyle_14_600,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Text(
                   args['Content'],
@@ -166,18 +155,28 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () {},
-                        icon: Image.asset('assets/icons/telegram_black.png'),
+                        onPressed: () async {
+                          await BottomSheetHelper.showScoreBottomSheet(
+                            context,
+                          );
+                        },
+                        icon: Image.asset('assets/icons/share.png'),
                         color: Colors.black),
                     Row(
                       children: [
-                        Icon(Icons.thumb_up_outlined),
+                        IconButton(
+                          onPressed: () async {
+                            await EmojiBox.showCustomDialog(
+                                context); // Pass context here
+                          },
+                          icon: Icon(Icons.thumb_up_outlined),
+                        ),
                         SizedBox(
                           width: 8,
                         ),
                         Text(
                           "9998",
-                          style: AppStyles.cardTextStyle,
+                          style: AppStyles.textStyle_14_600,
                         )
                       ],
                     )

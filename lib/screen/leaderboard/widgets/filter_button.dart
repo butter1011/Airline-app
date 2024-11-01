@@ -29,8 +29,8 @@ class _FilterButtonState extends State<FilterButton> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: _isSelected
-                ? AppStyles.mainButtonColor
-                : AppStyles.whiteColor, // Change color based on selection
+                ? AppStyles.mainColor
+                : Colors.white, // Change color based on selection
             border: Border.all(
               width: 2,
               color: AppStyles.littleBlackColor,
@@ -49,13 +49,13 @@ class _FilterButtonState extends State<FilterButton> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: _isSelected
-                  ? AppStyles.mainButtonColor
-                  : AppStyles.whiteColor, // Change color based on selection
+                  ? AppStyles.mainColor
+                  : Colors.white, // Change color based on selection
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(
-                child: Text(widget.text, style: AppStyles.cardTextStyle),
+                child: Text(widget.text, style: AppStyles.textStyle_14_600),
               ),
             ),
           ),

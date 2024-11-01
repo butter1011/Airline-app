@@ -135,7 +135,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
                               children: [
                                 Text(
                                   'Long AirPort Name goes here',
-                                  style: AppStyles.textButtonStyle,
+                                  style: AppStyles.textStyle_15_600,
                                 ),
                               ],
                             ),
@@ -144,7 +144,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
                               children: [
                                 Text(
                                   'Your scored 9/10',
-                                  style: AppStyles.litteGrayTextStyle,
+                                  style: AppStyles.textStyle_15_500,
                                 ),
                               ],
                             ),

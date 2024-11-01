@@ -36,7 +36,7 @@ class ReviewFlightCard extends StatelessWidget {
                     ),
                     Text(
                       originCountry + ", " + originTime,
-                      style: AppStyles.flagTextStyle,
+                      style: AppStyles.textStyle_13_600,
                     )
                   ],
                 ),
@@ -49,7 +49,7 @@ class ReviewFlightCard extends StatelessWidget {
                     ),
                     Text(
                       destinationCountry + ", " + destinationTime,
-                      style: AppStyles.flagTextStyle,
+                      style: AppStyles.textStyle_13_600,
                     )
                   ],
                 ),
@@ -63,7 +63,8 @@ class ReviewFlightCard extends StatelessWidget {
               children: [
                 Text(
                   originCity + "->" + destinationCity,
-                  style: AppStyles.mainTextStyle.copyWith(color: Colors.black),
+                  style:
+                      AppStyles.textStyle_16_600.copyWith(color: Colors.black),
                 ),
                 Icon(Icons.arrow_forward)
               ],
@@ -74,8 +75,8 @@ class ReviewFlightCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("UO 2923", style: AppStyles.litteBlackTextStyle),
-                Text("WizAir 2923", style: AppStyles.litteBlackTextStyle),
+                Text("UO 2923", style: AppStyles.textStyle_14_500),
+                Text("WizAir 2923", style: AppStyles.textStyle_14_500),
               ],
             ),
             SizedBox(
@@ -92,7 +93,7 @@ class ReviewFlightCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       status,
-                      style: AppStyles.litteBlackTextStyle
+                      style: AppStyles.textStyle_14_500
                           .copyWith(color: Colors.white),
                     ),
                   ),

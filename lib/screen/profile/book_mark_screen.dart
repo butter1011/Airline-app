@@ -41,7 +41,7 @@ class BookMarkScreen extends StatelessWidget {
                 Expanded(
                     child: Center(
                         child: Text('Mexico (2)',
-                            style: AppStyles.mainTextStyle))),
+                            style: AppStyles.textStyle_16_600))),
               ],
             ),
           ),

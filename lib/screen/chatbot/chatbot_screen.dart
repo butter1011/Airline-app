@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/bottom_nav_bar.dart';
 import 'package:airline_app/screen/chatbot/widgets/received_message_box.dart';
 import 'package:airline_app/screen/chatbot/widgets/sent_message_box.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -25,7 +24,7 @@ class ChatbotScreen extends StatelessWidget {
           child: Text(
             "Sam - AI Flight Planner",
             textAlign: TextAlign.center,
-            style: AppStyles.mainTextStyle,
+            style: AppStyles.textStyle_16_600,
           ),
         ),
       ),

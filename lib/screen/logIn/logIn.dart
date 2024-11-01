@@ -1,8 +1,6 @@
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -10,7 +8,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppStyles.mainButtonColor,
+        backgroundColor: AppStyles.mainColor,
         body: Center(
           // width: double.infinity,
           child: Column(
@@ -60,7 +58,7 @@ class Login extends StatelessWidget {
                               width: 10,
                             ),
                             Text('Sign in with Google',
-                                style: AppStyles.textButtonStyle),
+                                style: AppStyles.textStyle_15_600),
                           ],
                         ),
                       ),
@@ -89,7 +87,7 @@ class Login extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.signupscreen);
+                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
                 },
                 child: Container(
                   width: 327,
@@ -121,10 +119,7 @@ class Login extends StatelessWidget {
                         ),
                         Text(
                           'Register with email',
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                          style: AppStyles.textStyle_15_600,
                         ),
                       ],
                     ),
