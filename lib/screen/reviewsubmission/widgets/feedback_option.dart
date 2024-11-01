@@ -89,10 +89,30 @@ class FeedbackOption extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Limit Exceeded"),
-          content: Text("You can select up to 4 positive aspects."),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.red, size: 24), // Warning icon
+              SizedBox(width: 10),
+              Text("Limit Exceeded",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          content: Text(
+            "You can select up to 4 positive aspects.",
+            style: TextStyle(fontSize: 16),
+          ),
           actions: <Widget>[
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.blue, // Button color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
