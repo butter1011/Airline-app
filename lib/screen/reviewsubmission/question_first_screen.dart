@@ -13,16 +13,19 @@ class QuestionFirstScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(itemSelectionProvider);
-    final selectedNumber = selections.where((s) => s).length;
+    final int numberOfSelectedAspects =
+        ref.watch(itemSelectionProvider.notifier).numberOfSelectedAspects();
+    print("❤$numberOfSelectedAspects");
+    //
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: buildQuestionHeader(),
+        flexibleSpace: BuildQuestionHeader(),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildFeedbackOptions(selectedNumber),
+            _buildFeedbackOptions(selections, numberOfSelectedAspects),
             _buildNavigationButtons(context),
           ],
         ),
@@ -30,7 +33,7 @@ class QuestionFirstScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(int selectedNumber) {
+  Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
     final Map<String, dynamic> feedbackOptions = aspectsForElevation;
     List<String> labelKeys = aspectsForElevation.keys.toList();
 
@@ -57,8 +60,10 @@ class QuestionFirstScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return FeedbackOption(
                   iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
-                  label: labelKeys[index],
-                  selectedNumber: selectedNumber,
+                  label: index,
+                  numberOfSelectedAspects:numberOfSelectedAspects,
+                  selectedNumber:
+                      selections[index].where((s) => s == true).length,
                 );
               },
             )),
@@ -105,8 +110,8 @@ class QuestionFirstScreen extends ConsumerWidget {
   }
 }
 
-class buildQuestionHeader extends StatelessWidget {
-  const buildQuestionHeader({super.key});
+class BuildQuestionHeader extends StatelessWidget {
+  const BuildQuestionHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,25 +1,34 @@
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackOption extends StatelessWidget {
   final String iconUrl;
-  final String label;
+  final int label;
 
   final int selectedNumber;
+  final int numberOfSelectedAspects;
 
-  const FeedbackOption(
+  FeedbackOption(
       {super.key,
       required this.iconUrl,
       required this.label,
-      required this.selectedNumber});
+      required this.selectedNumber,
+      required this.numberOfSelectedAspects});
+  final List<String> labelKeys = aspectsForElevation.keys.toList();
 
   @override
   Widget build(BuildContext context) {
+    final labelName = labelKeys[label];
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
-            arguments: {'singleAspect': label});
+        if (numberOfSelectedAspects > 3) {
+          _showAlertDialog(context);
+        } else {
+          Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
+              arguments: {'singleAspect': label});
+        }
       }, // Change color on tap
       child: Stack(
         children: [
@@ -48,7 +57,7 @@ class FeedbackOption extends StatelessWidget {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  label,
+                  labelName,
                   textAlign: TextAlign.center,
                   style: AppStyles.textStyle_14_600, // Optional styling
                 ),
@@ -72,6 +81,26 @@ class FeedbackOption extends StatelessWidget {
                 ))
         ],
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Limit Exceeded"),
+          content: Text("You can select up to 4 positive aspects."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -665,7 +665,6 @@ Map<String, dynamic> aspectsForElevation = {
       'Check-In Process',
       'Boarding Efficiency',
       'Baggage Delivery',
-      'Lounge Access',
     ],
   },
   'Cleanliness': {
@@ -673,17 +672,12 @@ Map<String, dynamic> aspectsForElevation = {
     'items': [
       'Check-In Process',
       'Boarding Efficiency',
-      'Baggage Delivery',
-      'Lounge Access',
     ],
   },
   'Onboard Service': {
     'iconUrl': 'assets/icons/review_icon_onboard.png',
     'items': [
       'Check-In Process',
-      'Boarding Efficiency',
-      'Baggage Delivery',
-      'Lounge Access',
     ],
   },
   'Food & Beverage': {
