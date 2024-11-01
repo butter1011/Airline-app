@@ -31,7 +31,7 @@ class CreviewList extends StatelessWidget {
               children: [
                 Container(
                   height: 40,
-                  decoration: AppStyles.avatarDecoration,
+                  decoration: AppStyles.circleDecoration,
                   child: CircleAvatar(
                     radius: 20,
                     backgroundImage: logo.isNotEmpty

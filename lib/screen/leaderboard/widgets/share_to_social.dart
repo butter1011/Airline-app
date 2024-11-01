@@ -34,12 +34,12 @@ class BottomSheetHelper {
                       avatar: 'assets/icons/icon_link.png',
                       name: 'Copy link',
                     ),
-                    ...List.generate(friendsList.length, (index) {
+                    ...List.generate(socialList.length, (index) {
                       return SingleFriendCard(
-                        avatar: friendsList[index]['Avatar'].isNotEmpty
-                            ? friendsList[index]['Avatar']
+                        avatar: socialList[index]['Avatar'].isNotEmpty
+                            ? socialList[index]['Avatar']
                             : 'assets/icons/google.png',
-                        name: friendsList[index]['Name'],
+                        name: socialList[index]['Name'],
                       );
                     }),
                     SingleFriendCard(
@@ -72,7 +72,7 @@ class SingleFriendCard extends StatelessWidget {
           Container(
             width: 56,
             height: 56,
-            decoration: AppStyles.avatarDecoration.copyWith(
+            decoration: AppStyles.circleDecoration.copyWith(
                 image: DecorationImage(
                     image: AssetImage(
               avatar,

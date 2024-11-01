@@ -2,11 +2,19 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  int selectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
+    final List bottomButtonList = [_registerAnother(), _anotherButtons()];
     return Scaffold(
         backgroundColor: AppStyles.mainColor,
         body: Center(
@@ -25,7 +33,7 @@ class Login extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+                  Navigator.pushNamed(context, AppRoutes.skipscreen);
                 },
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -85,49 +93,169 @@ class Login extends StatelessWidget {
                   )),
                 ]),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-                },
-                child: Container(
-                  width: 327,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(27),
-                    border: Border.all(
-                      width: 2,
-                      color: AppStyles.littleBlackColor,
-                    ),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: const Offset(3, 3))
-                    ],
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/mail.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Register with email',
-                          style: AppStyles.textStyle_15_600,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              bottomButtonList[selectedIndex]
             ],
           ),
         ));
+  }
+
+  Widget _registerAnother() {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          selectedIndex++;
+        });
+      },
+      child: Container(
+        width: 327,
+        height: 54,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(27),
+          border: Border.all(
+            width: 2,
+            color: AppStyles.littleBlackColor,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: AppStyles.littleBlackColor, offset: const Offset(3, 3))
+          ],
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/icons/mail.png',
+                width: 20,
+                height: 20,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Register with email',
+                style: AppStyles.textStyle_15_600,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _anotherButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Container(
+              width: 99,
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: AppStyles.littleBlackColor,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppStyles.littleBlackColor,
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_whatsapp.png',
+                      width: 25,
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              width: 99,
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: AppStyles.littleBlackColor,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppStyles.littleBlackColor,
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/apple.png',
+                      width: 25,
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              width: 99,
+              height: 54,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(27),
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: AppStyles.littleBlackColor,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppStyles.littleBlackColor,
+                    // Adjust opacity if needed
+                    offset:
+                        const Offset(2, 2), // Set offset to (0, 0) for no gap
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/Outlook.png',
+                      width: 25,
+                      height: 25,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ); 
   }
 }

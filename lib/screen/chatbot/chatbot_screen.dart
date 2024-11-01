@@ -20,9 +20,10 @@ class ChatbotScreen extends StatelessWidget {
             size: 24,
           ),
         ),
+        centerTitle: true,
         title: Center(
           child: Text(
-            "Sam - AI Flight Planner",
+            "Sam-AI Flight Planner",
             textAlign: TextAlign.center,
             style: AppStyles.textStyle_16_600,
           ),
@@ -89,7 +90,7 @@ class ChatbotScreen extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Type your message...',
+                hintText: 'Message',
                 hintStyle: AppStyles.textStyle_14_400
                     .copyWith(color: Color(0xff38433E)),
                 contentPadding:
@@ -112,3 +113,4 @@ class ChatbotScreen extends StatelessWidget {
     );
   }
 }
+  

@@ -2,20 +2,20 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FeedbackOption extends StatefulWidget {
+class CategoryRatingOptions extends StatefulWidget {
   final String iconUrl;
   final String label;
   final String? badgeScore;
 
-  const FeedbackOption(
+  const CategoryRatingOptions(
       {super.key, required this.iconUrl, required this.label, this.badgeScore});
 
   @override
   // ignore: library_private_types_in_public_api
-  _FeedbackOptionState createState() => _FeedbackOptionState();
+  _CategoryRatingOptionsState createState() => _CategoryRatingOptionsState();
 }
 
-class _FeedbackOptionState extends State<FeedbackOption> {
+class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
   bool _isClicked = false;
 
   void _toggleClick() {

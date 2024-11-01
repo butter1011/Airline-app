@@ -642,10 +642,60 @@ List<Map<String, dynamic>> trendingFeedbackList = [
     ]
   },
 ];
-List<Map<String, dynamic>> friendsList = [
+List<Map<String, dynamic>> socialList = [
   {'Name': 'Linkedin', 'Avatar': 'assets/icons/linkedin.png'},
   {'Name': 'Telegram', 'Avatar': 'assets/icons/telegram.png'},
   {'Name': 'Discord', 'Avatar': 'assets/icons/discord.png'},
   {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
   {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
 ];
+Map<String, dynamic> aspectsForElevation = {
+  'Boarding and Arrival Experience': {
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'items': [
+      'Check-In Process',
+      'Boarding Efficiency',
+      'Baggage Delivery',
+      'Lounge Access',
+    ],
+  },
+  'Comfort': {
+    'iconUrl': 'assets/icons/review_icon_comfort.png',
+    'items': [
+      'Check-In Process',
+      'Boarding Efficiency',
+      'Baggage Delivery',
+    ],
+  },
+  'Cleanliness': {
+    'iconUrl': 'assets/icons/review_icon_cleanliness.png',
+    'items': [
+      'Check-In Process',
+      'Boarding Efficiency',
+    ],
+  },
+  'Onboard Service': {
+    'iconUrl': 'assets/icons/review_icon_onboard.png',
+    'items': [
+      'Check-In Process',
+    ],
+  },
+  'Food & Beverage': {
+    'iconUrl': 'assets/icons/review_icon_food.png',
+    'items': [
+      'Check-In Process',
+      'Boarding Efficiency',
+      'Baggage Delivery',
+      'Lounge Access',
+    ],
+  },
+  'In-Flight Entertainment': {
+    'iconUrl': 'assets/icons/review_icon_entertainment.png',
+    'items': [
+      'Check-In Process',
+      'Boarding Efficiency',
+      'Baggage Delivery',
+      'Lounge Access',
+    ],
+  },
+};
