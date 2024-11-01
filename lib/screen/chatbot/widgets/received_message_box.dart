@@ -12,7 +12,7 @@ class ReceivedMessageBox extends StatelessWidget {
         Container(
           height: 40,
           width: 40,
-          decoration: AppStyles.avatarDecoration,
+          decoration: AppStyles.circleDecoration,
           child: CircleAvatar(
             radius: 20,
             backgroundImage: AssetImage('assets/icons/bot.png'),

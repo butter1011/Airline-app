@@ -13,15 +13,18 @@ class CairCategoryReviews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
                 decoration: AppStyles.avatarDecoration,
                 child: CircleAvatar(
                   radius: 20,
@@ -56,9 +59,45 @@ class CairCategoryReviews extends StatelessWidget {
           ),
           VerifiedButton(),
           SizedBox(
+            height: 18,
+          ),
+          Row(
+            children: [
+              Text(
+                'Flex with',
+                style: AppStyles.normalTextStyle,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                review['Used Airport'],
+                style: AppStyles.cardTextStyle,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          Row(
+            children: [
+              Text(
+                'Flex with',
+                style: AppStyles.normalTextStyle,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text(
+                review['Path'],
+                style: AppStyles.cardTextStyle,
+              )
+            ],
+          ),
+          SizedBox(
             height: 16,
           ),
-          review['Images'] != null && review['Images'].isNotEmpty
+          review['Image'] != null && review['Image'].isNotEmpty
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(
                       20.0), // Set your desired border radius
@@ -71,8 +110,7 @@ class CairCategoryReviews extends StatelessWidget {
                       height: 260.0,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/${review['Images'][0]}'),
+                        image: AssetImage('assets/images/${review['Image']}'),
                         fit: BoxFit.cover,
                       )), // Set the height to 300 pixels
                     ),

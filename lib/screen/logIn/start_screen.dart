@@ -160,47 +160,10 @@ class StartScreen extends StatelessWidget {
                   )),
                 ]),
               ),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  width: 327,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(27),
-                    border: Border.all(
-                      width: 2,
-                      color: AppStyles.littleBlackColor,
-                    ),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: const Offset(3, 3))
-                    ],
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/mail.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Register with email',
-                          style: AppStyles.textStyle_15_600,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            
             ],
           ),
         ));
   }
+  
 }

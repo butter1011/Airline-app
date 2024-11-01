@@ -16,7 +16,7 @@ class ReviewFlightCard extends StatelessWidget {
     final destinationTime = singleFlight["origin"]?["time"] ?? " ";
     final destinationFlag = singleFlight["destination"]?["flag"] ?? "";
     final status = singleFlight['visit status'] ?? " ";
-    // print(singleairport);
+
     return Container(
       decoration: AppStyles.cardDecoration,
       child: Padding(

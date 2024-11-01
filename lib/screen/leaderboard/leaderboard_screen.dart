@@ -190,8 +190,6 @@ class LeaderboardScreen extends StatelessWidget {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class _AirportListSection extends ConsumerWidget {
-  const _AirportListSection({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(buttonExpandNotifierProvider);

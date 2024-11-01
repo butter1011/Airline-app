@@ -1,28 +1,54 @@
-import 'package:airline_app/screen/profile/utils/card_chart_json.dart';
-import 'package:airline_app/screen/profile/widget/button1.dart';
+import 'package:airline_app/screen/profile/widget/review_button.dart';
+
 import 'package:flutter/material.dart';
 
 class CardChart extends StatelessWidget {
-  // const CardChart({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      children: btn_chartList.map((btnValue) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 4,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Use a Container with a fixed height or let GridView take its own space
+          Container(
+            height: MediaQuery.of(context).size.height *
+                0.5, // Adjust height as needed
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 1.3,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              children: [
+                ReviewButton(
+                  iconUrl: 'assets/icons/top_reviewer.png',
+                  label: 'Top Reviewer',
+                ),
+                ReviewButton(
+                  iconUrl: 'assets/icons/review_icon_comfort.png',
+                  label: 'Badge name',
+                ),
+                ReviewButton(
+                  iconUrl: 'assets/icons/review_icon_cleanliness.png',
+                  label: 'Badge name goes\n here',
+                ),
+                ReviewButton(
+                  iconUrl: 'assets/icons/review_icon_onboard.png',
+                  label: 'Badge name goes\n here',
+                ),
+                ReviewButton(
+                  iconUrl: 'assets/icons/review_icon_food.png',
+                  label: 'Badge name',
+                ),
+                ReviewButton(
+                  iconUrl: 'assets/icons/review_icon_entertainment.png',
+                  label: 'Badge name',
+                ),
+              ],
+            ),
           ),
-          child: ButtonChart(
-            iconpath: btnValue['iconpath'],
-            mywidth: btnValue['width'],
-            btntext: btnValue['text'],
-            // myColor: btnValue['myColor'],
-            myheight: btnValue['height'],
-          ),
-        );
-      }).toList(),
+        ],
+      ),
     );
   }
 }

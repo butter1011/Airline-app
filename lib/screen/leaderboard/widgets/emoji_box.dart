@@ -23,7 +23,6 @@ class __EmojiPickerDialogState extends State<_EmojiPickerDialog> {
   List<double> scales = List.generate(7, (_) => 1.0); // Scale for each emoji
 
   void _onEmojiPressed(int index) {
-    print("✈💎💎💎💎💎");
     setState(() {
       scales[index] = 1.5; // Scale up
     });

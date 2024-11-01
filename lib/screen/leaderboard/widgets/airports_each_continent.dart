@@ -9,9 +9,9 @@ class AirportsEachContinent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("🥉🥉🥉 ${airportList[continent]}");
+
     dynamic airports = airportList[continent];
-    print("this is airports ✈=====>$continent");
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

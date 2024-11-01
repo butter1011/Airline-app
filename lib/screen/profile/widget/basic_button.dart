@@ -8,12 +8,11 @@ class BasicButton extends StatelessWidget {
   final String btntext;
 
   const BasicButton(
-      {Key? key,
+      {super.key,
       required this.mywidth,
       required this.myheight,
       required this.myColor,
-      required this.btntext})
-      : super(key: key);
+      required this.btntext});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class BasicButton extends StatelessWidget {
       width: mywidth,
       height: myheight,
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(width: 2),
         color: myColor,
         borderRadius: BorderRadius.circular(27),
         boxShadow: [

@@ -1,5 +1,4 @@
-import 'package:airline_app/screen/app_widgets/feedbackoption.dart';
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -129,32 +128,32 @@ class QuestionSecondScreen extends StatelessWidget {
                 childAspectRatio: 1.3,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                children: [
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_boarding.png',
-                    label: 'Boarding and\nArrival Experience',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_comfort.png',
-                    label: 'Comfort',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                    label: 'Cleanliness',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_onboard.png',
-                    label: 'Onboard Service',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_food.png',
-                    label: 'Food & Beverage',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_entertainment.png',
-                    label: 'In-Flight\nEntertainment',
-                  ),
-                ],
+                // children: [
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_boarding.png',
+                //     label: 'Boarding and\nArrival Experience',
+                //   ),
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_comfort.png',
+                //     label: 'Comfort',
+                //   ),
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_cleanliness.png',
+                //     label: 'Cleanliness',
+                //   ),
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_onboard.png',
+                //     label: 'Onboard Service',
+                //   ),
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_food.png',
+                //     label: 'Food & Beverage',
+                //   ),
+                //   FeedbackOption(
+                //     iconUrl: 'assets/icons/review_icon_entertainment.png',
+                //     label: 'In-Flight\nEntertainment',
+                //   ),
+                // ],
               ),
             ),
           ],

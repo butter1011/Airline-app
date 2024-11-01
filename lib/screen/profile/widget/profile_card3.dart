@@ -9,12 +9,12 @@ class ProfileCard3 extends StatefulWidget {
   final int count;
 
   const ProfileCard3({
-    Key? key,
+    super.key,
     required this.iconPath,
     required this.isActive,
     required this.count,
     required this.myfun,
-  }) : super(key: key);
+  });
 
   @override
   State<ProfileCard3> createState() => _ProfileCardState();
@@ -26,10 +26,10 @@ class _ProfileCardState extends State<ProfileCard3> {
     return GestureDetector(
       onTap: widget.myfun, // Call the passed function when tapped
       child: Container(
-        width: 60,
-        height: 60,
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(width: 2),
           boxShadow: [
             BoxShadow(
               color: Colors.black,

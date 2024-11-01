@@ -51,6 +51,7 @@ class SyncedScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);
                     },
+                    color: Colors.white,
                   ),
                   SizedBox(
                     height: 24,
@@ -60,6 +61,7 @@ class SyncedScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);
                     },
+                    color: AppStyles.mainColor,
                   )
                 ],
               ),

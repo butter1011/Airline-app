@@ -92,7 +92,9 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
                   }));
                 },
                 child: Container(
-                  decoration: AppStyles.avatarExpandDecoration,
+                  decoration: AppStyles.circleDecoration
+                      .copyWith(color: AppStyles.mainColor)
+                      .copyWith(color: AppStyles.mainColor),
                   width: 40,
                   height: 40,
                   child: Image.asset('assets/icons/1.png'),
@@ -100,7 +102,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
               )),
           Positioned(
               bottom: 8,
-              left: 8,
+              left: -8,
               right: 0,
               child: Container(
                 height: 130,

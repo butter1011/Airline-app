@@ -2,10 +2,11 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class NavButton extends StatefulWidget {
-  const NavButton({super.key, required this.text, required this.onPressed});
+  const NavButton({super.key, required this.text, required this.onPressed, required this.color});
 
   final String text;
   final VoidCallback onPressed;
+  final Color color;
 
   @override
   _NavButtonState createState() => _NavButtonState();
@@ -37,7 +38,7 @@ class _NavButtonState extends State<NavButton> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           overlayColor: AppStyles.mainColor,
-          backgroundColor: Colors.white,
+          backgroundColor: widget.color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),

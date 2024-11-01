@@ -31,7 +31,7 @@ class FeedbackCard extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: AppStyles.avatarDecoration,
+                  decoration: AppStyles.circleDecoration,
                   child: CircleAvatar(
                     radius: 20,
                     backgroundImage:

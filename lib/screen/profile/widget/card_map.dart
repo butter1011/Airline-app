@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                 }));
               },
               child: Container(
-                decoration: AppStyles.avatarDecoration,
+                decoration: AppStyles.circleDecoration,
                 width: 40,
                 height: 40,
                 child: Image.asset('assets/icons/1.png'),
@@ -99,7 +99,7 @@ class _MapScreenState extends State<MapScreen> {
             )),
         Positioned(
             bottom: 8,
-            left: 8,
+            left: -8,
             right: 0,
             child: Container(
               height: 130,
@@ -120,8 +120,8 @@ class _MapScreenState extends State<MapScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               BasicMapbutton(
-                                  mywidth: 133,
-                                  myheight: 24,
+                                  mywidth: 138,
+                                  myheight: 28,
                                   iconpath: 'assets/icons/check.png',
                                   btntext: 'Visit Confirmed'),
                             ],

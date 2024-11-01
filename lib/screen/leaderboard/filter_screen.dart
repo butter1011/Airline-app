@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/leaderboard/widgets/filter_button.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -114,7 +115,11 @@ class _FilterScreenState extends State<FilterScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: const Icon(Icons.arrow_back_ios, size: 24),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios, size: 24)),
         title: Text(
           "Filters",
           textAlign: TextAlign.center,
@@ -365,21 +370,27 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.87,
-            height: 56,
-            decoration: BoxDecoration(
-                color: AppStyles.mainColor,
-                border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: [
-                  BoxShadow(
-                      color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-                ]),
-            child: Center(
-              child: Text(
-                "Apply",
-                style: AppStyles.textStyle_15_600,
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.87,
+              height: 56,
+              decoration: BoxDecoration(
+                  color: AppStyles.mainColor,
+                  border:
+                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                        color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+                  ]),
+              child: Center(
+                child: Text(
+                  "Apply",
+                  style: AppStyles.textStyle_15_600,
+                ),
               ),
             ),
           ),
@@ -390,8 +401,8 @@ class _FilterScreenState extends State<FilterScreen> {
 }
 
 class ContinentFilterButton extends StatelessWidget {
-  const ContinentFilterButton({
-    super.key,
+  const ContinentFilterButton({super.key, 
+
     required this.text,
     required this.isSelected,
     required this.onTap,

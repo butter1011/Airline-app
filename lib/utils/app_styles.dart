@@ -19,7 +19,19 @@ class AppStyles {
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
-
+  static TextStyle normalTextStyle = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+  static BoxDecoration avatarExpandDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: AppStyles.mainButtonColor, // Border color
+      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+      boxShadow: [
+        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
+      ]);
   static TextStyle textStyle_14_400 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
@@ -93,25 +105,7 @@ class AppStyles {
   );
 
   /// Box style
-  static BoxDecoration avatarDecoration = BoxDecoration(
-      shape: BoxShape.circle,
-      color: Colors.white, // Border color
-      border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 4.0),
-        right: BorderSide(color: Colors.black, width: 4.0),
-      ));
-  static BoxDecoration avatarExpandDecoration = BoxDecoration(
-      shape: BoxShape.circle,
-      color: AppStyles.mainColor, // Border color
-      border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 4.0),
-        right: BorderSide(color: Colors.black, width: 4.0),
-      ));
-  static BoxDecoration slideButtonDecoration = BoxDecoration(
+  static BoxDecoration circleDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border(
@@ -147,5 +141,23 @@ class AppStyles {
         left: BorderSide(color: Colors.black, width: 2.0),
         bottom: BorderSide(color: Colors.black, width: 4.0),
         right: BorderSide(color: Colors.black, width: 4.0),
+      ));
+  static BoxDecoration iconDecoration = BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      border: Border(
+        top: BorderSide(color: Colors.black, width: 2.0),
+        left: BorderSide(color: Colors.black, width: 2.0),
+        bottom: BorderSide(color: Colors.black, width: 3.0),
+        right: BorderSide(color: Colors.black, width: 3.0),
+      ));
+  static BoxDecoration badgeDecoration = BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.white,
+      border: Border(
+        top: BorderSide(color: Colors.black, width: 2.0),
+        left: BorderSide(color: Colors.black, width: 2.0),
+        bottom: BorderSide(color: Colors.black, width: 3.0),
+        right: BorderSide(color: Colors.black, width: 3.0),
       ));
 }
