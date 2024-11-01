@@ -23,13 +23,10 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-
     CarouselSliderController buttonCarouselController =
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    print("This is argument 💎💎💎💎💎💎💎 ${args!['UsedAirport']}");
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +88,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                     Container(
                       width: 40,
                       height: 40,
-                      decoration: AppStyles.avatarDecoration,
+                      decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
                         radius: 20,
                         backgroundImage:

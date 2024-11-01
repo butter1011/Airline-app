@@ -7,12 +7,11 @@ class Button extends StatelessWidget {
   final double myheight;
 
   const Button(
-      {Key? key,
+      {super.key,
       required this.mywidth,
       required this.myheight,
       required this.myColor,
-      required this.travelname})
-      : super(key: key);
+      required this.travelname});
 
   @override
   Widget build(BuildContext context) {

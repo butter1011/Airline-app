@@ -9,7 +9,7 @@ class NextButton extends StatelessWidget {
     return Container(
       width: 32,
       height: 32,
-      decoration: AppStyles.slideButtonDecoration,
+      decoration: AppStyles.circleDecoration,
       child: const CircleAvatar(
         radius: 20,
         backgroundColor: Colors.white,

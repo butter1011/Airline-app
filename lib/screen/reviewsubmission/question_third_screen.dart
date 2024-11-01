@@ -51,7 +51,7 @@ class QuestionThirdScreen extends StatelessWidget {
               _buildHeaderTitle(),
               SizedBox(height: 32),
               _buildHeaderSubtitle(),
-              SizedBox(height: 20),  
+              SizedBox(height: 20),
               _buildFlightDetails(),
               Spacer(), // Pushes the following container to the bottom
               _buildBottomContainer(),
@@ -212,7 +212,7 @@ class QuestionThirdScreen extends StatelessWidget {
   }
 
   Future<void> _buildBottomSheet(BuildContext context) {
-    print("🥉🥉🥉🥉=====>$context");
+  
     return showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
@@ -270,7 +270,11 @@ class QuestionThirdScreen extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: NavButton(text: "Review airport", onPressed: () {}),
+                child: NavButton(
+                  text: "Review airport",
+                  onPressed: () {},
+                  color: Colors.white,
+                ),
               )
             ],
           ),
@@ -300,7 +304,7 @@ class __ReviewScoreIconState extends State<_ReviewScoreIcon> {
       },
       child: Container(
         height: 40,
-        decoration: AppStyles.avatarDecoration
+        decoration: AppStyles.circleDecoration
             .copyWith(color: _isSelected ? AppStyles.mainColor : Colors.white),
         child: Image.asset(widget.iconUrl),
       ),

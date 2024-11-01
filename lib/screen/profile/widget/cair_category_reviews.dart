@@ -22,7 +22,7 @@ class CairCategoryReviews extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: AppStyles.avatarDecoration,
+                decoration: AppStyles.circleDecoration,
                 child: CircleAvatar(
                   radius: 20,
                   backgroundImage:

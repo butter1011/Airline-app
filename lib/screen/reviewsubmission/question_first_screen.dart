@@ -1,23 +1,28 @@
-import 'package:airline_app/screen/app_widgets/feedbackoption.dart';
+import 'package:airline_app/provider/selected_counter_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuestionFirstScreen extends StatelessWidget {
+class QuestionFirstScreen extends ConsumerWidget {
   const QuestionFirstScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selections = ref.watch(itemSelectionProvider);
+    final selectedNumber = selections.where((s) => s).length;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: _buildHeader(context),
+        flexibleSpace: buildQuestionHeader(),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildFeedbackOptions(),
+            _buildFeedbackOptions(selectedNumber),
             _buildNavigationButtons(context),
           ],
         ),
@@ -25,7 +30,86 @@ class QuestionFirstScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(context) {
+  Widget _buildFeedbackOptions(int selectedNumber) {
+    final Map<String, dynamic> feedbackOptions = aspectsForElevation;
+    List<String> labelKeys = aspectsForElevation.keys.toList();
+
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select up to 4 positive aspects',
+              style: AppStyles.textStyle_14_600,
+            ),
+            SizedBox(height: 16),
+            Expanded(
+                child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.3,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+              ),
+              itemCount: feedbackOptions.length, // Use the length of the list
+              itemBuilder: (context, index) {
+                return FeedbackOption(
+                  iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
+                  label: labelKeys[index],
+                  selectedNumber: selectedNumber,
+                );
+              },
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavigationButtons(context) {
+    return Column(
+      children: [
+        Container(
+          height: 2,
+          color: Colors.black,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: NavPageButton(
+                    text: 'Go back',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icons.arrow_back),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: NavPageButton(
+                    text: 'Next',
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.questionsecondscreen);
+                    },
+                    icon: Icons.arrow_forward),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class buildQuestionHeader extends StatelessWidget {
+  const buildQuestionHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
@@ -109,93 +193,4 @@ class QuestionFirstScreen extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildFeedbackOptions() {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Select up to 4 positive aspects',
-              style: AppStyles.textStyle_14_600,
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 1.3,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                children: [
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_boarding.png',
-                    label: 'Boarding and\nArrival Experience',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_comfort.png',
-                    label: 'Comfort',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                    label: 'Cleanliness',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_onboard.png',
-                    label: 'Onboard Service',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_food.png',
-                    label: 'Food & Beverage',
-                  ),
-                  FeedbackOption(
-                    iconUrl: 'assets/icons/review_icon_entertainment.png',
-                    label: 'In-Flight\nEntertainment',
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavigationButtons(context) {
-    return Column(
-      children: [
-        Container(
-          height: 2,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: NavPageButton(
-                    text: 'Go back',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icons.arrow_back),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: NavPageButton(
-                    text: 'Next',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, AppRoutes.questionsecondscreen);
-                    },
-                    icon: Icons.arrow_forward),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
-

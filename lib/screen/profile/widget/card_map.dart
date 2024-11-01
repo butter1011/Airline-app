@@ -91,7 +91,7 @@ class _MapScreenState extends State<MapScreen> {
                 }));
               },
               child: Container(
-                decoration: AppStyles.avatarDecoration,
+                decoration: AppStyles.circleDecoration,
                 width: 40,
                 height: 40,
                 child: Image.asset('assets/icons/1.png'),

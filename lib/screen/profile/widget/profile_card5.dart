@@ -9,12 +9,12 @@ class ProfileCard5 extends StatefulWidget {
   final int count;
 
   const ProfileCard5({
-    Key? key,
+    super.key,
     required this.iconPath,
     required this.isActive,
     required this.count,
     required this.myfun,
-  }) : super(key: key);
+  });
 
   @override
   State<ProfileCard5> createState() => _ProfileCardState();

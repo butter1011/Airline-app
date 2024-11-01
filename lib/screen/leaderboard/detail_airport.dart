@@ -1,7 +1,6 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
-import 'package:airline_app/screen/app_widgets/feedbackoption.dart';
+import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
-import 'package:airline_app/screen/leaderboard/widgets/detailButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -26,7 +25,7 @@ class _DetailAirportState extends State<DetailAirport> {
   void didChangeDependencies() {
     if (ModalRoute.of(context)!.settings.arguments != null) {
       var args = ModalRoute.of(context)!.settings.arguments as Map;
-      print(" Passed index ==========> ${args['index']}");
+   
       airportIndex = args['index'];
     }
     super.didChangeDependencies();
@@ -35,7 +34,7 @@ class _DetailAirportState extends State<DetailAirport> {
   @override
   Widget build(BuildContext context) {
     List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
-    print("😉😉😉😉😉😉 ${reviews[1]}");
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -195,8 +194,7 @@ class _DetailAirportState extends State<DetailAirport> {
                 ),
               ),
               Column(
-                children: reviews.map((singleReview) {
-                  print("🧨🧨🧨🧨 $singleReview");
+                children: reviews.map((singleReview) {       
                   return CategoryReviews(
                     review: singleReview,
                   );
@@ -260,8 +258,6 @@ class _DetailAirportState extends State<DetailAirport> {
 }
 
 class ExpandButtons extends ConsumerWidget {
-  const ExpandButtons({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var isExpanded = ref.watch(buttonExpandNotifierProvider);
@@ -276,18 +272,19 @@ class ExpandButtons extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: FeedbackOption(
-                        iconUrl: 'assets/icons/review_icon_boarding.png',
-                        label: 'Boarding and\nArrival Experience',
-                        badgeScore: '10',),
+                    child: CategoryRatingOptions(
+                      iconUrl: 'assets/icons/review_icon_boarding.png',
+                      label: 'Boarding and\nArrival Experience',
+                      badgeScore: '10',
+                    ),
                   ),
                   SizedBox(
                     width: 16,
                   ),
                   Expanded(
-                    child: FeedbackOption(
-                        iconUrl: 'assets/icons/review_icon_comfort.png',
-                        label: 'Comfort',
+                    child: CategoryRatingOptions(
+                      iconUrl: 'assets/icons/review_icon_comfort.png',
+                      label: 'Comfort',
                       badgeScore: '10',
                     ),
                   ),
@@ -299,9 +296,9 @@ class ExpandButtons extends ConsumerWidget {
               Row(
                 children: [
                   Expanded(
-                    child: FeedbackOption(
-                        iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                        label: 'Cleanliness',
+                    child: CategoryRatingOptions(
+                      iconUrl: 'assets/icons/review_icon_cleanliness.png',
+                      label: 'Cleanliness',
                       badgeScore: '10',
                     ),
                   ),
@@ -309,9 +306,9 @@ class ExpandButtons extends ConsumerWidget {
                     width: 16,
                   ),
                   Expanded(
-                    child: FeedbackOption(
-                        iconUrl: 'assets/icons/review_icon_onboard.png',
-                        label: 'Onboard Service',
+                    child: CategoryRatingOptions(
+                      iconUrl: 'assets/icons/review_icon_onboard.png',
+                      label: 'Onboard Service',
                       badgeScore: '9',
                     ),
                   ),
@@ -327,9 +324,9 @@ class ExpandButtons extends ConsumerWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: FeedbackOption(
-                                iconUrl: 'assets/icons/review_icon_food.png',
-                                label: 'Food & Beverage',
+                            child: CategoryRatingOptions(
+                              iconUrl: 'assets/icons/review_icon_food.png',
+                              label: 'Food & Beverage',
                               badgeScore: '8',
                             ),
                           ),
@@ -337,10 +334,10 @@ class ExpandButtons extends ConsumerWidget {
                             width: 16,
                           ),
                           Expanded(
-                            child: FeedbackOption(
-                                iconUrl:
-                                    'assets/icons/review_icon_entertainment.png',
-                                label: 'In-Flight\nEntertainment',
+                            child: CategoryRatingOptions(
+                              iconUrl:
+                                  'assets/icons/review_icon_entertainment.png',
+                              label: 'In-Flight\nEntertainment',
                               badgeScore: '7',
                             ),
                           ),
