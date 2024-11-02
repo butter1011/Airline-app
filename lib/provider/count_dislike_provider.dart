@@ -1,13 +1,13 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final itemSelectionProvider =
-    StateNotifierProvider<ItemSelectionNotifier, List<List<bool>>>((ref) {
-  return ItemSelectionNotifier(aspectsForElevation);
+final countDislikeProvider =
+    StateNotifierProvider<CountDislikeNotifier, List<List<bool>>>((ref) {
+  return CountDislikeNotifier(aspectsForElevation);
 });
 
-class ItemSelectionNotifier extends StateNotifier<List<List<bool>>> {
-  ItemSelectionNotifier(Map<String, dynamic> aspects)
+class CountDislikeNotifier extends StateNotifier<List<List<bool>>> {
+  CountDislikeNotifier(Map<String, dynamic> aspects)
       : super(aspects.entries.map((aspect) {
           // Create a selection list for each aspect based on its items
           return List.generate(aspect.value['items'].length, (index) => false);
@@ -35,7 +35,7 @@ class ItemSelectionNotifier extends StateNotifier<List<List<bool>>> {
     return selection;
   }
 
-   int numberOfSelectedAspects() {
+  int numberOfSelectedAspects() {
     int count = 0;
     for (List<bool> aspect in state) {
       if (aspect.any((isSelected) => isSelected)) {

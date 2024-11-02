@@ -1,17 +1,21 @@
+import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackOption extends StatelessWidget {
+  final int numForIdentifyOfParent;
   final String iconUrl;
   final int label;
-
   final int selectedNumber;
   final int numberOfSelectedAspects;
 
   FeedbackOption(
       {super.key,
+      required this.numForIdentifyOfParent,
       required this.iconUrl,
       required this.label,
       required this.selectedNumber,
@@ -23,12 +27,29 @@ class FeedbackOption extends StatelessWidget {
     final labelName = labelKeys[label];
     return GestureDetector(
       onTap: () {
-        if (numberOfSelectedAspects > 3) {
-          _showAlertDialog(context);
-        } else {
-          Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
-              arguments: {'singleAspect': label});
+        print("🪂${context.widget.runtimeType}");
+
+        if (numForIdentifyOfParent == 1) {
+          if (numberOfSelectedAspects > 3) {
+            _showAlertDialog(context);
+          } else {
+            Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
+                arguments: {'singleAspect': label});
+          }
+        } else if (numForIdentifyOfParent == 2) {
+          if (numberOfSelectedAspects > 3) {
+            _showAlertDialog(context);
+          } else {
+            Navigator.pushNamed(context, AppRoutes.detailsecondscreen,
+                arguments: {'singleAspect': label});
+          }
         }
+        // if (numberOfSelectedAspects > 3) {
+        //   _showAlertDialog(context);
+        // } else {
+        //   Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
+        //       arguments: {'singleAspect': label});
+        // }
       }, // Change color on tap
       child: Stack(
         children: [
