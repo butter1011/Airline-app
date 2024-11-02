@@ -1,23 +1,32 @@
+import 'package:airline_app/provider/count_dislike_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuestionSecondScreen extends StatelessWidget {
+class QuestionSecondScreen extends ConsumerWidget {
   const QuestionSecondScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selections = ref.watch(countDislikeProvider);
+    final int numberOfSelectedAspects =
+        ref.watch(countDislikeProvider.notifier).numberOfSelectedAspects();
+    print("❤$numberOfSelectedAspects");
+    //
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: _buildHeader(context),
+        flexibleSpace: BuildQuestionHeader(),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildFeedbackOptions(),
+            _buildFeedbackOptions(selections, numberOfSelectedAspects),
             _buildNavigationButtons(context),
           ],
         ),
@@ -25,92 +34,10 @@ class QuestionSecondScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Japan.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          color:
-              Color(0xff181818).withOpacity(0.75), // Black overlay with opacity
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.052),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/icons/vector_japan.png"),
-                  SizedBox(width: 8),
-                  Column(
-                    children: [
-                      Text(
-                        'JAPAN     ',
-                        style: AppStyles.oswaldTextStyle,
-                      ),
-                      Text(
-                        ' AIRLINES',
-                        style: AppStyles.oswaldTextStyle,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 32),
-              Text(
-                "What could be improved?",
-                style: AppStyles.textStyle_18_600
-                    .copyWith(color: Color(0xffF9F9F9)),
-              ),
-              Text(
-                'Your feedback helps us improve!',
-                style: AppStyles.textStyle_15_600
-                    .copyWith(color: Color(0xffC1C7C4)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Japan Airways, 18/10/24, Premium Economy',
-                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                'Tokyo > Bucharest',
-                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
-              ),
-              Spacer(), // This will push the following container to the bottom
-              Container(
-                height: 24,
-                width: double.infinity,
+  Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
+    final Map<String, dynamic> feedbackOptions = aspectsForElevation;
+    List<String> labelKeys = aspectsForElevation.keys.toList();
 
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(24),
-                        topLeft: Radius.circular(24))),
-
-                // Center text inside the container
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFeedbackOptions() {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
@@ -123,39 +50,26 @@ class QuestionSecondScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: GridView.count(
+                child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.3,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                // children: [
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_boarding.png',
-                //     label: 'Boarding and\nArrival Experience',
-                //   ),
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_comfort.png',
-                //     label: 'Comfort',
-                //   ),
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                //     label: 'Cleanliness',
-                //   ),
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_onboard.png',
-                //     label: 'Onboard Service',
-                //   ),
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_food.png',
-                //     label: 'Food & Beverage',
-                //   ),
-                //   FeedbackOption(
-                //     iconUrl: 'assets/icons/review_icon_entertainment.png',
-                //     label: 'In-Flight\nEntertainment',
-                //   ),
-                // ],
               ),
-            ),
+              itemCount: feedbackOptions.length, // Use the length of the list
+              itemBuilder: (context, index) {
+                print("🤣$selections");
+                return FeedbackOption(
+                  numForIdentifyOfParent: 2,
+                  iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
+                  label: index,
+                  numberOfSelectedAspects: numberOfSelectedAspects,
+                  selectedNumber:
+                      selections[index].where((s) => s == true).length,
+                );
+              },
+            )),
           ],
         ),
       ),

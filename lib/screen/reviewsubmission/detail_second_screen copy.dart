@@ -1,16 +1,16 @@
-import 'package:airline_app/provider/count_like_provider.dart';
+import 'package:airline_app/provider/count_dislike_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetailFirstScreen extends ConsumerWidget {
-  const DetailFirstScreen({super.key});
+class DetailSecondScreen extends ConsumerWidget {
+  const DetailSecondScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(countLikeProvider);
+    final selections = ref.watch(countDislikeProvider);
 
     print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
@@ -22,7 +22,7 @@ class DetailFirstScreen extends ConsumerWidget {
     final List itemListForSingleAspect =
         aspectsForElevation[singleAspect]['items'] ?? [];
     final selectedItemNumter =
-        ref.watch(countLikeProvider.notifier).selectedNumber(singleIndex);
+        ref.watch(countDislikeProvider.notifier).selectedNumber(singleIndex);
 
     return Scaffold(
       appBar: AppBar(
@@ -106,7 +106,7 @@ class DetailFirstScreen extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(WidgetRef ref, int singleIndex,
       List itemListForSingleAspect, List<List<bool>> selections) {
-    // List isSelectedList = ref.watch(countLikeProvider);
+    // List isSelectedList = ref.watch(countDislikeProvider);
 
     return Wrap(
       spacing: 16,
@@ -115,7 +115,7 @@ class DetailFirstScreen extends ConsumerWidget {
         return GestureDetector(
           onTap: () {
             ref
-                .read(countLikeProvider.notifier)
+                .read(countDislikeProvider.notifier)
                 .toggleSelection(singleIndex, index);
           },
           child: IntrinsicWidth(

@@ -18,5 +18,6 @@ class AppRoutes {
   static const questionfirstscreen = "/";
   static const detailfirstscreen = "/detailfirstscreen";
   static const questionsecondscreen = "/questionsecondscreen";
+    static const detailsecondscreen = "/detailsecondscreen";
   static const questionthirdscreen = "/questionthirdscreen";
 }

@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/selected_counter_provider.dart';
+import 'package:airline_app/provider/count_like_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -12,9 +12,9 @@ class QuestionFirstScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(itemSelectionProvider);
+    final selections = ref.watch(countLikeProvider);
     final int numberOfSelectedAspects =
-        ref.watch(itemSelectionProvider.notifier).numberOfSelectedAspects();
+        ref.watch(countLikeProvider.notifier).numberOfSelectedAspects();
     print("❤$numberOfSelectedAspects");
     //
     return Scaffold(
@@ -59,9 +59,10 @@ class QuestionFirstScreen extends ConsumerWidget {
               itemCount: feedbackOptions.length, // Use the length of the list
               itemBuilder: (context, index) {
                 return FeedbackOption(
+                  numForIdentifyOfParent:1,
                   iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
                   label: index,
-                  numberOfSelectedAspects:numberOfSelectedAspects,
+                  numberOfSelectedAspects: numberOfSelectedAspects,
                   selectedNumber:
                       selections[index].where((s) => s == true).length,
                 );
