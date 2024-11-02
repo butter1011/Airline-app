@@ -1,13 +1,44 @@
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
+import 'dart:io';
+
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class QuestionThirdScreen extends StatelessWidget {
+class QuestionThirdScreen extends StatefulWidget {
   const QuestionThirdScreen({super.key});
+
+  @override
+  State<QuestionThirdScreen> createState() => _QuestionThirdScreenState();
+}
+
+class _QuestionThirdScreenState extends State<QuestionThirdScreen> {
+  // dynamic _image;
+
+  // pickImage() async {
+  //   FilePickerResult? result = await FilePicker.platform
+  //       .pickFiles(type: FileType.image, allowMultiple: false);
+  //   if (result != null) {
+  //     setState(() {
+  //       _image = result.files.first.bytes;
+  //     });
+  //   }
+  // }
+  List<File> _image = []; // Initialize as an empty list
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image.add(File(pickedFile.path)); // Add the new image to the list
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +52,75 @@ class QuestionThirdScreen extends StatelessWidget {
           children: [
             _buildFeedbackOptions(context),
             _buildNavigationButtons(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeedbackOptions(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Share your experience with other users (Optional)',
+                style: AppStyles.textStyle_14_600),
+            SizedBox(height: 19),
+            _buildMediaUploadOption(context),
+            SizedBox(height: 24),
+            if (_image.isNotEmpty) // Check if the list is not empty
+              Wrap(
+                spacing: 8.0, // Space between images
+                runSpacing: 8.0,
+                children: _image
+                    .map(
+                      (file) => Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: AppStyles.buttonDecoration.copyWith(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                image: FileImage(file),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: -5,
+                            top: -5,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _image.remove(file); // Remove image on tap
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.cancel_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            SizedBox(height: 20),
+            _buildCommentsSection(context),
           ],
         ),
       ),
@@ -115,25 +215,6 @@ class QuestionThirdScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Share your experience with other users (Optional)',
-                style: AppStyles.textStyle_14_600),
-            SizedBox(height: 19),
-            _buildMediaUploadOption(context),
-            SizedBox(height: 20),
-            _buildCommentsSection(context),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildMediaUploadOption(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -141,34 +222,45 @@ class QuestionThirdScreen extends StatelessWidget {
       decoration: AppStyles.cardDecoration
           .copyWith(borderRadius: BorderRadius.circular(16)),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-            height: 48,
-            width: 48,
-            decoration: AppStyles.cardDecoration
-                .copyWith(borderRadius: BorderRadius.circular(16)),
-            child: Icon(Icons.file_upload_outlined)),
+        GestureDetector(
+          onTap: () {
+            _pickImage();
+          },
+          child: Container(
+              height: 48,
+              width: 48,
+              decoration: AppStyles.cardDecoration
+                  .copyWith(borderRadius: BorderRadius.circular(16)),
+              child: Icon(Icons.file_upload_outlined)),
+        ),
         SizedBox(height: 12),
-        Text("Choose your media for upload", style: AppStyles.textStyle_15_600)
+        Text("Choose your media for upload", style: AppStyles.textStyle_15_600),
       ]),
     );
   }
 
   Widget _buildCommentsSection(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Comments (Optional)", style: AppStyles.textStyle_14_600),
-        SizedBox(height: 6),
-        Container(
-            height: MediaQuery.of(context).size.height * 0.19,
-            width: double.infinity,
-            decoration: AppStyles.cardDecoration,
-            child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Text("Some comment here",
-                    style: AppStyles.textStyle_14_400))),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Comments (Optional)", style: AppStyles.textStyle_14_600),
+          SizedBox(height: 6),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: AppStyles.cardDecoration,
+              child: TextFormField(
+                maxLines: null, // Allows unlimited lines
+                decoration: InputDecoration(
+                  hintText: "Some comment here",
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -212,7 +304,6 @@ class QuestionThirdScreen extends StatelessWidget {
   }
 
   Future<void> _buildBottomSheet(BuildContext context) {
-  
     return showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,

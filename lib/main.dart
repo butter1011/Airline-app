@@ -11,6 +11,7 @@ import 'package:airline_app/screen/profile/book_mark_screen.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/detail_second_screen%20copy.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_third_screen.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      routes: {        
+      routes: {
         AppRoutes.loginscreen: (context) => const Login(),
         AppRoutes.skipscreen: (context) => const SkipScreen(),
         AppRoutes.reviewsubmissionscreen: (context) =>
@@ -71,11 +72,12 @@ class MyApp extends StatelessWidget {
         AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        AppRoutes.manualinput: (context) => ManualInputScreen(),        
+        AppRoutes.manualinput: (context) => ManualInputScreen(),
         AppRoutes.flightinput: (context) => FlightInputScreen(),
         AppRoutes.questionfirstscreen: (context) => QuestionFirstScreen(),
         AppRoutes.detailfirstscreen: (context) => DetailFirstScreen(),
         AppRoutes.questionsecondscreen: (context) => QuestionSecondScreen(),
+        AppRoutes.detailsecondscreen: (context) => DetailSecondScreen(),
         AppRoutes.questionthirdscreen: (context) => QuestionThirdScreen(),
       },
       debugShowCheckedModeBanner: false,
