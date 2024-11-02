@@ -20,4 +20,8 @@ class AppRoutes {
   static const questionsecondscreen = "/questionsecondscreen";
     static const detailsecondscreen = "/detailsecondscreen";
   static const questionthirdscreen = "/questionthirdscreen";
+  static const profilesupportscreen = "/supportscreen";
+  static const eidtprofilescreen = "/eidtprofilescreen";
+  static const aboutapp = "/aboutapp";
+  static const termsofservice = "/termsofservice";
 }

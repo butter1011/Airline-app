@@ -1,191 +1,134 @@
-import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'package:airline_app/screen/profile/utils/calender_sync_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/screen/profile/widget/basic_button.dart';
-
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
-
 import 'package:flutter/material.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
+
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  List<bool> isSelected = [false, false, false, false];
+
+  void toggleSelection(int index) {
+    setState(() {
+      isSelected[index] = !isSelected[index]; // Toggle the selected state
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 66,
+      appBar: AppBar(
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.profilescreen);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            size: 24,
           ),
+        ),
+        title: Text(
+          "Notifications",
+          textAlign: TextAlign.center,
+          style: AppStyles.mainTextStyle,
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        children: [
+          Divider(thickness: 4, color: Colors.black),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ProfileScreen();
-                    }));
-                  },
+            child: Text(
+              'Type',
+              style: AppStyles.subtitleTextStyle,
+            ),
+          ),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(isSelected.length, (index) {
+                return GestureDetector(
+                  onTap: () =>
+                      toggleSelection(index), // Toggle selection on tap
+                  child: BasicButton(
+                    mywidth: index == 0 ? 49 : (index == 2 ? 94 : 161),
+                    myheight: 40,
+                    myColor: isSelected[index]
+                        ? AppStyles.mainButtonColor
+                        : Colors.white, // Change color based on selection
+                    btntext: index == 0
+                        ? "All"
+                        : "Category goes here", // Update button text accordingly
+                  ),
+                );
+              }),
+            ),
+          ),
+          SizedBox(height: 20),
+          Divider(thickness: 2, color: Colors.black),
+          // Use ListView.builder for better performance
+          ListView.builder(
+            shrinkWrap: true, // Allows it to be embedded in a scrollable widget
+            physics:
+                NeverScrollableScrollPhysics(), // Disable scrolling for this ListView
+            itemCount: calenderSync.length, // Assuming calenderSync is a list
+            itemBuilder: (context, index) {
+              final calenter = calenderSync[index];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                child: Container(
+                  width: double.infinity, // Use full width available
+                  decoration: AppStyles.notificationDecoration,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      'assets/icons/left.png', // Path to your arrow icon
-                      width: 24,
-                      height: 24,
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              calenter['topic'],
+                              style: AppStyles.mainTextStyle,
+                            ),
+                            const Icon(Icons.arrow_forward_sharp)
+                          ],
+                        ),
+                        SizedBox(
+                            height:
+                                8), // Add some space between topic and contents
+                        Text(
+                          calenter['contents'],
+                          style: AppStyles.cardTextStyle.copyWith(
+                              fontWeight: FontWeight.w400, color: Colors.black),
+                        ),
+                        SizedBox(height: 18),
+                        BasicBlackButton(
+                          mywidth: 126,
+                          myheight: 24,
+                          myColor: Colors.black,
+                          btntext: 'Recommended',
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                    child: Center(
-                        child: Text('Notifications',
-                            style: AppStyles.textStyle_16_600))),
-              ],
-            ),
-          ),
-          Divider(
-            thickness: 4,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Type',
-                  style: AppStyles.textStyle_18_600,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Wrap(
-            alignment: WrapAlignment.start,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              BasicButton(
-                  mywidth: 49,
-                  myheight: 40,
-                  myColor: AppStyles.mainColor,
-                  btntext: "All"),
-              BasicButton(
-                  mywidth: 112,
-                  myheight: 40,
-                  myColor: Colors.white,
-                  btntext: "Promotional"),
-              BasicButton(
-                  mywidth: 83,
-                  myheight: 40,
-                  myColor: Colors.white,
-                  btntext: "Reward"),
-              BasicButton(
-                  mywidth: 96,
-                  myheight: 40,
-                  myColor: Colors.white,
-                  btntext: "Feedback"),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Divider(
-              thickness: 2,
-              color: Colors.black,
-            ),
-          ),
-          Container(
-            width: 327,
-            decoration: AppStyles.notificationDecoration,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'E-mail Sync',
-                        style: AppStyles.textStyle_16_600,
-                      ),
-                      Icon(Icons.arrow_forward_sharp)
-                    ],
-                  ),
-                  Text(
-                    'Sub headline goes here where we explain the why we need it',
-                    style: AppStyles.textStyle_14_600.copyWith(
-                        fontWeight: FontWeight.w400, color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      BasicBlackButton(
-                        mywidth: 126,
-                        myheight: 24,
-                        myColor: Colors.black,
-                        btntext: 'Recommended',
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Container(
-            width: 327,
-            decoration: AppStyles.notificationDecoration,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'E-mail Sync',
-                        style: AppStyles.textStyle_16_600,
-                      ),
-                      Icon(Icons.arrow_forward_sharp)
-                    ],
-                  ),
-                  Text(
-                    'Sub headline goes here where we explain the why we need it',
-                    style: AppStyles.textStyle_14_600.copyWith(
-                        fontWeight: FontWeight.w400, color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      BasicBlackButton(
-                        mywidth: 126,
-                        myheight: 24,
-                        myColor: Colors.black,
-                        btntext: 'Recommended',
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

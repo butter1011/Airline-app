@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-class BasicButton extends StatelessWidget {
+class BasicLanguageButton extends StatelessWidget {
   final double mywidth;
   final double myheight;
   final Color myColor;
 
   final String btntext;
 
-  const BasicButton(
-      {super.key,
+  const BasicLanguageButton(
+      {Key? key,
       required this.mywidth,
       required this.myheight,
       required this.myColor,
-      required this.btntext});
+      required this.btntext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class BasicButton extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 2),
         child:
             // Center(
             //   child:
@@ -40,8 +41,9 @@ class BasicButton extends StatelessWidget {
             '$btntext',
             style: const TextStyle(
                 fontFamily: 'Clash Grotesk',
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
           ),
         ),
         // ),

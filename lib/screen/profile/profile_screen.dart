@@ -74,8 +74,7 @@ class ProfileScreen extends StatelessWidget {
                                                   fontFamily: 'Clash Grotesk',
                                                   fontSize: 16,
                                                   color: Colors.white,
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                           ],
                                         ),
@@ -85,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                                       width: 8,
                                     ),
                                     Container(
-                                      width: 43,
+                                      width: 63,
                                       height: 32,
                                       decoration: BoxDecoration(
                                         border: Border.all(),
@@ -101,14 +100,26 @@ class ProfileScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(1.0),
                                         child: Center(
-                                          child: Text(
-                                            '+9',
-                                            style: TextStyle(
-                                                fontFamily: 'Clash Grotesk',
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal),
-                                          ),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                    'assets/icons/LeadIcon.png'),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  '+9',
+                                                  style: TextStyle(
+                                                      fontFamily:
+                                                          'Clash Grotesk',
+                                                      fontSize: 16,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ]),
                                         ),
                                       ),
                                     ),
@@ -121,13 +132,13 @@ class ProfileScreen extends StatelessWidget {
                                   width: 227,
                                   height: 32,
                                   decoration: BoxDecoration(
-                                    border: Border.all(),
+                                    border: Border.all(width: 2),
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(27),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black,
-                                        offset: Offset(4, 4),
+                                        offset: Offset(2, 2),
                                       ),
                                     ],
                                   ),
@@ -145,11 +156,10 @@ class ProfileScreen extends StatelessWidget {
                                           Center(
                                             child: const Text(
                                               'Flyer type: Business Class',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   fontFamily: 'Clash Grotesk',
                                                   fontSize: 16,
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                           ),
                                         ],
@@ -171,7 +181,7 @@ class ProfileScreen extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Clash Grotesk',
                               fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -181,9 +191,9 @@ class ProfileScreen extends StatelessWidget {
                             'Very long bio goes here pushing it to the second row',
                             style: TextStyle(
                               fontFamily: 'Clash Grotesk',
-                              letterSpacing: 0.3,
-                              fontSize: 17,
-                              fontWeight: FontWeight.normal,
+                              letterSpacing: 0.6,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -199,8 +209,8 @@ class ProfileScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
@@ -208,8 +218,8 @@ class ProfileScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -227,8 +237,8 @@ class ProfileScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
@@ -237,8 +247,8 @@ class ProfileScreen extends StatelessWidget {
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
                                   height: 1,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-class BasicButton extends StatelessWidget {
+class BasicButtonEnglish extends StatelessWidget {
   final double mywidth;
   final double myheight;
   final Color myColor;
 
   final String btntext;
 
-  const BasicButton(
-      {super.key,
+  const BasicButtonEnglish(
+      {Key? key,
       required this.mywidth,
       required this.myheight,
       required this.myColor,
-      required this.btntext});
+      required this.btntext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
