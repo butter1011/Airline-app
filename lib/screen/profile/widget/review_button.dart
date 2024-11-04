@@ -27,7 +27,7 @@ class _ReviewButtonState extends State<ReviewButton> {
       child: Container(
         decoration: AppStyles.cardDecoration.copyWith(
           color: _isClicked
-              ? AppStyles.mainButtonColor
+              ? AppStyles.mainColor
               : Colors.white, // Change color based on click state
         ),
         padding: EdgeInsets.only(
@@ -39,7 +39,7 @@ class _ReviewButtonState extends State<ReviewButton> {
               height: 48,
               width: 48,
               decoration: AppStyles.cardDecoration.copyWith(
-                color: _isClicked ? Colors.white : AppStyles.mainButtonColor,
+                color: _isClicked ? Colors.white : AppStyles.mainColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Image.asset(widget.iconUrl, height: 40),
@@ -48,7 +48,7 @@ class _ReviewButtonState extends State<ReviewButton> {
             Text(
               widget.label,
               textAlign: TextAlign.center,
-              style: AppStyles.cardTextStyle, // Optional styling
+              style: AppStyles.textStyle_14_600, // Optional styling
             ),
           ],
         ),

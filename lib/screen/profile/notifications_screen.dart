@@ -39,7 +39,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         title: Text(
           "Notifications",
           textAlign: TextAlign.center,
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
       ),
       body: ListView(
@@ -50,7 +50,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Text(
               'Type',
-              style: AppStyles.subtitleTextStyle,
+              style: AppStyles.textStyle_14_400,
             ),
           ),
           SizedBox(height: 16),
@@ -67,7 +67,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     mywidth: index == 0 ? 49 : (index == 2 ? 94 : 161),
                     myheight: 40,
                     myColor: isSelected[index]
-                        ? AppStyles.mainButtonColor
+                        ? AppStyles.mainColor
                         : Colors.white, // Change color based on selection
                     btntext: index == 0
                         ? "All"
@@ -103,7 +103,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           children: [
                             Text(
                               calenter['topic'],
-                              style: AppStyles.mainTextStyle,
+                              style: AppStyles.textStyle_16_600,
                             ),
                             const Icon(Icons.arrow_forward_sharp)
                           ],
@@ -113,7 +113,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 8), // Add some space between topic and contents
                         Text(
                           calenter['contents'],
-                          style: AppStyles.cardTextStyle.copyWith(
+                          style: AppStyles.textStyle_14_600.copyWith(
                               fontWeight: FontWeight.w400, color: Colors.black),
                         ),
                         SizedBox(height: 18),

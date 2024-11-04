@@ -268,7 +268,7 @@ class _CardNotificationsState extends State<CardNotifications> {
                     mywidth: 103,
                     myheight: 40,
                     myColor: _selectedLanguage == 'English'
-                        ? AppStyles.mainButtonColor
+                        ? AppStyles.mainColor
                         : Colors.white,
                     btntext: "English"),
               ),
@@ -282,7 +282,7 @@ class _CardNotificationsState extends State<CardNotifications> {
                     mywidth: 103,
                     myheight: 40,
                     myColor: _selectedLanguage == 'Chinese'
-                        ? AppStyles.mainButtonColor
+                        ? AppStyles.mainColor
                         : Colors.white,
                     btntext: "Chinese"),
               ),
@@ -296,7 +296,7 @@ class _CardNotificationsState extends State<CardNotifications> {
                     mywidth: 103,
                     myheight: 40,
                     myColor: _selectedLanguage == 'Russian'
-                        ? AppStyles.mainButtonColor
+                        ? AppStyles.mainColor
                         : Colors.white,
                     btntext: "Russian"),
               ),
@@ -401,7 +401,7 @@ class _CardNotificationsState extends State<CardNotifications> {
                     child: BasicLanguageButton(
                         mywidth: 155,
                         myheight: 56,
-                        myColor: AppStyles.mainButtonColor,
+                        myColor: AppStyles.mainColor,
                         btntext: "Yes, change"),
                   )
                 ],

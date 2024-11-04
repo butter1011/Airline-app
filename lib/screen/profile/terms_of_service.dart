@@ -25,7 +25,7 @@ class TermsOfService extends StatelessWidget {
         title: Text(
           "Terms of Service",
           textAlign: TextAlign.center,
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
       ),
       body: Column(
@@ -45,7 +45,7 @@ class TermsOfService extends StatelessWidget {
               children: [
                 Text(
                   'Terms of Service',
-                  style: AppStyles.subtitleTextStyle,
+                  style: AppStyles.textStyle_14_400,
                 ),
               ],
             ),

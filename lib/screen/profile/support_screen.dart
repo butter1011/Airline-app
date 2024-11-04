@@ -24,7 +24,7 @@ class SupportScreen extends StatelessWidget {
         title: Text(
           "Support",
           textAlign: TextAlign.center,
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
       ),
       body: Stack(
