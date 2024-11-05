@@ -12,7 +12,7 @@ class SupportReceivedMessageBox extends StatelessWidget {
         Container(
           height: 40,
           width: 40,
-          decoration: AppStyles.avatarDecoration,
+          decoration: AppStyles.circleDecoration,
           child: CircleAvatar(
             radius: 20,
             backgroundImage: AssetImage('assets/icons/bot.png'),
@@ -44,7 +44,7 @@ class SupportReceivedMessageBox extends StatelessWidget {
                     children: [
                       Text(
                         "Hey, Sam here! Excited to help you. What problem occurred in your journey in using our app?",
-                        style: AppStyles.messageTextStyle,
+                        style: AppStyles.textStyle_15_500,
                       ),
                       Align(
                         alignment: Alignment
@@ -53,7 +53,7 @@ class SupportReceivedMessageBox extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 16),
                           child: Text(
                             "10:05 PM",
-                            style: AppStyles.messageTextStyle
+                            style: AppStyles.textStyle_15_500
                                 .copyWith(color: const Color(0xff97A09C)),
                           ),
                         ),

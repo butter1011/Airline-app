@@ -25,13 +25,6 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
-  static BoxDecoration avatarExpandDecoration = BoxDecoration(
-      shape: BoxShape.circle,
-      color: AppStyles.mainButtonColor, // Border color
-      border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-      boxShadow: [
-        BoxShadow(color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-      ]);
   static TextStyle textStyle_14_400 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
@@ -67,7 +60,7 @@ class AppStyles {
     fontFamily: 'Clash Grotesk',
     fontSize: 15,
     fontWeight: FontWeight.w500,
-    color: Color(0xFF181818),
+    color: Color(0xFF000000),
   );
 
   static TextStyle textStyle_16_600 = const TextStyle(
