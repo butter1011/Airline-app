@@ -19,7 +19,7 @@ class BookMarkScreen extends StatelessWidget {
         centerTitle: true, // This centers the title
         title: Text(
           'Dubai(2)',
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
         leading: IconButton(
           icon: Padding(

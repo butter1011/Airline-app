@@ -41,7 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: Text(
           "Edit Profile",
           textAlign: TextAlign.center,
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
       ),
       body: Column(
@@ -54,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             height: 20,
           ),
           Container(
-            decoration: AppStyles.avatarDecoration,
+            decoration: AppStyles.circleDecoration,
             child: CircleAvatar(
               backgroundImage: AssetImage("assets/images/avatar_1.png"),
               radius: 36,
@@ -65,7 +65,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Text(
             "Change Photo",
-            style: AppStyles.textButtonStyle,
+            style: AppStyles.textStyle_15_600,
           ),
           SizedBox(
             height: 22,
@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Text(
                   "Name & Surname",
-                  style: AppStyles.cardTextStyle,
+                  style: AppStyles.textStyle_14_600,
                 )
               ],
             ),
@@ -119,7 +119,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Text(
                   "Bio",
-                  style: AppStyles.cardTextStyle,
+                  style: AppStyles.textStyle_14_600,
                 )
               ],
             ),
@@ -159,7 +159,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Text(
                   "Your Favorite Airline",
-                  style: AppStyles.cardTextStyle,
+                  style: AppStyles.textStyle_14_600,
                 ),
               ],
             ),
@@ -189,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 width: MediaQuery.of(context).size.width * 0.87,
                 height: 56,
                 decoration: BoxDecoration(
-                    color: AppStyles.mainButtonColor,
+                    color: AppStyles.mainColor,
                     border:
                         Border.all(width: 2, color: AppStyles.littleBlackColor),
                     borderRadius: BorderRadius.circular(28),
@@ -201,7 +201,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Center(
                   child: Text(
                     "Save Changes",
-                    style: AppStyles.textButtonStyle,
+                    style: AppStyles.textStyle_15_600,
                   ),
                 ),
               ),
@@ -245,8 +245,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       Text(
                         'Successfully saved!',
-                        style: AppStyles.litteBlackTextStyle
-                            .copyWith(fontSize: 20),
+                        style: AppStyles.textStyle_16_600.copyWith(
+                            fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

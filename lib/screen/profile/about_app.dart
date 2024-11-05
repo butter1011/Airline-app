@@ -25,7 +25,7 @@ class AboutApp extends StatelessWidget {
         title: Text(
           "About the app",
           textAlign: TextAlign.center,
-          style: AppStyles.mainTextStyle,
+          style: AppStyles.textStyle_16_600,
         ),
       ),
       body: Column(
@@ -45,7 +45,7 @@ class AboutApp extends StatelessWidget {
               children: [
                 Text(
                   'Headline goes here',
-                  style: AppStyles.subtitleTextStyle,
+                  style: AppStyles.textStyle_14_400,
                 ),
               ],
             ),
