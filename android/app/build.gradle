@@ -5,6 +5,7 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+
 android {
     namespace = "com.example.airline_app"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +29,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        resValue "string", "server_client_id", "449918634761-ngrqgm8s6qsvo25o16mkklsprhqa4alo.apps.googleusercontent.com"
     }
 
     buildTypes {

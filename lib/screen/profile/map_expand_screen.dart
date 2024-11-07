@@ -32,6 +32,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
 
     _mapController.move(
         LatLng(_currentPosition!.latitude, _currentPosition!.longitude), 4.0);
+    print('😍$_currentPosition');
   }
 
   // LatLng latLng = const LatLng(48.8584, 16.2945);
