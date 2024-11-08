@@ -1,20 +1,66 @@
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  int selectedIndex = 0;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
+    // clientId:
+    //     '449918634761-ngrqgm8s6qsvo25o16mkklsprhqa4alo.apps.googleusercontent.com',
+  );
+
+  Future<void> _handleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      print('😍$googleUser');
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final String? accessToken = googleAuth.accessToken;
+        googleAuth.idToken;
+
+        print('🏆🏆🏆🏆 ${googleAuth.accessToken}');
+        print(googleUser);
+
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/auth/google'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({'accessToken': accessToken}),
+        );
+
+        if (response.statusCode == 200) {
+          // Handle successful authentication
+          print('✔✔😔✔Authentication successful');
+          Navigator.pushNamed(context, AppRoutes.skipscreen);
+
+          final responseData = jsonDecode(response.body);
+          print('User ID: ${responseData['userId']}');
+          // You might want to store the user ID or navigate to a new screen
+        } else {
+          // Handle authentication error
+          print('Authentication failed: ${response.body}');
+        }
+      }
+    } catch (error) {
+      print('Error during Google sign in: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List bottomButtonList = [_registerAnother(), _anotherButtons()];
     return Scaffold(
         backgroundColor: AppStyles.mainColor,
         body: Center(
@@ -33,7 +79,7 @@ class _LoginState extends State<Login> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.skipscreen);
+                  _handleSignIn();
                 },
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -93,169 +139,49 @@ class _LoginState extends State<Login> {
                   )),
                 ]),
               ),
-              bottomButtonList[selectedIndex]
+              GestureDetector(
+                onTap: () {
+                  // _handleSignIn();
+                },
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Container(
+                      width: 327,
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(27),
+                        border: Border.all(
+                          width: 2,
+                          color: AppStyles.littleBlackColor,
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: AppStyles.littleBlackColor,
+                              offset: const Offset(3, 3))
+                        ],
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/whatsapp.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Sign in with Google',
+                                style: AppStyles.textStyle_15_600),
+                          ],
+                        ),
+                      ),
+                    )),
+              ),
             ],
           ),
         ));
-  }
-
-  Widget _registerAnother() {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          selectedIndex++;
-        });
-      },
-      child: Container(
-        width: 327,
-        height: 54,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(27),
-          border: Border.all(
-            width: 2,
-            color: AppStyles.littleBlackColor,
-          ),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                color: AppStyles.littleBlackColor, offset: const Offset(3, 3))
-          ],
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/icons/mail.png',
-                width: 20,
-                height: 20,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Register with email',
-                style: AppStyles.textStyle_15_600,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _anotherButtons() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/icon_whatsapp.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/apple.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    // Adjust opacity if needed
-                    offset:
-                        const Offset(2, 2), // Set offset to (0, 0) for no gap
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/Outlook.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ); 
   }
 }
