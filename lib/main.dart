@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/filter_screen.dart';
@@ -24,16 +26,25 @@ import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // String ACCESS_TOKEN = const String.fromEnvironment(
-  //     "pk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJwcTZtcngwb3gzMnJzMjk0amtrNG14In0.dauZLQQedNrrHuzb1sRxOw");
-  // MapboxOptions.setAccessToken(ACCESS_TOKEN);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+          name: "com.example.airline_app",
+          options: const FirebaseOptions(
+              apiKey: 'AIzaSyAQeqsF2Qgxtl60L59iQFKV-Ju-Okjtcy0',
+              appId: '1:387530374485:android:26a6d8df78dab22f2c43dc',
+              messagingSenderId: '387530374485',
+              projectId: 'airline-review-5f36f',
+              storageBucket: ''))
+      : await Firebase.initializeApp();
+
   runApp(
     ProviderScope(
       child: MyApp(),

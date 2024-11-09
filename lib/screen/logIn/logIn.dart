@@ -1,9 +1,9 @@
+import 'package:airline_app/screen/logIn/skip_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,49 +13,23 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
-    // clientId:
-    //     '449918634761-ngrqgm8s6qsvo25o16mkklsprhqa4alo.apps.googleusercontent.com',
-  );
-
-  Future<void> _handleSignIn() async {
+  ValueNotifier userCredential = ValueNotifier('');
+  Future<dynamic> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      print('😍$googleUser');
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-        final String? accessToken = googleAuth.accessToken;
-        googleAuth.idToken;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-        print('🏆🏆🏆🏆 ${googleAuth.accessToken}');
-        print(googleUser);
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-        final response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/auth/google'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode({'accessToken': accessToken}),
-        );
-
-        if (response.statusCode == 200) {
-          // Handle successful authentication
-          print('✔✔😔✔Authentication successful');
-          Navigator.pushNamed(context, AppRoutes.skipscreen);
-
-          final responseData = jsonDecode(response.body);
-          print('User ID: ${responseData['userId']}');
-          // You might want to store the user ID or navigate to a new screen
-        } else {
-          // Handle authentication error
-          print('Authentication failed: ${response.body}');
-        }
-      }
-    } catch (error) {
-      print('Error during Google sign in: $error');
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print('exception->$e');
     }
   }
 
@@ -78,8 +52,13 @@ class _LoginState extends State<Login> {
                 height: 32,
               ),
               GestureDetector(
-                onTap: () {
-                  _handleSignIn();
+                onTap: () async {
+                  userCredential.value = await signInWithGoogle();
+                  if (userCredential.value != null) {
+                    // ignore: avoid_print, use_build_context_synchronously
+                    Navigator.pushNamed(context, AppRoutes.skipscreen);
+                    print(userCredential.value.user!.email);
+                  }
                 },
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
