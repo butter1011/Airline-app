@@ -87,24 +87,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               horizontal: 25,
             ),
             child: Container(
-              height: 40,
+              height: 40, // Increased height for better visibility
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white, // Background color
-                border:
-                    Border.all(width: 2, color: Colors.black), // Border color
+                borderRadius:
+                    BorderRadius.circular(20), // Adjusted for new height
+                color: Colors.white,
+                border: Border.all(width: 2, color: Colors.black),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      offset: Offset(2, 2))
+                    color: Colors.black.withOpacity(0.2),
+                    offset: Offset(2, 2),
+                  )
                 ],
               ),
-              child: TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
-
-                  border: InputBorder.none, // Remove the underline
+              child: Center(
+                // Added Center widget
+                child: TextField(
+                  controller: _nameController,
+                  textAlignVertical:
+                      TextAlignVertical.center, // Centers text vertically
+                  style: TextStyle(fontSize: 16), // Adjust font size as needed
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    border: InputBorder.none,
+                    isCollapsed: true, // Removes the default padding
+                  ),
                 ),
               ),
             ),
@@ -282,11 +289,14 @@ class FavoriteAirlineDropdown extends StatefulWidget {
 }
 
 class _FavoriteAirlineDropdownState extends State<FavoriteAirlineDropdown> {
-  String? _selectedItem; // Variable to hold the selected item
+  String? _selectedItem;
+  bool _isExpanded = false; // Variable to hold the selected item
   final List<String> _favoriteAirlineItems = [
-    'British Airways',
-    'Japan Airways',
-    'Dubai Airways',
+    'American Airlines',
+    'Delta Air Lines',
+    'United Airlines',
+    'Southwest Airlines',
+    'JetBlue Airways',
   ];
 
   @override
@@ -298,71 +308,82 @@ class _FavoriteAirlineDropdownState extends State<FavoriteAirlineDropdown> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            border: Border.all(width: 2)),
-        // Main container for the dropdown
-        // Set width as needed
-        padding: EdgeInsets.symmetric(horizontal: 10),
-
-        child: DropdownButtonHideUnderline(
-          // Hides the default underline
-          child: DropdownButton<String>(
-            value: _selectedItem,
-
-            isExpanded: true, // Make dropdown fill available space
-            icon: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Icon(
-                Icons.expand_more,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            // Style for the button when collapsed
-
-            style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.w500),
-            // Customize the dropdown menu appearance
-            menuMaxHeight: 600, // Maximum height of the dropdown menu
-            elevation: 8, // Shadow depth of the dropdown menu
-            // Style for the dropdown menu
-            dropdownColor: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            onChanged: (String? newValue) {
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
               setState(() {
-                _selectedItem = newValue;
+                _isExpanded = !_isExpanded;
               });
             },
-            // Generate items for the dropdown
-            items: _favoriteAirlineItems
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Container(
-                  height: 40,
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    // Hover effect (only visible on web)
-                    color: Colors.transparent,
-                  ),
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                border: Border.all(width: 2),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _selectedItem ?? '',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                  Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color: Colors.grey.shade600,
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+          if (_isExpanded)
+            Container(
+              margin: EdgeInsets.only(top: 4),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ListView(
+                shrinkWrap: true,
+                children: _favoriteAirlineItems.map((String value) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedItem = value;
+                        _isExpanded = false;
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: _selectedItem == value
+                            ? Colors.grey.withOpacity(0.2)
+                            : Colors.transparent,
+                      ),
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+        ],
       ),
     );
   }

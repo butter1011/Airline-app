@@ -17,6 +17,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
   late MapController _mapController;
   Position? _currentPosition;
   bool _isLoading = true;
+  LatLng? _startPosition;
 
   @override
   void initState() {
@@ -114,123 +115,126 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
   Widget build(BuildContext context) {
     final PageController pgcontroller = PageController(viewportFraction: 0.9);
     return Scaffold(
-      body: Container(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: FlutterMap(
-                    mapController: _mapController,
-                    options: MapOptions(
-                      initialCenter: _currentPosition != null
-                          ? LatLng(_currentPosition!.latitude,
-                              _currentPosition!.longitude)
-                          : const LatLng(0, 0),
-                      initialZoom: 4,
+        body: Container(
+      child: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: FlutterMap(
+                  mapController: _mapController,
+                  options: MapOptions(
+                    initialCenter: _currentPosition != null
+                        ? LatLng(_currentPosition!.latitude,
+                            _currentPosition!.longitude)
+                        : const LatLng(0, 0),
+                    initialZoom: 4,
+                    onTap: (tapPosition, point) {
+                      setState(() {
+                        // Change the type of _startPosition to LatLng
+                        _startPosition = point;
+                      });
+                    },
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJwcTZtcngwb3gzMnJzMjk0amtrNG14In0.dauZLQQedNrrHuzb1sRxOw",
                     ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJxN3J1a3owd2I1MmxzYjh1cmlrOTM1In0.Ezps4XCt-6SpPYpZY4jIog",
-                        additionalOptions: {
-                          'accessToken':
-                              'sk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJxN3J1a3owd2I1MmxzYjh1cmlrOTM1In0.Ezps4XCt-6SpPYpZY4jIog',
-                          'id': 'mapbox.streets',
-                        },
+                    if (_currentPosition != null)
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: LatLng(_currentPosition!.latitude,
+                                _currentPosition!.longitude),
+                            width: 60,
+                            height: 60,
+                            child: Icon(Icons.location_pin,
+                                color: Colors.red.shade700, size: 60),
+                          ),
+                        ],
                       ),
-                      if (_currentPosition != null)
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              point: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
-                              width: 60,
-                              height: 60,
-                              child: Icon(Icons.location_pin,
-                                  color: Colors.red.shade700, size: 60),
+                    if (_startPosition != null)
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: _startPosition!,
+                            width: 40,
+                            height: 40,
+                            child: Icon(Icons.location_pin,
+                                color: Colors.green.shade700, size: 60),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 24,
+                top: 56,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfileScreen()),
+                    );
+                  },
+                  child: Container(
+                    decoration: AppStyles.circleDecoration,
+                    width: 40,
+                    height: 40,
+                    child: Image.asset('assets/icons/1.png'),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                left: -8,
+                right: 0,
+                child: SizedBox(
+                  height: 130,
+                  child: PageView.builder(
+                    controller: pgcontroller,
+                    itemCount: mabboxVisitConfirmedList.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        padding: const EdgeInsets.all(16),
+                        width: 278,
+                        decoration: AppStyles.cardDecoration,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BasicMapbutton(
+                              mywidth: 138,
+                              myheight: 28,
+                              iconpath: 'assets/icons/check.png',
+                              btntext: 'Visit Confirmed',
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Long AirPort Name goes here',
+                              style: AppStyles.textStyle_15_600,
+                            ),
+                            Text(
+                              'Your scored 9/10',
+                              style: AppStyles.textStyle_15_500,
                             ),
                           ],
                         ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-                Positioned(
-                    right: 24,
-                    top: 56,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ProfileScreen();
-                        }));
-                      },
-                      child: Container(
-                        decoration: AppStyles.circleDecoration
-                            .copyWith(color: AppStyles.mainColor)
-                            .copyWith(color: AppStyles.mainColor),
-                        width: 40,
-                        height: 40,
-                        child: Image.asset('assets/icons/1.png'),
-                      ),
-                    )),
-                Positioned(
-                    bottom: 8,
-                    left: -8,
-                    right: 0,
-                    child: Container(
-                      height: 130,
-                      // width: 200,
-                      child: PageView.builder(
-                          controller: pgcontroller,
-                          itemCount: mabboxVisitConfirmedList.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 4),
-                              padding: EdgeInsets.all(16),
-                              width: 278,
-                              // height: 117,
-                              decoration: AppStyles.cardDecoration,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      BasicMapbutton(
-                                          mywidth: 138,
-                                          myheight: 26,
-                                          iconpath: 'assets/icons/check.png',
-                                          btntext: 'Visit Confirmed'),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Long AirPort Name goes here',
-                                        style: AppStyles.textStyle_15_600,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Your scored 9/10',
-                                        style: AppStyles.textStyle_15_500,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    ))
-              ]),
-      ),
-    );
+              ),
+            ]),
+    ));
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 }

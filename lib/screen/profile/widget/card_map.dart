@@ -18,6 +18,7 @@ class _MapScreenState extends State<MapScreen> {
   late MapController _mapController;
   Position? _currentPosition;
   bool _isLoading = true;
+  LatLng? _startPosition;
 
   @override
   void initState() {
@@ -88,7 +89,7 @@ class _MapScreenState extends State<MapScreen> {
         if (mounted && _currentPosition != null) {
           _mapController.move(
             LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-            4.0,
+            8.0,
           );
         }
       }
@@ -128,16 +129,17 @@ class _MapScreenState extends State<MapScreen> {
                             _currentPosition!.longitude)
                         : const LatLng(0, 0),
                     initialZoom: 4,
+                    onTap: (tapPosition, point) {
+                      setState(() {
+                        // Change the type of _startPosition to LatLng
+                        _startPosition = point;
+                      });
+                    },
                   ),
                   children: [
                     TileLayer(
                       urlTemplate:
-                          "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJxN3J1a3owd2I1MmxzYjh1cmlrOTM1In0.Ezps4XCt-6SpPYpZY4jIog",
-                      additionalOptions: {
-                        'accessToken':
-                            'sk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJxN3J1a3owd2I1MmxzYjh1cmlrOTM1In0.Ezps4XCt-6SpPYpZY4jIog',
-                        'id': 'mapbox.streets',
-                      },
+                          "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJwcTZtcngwb3gzMnJzMjk0amtrNG14In0.dauZLQQedNrrHuzb1sRxOw",
                     ),
                     if (_currentPosition != null)
                       MarkerLayer(
@@ -149,6 +151,18 @@ class _MapScreenState extends State<MapScreen> {
                             height: 60,
                             child: Icon(Icons.location_pin,
                                 color: Colors.red.shade700, size: 60),
+                          ),
+                        ],
+                      ),
+                    if (_startPosition != null)
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: _startPosition!,
+                            width: 40,
+                            height: 40,
+                            child: Icon(Icons.location_pin,
+                                color: Colors.green.shade700, size: 60),
                           ),
                         ],
                       ),
