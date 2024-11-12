@@ -1,9 +1,9 @@
-import 'package:airline_app/screen/logIn/skip_screen.dart';
+import 'dart:convert';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:otpless_flutter/otpless_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,23 +13,63 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  ValueNotifier userCredential = ValueNotifier('');
-  Future<dynamic> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  final _otplessFlutterPlugin = Otpless();
+  static const String appId = "bzpl0offchgcjrm8a4sj";
 
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+  @override
+  void initState() {
+    super.initState();
+    _initializeOtpless();
+  }
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+  Future<void> _initializeOtpless() async {
+    await _otplessFlutterPlugin.enableDebugLogging(true);
+    await _otplessFlutterPlugin.initHeadless(appId);
+    _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
+  }
+
+  void onHeadlessResult(dynamic result) async {
+    String jsonString = jsonEncode(result);
+    if (result != null && result['data'] != null) {
+      print('🏆🏆🏆🏆$result');
+      UserData userData = UserData.fromJson(jsonString);
+      print('Name: ${userData.name}');
+      print('Identity Value: ${userData.identityValue}');
+
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/auth/signin'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(
+            {'name': userData.name, 'identityValue': userData.identityValue}),
       );
+      if (response.statusCode == 200) {
+        print('🌹🌹🌹🌹🌹Authentication successful');
+        final responseData = jsonDecode(response.body);
+        if (responseData['userState'] == 0) {
+          Navigator.pushNamed(context, AppRoutes.skipscreen);
+        } else {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } on Exception catch (e) {
-      // ignore: avoid_print
-      print('exception->$e');
+        // You might want to store the user ID or navigate to a new screen
+      } else {
+        // Handle authentication error
+        print('Authentication failed: ${response.body}');
+      }
+    } else {
+      _showErrorSnackBar('Login failed. Please try again.');
+    }
+  }
+
+  Future<void> _loginWithWhatsApp() async {
+    try {
+      Map<String, dynamic> arg = {'appId': appId};
+      await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
+    } catch (e) {
+      print('WhatsApp login error: $e');
+      _showErrorSnackBar('WhatsApp login failed. Please try again.');
     }
   }
 
@@ -48,79 +88,12 @@ class _LoginState extends State<Login> {
                 height: 575,
                 fit: BoxFit.cover,
               ),
-              const SizedBox(
+              SizedBox(
                 height: 32,
               ),
               GestureDetector(
-                onTap: () async {
-                  userCredential.value = await signInWithGoogle();
-                  if (userCredential.value != null) {
-                    // ignore: avoid_print, use_build_context_synchronously
-                    Navigator.pushNamed(context, AppRoutes.skipscreen);
-                    print(userCredential.value.user!.email);
-                  }
-                },
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      width: 327,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(27),
-                        border: Border.all(
-                          width: 2,
-                          color: AppStyles.littleBlackColor,
-                        ),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppStyles.littleBlackColor,
-                              offset: const Offset(3, 3))
-                        ],
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/google.png',
-                              width: 20,
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Sign in with Google',
-                                style: AppStyles.textStyle_15_600),
-                          ],
-                        ),
-                      ),
-                    )),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
-                child: Row(children: <Widget>[
-                  Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                  Text(
-                    "   Or   ",
-                    style: TextStyle(
-                        fontFamily: 'Clash Grotesk',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                    selectionColor: Colors.black,
-                  ),
-                  Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                ]),
-              ),
-              GestureDetector(
                 onTap: () {
-                  // _handleSignIn();
+                  _loginWithWhatsApp();
                 },
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -162,5 +135,34 @@ class _LoginState extends State<Login> {
             ],
           ),
         ));
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+}
+
+class UserData {
+  final String name;
+  final String identityValue;
+
+  UserData({required this.name, required this.identityValue});
+
+  factory UserData.fromJson(String jsonString) {
+    final Map<String, dynamic> json = jsonDecode(jsonString);
+    final List<dynamic> identities = json['data']['identities'];
+
+    if (identities.isEmpty) {
+      throw Exception('No identities found in the JSON data');
+    }
+
+    final Map<String, dynamic> firstIdentity = identities.first;
+
+    return UserData(
+      name: firstIdentity['name'] ?? 'Unknown',
+      identityValue: firstIdentity['identityValue'] ?? 'Unknown',
+    );
   }
 }
