@@ -30,23 +30,43 @@ class _LoginState extends State<Login> {
 
   void onHeadlessResult(dynamic result) async {
     String jsonString = jsonEncode(result);
+    final response;
     if (result != null && result['data'] != null) {
-      print('🏆🏆🏆🏆$result');
       UserData userData = UserData.fromJson(jsonString);
+      print('🏆🏆🏆🏆');
       print('Name: ${userData.name}');
       print('Identity Value: ${userData.identityValue}');
+      print('channel: ${userData.channel}');
 
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/auth/signin'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode(
-            {'name': userData.name, 'identityValue': userData.identityValue}),
-      );
+      if (userData.channel == 'WHATSAPP') {
+        response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'phoneNumber': userData.identityValue,
+            'email': "",
+          }),
+        );
+      } else {
+        response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'phonenumber': '',
+            'email': userData.identityValue,
+          }),
+        );
+      }
+
       if (response.statusCode == 200) {
-        print('🌹🌹🌹🌹🌹Authentication successful');
         final responseData = jsonDecode(response.body);
+        print('✅✅✅✅✅$responseData');
         if (responseData['userState'] == 0) {
           Navigator.pushNamed(context, AppRoutes.skipscreen);
         } else {
@@ -96,42 +116,27 @@ class _LoginState extends State<Login> {
                   _loginWithWhatsApp();
                 },
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      width: 327,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(27),
-                        border: Border.all(
-                          width: 2,
-                          color: AppStyles.littleBlackColor,
-                        ),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppStyles.littleBlackColor,
-                              offset: const Offset(3, 3))
-                        ],
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/whatsapp.png',
-                              width: 20,
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Sign in with Google',
-                                style: AppStyles.textStyle_15_600),
-                          ],
-                        ),
-                      ),
+                  padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        child: Divider(
+                      color: Colors.black,
                     )),
-              ),
+                    Text(
+                      "   Tap here to signin   ",
+                      style: TextStyle(
+                          fontFamily: 'Clash Grotesk',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                      selectionColor: Colors.black,
+                    ),
+                    Expanded(
+                        child: Divider(
+                      color: Colors.black,
+                    )),
+                  ]),
+                ),
+              )
             ],
           ),
         ));
@@ -147,8 +152,10 @@ class _LoginState extends State<Login> {
 class UserData {
   final String name;
   final String identityValue;
+  final String channel;
 
-  UserData({required this.name, required this.identityValue});
+  UserData(
+      {required this.name, required this.identityValue, required this.channel});
 
   factory UserData.fromJson(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
@@ -161,8 +168,8 @@ class UserData {
     final Map<String, dynamic> firstIdentity = identities.first;
 
     return UserData(
-      name: firstIdentity['name'] ?? 'Unknown',
-      identityValue: firstIdentity['identityValue'] ?? 'Unknown',
-    );
+        name: firstIdentity['name'] ?? 'Unknown',
+        identityValue: firstIdentity['identityValue'] ?? 'Unknown',
+        channel: firstIdentity['channel'] ?? 'Unknown');
   }
 }
