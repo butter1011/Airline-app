@@ -12,18 +12,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final expandedItemsProvider = StateProvider<int>((ref) => 5);
-
-class LeaderboardScreen extends ConsumerStatefulWidget {
+class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
 
   @override
-  ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
+class _LeaderboardScreenState extends State<LeaderboardScreen> {
   List<Map<String, dynamic>> airportReviewList = [];
   bool isLoading = true;
+  int expandedItems = 5;
 
   @override
   void initState() {
@@ -57,8 +56,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final expandedItems = ref.watch(expandedItemsProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
@@ -199,6 +196,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               _AirportListSection(
                                 airportReviewList: airportReviewList,
                                 expandedItems: expandedItems,
+                                onExpand: () {
+                                  setState(() {
+                                    expandedItems += 5;
+                                  });
+                                },
                               ), // Your custom widget
                               SizedBox(height: 28),
                               Text(
@@ -254,17 +256,19 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-class _AirportListSection extends ConsumerWidget {
+class _AirportListSection extends StatelessWidget {
   final List<Map<String, dynamic>> airportReviewList;
   final int expandedItems;
+  final VoidCallback onExpand;
 
   const _AirportListSection({
     required this.airportReviewList,
     required this.expandedItems,
+    required this.onExpand,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Column(
@@ -286,9 +290,7 @@ class _AirportListSection extends ConsumerWidget {
         if (expandedItems < airportReviewList.length)
           Center(
             child: InkWell(
-              onTap: () {
-                ref.read(expandedItemsProvider.notifier).state += 5;
-              },
+              onTap: onExpand,
               child: IntrinsicWidth(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
