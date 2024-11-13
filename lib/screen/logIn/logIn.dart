@@ -40,25 +40,26 @@ class _LoginState extends State<Login> {
 
       if (userData.channel == 'WHATSAPP') {
         response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/api/v1/user'),
+          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: json.encode({
             'name': userData.name,
-            'phoneNumber': userData.identityValue,
+            'whatsappNumber': userData.identityValue,
             'email': "",
           }),
         );
       } else {
         response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/api/v1/user'),
+          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
+          // Uri.parse('http://10.0.2.2:3000/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: json.encode({
             'name': userData.name,
-            'phonenumber': '',
+            'whatsappNumber': '',
             'email': userData.identityValue,
           }),
         );
@@ -109,7 +110,7 @@ class _LoginState extends State<Login> {
                 fit: BoxFit.cover,
               ),
               SizedBox(
-                height: 32,
+                height: 82,
               ),
               GestureDetector(
                 onTap: () {
@@ -126,7 +127,7 @@ class _LoginState extends State<Login> {
                       "   Tap here to signin   ",
                       style: TextStyle(
                           fontFamily: 'Clash Grotesk',
-                          fontSize: 16,
+                          fontSize: 24,
                           fontWeight: FontWeight.w600),
                       selectionColor: Colors.black,
                     ),
