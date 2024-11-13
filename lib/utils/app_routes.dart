@@ -2,7 +2,7 @@ class AppRoutes {
   static const loginscreen = "/";
   static const skipscreen = "/skipscreen";
   static const leaderboardscreen = "/leaderboardscreen";
-  static const profilescreen = "/profile_screen";
+  static const profilescreen = "/profilescreen";
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
   static const filterscreen = "/filterscreen";
@@ -18,7 +18,7 @@ class AppRoutes {
   static const questionfirstscreen = "/questionfirstscreen";
   static const detailfirstscreen = "/detailfirstscreen";
   static const questionsecondscreen = "/questionsecondscreen";
-    static const detailsecondscreen = "/detailsecondscreen";
+  static const detailsecondscreen = "/detailsecondscreen";
   static const questionthirdscreen = "/questionthirdscreen";
   static const profilesupportscreen = "/supportscreen";
   static const eidtprofilescreen = "/eidtprofilescreen";

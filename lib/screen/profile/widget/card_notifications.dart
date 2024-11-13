@@ -1,7 +1,7 @@
-import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
+import 'dart:ui';
+
 import 'package:airline_app/screen/profile/widget/basic_button%20english.dart';
-import 'package:airline_app/screen/profile/widget/basic_button_Russian.dart';
-import 'package:airline_app/screen/profile/widget/basic_button_chinese.dart';
+
 import 'package:airline_app/screen/profile/widget/basic_language_button.dart';
 
 import 'package:airline_app/utils/app_routes.dart';
@@ -307,19 +307,30 @@ class _CardNotificationsState extends State<CardNotifications> {
           height: 10,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
           child: InkWell(
+            onTap: () {
+              // Navigator.pushNamed(
+              //   context,
+              //   AppRoutes.cardnotificationscreen,
+              // );
+            },
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Sign out',
+                  'Sign Out',
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
                 ),
+                Image.asset(
+                  'assets/icons/rightarrow.png',
+                  width: 40,
+                  height: 40,
+                )
               ],
             ),
           ),
@@ -331,83 +342,101 @@ class _CardNotificationsState extends State<CardNotifications> {
     );
   }
 
-  Future _changeLanguage(context) {
+  Future _changeLanguage(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return Container(
-          height: 181,
-          width: MediaQuery.sizeOf(context).width,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(
-              height: 6,
+        return Stack(
+          children: [
+            // Blurred background
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
+                ),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            // Modal content
+            Container(
+              height: 181,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 4,
-                    width: 32,
-                    color: Colors.grey,
+                  SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 4,
+                          width: 32,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(
+                      "Change to ${_selectedLanguage}",
+                      style: AppStyles.textStyle_24_600
+                          .copyWith(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(
+                      "Are you sure you want to change to Chinese?",
+                      style: AppStyles.textStyle_14_400,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Divider(thickness: 2, color: Colors.black),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.profilescreen);
+                          },
+                          child: BasicLanguageButton(
+                            mywidth: 155,
+                            myheight: 56,
+                            myColor: Colors.white,
+                            btntext: "No, leave",
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Implement language change logic here
+                            Navigator.pop(context);
+                          },
+                          child: BasicLanguageButton(
+                            mywidth: 155,
+                            myheight: 56,
+                            myColor: AppStyles.mainColor,
+                            btntext: "Yes, change",
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                "Change to ${_selectedLanguage}",
-                style: AppStyles.textStyle_24_600
-                    .copyWith(fontWeight: FontWeight.w500),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                "Are you sure you want to change to Chinese?",
-                style: AppStyles.textStyle_14_400,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Divider(
-              thickness: 2,
-              color: Colors.black,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.profilescreen);
-                    },
-                    child: BasicLanguageButton(
-                        mywidth: 155,
-                        myheight: 56,
-                        myColor: Colors.white,
-                        btntext: "No, leave"),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: BasicLanguageButton(
-                        mywidth: 155,
-                        myheight: 56,
-                        myColor: AppStyles.mainColor,
-                        btntext: "Yes, change"),
-                  )
-                ],
-              ),
-            )
-          ]),
+          ],
         );
       },
     );
