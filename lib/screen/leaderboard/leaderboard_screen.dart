@@ -1,4 +1,5 @@
-import 'package:airline_app/provider/button_expand_provider.dart';
+// leaderboard
+
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
@@ -7,18 +8,20 @@ import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LeaderboardScreen extends StatefulWidget {
+final expandedItemsProvider = StateProvider<int>((ref) => 5);
+
+class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
+class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   List<Map<String, dynamic>> airportReviewList = [];
   bool isLoading = true;
 
@@ -29,25 +32,33 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 
   Future<void> fetchAirportLineList() async {
-    final response = await http.get(Uri.parse(
-        'https://airline-backend-pi.vercel.app/api/v2/airline-airport'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+    try {
+      final response = await http.get(Uri.parse(
+          'https://airline-backend-pi.vercel.app/api/v2/airline-airport'));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final List<dynamic> data = responseData['data'];
+        setState(() {
+          airportReviewList = List<Map<String, dynamic>>.from(data);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception('Failed to load airport reviews');
+      }
+    } catch (e) {
       setState(() {
-        airportReviewList = List<Map<String, dynamic>>.from(data);
         isLoading = false;
       });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      throw Exception('Failed to load airport reviews');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final expandedItems = ref.watch(expandedItemsProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
@@ -186,8 +197,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                 ),
                               ),
                               _AirportListSection(
-                                  airportReviewList:
-                                      airportReviewList), // Your custom widget
+                                airportReviewList: airportReviewList,
+                                expandedItems: expandedItems,
+                              ), // Your custom widget
                               SizedBox(height: 28),
                               Text(
                                 'Trending Feedback',
@@ -242,23 +254,28 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-class _AirportListSection extends StatelessWidget {
+class _AirportListSection extends ConsumerWidget {
   final List<Map<String, dynamic>> airportReviewList;
-  const _AirportListSection({required this.airportReviewList});
+  final int expandedItems;
+
+  const _AirportListSection({
+    required this.airportReviewList,
+    required this.expandedItems,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Column(
           children: airportReviewList.asMap().entries.map((entry) {
             int index = entry.key;
             Map<String, dynamic> singleAirport = entry.value;
-            if (index < 5) {
+            if (index < expandedItems) {
               return AirportList(
-                country: singleAirport['country'],
-                reviewStatus: singleAirport['reviewStatus'],
-                logo: singleAirport['logo'],
+                name: singleAirport['name'],
+                is_airline: singleAirport['is_airline'],
+                // logo: singleAirport['logo'],
                 index: index,
               );
             }
@@ -266,24 +283,26 @@ class _AirportListSection extends StatelessWidget {
           }).toList(),
         ),
         SizedBox(height: 19),
-        Center(
-          child: InkWell(
-            onTap: () {
-              // Expand more logic
-            },
-            child: IntrinsicWidth(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Expand more",
-                      style: AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_downward),
-                ],
+        if (expandedItems < airportReviewList.length)
+          Center(
+            child: InkWell(
+              onTap: () {
+                ref.read(expandedItemsProvider.notifier).state += 5;
+              },
+              child: IntrinsicWidth(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Expand more",
+                        style:
+                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_downward),
+                  ],
+                ),
               ),
             ),
           ),
-        )
       ],
     );
   }

@@ -1,19 +1,22 @@
+// airport_list
+
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class AirportList extends StatelessWidget {
-  const AirportList(
-      {super.key,
-      required this.country,
-      required this.reviewStatus,
-      required this.index,
-      required this.logo});
+  const AirportList({
+    super.key,
+    required this.name,
+    required this.is_airline,
+    required this.index,
+    // required this.logo
+  });
 
-  final String country;
-  final bool reviewStatus;
+  final String name;
+  final bool is_airline;
   final int index;
-  final String logo;
+  // final String logo;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,9 @@ class AirportList extends StatelessWidget {
                     decoration: AppStyles.circleDecoration,
                     child: CircleAvatar(
                       radius: 20,
-                      backgroundImage: logo.isNotEmpty
-                          ? AssetImage('assets/images/$logo')
-                          : AssetImage('assets/images/logo_empty.png'),
+                      // backgroundImage: logo.isNotEmpty
+                      //     ? AssetImage('assets/images/$logo')
+                      //     : AssetImage('assets/images/logo_empty.png'),
                     ),
                   ),
                   const SizedBox(
@@ -48,11 +51,11 @@ class AirportList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        country,
+                        name,
                         style: AppStyles.textStyle_14_600,
                       ),
                       Text(
-                        'Airline',
+                        is_airline ? 'Airline' : 'Airport',
                         style: AppStyles.textStyle_14_600.copyWith(
                             fontSize: 13, fontWeight: FontWeight.w500),
                       ),
@@ -75,9 +78,10 @@ class AirportList extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            reviewStatus
-                                ? Image.asset('assets/icons/graph_primary.png')
-                                : Image.asset('assets/icons/graph_danger.png'),
+                            Image.asset('assets/icons/graph_danger.png'),
+                            // reviewStatus
+                            // ? Image.asset('assets/icons/graph_primary.png')
+                            // : Image.asset('assets/icons/graph_danger.png'),
                             SizedBox(
                               width: 8,
                             ),
