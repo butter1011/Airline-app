@@ -278,7 +278,7 @@ class _AirportListSection extends StatelessWidget {
             if (index < expandedItems) {
               return AirportList(
                 name: singleAirport['name'],
-                is_airline: singleAirport['is_airline'],
+                isAirline: singleAirport['isAirline'],
                 // logo: singleAirport['logo'],
                 index: index,
               );

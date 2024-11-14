@@ -8,13 +8,13 @@ class AirportList extends StatelessWidget {
   const AirportList({
     super.key,
     required this.name,
-    required this.is_airline,
+    required this.isAirline,
     required this.index,
     // required this.logo
   });
 
   final String name;
-  final bool is_airline;
+  final bool isAirline;
   final int index;
   // final String logo;
 
@@ -55,7 +55,7 @@ class AirportList extends StatelessWidget {
                         style: AppStyles.textStyle_14_600,
                       ),
                       Text(
-                        is_airline ? 'Airline' : 'Airport',
+                        isAirline ? 'Airline' : 'Airport',
                         style: AppStyles.textStyle_14_600.copyWith(
                             fontSize: 13, fontWeight: FontWeight.w500),
                       ),
