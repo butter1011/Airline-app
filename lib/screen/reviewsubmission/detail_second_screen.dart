@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/count_dislike_provider.dart';
+import 'package:airline_app/provider/count_like_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -10,39 +10,50 @@ class DetailSecondScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(countDislikeProvider);
-
-    print("😍😍😍=======> $selections");
+    final selections = ref.watch(countLikeProvider);
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
-    List<String> labelKeys = aspectsForElevation.keys.toList();
-    String singleAspect = labelKeys[singleIndex];
+    List<String> mainCategoryNames = [];
+    for (var category in mainCategoryAndSubcategory) {
+      mainCategoryNames.add(category['mainCategory'] as String);
+    }
+    String singleAspect = mainCategoryNames[singleIndex];
 
-    // Ensure itemListForSingleAspect is not null
-    final List itemListForSingleAspect =
-        aspectsForElevation[singleAspect]['items'] ?? [];
-    final selectedItemNumter =
-        ref.watch(countDislikeProvider.notifier).selectedNumber(singleIndex);
+    // Ensure subCategoryList is not null
+    final Map<String, dynamic> subCategoryList =
+        mainCategoryAndSubcategory[singleIndex]['subCategory'];
+
+    final selectedNumberOfSubcategoryForDislike = ref
+        .watch(countLikeProvider.notifier)
+        .selectedNumberOfSubcategoryForDislike(singleIndex);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(), // Assuming this method exists
+        flexibleSpace: BuildQuestionHeader(
+          subTitle: "What could be improved?",
+        ), // Assuming this method exists
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildBackButton(context),
               SizedBox(height: 10),
-              _buildHeaderContainer(context, singleAspect, selectedItemNumter
+              _buildHeaderContainer(
+                  context, singleAspect, selectedNumberOfSubcategoryForDislike
                   // selections.where((s) => s).length,
                   ),
               SizedBox(height: 16),
               _buildFeedbackOptions(
-                  ref, singleIndex, itemListForSingleAspect, selections),
+                  ref, singleIndex, subCategoryList, selections),
               SizedBox(height: 12),
               _buildOptionalText(),
               SizedBox(height: 6),
@@ -55,8 +66,8 @@ class DetailSecondScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeaderContainer(
-      BuildContext context, String singleAspect, int selectedItemNumter) {
+  Widget _buildHeaderContainer(BuildContext context, String singleAspect,
+      int selectedNumberOfSubcategoryForDislike) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       height: MediaQuery.of(context).size.height * 0.08,
@@ -92,7 +103,7 @@ class DetailSecondScreen extends ConsumerWidget {
               decoration: AppStyles.badgeDecoration,
               child: Center(
                 child: Text(
-                  selectedItemNumter.toString(),
+                  selectedNumberOfSubcategoryForDislike.toString(),
                   style: AppStyles.textStyle_13_600,
                   textAlign: TextAlign.center,
                 ),
@@ -104,35 +115,45 @@ class DetailSecondScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(WidgetRef ref, int singleIndex,
-      List itemListForSingleAspect, List<List<bool>> selections) {
-    // List isSelectedList = ref.watch(countDislikeProvider);
+  Widget _buildFeedbackOptions(
+      WidgetRef ref, int singleIndex, subCategoryList, selections) {
+    // List isSelectedList = ref.watch(countLikeProvider);
 
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: List.generate(itemListForSingleAspect.length, (index) {
+      children: List.generate(subCategoryList.length, (index) {
+        Map<String, dynamic> items = selections[singleIndex]['subCategory'];
+        List itemkeys = items.keys.toList();
+        List itemValues = items.values.toList();
+        String key = itemkeys[index];
+        dynamic value = itemValues[index];
+
         return GestureDetector(
           onTap: () {
-            ref
-                .read(countDislikeProvider.notifier)
-                .toggleSelection(singleIndex, index);
+            value == true
+                ? print("Value is true, no action performed.")
+                : ref
+                    .read(countLikeProvider.notifier)
+                    .selectDislike(singleIndex, key);
           },
-          child: IntrinsicWidth(
-            child: Container(
-              height: 40,
-              decoration: AppStyles.cardDecoration.copyWith(
-                borderRadius: BorderRadius.circular(16),
-                color: selections[singleIndex][index]
-                    ? AppStyles.mainColor
-                    : Colors.white,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    itemListForSingleAspect[index].toString(),
-                    style: AppStyles.textStyle_14_600,
+          child: Opacity(
+            opacity: value == true ? 0.5 : 1,
+            child: IntrinsicWidth(
+              child: Container(
+                height: 40,
+                decoration: AppStyles.cardDecoration.copyWith(
+                  borderRadius: BorderRadius.circular(16),
+                  color:
+                      items[key] == false ? AppStyles.mainColor : Colors.white,
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      itemkeys[index].toString(),
+                      style: AppStyles.textStyle_14_600,
+                    ),
                   ),
                 ),
               ),
@@ -170,17 +191,15 @@ class DetailSecondScreen extends ConsumerWidget {
   }
 
   Widget _buildTextField() {
-    return Expanded(
-      child: Container(
-        decoration: AppStyles.cardDecoration.copyWith(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: TextFormField(
-          maxLines: null, // Allows unlimited lines
-          decoration: InputDecoration(
-            hintText: "What did you also like?",
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
+    return Container(
+      decoration: AppStyles.cardDecoration.copyWith(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: TextFormField(
+        maxLines: null, // Allows unlimited lines
+        decoration: InputDecoration(
+          hintText: "What did you also like?",
+          border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
       ),
     );

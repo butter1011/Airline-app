@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/leaderboard/widgets/filter_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FilterScreen extends StatefulWidget {
@@ -57,6 +58,7 @@ class _FilterScreenState extends State<FilterScreen> {
   bool categoryIsExpanded = true;
   bool rankIsExpanded = true;
   bool continentIsExpanded = true;
+  bool openedSearchTextField = false;
 
   @override
   void initState() {
@@ -113,6 +115,7 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
@@ -120,39 +123,68 @@ class _FilterScreenState extends State<FilterScreen> {
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: Text(
-          "Filters",
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
+        title: openedSearchTextField
+            ? TextField(
+                decoration: InputDecoration(
+                  hintStyle: AppStyles.textStyle_14_400
+                      .copyWith(color: Color(0xff38433E)),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color:
+                        Color(0xff38433E), // Set the color of the search icon
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        openedSearchTextField = false;
+                      });
+                    },
+                    icon: Image.asset('assets/icons/icon_cancel.png'),
+                  ),
+                ),
+              )
+            : Text(
+                "Filters",
+                textAlign: TextAlign.center,
+                style: AppStyles.textStyle_16_600,
+              ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 29),
-            child: Icon(Icons.search, size: 24),
-          ),
+          openedSearchTextField
+              ? Text("")
+              : Padding(
+                  padding: const EdgeInsets.only(right: 29),
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        openedSearchTextField = !openedSearchTextField;
+                      });
+                    },
+                    icon: Icon(Icons.search, size: 24),
+                  ),
+                )
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
           child: Container(color: Colors.black, height: 4.0),
         ),
       ),
-      body: Expanded(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              _buildTypeCategory(),
-              const SizedBox(height: 17),
-              _buildFlyerClassLeaderboards(),
-              const SizedBox(height: 17),
-              _buildCategoryLeaderboards(),
-              const SizedBox(height: 17),
-              _buildRankLeaderboards(),
-              const SizedBox(height: 10),
-              _buildContinentLeaderboards(),
-              const SizedBox(height: 85),
-            ],
-          ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            _buildTypeCategory(),
+            const SizedBox(height: 17),
+            _buildFlyerClassLeaderboards(),
+            const SizedBox(height: 17),
+            _buildCategoryLeaderboards(),
+            const SizedBox(height: 17),
+            _buildRankLeaderboards(),
+            const SizedBox(height: 10),
+            _buildContinentLeaderboards(),
+            const SizedBox(height: 85),
+          ],
         ),
       ),
       bottomSheet: _buildApplyButton(),
@@ -401,8 +433,8 @@ class _FilterScreenState extends State<FilterScreen> {
 }
 
 class ContinentFilterButton extends StatelessWidget {
-  const ContinentFilterButton({super.key, 
-
+  const ContinentFilterButton({
+    super.key,
     required this.text,
     required this.isSelected,
     required this.onTap,

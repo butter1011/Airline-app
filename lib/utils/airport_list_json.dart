@@ -649,53 +649,63 @@ List<Map<String, dynamic>> socialList = [
   {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
   {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
 ];
-Map<String, dynamic> aspectsForElevation = {
-  'Boarding and Arrival Experience': {
+List<Map<String, dynamic>> mainCategoryAndSubcategory = [
+  {
+    'mainCategory': ' Departure and Arrival Experience',
     'iconUrl': 'assets/icons/review_icon_boarding.png',
-    'items': [
-      'Check-In Process',
-      'Boarding Efficiency',
-      'Baggage Delivery',
-      'Lounge Access',
-    ],
+    'subCategory': {
+      'Check-In Process': null,
+      'Boarding Efficiency': null,
+      'Baggage Delivery': null,
+      'Lounge Access': null,
+    },
   },
-  'Comfort': {
-    'iconUrl': 'assets/icons/review_icon_comfort.png',
-    'items': [
-      'Check-In Process',
-      'Boarding Efficiency',
-      'Baggage Delivery',
-    ],
+  {
+    'mainCategory': 'Comfort',
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'subCategory': {
+      'Seat Width': null,
+      'Legroom': null,
+      'Aircraft': null,
+      'Accessibility': null,
+      'Amenities': null,
+    },
   },
-  'Cleanliness': {
-    'iconUrl': 'assets/icons/review_icon_cleanliness.png',
-    'items': [
-      'Check-In Process',
-      'Boarding Efficiency',
-    ],
+  {
+    'mainCategory': 'Cleanliness',
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'subCategory': {
+      'Cabin': null,
+      'Toilet': null,
+    },
   },
-  'Onboard Service': {
-    'iconUrl': 'assets/icons/review_icon_onboard.png',
-    'items': [
-      'Check-In Process',
-    ],
+  {
+    'mainCategory': 'Onboard Service',
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'subCategory': {
+      'Responsiveness': null,
+      'Helpfulness': null,
+    },
   },
-  'Food & Beverage': {
-    'iconUrl': 'assets/icons/review_icon_food.png',
-    'items': [
-      'Check-In Process',
-      'Boarding Efficiency',
-      'Baggage Delivery',
-      'Lounge Access',
-    ],
+  {
+    'mainCategory': 'Food & Beverage',
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'subCategory': {
+      'Choice': null,
+      'Taste': null,
+      'Quantity': null,
+      'Duty Free Value': null,
+      'Duty Free Choices': null,
+    },
   },
-  'In-Flight Entertainment': {
-    'iconUrl': 'assets/icons/review_icon_entertainment.png',
-    'items': [
-      'Check-In Process',
-      'Boarding Efficiency',
-      'Baggage Delivery',
-      'Lounge Access',
-    ],
+  {
+    'mainCategory': 'Entertainment and Wi-Fi',
+    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'subCategory': {
+      'IFE Availability': null,
+      'IFE Choices': null,
+      'Wi-Fi Speed': null,
+      'Wi-Fi Value': null,
+    },
   },
-};
+];

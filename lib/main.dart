@@ -15,7 +15,7 @@ import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/detail_second_screen%20copy.dart';
+import 'package:airline_app/screen/reviewsubmission/detail_second_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/question_third_screen.dart';
@@ -87,6 +87,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
+   
       },
       debugShowCheckedModeBanner: false,
     );
