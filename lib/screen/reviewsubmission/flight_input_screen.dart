@@ -7,64 +7,106 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/controller/get_airline_controller.dart';
 
-class FlightInputScreen extends ConsumerWidget {
-  const FlightInputScreen({super.key});
+class FlightInputScreen extends ConsumerStatefulWidget {
+  FlightInputScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FlightInputScreen> createState() => _FlightInputScreenState();
+}
+
+class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
+  final _getAirlineData = GetAirlineController();
+  List<String> airlineNames = [];
+  List<String> airportNames = [];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getAirlineData.getAirlineAirport().then((value) {
+      print('🚝${value["data"]}');
+      List<dynamic> airlineData = (value["data"]["data"] as List)
+          .where((element) => element['isAirline'] == true)
+          .toList();
+      List<dynamic> airportData = (value["data"]["data"] as List)
+          .where((element) => element['isAirline'] == false)
+          .toList();
+      setState(() {
+        airlineNames =
+            airlineData.map((airline) => airline['name'] as String).toList();
+        airportNames =
+            airportData.map((airline) => airline['name'] as String).toList();
+
+        isLoading = false;
+      });
+      print("🤣$airlineNames");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final flightInputState = ref.watch(flightInputProvider);
-    print(flightInputState);
+    print("👌$airlineNames");
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: ListView(
-          children: [
-            const SizedBox(height: 19),
-            _buildInfoText(
-                "Add your flight schedule below or sync your calendar/email"),
-            const SizedBox(height: 22),
-            _buildSectionTitle("Synchronize (Recommended):"),
-            const SizedBox(height: 13),
-            _buildSyncButtons(),
-            const SizedBox(height: 18),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomDropdownButton(
-                  labelText: "From",
-                  hintText: "departure Airport",
-                  onChanged: (value) =>
-                      ref.read(flightInputProvider.notifier).updateFrom(value),
-                ),
-                const SizedBox(height: 18),
-                CustomDropdownButton(
-                  labelText: "To",
-                  hintText: "destination Airport",
-                  onChanged: (value) =>
-                      ref.read(flightInputProvider.notifier).updateTo(value),
-                ),
-                const SizedBox(height: 18),
-                CustomDropdownButton(
-                  labelText: "Airline",
-                  hintText: "your Airline",
-                  onChanged: (value) => ref
-                      .read(flightInputProvider.notifier)
-                      .updateAirline(value),
-                ),
-              ],
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 19),
+                  _buildInfoText(
+                      "Add your flight schedule below or sync your calendar/email"),
+                  const SizedBox(height: 22),
+                  _buildSectionTitle("Synchronize (Recommended):"),
+                  const SizedBox(height: 13),
+                  _buildSyncButtons(),
+                  const SizedBox(height: 18),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomDropdownButton(
+                        labelText: "From",
+                        hintText: "departure Airport",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateFrom(value),
+                        airlineNames: airportNames,
+                      ),
+                      const SizedBox(height: 18),
+                      CustomDropdownButton(
+                        labelText: "To",
+                        hintText: "destination Airport",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateTo(value),
+                        airlineNames: airportNames,
+                      ),
+                      const SizedBox(height: 18),
+                      CustomDropdownButton(
+                        labelText: "Airline",
+                        hintText: "your Airline",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateAirline(value),
+                        airlineNames: airlineNames,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  CalendarExample(),
+                  const SizedBox(height: 18),
+                  _buildTravelClassSelection(ref),
+                  const SizedBox(height: 18),
+                  _buildAdditionalSyncOptions(ref),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
-            const SizedBox(height: 18),
-            CalendarExample(),
-            const SizedBox(height: 18),
-            _buildTravelClassSelection(ref),
-            const SizedBox(height: 18),
-            _buildAdditionalSyncOptions(ref),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
       bottomNavigationBar: _buildBottomNavigationBar(context, flightInputState),
     );
   }
@@ -237,8 +279,12 @@ class FlightInputScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
-              print(
-                  "🥈🎈${flightInputState.selectedClassOfTravel} 🎈${flightInputState.to} 🎈${flightInputState.from} 🎈${flightInputState.airline}  ");
+              // await GetAirlineController().getAirlineAirport().then((value) {
+              //   print(value);
+              // });
+
+              // print(
+              // "🥈🎈${flightInputState.selectedClassOfTravel} 🎈${flightInputState.to} 🎈${flightInputState.from} 🎈${flightInputState.airline}  ");
               Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
             },
             child: Container(
@@ -264,33 +310,23 @@ class FlightInputScreen extends ConsumerWidget {
 }
 
 class CustomDropdownButton extends StatefulWidget {
-  const CustomDropdownButton({
-    super.key,
-    required this.labelText,
-    required this.hintText,
-    required this.onChanged,
-  });
+  const CustomDropdownButton(
+      {super.key,
+      required this.labelText,
+      required this.hintText,
+      required this.onChanged,
+      required this.airlineNames});
 
   final String labelText;
   final String hintText;
   final ValueChanged<String> onChanged;
+  final List<String> airlineNames;
 
   @override
   State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  final List<String> items = [
-    'A_Item1',
-    'A_Item2',
-    'A_Item3',
-    'A_Item4',
-    'B_Item1',
-    'B_Item2',
-    'B_Item3',
-    'B_Item4',
-  ];
-
   final TextEditingController textEditingController = TextEditingController();
   String? selectedValue;
 
@@ -313,7 +349,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
             hint: Text('Select ${widget.hintText}',
                 style: AppStyles.textStyle_15_400
                     .copyWith(color: Color(0xFF38433E))),
-            items: items
+            items: widget.airlineNames
                 .map((item) => DropdownMenuItem(
                       value: item,
                       child: Text(
