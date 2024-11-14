@@ -30,10 +30,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // String ACCESS_TOKEN = const String.fromEnvironment(
-  //     "pk.eyJ1Ijoia2luZ2J1dHRlciIsImEiOiJjbTJwcTZtcngwb3gzMnJzMjk0amtrNG14In0.dauZLQQedNrrHuzb1sRxOw");
-  // MapboxOptions.setAccessToken(ACCESS_TOKEN);
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -60,6 +56,12 @@ class MyApp extends StatelessWidget {
         bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          },
+        ),
       ),
       routes: {
         AppRoutes.loginscreen: (context) => const Login(),

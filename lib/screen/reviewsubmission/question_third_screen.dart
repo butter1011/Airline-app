@@ -4,16 +4,15 @@ import 'package:airline_app/controller/review_controller.dart';
 import 'package:airline_app/models/review.dart';
 import 'package:airline_app/provider/count_like_provider.dart';
 import 'package:airline_app/provider/flight_info_provider.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
-import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:riverpod/src/framework.dart';
 
 class QuestionThirdScreen extends ConsumerStatefulWidget {
   const QuestionThirdScreen({super.key});
@@ -29,6 +28,7 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
   final TextEditingController _commentController =
       TextEditingController(); // Step 1: Declare the controller
   String comment = "";
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -49,7 +49,6 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
     final to = flightData.to;
     final airline = flightData.airline;
     final classTravel = flightData.selectedClassOfTravel;
-    final selectedSynchronize = flightData.selectedSynchronize;
     final departureArrival = reviewData[0]["subCategory"];
     final comfort = reviewData[1]["subCategory"];
     final cleanliness = reviewData[2]["subCategory"];
@@ -57,91 +56,113 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
     final foodBeverage = reviewData[4]["subCategory"];
     final entertainmentWifi = reviewData[5]["subCategory"];
 
-    return Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-          flexibleSpace: BuildQuestionHeader(
-            subTitle: "Share your experience.",
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildFeedbackOptions(context),
-                SizedBox(height: 20), // Space before comments section
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(height: 2, color: Colors.black),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: NavPageButton(
-                      text: 'Go back',
-                      onPressed: () {
-                        Navigator.pop(context); // Navigate back
-                      },
-                      icon: Icons.arrow_back,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: NavPageButton(
-                      text: 'Submit',
-                      onPressed: () async {
-                        try {
-                          final review = Review(
-                            reviewer:
-                                "673511a26b35199491bc3adf", // Replace with actual reviewer ID
-                            from: from,
-                            to: to,
-                            classTravel: classTravel,
-                            departureArrival: departureArrival,
-                            comfort: comfort,
-                            cleanliness: cleanliness,
-                            onboardService: onboardService,
-                            foodBeverage: foodBeverage,
-                            entertainmentWifi: entertainmentWifi,
-                            comment: comment,
-                          );
-                          print("📞${review.toJson()}");
-
-                          final result =
-                              await _reviewController.saveReview(review);
-                          if (result) {
-                            print("📞📞📞📞📞");
-                            await _buildBottomSheet(context);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Failed to submit review')),
-                            );
-                          }
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Error: ${e.toString()}')),
-                          );
-                        }
-                      },
-                      icon: Icons.arrow_forward,
-                    ),
-                  ),
-                ],
+    return Stack(
+      children: [
+        Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+              flexibleSpace: BuildQuestionHeader(
+                subTitle: "Share your experience.",
               ),
             ),
-          ],
-        ));
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFeedbackOptions(context),
+                    SizedBox(height: 20), // Space before comments section
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(height: 2, color: Colors.black),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: NavPageButton(
+                          text: 'Go back',
+                          onPressed: () {
+                            Navigator.pop(context); // Navigate back
+                          },
+                          icon: Icons.arrow_back,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: NavPageButton(
+                          text: 'Submit',
+                          onPressed: () async {
+                            try {
+                              setState(() {
+                                _isLoading = true;
+                              });
+
+                              final review = Review(
+                                reviewer:
+                                    "673511a26b35199491bc3adf", // Replace with actual reviewer ID
+                                from: from,
+                                to: to,
+                                classTravel: classTravel,
+                                airline: airline,
+                                departureArrival: departureArrival,
+                                comfort: comfort,
+                                cleanliness: cleanliness,
+                                onboardService: onboardService,
+                                foodBeverage: foodBeverage,
+                                entertainmentWifi: entertainmentWifi,
+                                comment: comment,
+                              );
+                              print("📞${review.toJson()}");
+
+                              final result =
+                                  await _reviewController.saveReview(review);
+                              if (result) {
+                                print("📞📞📞📞📞");
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                await _buildBottomSheet(context);
+                              } else {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Failed to submit review')),
+                                );
+                              }
+                            } catch (e) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Error: ${e.toString()}')),
+                              );
+                            }
+                          },
+                          icon: Icons.arrow_forward,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+        if (_isLoading)
+          Container(
+              color: Colors.black.withOpacity(0.5), child: LoadingWidget()),
+      ],
+    );
   }
 
   Widget _buildFeedbackOptions(BuildContext context) {

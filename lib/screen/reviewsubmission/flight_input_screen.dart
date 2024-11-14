@@ -1,4 +1,5 @@
 import 'package:airline_app/provider/flight_info_provider.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -18,8 +19,8 @@ class FlightInputScreen extends ConsumerStatefulWidget {
 
 class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
   final _getAirlineData = GetAirlineController();
-  List<String> airlineNames = [];
-  List<String> airportNames = [];
+  List<dynamic> airlineData = [];
+  List<dynamic> airportData = [];
 
   bool isLoading = true;
 
@@ -28,32 +29,36 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
     super.initState();
     _getAirlineData.getAirlineAirport().then((value) {
       print('🚝${value["data"]}');
-      List<dynamic> airlineData = (value["data"]["data"] as List)
-          .where((element) => element['isAirline'] == true)
-          .toList();
-      List<dynamic> airportData = (value["data"]["data"] as List)
-          .where((element) => element['isAirline'] == false)
-          .toList();
       setState(() {
-        airlineNames =
-            airlineData.map((airline) => airline['name'] as String).toList();
-        airportNames =
-            airportData.map((airline) => airline['name'] as String).toList();
-
-        isLoading = false;
+        airlineData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == true)
+            .toList();
+        airportData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == false)
+            .toList();
       });
-      print("🤣$airlineNames");
+      isLoading = false;
+
+      // setState(() {
+      //   airlineNames =
+      //       airlineData.map((airline) => airline['name'] as String).toList();
+      //   airportNames =
+      //       airportData.map((airline) => airline['name'] as String).toList();
+
+      //   isLoading = false;
+      // });
+      print("🤣$airlineData");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final flightInputState = ref.watch(flightInputProvider);
-    print("👌$airlineNames");
     return Scaffold(
       appBar: _buildAppBar(context),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: LoadingWidget())
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: ListView(
@@ -75,7 +80,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         onChanged: (value) => ref
                             .read(flightInputProvider.notifier)
                             .updateFrom(value),
-                        airlineNames: airportNames,
+                        airlineNames: airportData,
                       ),
                       const SizedBox(height: 18),
                       CustomDropdownButton(
@@ -84,7 +89,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         onChanged: (value) => ref
                             .read(flightInputProvider.notifier)
                             .updateTo(value),
-                        airlineNames: airportNames,
+                        airlineNames: airportData,
                       ),
                       const SizedBox(height: 18),
                       CustomDropdownButton(
@@ -93,7 +98,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         onChanged: (value) => ref
                             .read(flightInputProvider.notifier)
                             .updateAirline(value),
-                        airlineNames: airlineNames,
+                        airlineNames: airlineData,
                       ),
                     ],
                   ),
@@ -320,7 +325,7 @@ class CustomDropdownButton extends StatefulWidget {
   final String labelText;
   final String hintText;
   final ValueChanged<String> onChanged;
-  final List<String> airlineNames;
+  final List<dynamic> airlineNames;
 
   @override
   State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
@@ -350,10 +355,10 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                 style: AppStyles.textStyle_15_400
                     .copyWith(color: Color(0xFF38433E))),
             items: widget.airlineNames
-                .map((item) => DropdownMenuItem(
-                      value: item,
+                .map((item) => DropdownMenuItem<String>(
+                      value: item['name'],
                       child: Text(
-                        item,
+                        item['name'],
                         style: const TextStyle(
                           fontSize: 14,
                         ),
@@ -362,11 +367,15 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                 .toList(),
             value: selectedValue,
             onChanged: (value) {
+              var id = widget.airlineNames
+                  .where((element) => element['name'] == value)
+                  .first['_id'];
+              print("👌  $value  $id");
+
               setState(() {
                 selectedValue = value;
               });
-              widget.onChanged(selectedValue ?? ""); // Call the callback
-              print("👌  ${selectedValue}");
+              widget.onChanged(id ?? ""); // Call the callback
             },
             buttonStyleData: ButtonStyleData(
               padding: const EdgeInsets.symmetric(horizontal: 8),
