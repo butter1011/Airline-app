@@ -33,10 +33,6 @@ class _LoginState extends State<Login> {
     final response;
     if (result != null && result['data'] != null) {
       UserData userData = UserData.fromJson(jsonString);
-      print('🏆🏆🏆🏆');
-      print('Name: ${userData.name}');
-      print('Identity Value: ${userData.identityValue}');
-      print('channel: ${userData.channel}');
 
       if (userData.channel == 'WHATSAPP') {
         response = await http.post(
@@ -67,7 +63,6 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print('✅✅✅✅✅$responseData');
         if (responseData['userState'] == 0) {
           Navigator.pushNamed(context, AppRoutes.skipscreen);
         } else {
@@ -89,7 +84,6 @@ class _LoginState extends State<Login> {
       Map<String, dynamic> arg = {'appId': appId};
       await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
     } catch (e) {
-      print('WhatsApp login error: $e');
       _showErrorSnackBar('WhatsApp login failed. Please try again.');
     }
   }
