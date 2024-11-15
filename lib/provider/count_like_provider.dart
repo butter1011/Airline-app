@@ -2,33 +2,75 @@ import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final countLikeProvider =
-    StateNotifierProvider<CountLikeNotifier, List<List<bool>>>((ref) {
-  return CountLikeNotifier(aspectsForElevation);
+    StateNotifierProvider<CountLikeNotifier, List<Map<String, dynamic>>>((ref) {
+  return CountLikeNotifier();
 });
 
-class CountLikeNotifier extends StateNotifier<List<List<bool>>> {
-  CountLikeNotifier(Map<String, dynamic> aspects)
-      : super(aspects.entries.map((aspect) {
-          // Create a selection list for each aspect based on its items
-          return List.generate(aspect.value['items'].length, (index) => false);
-        }).toList());
+class CountLikeNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+  CountLikeNotifier()
+      : super(mainCategoryAndSubcategory
+            .map((category) => {
+                  ...category,
+                  'subCategory': category['subCategory']
+                      .map((key, value) => MapEntry(key, value ?? null))
+                      .cast<String, bool?>()
+                })
+            .toList());
 
-  void toggleSelection(int aspectIndex, int itemIndex) {
-    state = [
-      for (int i = 0; i < state.length; i++)
-        i == aspectIndex
-            ? [
-                for (int j = 0; j < state[i].length; j++)
-                  j == itemIndex ? !state[i][j] : state[i][j],
-              ]
-            : state[i],
-    ];
+  void selectLike(int categoryIndex, String item) {
+    if (state[categoryIndex]['subCategory'].containsKey(item)) {
+      final currentValue = state[categoryIndex]['subCategory'][item];
+      state[categoryIndex]['subCategory'][item] =
+          _getNextStateOfLike(currentValue);
+      state = [...state]; // Trigger state change
+    }
   }
 
-  int selectedNumber(int aspectIndex) {
+  bool? _getNextStateOfLike(bool? currentState) {
+    if (currentState == null) {
+      return true;
+    } else if (currentState == true) {
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  void selectDislike(int categoryIndex, String item) {
+    if (state[categoryIndex]['subCategory'].containsKey(item)) {
+      final currentValue = state[categoryIndex]['subCategory'][item];
+      state[categoryIndex]['subCategory'][item] =
+          _getNextStateOfDislike(currentValue);
+      state = [...state]; // Trigger state change
+    }
+  }
+
+  bool? _getNextStateOfDislike(bool? currentState) {
+    if (currentState == null) {
+      return false;
+    } else if (currentState == false) {
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  int selectedNumberOfSubcategoryForLike(int categoryIndex) {
     int selection = 0;
-    for (bool index in state[aspectIndex]) {
-      if (index == true) {
+    for (var item in state[categoryIndex]['subCategory'].values) {
+      if (item == true) {
+        // Check for true
+        selection++;
+      }
+    }
+    return selection;
+  }
+
+  int selectedNumberOfSubcategoryForDislike(int categoryIndex) {
+    int selection = 0;
+    for (var item in state[categoryIndex]['subCategory'].values) {
+      if (item == false) {
+        // Check for true
         selection++;
       }
     }
@@ -37,11 +79,15 @@ class CountLikeNotifier extends StateNotifier<List<List<bool>>> {
 
   int numberOfSelectedAspects() {
     int count = 0;
-    for (List<bool> aspect in state) {
-      if (aspect.any((isSelected) => isSelected)) {
-        count++;
+
+    // Iterate through each category in the state
+    for (var category in state) {
+      // Check if any item in the category has a value of true
+      if (category['subCategory'].values.any((value) => value == true)) {
+        count++; // Increment count if at least one item is selected
       }
     }
+
     return count;
   }
 }

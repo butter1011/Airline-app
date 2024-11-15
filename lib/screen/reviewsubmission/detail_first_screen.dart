@@ -12,26 +12,36 @@ class DetailFirstScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(countLikeProvider);
 
-    print("😍😍😍=======> $selections");
+    // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
-    List<String> labelKeys = aspectsForElevation.keys.toList();
-    String singleAspect = labelKeys[singleIndex];
+    List<String> mainCategoryNames = [];
+    for (var category in mainCategoryAndSubcategory) {
+      mainCategoryNames.add(category['mainCategory'] as String);
+    }
+    String singleAspect = mainCategoryNames[singleIndex];
 
-    // Ensure itemListForSingleAspect is not null
-    final List itemListForSingleAspect =
-        aspectsForElevation[singleAspect]['items'] ?? [];
-    final selectedItemNumter =
-        ref.watch(countLikeProvider.notifier).selectedNumber(singleIndex);
+    // Ensure subCategoryList is not null
+    final Map<String, dynamic> subCategoryList =
+        mainCategoryAndSubcategory[singleIndex]['subCategory'];
+
+    final selectedItemNumter = ref
+        .watch(countLikeProvider.notifier)
+        .selectedNumberOfSubcategoryForLike(singleIndex);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(), // Assuming this method exists
+        flexibleSpace: BuildQuestionHeader(
+          subTitle: "Tell us what you liked about your journey.",
+        ), // Assuming this method exists
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -42,7 +52,7 @@ class DetailFirstScreen extends ConsumerWidget {
                   ),
               SizedBox(height: 16),
               _buildFeedbackOptions(
-                  ref, singleIndex, itemListForSingleAspect, selections),
+                  ref, singleIndex, subCategoryList, selections),
               SizedBox(height: 12),
               _buildOptionalText(),
               SizedBox(height: 6),
@@ -104,35 +114,44 @@ class DetailFirstScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(WidgetRef ref, int singleIndex,
-      List itemListForSingleAspect, List<List<bool>> selections) {
+  Widget _buildFeedbackOptions(
+      WidgetRef ref, int singleIndex, subCategoryList, selections) {
     // List isSelectedList = ref.watch(countLikeProvider);
 
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: List.generate(itemListForSingleAspect.length, (index) {
+      children: List.generate(subCategoryList.length, (index) {
+        Map<String, dynamic> items = selections[singleIndex]['subCategory'];
+        List itemkeys = items.keys.toList();
+        List itemValues = items.values.toList();
+        String key = itemkeys[index];
+        dynamic value = itemValues[index];
         return GestureDetector(
           onTap: () {
-            ref
-                .read(countLikeProvider.notifier)
-                .toggleSelection(singleIndex, index);
+            value == false
+                ? print("Value is false, no action performed.")
+                : ref
+                    .read(countLikeProvider.notifier)
+                    .selectLike(singleIndex, key);
           },
-          child: IntrinsicWidth(
-            child: Container(
-              height: 40,
-              decoration: AppStyles.cardDecoration.copyWith(
-                borderRadius: BorderRadius.circular(16),
-                color: selections[singleIndex][index]
-                    ? AppStyles.mainColor
-                    : Colors.white,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    itemListForSingleAspect[index].toString(),
-                    style: AppStyles.textStyle_14_600,
+          child: Opacity(
+            opacity: value == false ? 0.5 : 1,
+            child: IntrinsicWidth(
+              child: Container(
+                height: 40,
+                decoration: AppStyles.cardDecoration.copyWith(
+                  borderRadius: BorderRadius.circular(16),
+                  color:
+                      items[key] == true ? AppStyles.mainColor : Colors.white,
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      itemkeys[index].toString(),
+                      style: AppStyles.textStyle_14_600,
+                    ),
                   ),
                 ),
               ),
@@ -170,17 +189,15 @@ class DetailFirstScreen extends ConsumerWidget {
   }
 
   Widget _buildTextField() {
-    return Expanded(
-      child: Container(
-        decoration: AppStyles.cardDecoration.copyWith(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: TextFormField(
-          maxLines: null, // Allows unlimited lines
-          decoration: InputDecoration(
-            hintText: "What did you also like?",
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
+    return Container(
+      decoration: AppStyles.cardDecoration.copyWith(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: TextFormField(
+        maxLines: null, // Allows unlimited lines
+        decoration: InputDecoration(
+          hintText: "What did you also like?",
+          border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
       ),
     );

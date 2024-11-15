@@ -1,41 +1,118 @@
+import 'package:airline_app/provider/flight_info_provider.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/controller/get_airline_controller.dart';
 
-class FlightInputScreen extends StatelessWidget {
-  const FlightInputScreen({super.key});
+class FlightInputScreen extends ConsumerStatefulWidget {
+  FlightInputScreen({super.key});
+
+  @override
+  ConsumerState<FlightInputScreen> createState() => _FlightInputScreenState();
+}
+
+class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
+  final _getAirlineData = GetAirlineController();
+  List<dynamic> airlineData = [];
+  List<dynamic> airportData = [];
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getAirlineData.getAirlineAirport().then((value) {
+      print('🚝${value["data"]}');
+      setState(() {
+        airlineData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == true)
+            .toList();
+        airportData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == false)
+            .toList();
+      });
+      isLoading = false;
+
+      // setState(() {
+      //   airlineNames =
+      //       airlineData.map((airline) => airline['name'] as String).toList();
+      //   airportNames =
+      //       airportData.map((airline) => airline['name'] as String).toList();
+
+      //   isLoading = false;
+      // });
+      print("🤣$airlineData");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final flightInputState = ref.watch(flightInputProvider);
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: ListView(
-          children: [
-            const SizedBox(height: 19),
-            _buildInfoText(
-                "Add your flight schedule below or sync your calendar/email"),
-            const SizedBox(height: 22),
-            _buildSectionTitle("Synchronize (Recommended):"),
-            const SizedBox(height: 13),
-            _buildSyncButtons(),
-            const SizedBox(height: 18),
-            _buildDropdownSection(),
-            const SizedBox(height: 18),
-            CalendarExample(),
-            const SizedBox(height: 18),
-            _buildTravelClassSelection(),
-            const SizedBox(height: 18),
-            _buildAdditionalSyncOptions(),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+      body: isLoading
+          ? Center(
+              child: LoadingWidget())
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 19),
+                  _buildInfoText(
+                      "Add your flight schedule below or sync your calendar/email"),
+                  const SizedBox(height: 22),
+                  _buildSectionTitle("Synchronize (Recommended):"),
+                  const SizedBox(height: 13),
+                  _buildSyncButtons(),
+                  const SizedBox(height: 18),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomDropdownButton(
+                        labelText: "From",
+                        hintText: "departure Airport",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateFrom(value),
+                        airlineNames: airportData,
+                      ),
+                      const SizedBox(height: 18),
+                      CustomDropdownButton(
+                        labelText: "To",
+                        hintText: "destination Airport",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateTo(value),
+                        airlineNames: airportData,
+                      ),
+                      const SizedBox(height: 18),
+                      CustomDropdownButton(
+                        labelText: "Airline",
+                        hintText: "your Airline",
+                        onChanged: (value) => ref
+                            .read(flightInputProvider.notifier)
+                            .updateAirline(value),
+                        airlineNames: airlineData,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  CalendarExample(),
+                  const SizedBox(height: 18),
+                  _buildTravelClassSelection(ref),
+                  const SizedBox(height: 18),
+                  _buildAdditionalSyncOptions(ref),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+      bottomNavigationBar: _buildBottomNavigationBar(context, flightInputState),
     );
   }
 
@@ -48,7 +125,7 @@ class FlightInputScreen extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Input Manually',
+      title: Text('Flight Input',
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),
@@ -105,26 +182,7 @@ class FlightInputScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdownSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomDropdownButton(
-          labelText: "From",
-          hintText: "departure Airport",
-        ),
-        const SizedBox(height: 18),
-        CustomDropdownButton(
-          labelText: "To",
-          hintText: "destination Airport",
-        ),
-        const SizedBox(height: 18),
-        CustomDropdownButton(labelText: "Airline", hintText: "your Airline"),
-      ],
-    );
-  }
-
-  Widget _buildTravelClassSelection() {
+  Widget _buildTravelClassSelection(WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -134,16 +192,43 @@ class FlightInputScreen extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ToggleBtn(buttonText: "Business", height: 40),
-            ToggleBtn(buttonText: "Premium Economy", height: 40),
-            ToggleBtn(buttonText: "Economy", height: 40),
+            ToggleBtn(
+              buttonText: "Business",
+              height: 40,
+              isSelected:
+                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                      "Business",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateClassOfTravel("Business"),
+            ),
+            ToggleBtn(
+              buttonText: "Premium Economy",
+              height: 40,
+              isSelected:
+                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                      "Premium Economy",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateClassOfTravel("Premium Economy"),
+            ),
+            ToggleBtn(
+              buttonText: "Economy",
+              height: 40,
+              isSelected:
+                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                      "Economy",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateClassOfTravel("Economy"),
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildAdditionalSyncOptions() {
+  Widget _buildAdditionalSyncOptions(WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -153,16 +238,40 @@ class FlightInputScreen extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ToggleBtn(buttonText: "Boarding Passes", height: 40),
-            ToggleBtn(buttonText: "Geolocation", height: 40),
-            ToggleBtn(buttonText: "E-Tickets", height: 40),
+            ToggleBtn(
+              buttonText: "Boarding Passes",
+              height: 40,
+              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+                  "Boarding Passes",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateSynchronize("Boarding Passes"),
+            ),
+            ToggleBtn(
+              buttonText: "Geolocation",
+              height: 40,
+              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+                  "Geolocation",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateSynchronize("Geolocation"),
+            ),
+            ToggleBtn(
+              buttonText: "E-Tickets",
+              height: 40,
+              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+                  "E-Tickets",
+              onSelected: () => ref
+                  .read(flightInputProvider.notifier)
+                  .updateSynchronize("E-Tickets"),
+            )
           ],
         ),
       ],
     );
   }
 
-  Widget _buildBottomNavigationBar(context) {
+  Widget _buildBottomNavigationBar(context, flightInputState) {
     return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures it takes only the required space
@@ -175,6 +284,12 @@ class FlightInputScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
+              // await GetAirlineController().getAirlineAirport().then((value) {
+              //   print(value);
+              // });
+
+              // print(
+              // "🥈🎈${flightInputState.selectedClassOfTravel} 🎈${flightInputState.to} 🎈${flightInputState.from} 🎈${flightInputState.airline}  ");
               Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
             },
             child: Container(
@@ -200,64 +315,120 @@ class FlightInputScreen extends StatelessWidget {
 }
 
 class CustomDropdownButton extends StatefulWidget {
+  const CustomDropdownButton(
+      {super.key,
+      required this.labelText,
+      required this.hintText,
+      required this.onChanged,
+      required this.airlineNames});
+
   final String labelText;
   final String hintText;
-
-  const CustomDropdownButton(
-      {super.key, required this.labelText, required this.hintText});
+  final ValueChanged<String> onChanged;
+  final List<dynamic> airlineNames;
 
   @override
   State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  String? selectedItem;
+  final TextEditingController textEditingController = TextEditingController();
+  String? selectedValue;
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.labelText,
-            style: AppStyles.textStyle_14_600), // Use label from constructor
+        Text(widget.labelText, style: AppStyles.textStyle_14_600),
         const SizedBox(height: 8),
-        _buildDropdown(),
-      ],
-    );
-  }
+        DropdownButtonHideUnderline(
+          child: DropdownButton2<String>(
+            isExpanded: true,
+            hint: Text('Select ${widget.hintText}',
+                style: AppStyles.textStyle_15_400
+                    .copyWith(color: Color(0xFF38433E))),
+            items: widget.airlineNames
+                .map((item) => DropdownMenuItem<String>(
+                      value: item['name'],
+                      child: Text(
+                        item['name'],
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ))
+                .toList(),
+            value: selectedValue,
+            onChanged: (value) {
+              var id = widget.airlineNames
+                  .where((element) => element['name'] == value)
+                  .first['_id'];
+              print("👌  $value  $id");
 
-  Widget _buildDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      height: 48,
-      decoration: AppStyles.cardDecoration,
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          hint: Text('Select ${widget.hintText}',
-              style: AppStyles.textStyle_15_400.copyWith(
-                  color:
-                      Color(0xff38433E))), // Dynamic hint text based on label
-          value: selectedItem,
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedItem = newValue;
-            });
-          },
-          items: ['Option A', 'Option B', 'Option C']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(value),
+              setState(() {
+                selectedValue = value;
+              });
+              widget.onChanged(id ?? ""); // Call the callback
+            },
+            buttonStyleData: ButtonStyleData(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: AppStyles.cardDecoration,
+              height: 48,
+            ),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 200,
+              decoration: AppStyles.cardDecoration,
+            ),
+            menuItemStyleData: const MenuItemStyleData(height: 40),
+            dropdownSearchData: DropdownSearchData(
+              searchController: textEditingController,
+              searchInnerWidgetHeight: 50,
+              searchInnerWidget: Container(
+                height: 50,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  bottom: 4,
+                  right: 8,
+                  left: 8,
+                ),
+                child: TextFormField(
+                  expands: true,
+                  maxLines: null,
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    hintText: "Select ${widget.hintText}",
+                    hintStyle: AppStyles.textStyle_15_400
+                        .copyWith(color: Color(0xFF38433E)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
               ),
-            );
-          }).toList(),
-          isExpanded: true,
-          iconSize: 24,
-          icon: Icon(Icons.expand_more), // Change icon color if needed
-        ),
-      ),
+              searchMatchFn: (item, searchValue) {
+                return item.value.toString().contains(searchValue);
+              },
+            ),
+            onMenuStateChange: (isOpen) {
+              if (!isOpen) {
+                textEditingController.clear();
+              }
+            },
+            iconStyleData: IconStyleData(icon: Icon(Icons.expand_more)),
+          ),
+        )
+      ],
     );
   }
 }

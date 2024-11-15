@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 class ManualInputScreen extends StatelessWidget {
   const ManualInputScreen({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_sharp),

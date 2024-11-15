@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/count_dislike_provider.dart';
+import 'package:airline_app/provider/count_like_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -13,15 +13,18 @@ class QuestionSecondScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(countDislikeProvider);
+    final selections = ref.watch(countLikeProvider);
     final int numberOfSelectedAspects =
-        ref.watch(countDislikeProvider.notifier).numberOfSelectedAspects();
+        ref.watch(countLikeProvider.notifier).numberOfSelectedAspects();
     print("❤$numberOfSelectedAspects");
-    //
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(),
+        flexibleSpace: BuildQuestionHeader(
+          subTitle: "What could be improved?",
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -35,8 +38,14 @@ class QuestionSecondScreen extends ConsumerWidget {
   }
 
   Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
-    final Map<String, dynamic> feedbackOptions = aspectsForElevation;
-    List<String> labelKeys = aspectsForElevation.keys.toList();
+    final List<Map<String, dynamic>> feedbackOptions =
+        mainCategoryAndSubcategory;
+
+    List<String> mainCategoryNames = [];
+
+    for (var category in mainCategoryAndSubcategory) {
+      mainCategoryNames.add(category['mainCategory'] as String);
+    }
 
     return Expanded(
       child: Padding(
@@ -59,14 +68,16 @@ class QuestionSecondScreen extends ConsumerWidget {
               ),
               itemCount: feedbackOptions.length, // Use the length of the list
               itemBuilder: (context, index) {
-                print("🤣$selections");
                 return FeedbackOption(
                   numForIdentifyOfParent: 2,
-                  iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
+                  iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
                   numberOfSelectedAspects: numberOfSelectedAspects,
-                  selectedNumber:
-                      selections[index].where((s) => s == true).length,
+                  selectedNumberOfSubcategoryForLike: selections[index]
+                          ['subCategory']
+                      .values
+                      .where((s) => s == false)
+                      .length,
                 );
               },
             )),
