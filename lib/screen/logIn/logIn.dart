@@ -1,18 +1,20 @@
 import 'dart:convert';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Login extends ConsumerStatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   final _otplessFlutterPlugin = Otpless();
   static const String appId = "bzpl0offchgcjrm8a4sj";
 
@@ -63,6 +65,8 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        print('🏀${responseData}');
+        ref.read(userDataProvider.notifier).setUserData(responseData);
         if (responseData['userState'] == 0) {
           Navigator.pushNamed(context, AppRoutes.skipscreen);
         } else {
