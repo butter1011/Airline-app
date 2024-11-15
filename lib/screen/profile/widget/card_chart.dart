@@ -16,12 +16,13 @@ class CardChart extends StatelessWidget {
                 0.5, // Adjust height as needed
             child: GridView.count(
               crossAxisCount: 2,
+              physics: const NeverScrollableScrollPhysics(),
               childAspectRatio: 1.3,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
               children: [
                 ReviewButton(
-                  iconUrl: 'assets/icons/top_reviewer.png',
+                  iconUrl: 'assets/icons/reviewmessage.png',
                   label: 'Top Reviewer',
                 ),
                 ReviewButton(

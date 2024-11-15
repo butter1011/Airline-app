@@ -2,7 +2,7 @@ class AppRoutes {
   static const loginscreen = "/loginscreen";
   static const skipscreen = "/skipscreen";
   static const leaderboardscreen = "/leaderboardscreen";
-  static const profilescreen = "/profile_screen";
+  static const profilescreen = "/profilescreen";
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
   static const filterscreen = "/filterscreen";

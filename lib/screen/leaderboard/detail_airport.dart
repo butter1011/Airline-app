@@ -98,7 +98,7 @@ class _DetailAirportState extends State<DetailAirport> {
                               await BottomSheetHelper.showScoreBottomSheet(
                                   context);
                             },
-                            icon: Image.asset('assets/icons/share.png')),
+                            icon: Image.asset('assets/icons/share_white.png')),
                         IconButton(
                           onPressed: () {},
                           icon: IconButton(

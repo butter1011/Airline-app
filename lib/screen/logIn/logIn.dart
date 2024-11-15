@@ -1,20 +1,95 @@
+import 'dart:convert';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:otpless_flutter/otpless_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  int selectedIndex = 0;
+  final _otplessFlutterPlugin = Otpless();
+  static const String appId = "bzpl0offchgcjrm8a4sj";
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeOtpless();
+  }
+
+  Future<void> _initializeOtpless() async {
+    await _otplessFlutterPlugin.enableDebugLogging(true);
+    await _otplessFlutterPlugin.initHeadless(appId);
+    _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
+  }
+
+  void onHeadlessResult(dynamic result) async {
+    String jsonString = jsonEncode(result);
+    final response;
+    if (result != null && result['data'] != null) {
+      UserData userData = UserData.fromJson(jsonString);
+
+      if (userData.channel == 'WHATSAPP') {
+        response = await http.post(
+          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': userData.identityValue,
+            'email': "",
+          }),
+        );
+      } else {
+        response = await http.post(
+          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
+          // Uri.parse('http://10.0.2.2:3000/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': '',
+            'email': userData.identityValue,
+          }),
+        );
+      }
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['userState'] == 0) {
+          Navigator.pushNamed(context, AppRoutes.skipscreen);
+        } else {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
+
+        // You might want to store the user ID or navigate to a new screen
+      } else {
+        // Handle authentication error
+        print('Authentication failed: ${response.body}');
+      }
+    } else {
+      _showErrorSnackBar('Login failed. Please try again.');
+    }
+  }
+
+  Future<void> _loginWithWhatsApp() async {
+    try {
+      Map<String, dynamic> arg = {'appId': appId};
+      await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
+    } catch (e) {
+      _showErrorSnackBar('WhatsApp login failed. Please try again.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List bottomButtonList = [_registerAnother(), _anotherButtons()];
     return Scaffold(
         backgroundColor: AppStyles.mainColor,
         body: Center(
@@ -28,234 +103,68 @@ class _LoginState extends State<Login> {
                 height: 575,
                 fit: BoxFit.cover,
               ),
-              const SizedBox(
-                height: 32,
+              SizedBox(
+                height: 82,
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.skipscreen);
+                  _loginWithWhatsApp();
                 },
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      width: 327,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(27),
-                        border: Border.all(
-                          width: 2,
-                          color: AppStyles.littleBlackColor,
-                        ),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppStyles.littleBlackColor,
-                              offset: const Offset(3, 3))
-                        ],
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/icons/google.png',
-                              width: 20,
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Sign in with Google',
-                                style: AppStyles.textStyle_15_600),
-                          ],
-                        ),
-                      ),
+                  padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        child: Divider(
+                      color: Colors.black,
                     )),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
-                child: Row(children: <Widget>[
-                  Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                  Text(
-                    "   Or   ",
-                    style: TextStyle(
-                        fontFamily: 'Clash Grotesk',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                    selectionColor: Colors.black,
-                  ),
-                  Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                ]),
-              ),
-              bottomButtonList[selectedIndex]
+                    Text(
+                      "   Tap here to signin   ",
+                      style: TextStyle(
+                          fontFamily: 'Clash Grotesk',
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600),
+                      selectionColor: Colors.black,
+                    ),
+                    Expanded(
+                        child: Divider(
+                      color: Colors.black,
+                    )),
+                  ]),
+                ),
+              )
             ],
           ),
         ));
   }
 
-  Widget _registerAnother() {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          selectedIndex++;
-        });
-      },
-      child: Container(
-        width: 327,
-        height: 54,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(27),
-          border: Border.all(
-            width: 2,
-            color: AppStyles.littleBlackColor,
-          ),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                color: AppStyles.littleBlackColor, offset: const Offset(3, 3))
-          ],
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/icons/mail.png',
-                width: 20,
-                height: 20,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Register with email',
-                style: AppStyles.textStyle_15_600,
-              ),
-            ],
-          ),
-        ),
-      ),
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
     );
   }
+}
 
-  Widget _anotherButtons() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/icon_whatsapp.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/apple.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              width: 99,
-              height: 54,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27),
-                color: Colors.white,
-                border: Border.all(
-                  width: 2,
-                  color: AppStyles.littleBlackColor,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppStyles.littleBlackColor,
-                    // Adjust opacity if needed
-                    offset:
-                        const Offset(2, 2), // Set offset to (0, 0) for no gap
-                  ),
-                ],
-              ),
-              clipBehavior: Clip.hardEdge, // Ensures no extra space is added
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/Outlook.png',
-                      width: 25,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ); 
+class UserData {
+  final String name;
+  final String identityValue;
+  final String channel;
+
+  UserData(
+      {required this.name, required this.identityValue, required this.channel});
+
+  factory UserData.fromJson(String jsonString) {
+    final Map<String, dynamic> json = jsonDecode(jsonString);
+    final List<dynamic> identities = json['data']['identities'];
+
+    if (identities.isEmpty) {
+      throw Exception('No identities found in the JSON data');
+    }
+
+    final Map<String, dynamic> firstIdentity = identities.first;
+
+    return UserData(
+        name: firstIdentity['name'] ?? 'Unknown',
+        identityValue: firstIdentity['identityValue'] ?? 'Unknown',
+        channel: firstIdentity['channel'] ?? 'Unknown');
   }
 }

@@ -14,8 +14,11 @@ class FeedbackCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> images = List<String>.from(
-        singleFeedback['Image']); // Ensure it's a List<String>
+    final List<String> images = List<String>.from([
+      'review_abudhabi_1.png',
+      'review_ethiopian_2.png',
+      'review_turkish_1.png'
+    ]); // Ensure it's a List<String>
     CarouselSliderController buttonCarouselController =
         CarouselSliderController();
 
@@ -34,8 +37,8 @@ class FeedbackCard extends StatelessWidget {
                   decoration: AppStyles.circleDecoration,
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundImage:
-                        AssetImage('assets/images/${singleFeedback['Avatar']}'),
+                    // backgroundImage:
+                    //     AssetImage('assets/images/${singleFeedback['Avatar']}'),
                   ),
                 ),
                 SizedBox(width: 8),
@@ -43,11 +46,11 @@ class FeedbackCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Benedict Cumberbatch',
+                      singleFeedback['reviewer']['name'],
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      'Rated 9/10 on ${singleFeedback['Date']}',
+                      'Rated 9/10 on ${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(8, 10)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(5, 7)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(2, 4)}',
                       style: AppStyles.textStyle_14_400,
                     )
                   ],
@@ -59,16 +62,23 @@ class FeedbackCard extends StatelessWidget {
               children: [
                 Text('Flex with', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
-                Text(singleFeedback['Used Airport'],
+                Text(
+                    singleFeedback['airline']['name'] +
+                        ", " +
+                        singleFeedback['classTravel'],
                     style: AppStyles.textStyle_14_600)
               ],
             ),
             SizedBox(height: 7),
             Row(
               children: [
-                Text('Flex with', style: AppStyles.textStyle_14_400),
+                Text('Flex from', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
-                Text(singleFeedback['Path'], style: AppStyles.textStyle_14_600)
+                Text(
+                    singleFeedback['from']['country'] +
+                        "->" +
+                        singleFeedback['to']['country'],
+                    style: AppStyles.textStyle_14_600)
               ],
             ),
             SizedBox(height: 11),
@@ -122,7 +132,7 @@ class FeedbackCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 11),
-            Text(singleFeedback['Content'], style: AppStyles.textStyle_14_400),
+            Text(singleFeedback['comment'], style: AppStyles.textStyle_14_400),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

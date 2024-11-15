@@ -4,7 +4,6 @@ import 'package:airline_app/screen/leaderboard/filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/skip_screen.dart';
-
 import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/about_app.dart';
@@ -24,6 +23,7 @@ import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

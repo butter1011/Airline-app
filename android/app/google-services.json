@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "387530374485",
+    "project_id": "airline-review-5f36f",
+    "storage_bucket": "airline-review-5f36f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387530374485:android:26a6d8df78dab22f2c43dc",
+        "android_client_info": {
+          "package_name": "com.example.airline_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387530374485-vn4g88nqtlh1c5ll9kmne44lamlnaji1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.airline_app",
+            "certificate_hash": "96d05d9c532efa7fbce89af15b07b32c45bd15d5"
+          }
+        },
+        {
+          "client_id": "387530374485-csnt9dsner4ovi12gejcujmdjvdan9ae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQeqsF2Qgxtl60L59iQFKV-Ju-Okjtcy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387530374485-csnt9dsner4ovi12gejcujmdjvdan9ae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
