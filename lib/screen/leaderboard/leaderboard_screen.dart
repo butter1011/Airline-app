@@ -1,16 +1,14 @@
-// leaderboard
-
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
-import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -25,19 +23,42 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   bool isLeaderboardLoading = true;
   bool isReviewsLoading = true;
   int expandedItems = 5;
+  late WebSocketChannel _channel;
 
   @override
   void initState() {
     super.initState();
     fetchLeaderboard();
     fetchReviews();
+    _connectWebSocket();
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close();
+    super.dispose();
+  }
+
+  void _connectWebSocket() {
+    _channel = WebSocketChannel.connect(
+      Uri.parse('ws://$backendUrl/api/v1/airline-airport'),
+    );
+    _channel.stream.listen((message) {
+      final data = json.decode(message);
+      if (data['type'] == 'airlineAirport') {
+        setState(() {
+          leaderBoardList = List<Map<String, dynamic>>.from(data['data']);
+          isLeaderboardLoading = false;
+        });
+      }
+    });
   }
 
   /// Fetch the leaderboard data
   Future<void> fetchLeaderboard() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://airline-backend-pi.vercel.app/api/v2/airline-airport'));
+      final response =
+          await http.get(Uri.parse('$apiUrl/api/v2/airline-airport'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> data = responseData['data'];
@@ -58,11 +79,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     }
   }
 
-  /// Fetch the reviews data
   Future<void> fetchReviews() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://airline-backend-pi.vercel.app/api/v2/airline-reviews'));
+      final response = await http.get(
+        Uri.parse('$apiUrl/api/v2/airline-reviews'),
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -96,7 +117,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             )
           : Column(
               children: [
-                // This section will always stay at the top
                 SizedBox(
                   height: 44,
                 ),
@@ -112,9 +132,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         height: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white, // Background color
-                          border: Border.all(
-                              width: 2, color: Colors.black), // Border color
+                          color: Colors.white,
+                          border: Border.all(width: 2, color: Colors.black),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.black.withOpacity(0.2),
@@ -129,7 +148,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   fontFamily: 'Clash Grotesk', fontSize: 14),
                               contentPadding: EdgeInsets.all(0),
                               prefixIcon: Icon(Icons.search),
-                              border: InputBorder.none, // Remove the underline
+                              border: InputBorder.none,
                             ),
                           ),
                         ),
@@ -139,21 +158,19 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           Navigator.pushNamed(context, AppRoutes.filterscreen);
                         },
                         child: Container(
-                          width: 40, // Diameter of the circular avatar
-                          height: 40, // Diameter of the circular avatar
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white, // Background color
-                            border: Border.all(
-                                width: 2, color: Colors.black), // Border color
+                            color: Colors.white,
+                            border: Border.all(width: 2, color: Colors.black),
                             boxShadow: const [
                               BoxShadow(
                                   color: Colors.black, offset: Offset(2, 2))
                             ],
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                                'assets/icons/setting.png'), // Local image asset
+                            child: Image.asset('assets/icons/setting.png'),
                           ),
                         ),
                       ),
@@ -179,7 +196,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     children: [
                       MainButton(
                         text: "All",
-                      ), // Replace with your button widget
+                      ),
                       SizedBox(width: 8),
                       MainButton(
                         text: "Airline",
@@ -204,9 +221,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   height: 5,
                   decoration: BoxDecoration(color: AppStyles.littleBlackColor),
                 ),
-                // Divider(thickness: 5, color: AppStyles.littleBlackColor),
-
-                // The rest of your content goes here inside a scrollable area
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -224,7 +238,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   color: Color(0xff38433E),
                                 ),
                               ),
-
                               _AirportListSection(
                                 leaderBoardList: leaderBoardList,
                                 expandedItems: expandedItems,
@@ -233,7 +246,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                     expandedItems += 5;
                                   });
                                 },
-                              ), // Your custom widget
+                              ),
                               SizedBox(height: 28),
                               Text(
                                 'Trending Feedback',
@@ -248,8 +261,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   children: reviewList.map(
                                     (singleFeedback) {
                                       return FeedbackCard(
-                                          singleFeedback:
-                                              singleFeedback); // Your custom widget
+                                          singleFeedback: singleFeedback);
                                     },
                                   ).toList(),
                                 ),
@@ -257,7 +269,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               SizedBox(
                                 height: 18,
                               ),
-
                               InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(
@@ -287,10 +298,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 class _AirportListSection extends StatelessWidget {
   final List<Map<String, dynamic>> leaderBoardList;
-
   final int expandedItems;
   final VoidCallback onExpand;
 
@@ -312,7 +321,6 @@ class _AirportListSection extends StatelessWidget {
               return AirportList(
                 name: singleAirport['name'],
                 isAirline: singleAirport['isAirline'],
-                // logo: singleAirport['logo'],
                 index: index,
               );
             }
