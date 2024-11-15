@@ -1,10 +1,34 @@
+import 'dart:convert';
+
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/logIn/logIn.dart';
 
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _gettingUserData();
+  // }
+
+  // Future<void> _gettingUserData() async {
+  //   final _userData = await http.get(Uri.parse(
+  //       'https://airline-backend-pi.vercel.app/api/v2/userinfo/profile'));
+  //   if (_userData.statusCode == 200) {
+  //     final responseUserData = jsonDecode(_userData.body);
+  //     print('🏀🏀🏀$responseUserData');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
