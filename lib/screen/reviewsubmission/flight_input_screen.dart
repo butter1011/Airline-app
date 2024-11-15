@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/flight_info_provider.dart';
+import 'package:airline_app/provider/airline_info_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
@@ -21,7 +21,6 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
   final _getAirlineData = GetAirlineController();
   List<dynamic> airlineData = [];
   List<dynamic> airportData = [];
-
   bool isLoading = true;
 
   @override
@@ -38,27 +37,17 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             .toList();
       });
       isLoading = false;
-
-      // setState(() {
-      //   airlineNames =
-      //       airlineData.map((airline) => airline['name'] as String).toList();
-      //   airportNames =
-      //       airportData.map((airline) => airline['name'] as String).toList();
-
-      //   isLoading = false;
-      // });
-      print("🤣$airlineData");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final flightInputState = ref.watch(flightInputProvider);
+    final flightInputState = ref.watch(airlineInfoProvider);
+    bool isValid = ref.read(airlineInfoProvider.notifier).isFormValid();
     return Scaffold(
       appBar: _buildAppBar(context),
       body: isLoading
-          ? Center(
-              child: LoadingWidget())
+          ? Center(child: LoadingWidget())
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: ListView(
@@ -78,7 +67,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "From",
                         hintText: "departure Airport",
                         onChanged: (value) => ref
-                            .read(flightInputProvider.notifier)
+                            .read(airlineInfoProvider.notifier)
                             .updateFrom(value),
                         airlineNames: airportData,
                       ),
@@ -87,7 +76,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "To",
                         hintText: "destination Airport",
                         onChanged: (value) => ref
-                            .read(flightInputProvider.notifier)
+                            .read(airlineInfoProvider.notifier)
                             .updateTo(value),
                         airlineNames: airportData,
                       ),
@@ -96,14 +85,14 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "Airline",
                         hintText: "your Airline",
                         onChanged: (value) => ref
-                            .read(flightInputProvider.notifier)
+                            .read(airlineInfoProvider.notifier)
                             .updateAirline(value),
                         airlineNames: airlineData,
                       ),
                     ],
                   ),
                   const SizedBox(height: 18),
-                  CalendarExample(),
+                  CalendarWidget(),
                   const SizedBox(height: 18),
                   _buildTravelClassSelection(ref),
                   const SizedBox(height: 18),
@@ -112,7 +101,8 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                 ],
               ),
             ),
-      bottomNavigationBar: _buildBottomNavigationBar(context, flightInputState),
+      bottomNavigationBar:
+          _buildBottomNavigationBar(context, flightInputState, isValid),
     );
   }
 
@@ -196,30 +186,30 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               buttonText: "Business",
               height: 40,
               isSelected:
-                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
                       "Business",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateClassOfTravel("Business"),
             ),
             ToggleBtn(
               buttonText: "Premium Economy",
               height: 40,
               isSelected:
-                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
                       "Premium Economy",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateClassOfTravel("Premium Economy"),
             ),
             ToggleBtn(
               buttonText: "Economy",
               height: 40,
               isSelected:
-                  ref.watch(flightInputProvider).selectedClassOfTravel ==
+                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
                       "Economy",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateClassOfTravel("Economy"),
             ),
           ],
@@ -241,28 +231,28 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             ToggleBtn(
               buttonText: "Boarding Passes",
               height: 40,
-              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
                   "Boarding Passes",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateSynchronize("Boarding Passes"),
             ),
             ToggleBtn(
               buttonText: "Geolocation",
               height: 40,
-              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
                   "Geolocation",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateSynchronize("Geolocation"),
             ),
             ToggleBtn(
               buttonText: "E-Tickets",
               height: 40,
-              isSelected: ref.watch(flightInputProvider).selectedSynchronize ==
+              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
                   "E-Tickets",
               onSelected: () => ref
-                  .read(flightInputProvider.notifier)
+                  .read(airlineInfoProvider.notifier)
                   .updateSynchronize("E-Tickets"),
             )
           ],
@@ -271,7 +261,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
     );
   }
 
-  Widget _buildBottomNavigationBar(context, flightInputState) {
+  Widget _buildBottomNavigationBar(context, flightInputState, isValid) {
     return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures it takes only the required space
@@ -284,13 +274,20 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
-              // await GetAirlineController().getAirlineAirport().then((value) {
-              //   print(value);
-              // });
-
-              // print(
-              // "🥈🎈${flightInputState.selectedClassOfTravel} 🎈${flightInputState.to} 🎈${flightInputState.from} 🎈${flightInputState.airline}  ");
-              Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
+              print("🥈$isValid");
+              if (isValid) {
+                Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: const Color(0xFFFC8B8B),
+                    content: Text(
+                      "Please fill all the fields",
+                      style: AppStyles.textStyle_15_600,
+                    ),
+                  ),
+                );
+              }
             },
             child: Container(
               height: 56,

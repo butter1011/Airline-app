@@ -1,13 +1,14 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final countLikeProvider =
-    StateNotifierProvider<CountLikeNotifier, List<Map<String, dynamic>>>((ref) {
-  return CountLikeNotifier();
+final reviewFeedBackProvider =
+    StateNotifierProvider<ReviewFeedBackNotifier, List<Map<String, dynamic>>>(
+        (ref) {
+  return ReviewFeedBackNotifier();
 });
 
-class CountLikeNotifier extends StateNotifier<List<Map<String, dynamic>>> {
-  CountLikeNotifier()
+class ReviewFeedBackNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+  ReviewFeedBackNotifier()
       : super(mainCategoryAndSubcategory
             .map((category) => {
                   ...category,

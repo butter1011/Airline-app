@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/count_like_provider.dart';
+import 'package:airline_app/provider/review_feedback_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -10,7 +10,7 @@ class DetailFirstScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(countLikeProvider);
+    final selections = ref.watch(reviewFeedBackProvider);
 
     // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
@@ -26,7 +26,7 @@ class DetailFirstScreen extends ConsumerWidget {
         mainCategoryAndSubcategory[singleIndex]['subCategory'];
 
     final selectedItemNumter = ref
-        .watch(countLikeProvider.notifier)
+        .watch(reviewFeedBackProvider.notifier)
         .selectedNumberOfSubcategoryForLike(singleIndex);
 
     return Scaffold(
@@ -116,7 +116,7 @@ class DetailFirstScreen extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(
       WidgetRef ref, int singleIndex, subCategoryList, selections) {
-    // List isSelectedList = ref.watch(countLikeProvider);
+    // List isSelectedList = ref.watch(reviewFeedBackProvider);
 
     return Wrap(
       spacing: 16,
@@ -132,7 +132,7 @@ class DetailFirstScreen extends ConsumerWidget {
             value == false
                 ? print("Value is false, no action performed.")
                 : ref
-                    .read(countLikeProvider.notifier)
+                    .read(reviewFeedBackProvider.notifier)
                     .selectLike(singleIndex, key);
           },
           child: Opacity(
