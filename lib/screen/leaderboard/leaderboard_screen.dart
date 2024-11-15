@@ -20,17 +20,21 @@ class LeaderboardScreen extends StatefulWidget {
 }
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
-  List<Map<String, dynamic>> airportReviewList = [];
-  bool isLoading = true;
+  List<Map<String, dynamic>> leaderBoardList = [];
+  List<Map<String, dynamic>> reviewList = [];
+  bool isLeaderboardLoading = true;
+  bool isReviewsLoading = true;
   int expandedItems = 5;
 
   @override
   void initState() {
     super.initState();
-    fetchAirportLineList();
+    fetchLeaderboard();
+    fetchReviews();
   }
 
-  Future<void> fetchAirportLineList() async {
+  /// Fetch the leaderboard data
+  Future<void> fetchLeaderboard() async {
     try {
       final response = await http.get(Uri.parse(
           'https://airline-backend-pi.vercel.app/api/v2/airline-airport'));
@@ -38,18 +42,43 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> data = responseData['data'];
         setState(() {
-          airportReviewList = List<Map<String, dynamic>>.from(data);
-          isLoading = false;
+          leaderBoardList = List<Map<String, dynamic>>.from(data);
+          isLeaderboardLoading = false;
         });
       } else {
         setState(() {
-          isLoading = false;
+          isLeaderboardLoading = false;
         });
-        throw Exception('Failed to load airport reviews');
+        throw Exception('Failed to load leaderboard datas');
       }
     } catch (e) {
       setState(() {
-        isLoading = false;
+        isLeaderboardLoading = false;
+      });
+    }
+  }
+
+  /// Fetch the reviews data
+  Future<void> fetchReviews() async {
+    try {
+      final response = await http.get(Uri.parse(
+          'https://airline-backend-pi.vercel.app/api/v2/airline-reviews'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          reviewList = List<Map<String, dynamic>>.from(data);
+          isReviewsLoading = false;
+        });
+      } else {
+        setState(() {
+          isReviewsLoading = false;
+        });
+        throw Exception('Failed to load reviews');
+      }
+    } catch (e) {
+      setState(() {
+        isReviewsLoading = false;
       });
     }
   }
@@ -61,8 +90,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: 0,
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
+      body: isReviewsLoading || isLeaderboardLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
           : Column(
               children: [
                 // This section will always stay at the top
@@ -193,8 +224,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   color: Color(0xff38433E),
                                 ),
                               ),
+
                               _AirportListSection(
-                                airportReviewList: airportReviewList,
+                                leaderBoardList: leaderBoardList,
                                 expandedItems: expandedItems,
                                 onExpand: () {
                                   setState(() {
@@ -213,7 +245,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: trendingFeedbackList.map(
+                                  children: reviewList.map(
                                     (singleFeedback) {
                                       return FeedbackCard(
                                           singleFeedback:
@@ -257,12 +289,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class _AirportListSection extends StatelessWidget {
-  final List<Map<String, dynamic>> airportReviewList;
+  final List<Map<String, dynamic>> leaderBoardList;
+
   final int expandedItems;
   final VoidCallback onExpand;
 
   const _AirportListSection({
-    required this.airportReviewList,
+    required this.leaderBoardList,
     required this.expandedItems,
     required this.onExpand,
   });
@@ -272,7 +305,7 @@ class _AirportListSection extends StatelessWidget {
     return Column(
       children: [
         Column(
-          children: airportReviewList.asMap().entries.map((entry) {
+          children: leaderBoardList.asMap().entries.map((entry) {
             int index = entry.key;
             Map<String, dynamic> singleAirport = entry.value;
             if (index < expandedItems) {
@@ -287,7 +320,7 @@ class _AirportListSection extends StatelessWidget {
           }).toList(),
         ),
         SizedBox(height: 19),
-        if (expandedItems < airportReviewList.length)
+        if (expandedItems < leaderBoardList.length)
           Center(
             child: InkWell(
               onTap: onExpand,
