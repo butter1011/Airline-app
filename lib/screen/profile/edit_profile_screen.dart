@@ -1,31 +1,39 @@
-import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'dart:convert';
 
+import 'package:airline_app/provider/favorite_airline_provider.dart';
+import 'package:airline_app/screen/logIn/logIn.dart';
+import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class EditProfileScreen extends ConsumerStatefulWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _controller = TextEditingController(
-      text: 'Very long goes here pushing it to the second row');
-  final TextEditingController _nameController =
-      TextEditingController(text: 'Benedict Cumberbatch');
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
+
   @override
   void dispose() {
-    // Dispose of the controller when the widget is removed from the widget tree
-    _controller.dispose();
     _nameController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserData = ref.watch(userDataProvider);
+    _nameController.text = '${UserData?['userData']['name']}';
+    _bioController.text = '${UserData?['userData']['bio']}';
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -44,138 +52,141 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: AppStyles.textStyle_16_600,
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 4,
-            color: AppStyles.littleBlackColor,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: AppStyles.circleDecoration,
-            child: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/avatar_1.png"),
-              radius: 36,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 4,
+              color: AppStyles.littleBlackColor,
             ),
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Text(
-            "Change Photo",
-            style: AppStyles.textStyle_15_600,
-          ),
-          SizedBox(
-            height: 22,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Name & Surname",
-                  style: AppStyles.textStyle_14_600,
-                )
-              ],
+            SizedBox(
+              height: 20,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
+            Container(
+              decoration: AppStyles.circleDecoration,
+              child: CircleAvatar(
+                backgroundImage: AssetImage("assets/images/avatar_1.png"),
+                radius: 36,
+              ),
             ),
-            child: Container(
-              height: 40, // Increased height for better visibility
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(20), // Adjusted for new height
-                color: Colors.white,
-                border: Border.all(width: 2, color: Colors.black),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: Offset(2, 2),
+            SizedBox(
+              height: 24,
+            ),
+            Text(
+              "Change Photo",
+              style: AppStyles.textStyle_15_600,
+            ),
+            SizedBox(
+              height: 22,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Name & Surname",
+                    style: AppStyles.textStyle_14_600,
                   )
                 ],
               ),
-              child: Center(
-                // Added Center widget
-                child: TextField(
-                  controller: _nameController,
-                  textAlignVertical:
-                      TextAlignVertical.center, // Centers text vertically
-                  style: TextStyle(fontSize: 16), // Adjust font size as needed
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    border: InputBorder.none,
-                    isCollapsed: true, // Removes the default padding
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+              ),
+              child: Container(
+                height: 40, // Increased height for better visibility
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(20), // Adjusted for new height
+                  color: Colors.white,
+                  border: Border.all(width: 2, color: Colors.black),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(2, 2),
+                    )
+                  ],
+                ),
+                child: Center(
+                  // Added Center widget
+                  child: TextField(
+                    controller: _nameController,
+                    textAlignVertical:
+                        TextAlignVertical.center, // Centers text vertically
+                    style:
+                        TextStyle(fontSize: 16), // Adjust font size as needed
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                      border: InputBorder.none,
+                      isCollapsed: true, // Removes the default padding
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 22,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Bio",
-                  style: AppStyles.textStyle_14_600,
-                )
-              ],
+            SizedBox(
+              height: 22,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
-            ),
-            child: Container(
-              height: 122,
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(27),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(2, 2),
-                    )
-                  ]),
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(12)),
-                maxLines: null,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Bio",
+                    style: AppStyles.textStyle_14_600,
+                  )
+                ],
               ),
             ),
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Your Favorite Airline",
-                  style: AppStyles.textStyle_14_600,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+              ),
+              child: Container(
+                height: 122,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(27),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        offset: Offset(2, 2),
+                      )
+                    ]),
+                child: TextField(
+                  controller: _bioController,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(12)),
+                  maxLines: null,
                 ),
-              ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          FavoriteAirlineDropdown(),
-        ],
+            SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Your Favorite Airline",
+                    style: AppStyles.textStyle_14_600,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            FavoriteAirlineDropdown(),
+          ],
+        ),
       ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
@@ -189,8 +200,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: InkWell(
               onTap: () {
                 showCustomSnackbar(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+
+                _editProfileFunction();
               },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
@@ -273,12 +284,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
 
-    Overlay.of(context)?.insert(overlayEntry);
+    // Overlay.of(context)?.insert(overlayEntry);
 
     // Remove the overlay after some time
     Future.delayed(Duration(seconds: 3), () {
       overlayEntry.remove();
     });
+  }
+
+  void _editProfileFunction() async {
+    final UserData = ref.watch(userDataProvider);
+
+    final userInformationData = await http.post(
+        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'name': _nameController.text,
+          'bio': _bioController.text,
+          '_id': UserData?['userData']['_id']
+        }));
+
+    if (userInformationData.statusCode == 200) {
+      final responseChangeData = jsonDecode(userInformationData.body);
+      print('😜😜😜${responseChangeData}');
+      ref.read(userDataProvider.notifier).setUserData(responseChangeData);
+
+      Navigator.pushNamed(context, AppRoutes.profilescreen);
+
+      // You might want to store the user ID or navigate to a new screen
+    } else {
+      // Handle authentication error
+      print('Changing the userProfile failed: ${userInformationData.body}');
+    }
   }
 }
 
@@ -296,7 +335,6 @@ class _FavoriteAirlineDropdownState extends State<FavoriteAirlineDropdown> {
     'Delta Air Lines',
     'United Airlines',
     'Southwest Airlines',
-    'JetBlue Airways',
   ];
 
   @override

@@ -1,37 +1,17 @@
-import 'dart:convert';
-
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
-import 'package:airline_app/screen/logIn/logIn.dart';
 
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _gettingUserData();
-  // }
-
-  // Future<void> _gettingUserData() async {
-  //   final _userData = await http.get(Uri.parse(
-  //       'https://airline-backend-pi.vercel.app/api/v2/userinfo/profile'));
-  //   if (_userData.statusCode == 200) {
-  //     final responseUserData = jsonDecode(_userData.body);
-  //     print('🏀🏀🏀$responseUserData');
-  //   }
-  // }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final UserData = ref.watch(userDataProvider);
+    print('${UserData}');
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(currentIndex: 4),
@@ -93,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               height: 16,
                                             ),
                                             Text(
-                                              ' Top Reviewer',
+                                              ' ${UserData?['userData']['topReviewer']}',
                                               style: TextStyle(
                                                   fontFamily: 'Clash Grotesk',
                                                   fontSize: 16,
@@ -134,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   width: 4,
                                                 ),
                                                 Text(
-                                                  '+9',
+                                                  '${UserData?['userData']['badges']}',
                                                   style: TextStyle(
                                                       fontFamily:
                                                           'Clash Grotesk',
@@ -178,8 +158,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             width: 20,
                                           ),
                                           Center(
-                                            child: const Text(
-                                              'Flyer type: Business Class',
+                                            child: Text(
+                                              'Flyer type: ${UserData?['userData']['flyertype']}',
                                               style: TextStyle(
                                                   fontFamily: 'Clash Grotesk',
                                                   fontSize: 16,
@@ -198,10 +178,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           height: 30,
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Benedict Cumberbatch',
+                            ' ${UserData?['userData']['name']}',
                             style: TextStyle(
                               fontFamily: 'Clash Grotesk',
                               fontSize: 28,
@@ -209,10 +189,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Very long bio goes here pushing it to the second row',
+                            '${UserData?['userData']['bio']}',
                             style: TextStyle(
                               fontFamily: 'Clash Grotesk',
                               letterSpacing: 0.6,
@@ -224,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           height: 14,
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Row(
                             children: [
@@ -238,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               Text(
-                                '  British Airways',
+                                ' ${UserData?['userData']['favoriteAirlines']}',
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
