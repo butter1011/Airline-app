@@ -9,7 +9,7 @@ class ManualInputScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_sharp),
@@ -29,35 +29,45 @@ class ManualInputScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: ListView(
           children: [
-            _buildInputCard(
-              context,
-              imagePath: 'assets/icons/input_airport.png',
-              title: 'Airport Input',
-            ),
+            _InputCard(
+                imagePath: 'assets/icons/input_airport.png',
+                title: 'Airport Input',
+                onClick: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: AppStyles.mainColor,
+                      content: Text(
+                        "Coming Soon...",
+                        style: AppStyles.textStyle_15_600,
+                      ),
+                    ),
+                  );
+                }),
             const SizedBox(height: 23),
             _buildOrDivider(),
-            _buildInputCard(
-              context,
+            _InputCard(
               imagePath: 'assets/icons/input_flight.png',
               title: 'Flight Input',
+              onClick: () => Navigator.pushNamed(
+                  context,
+                  AppRoutes
+                      .flightinput), // Add an empty function as onClick is required
             ),
           ],
         ),
       ),
     );
   }
-
-  Widget _buildInputCard(BuildContext context,
-      {required String imagePath, required String title}) {
-    return _InputCard(imagePath: imagePath, title: title);
-  }
 }
 
 class _InputCard extends StatefulWidget {
   final String imagePath;
   final String title;
+  final VoidCallback onClick;
 
-  const _InputCard({required this.imagePath, required this.title});
+  const _InputCard(
+      {required this.imagePath, required this.title, required this.onClick});
 
   @override
   __InputCardState createState() => __InputCardState();
@@ -72,11 +82,11 @@ class __InputCardState extends State<_InputCard> {
     });
 
     // Reset the state after the animation duration
-    Future.delayed(const Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       setState(() {
         _isClicked = false;
       });
-      Navigator.pushNamed(context, AppRoutes.flightinput);
+      widget.onClick();
     });
   }
 

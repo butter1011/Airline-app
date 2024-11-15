@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/count_like_provider.dart';
+import 'package:airline_app/provider/review_feedback_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -12,15 +12,18 @@ class QuestionFirstScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(countLikeProvider);
+    final selections = ref.watch(reviewFeedBackProvider);
     final int numberOfSelectedAspects =
-        ref.watch(countLikeProvider.notifier).numberOfSelectedAspects();
+        ref.watch(reviewFeedBackProvider.notifier).numberOfSelectedAspects();
     print("❤$numberOfSelectedAspects");
-    //
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(),
+        flexibleSpace: BuildQuestionHeader(
+          subTitle: "Tell us what you liked about your journey.",
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -34,8 +37,14 @@ class QuestionFirstScreen extends ConsumerWidget {
   }
 
   Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
-    final Map<String, dynamic> feedbackOptions = aspectsForElevation;
-    List<String> labelKeys = aspectsForElevation.keys.toList();
+    final List<Map<String, dynamic>> feedbackOptions =
+        mainCategoryAndSubcategory;
+
+    List<String> mainCategoryNames = [];
+
+    for (var category in mainCategoryAndSubcategory) {
+      mainCategoryNames.add(category['mainCategory'] as String);
+    }
 
     return Expanded(
       child: Padding(
@@ -59,12 +68,15 @@ class QuestionFirstScreen extends ConsumerWidget {
               itemCount: feedbackOptions.length, // Use the length of the list
               itemBuilder: (context, index) {
                 return FeedbackOption(
-                  numForIdentifyOfParent:1,
-                  iconUrl: feedbackOptions[labelKeys[index]]['iconUrl'],
+                  numForIdentifyOfParent: 1,
+                  iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
                   numberOfSelectedAspects: numberOfSelectedAspects,
-                  selectedNumber:
-                      selections[index].where((s) => s == true).length,
+                  selectedNumberOfSubcategoryForLike: selections[index]
+                          ['subCategory']
+                      .values
+                      .where((s) => s == true)
+                      .length,
                 );
               },
             )),
@@ -112,7 +124,8 @@ class QuestionFirstScreen extends ConsumerWidget {
 }
 
 class BuildQuestionHeader extends StatelessWidget {
-  const BuildQuestionHeader({super.key});
+  const BuildQuestionHeader({super.key, required this.subTitle});
+  final String subTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +170,7 @@ class BuildQuestionHeader extends StatelessWidget {
               ),
               SizedBox(height: 32),
               Text(
-                "Tell us what you liked about your journey.",
+                subTitle,
                 style: AppStyles.textStyle_18_600
                     .copyWith(color: Color(0xffF9F9F9)),
               ),

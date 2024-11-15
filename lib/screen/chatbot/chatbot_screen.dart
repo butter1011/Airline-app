@@ -11,21 +11,23 @@ class ChatbotScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
+        leading: IconButton(
+          // Use IconButton for better control
+          onPressed: () {
             Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            size: 24,
-          ),
+          icon: const Icon(Icons.arrow_back_ios,
+              size: 20), // Slightly smaller icon
         ),
         centerTitle: true,
-        title: Center(
+        title: FittedBox(
+          // Use FittedBox to handle long titles
+          fit: BoxFit.scaleDown,
           child: Text(
             "Sam-AI Flight Planner",
-            textAlign: TextAlign.center,
             style: AppStyles.textStyle_16_600,
+            overflow:
+                TextOverflow.ellipsis, // Add ellipsis for very long titles
           ),
         ),
       ),
@@ -113,4 +115,3 @@ class ChatbotScreen extends StatelessWidget {
     );
   }
 }
-  

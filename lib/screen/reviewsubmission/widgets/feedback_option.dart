@@ -10,24 +10,29 @@ class FeedbackOption extends StatelessWidget {
   final int numForIdentifyOfParent;
   final String iconUrl;
   final int label;
-  final int selectedNumber;
+  final int selectedNumberOfSubcategoryForLike;
   final int numberOfSelectedAspects;
 
-  FeedbackOption(
+  const FeedbackOption(
       {super.key,
       required this.numForIdentifyOfParent,
       required this.iconUrl,
       required this.label,
-      required this.selectedNumber,
+      required this.selectedNumberOfSubcategoryForLike,
       required this.numberOfSelectedAspects});
-  final List<String> labelKeys = aspectsForElevation.keys.toList();
+  // final List<String> mainCategoryNames = mainCategoryAndSubcategory.keys.toList();
 
   @override
   Widget build(BuildContext context) {
-    final labelName = labelKeys[label];
+    List<String> mainCategoryNames = [];
+
+    for (var category in mainCategoryAndSubcategory) {
+      mainCategoryNames.add(category['mainCategory'] as String);
+    }
+    final labelName = mainCategoryNames[label];
     return GestureDetector(
       onTap: () {
-        print("🪂${context.widget.runtimeType}");
+        print("🪂${numForIdentifyOfParent}");
 
         if (numForIdentifyOfParent == 1) {
           if (numberOfSelectedAspects > 3) {
@@ -44,12 +49,6 @@ class FeedbackOption extends StatelessWidget {
                 arguments: {'singleAspect': label});
           }
         }
-        // if (numberOfSelectedAspects > 3) {
-        //   _showAlertDialog(context);
-        // } else {
-        //   Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
-        //       arguments: {'singleAspect': label});
-        // }
       }, // Change color on tap
       child: Stack(
         children: [
@@ -57,7 +56,7 @@ class FeedbackOption extends StatelessWidget {
             height: 126,
             width: MediaQuery.of(context).size.width * 0.41,
             decoration: AppStyles.cardDecoration.copyWith(
-              color: selectedNumber > 0
+              color: selectedNumberOfSubcategoryForLike > 0
                   ? AppStyles.mainColor
                   : Colors.white, // Change color based on click state
             ),
@@ -70,8 +69,9 @@ class FeedbackOption extends StatelessWidget {
                   height: 48,
                   width: 48,
                   decoration: AppStyles.cardDecoration.copyWith(
-                    color:
-                        selectedNumber > 0 ? Colors.white : AppStyles.mainColor,
+                    color: selectedNumberOfSubcategoryForLike > 0
+                        ? Colors.white
+                        : AppStyles.mainColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(iconUrl, height: 40),
@@ -85,7 +85,7 @@ class FeedbackOption extends StatelessWidget {
               ],
             ),
           ),
-          if (selectedNumber > 0)
+          if (selectedNumberOfSubcategoryForLike > 0)
             Positioned(
                 top: 12,
                 right: 16,
@@ -95,7 +95,7 @@ class FeedbackOption extends StatelessWidget {
                   decoration: AppStyles.badgeDecoration,
                   child: Center(
                     child: Text(
-                      "$selectedNumber",
+                      "$selectedNumberOfSubcategoryForLike",
                       style: AppStyles.textStyle_12_600,
                     ),
                   ),

@@ -24,4 +24,5 @@ class AppRoutes {
   static const eidtprofilescreen = "/eidtprofilescreen";
   static const aboutapp = "/aboutapp";
   static const termsofservice = "/termsofservice";
+  static const example = "/example";
 }
