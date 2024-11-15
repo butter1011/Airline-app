@@ -1,14 +1,18 @@
+import 'package:airline_app/provider/airline_info_provider.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/intl.dart';
 
-class CalendarExample extends StatefulWidget {
+class CalendarWidget extends ConsumerStatefulWidget {
+  const CalendarWidget({super.key});
+
   @override
-  _CalendarExampleState createState() => _CalendarExampleState();
+  ConsumerState<CalendarWidget> createState() => _CalendarWidgetState();
 }
 
-class _CalendarExampleState extends State<CalendarExample> {
+class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
   dynamic _startDate = ''; // Initialize with an empty string
   dynamic _endDate = ''; // Initialize with an empty string
   final DateRangePickerController _controller = DateRangePickerController();
@@ -30,6 +34,11 @@ class _CalendarExampleState extends State<CalendarExample> {
       _startDate = DateFormat('dd, MMMM yyyy').format(args.value.startDate);
       _endDate = DateFormat('dd, MMMM yyyy')
           .format(args.value.endDate ?? args.value.startDate);
+
+      List<String> dateRange = [_startDate, _endDate];
+      ref.read(airlineInfoProvider.notifier).updateDateRange(dateRange);
+
+      print("Selected dates👑: ${ref.watch(airlineInfoProvider).dateRange}");
     });
   }
 

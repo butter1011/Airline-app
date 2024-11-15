@@ -22,20 +22,10 @@ class LoadingWidget extends StatelessWidget {
       height: 80,
       child: LoadingIndicator(
         indicatorType: Indicator.ballSpinFadeLoader,
-
-        /// Required, The loading type of the widget
         colors: [AppStyles.mainColor],
-
-        /// Optional, The color collections
         strokeWidth: 2,
-
-        /// Optional, The stroke of the line, only applicable to widget which contains line
         backgroundColor: Colors.transparent,
-
-        /// Optional, Background of the widget
         pathBackgroundColor: Colors.pink,
-
-        /// Optional, the stroke backgroundColor
       ),
     ));
   }

@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/review_controller.dart';
 import 'package:airline_app/models/review.dart';
-import 'package:airline_app/provider/count_like_provider.dart';
-import 'package:airline_app/provider/flight_info_provider.dart';
+import 'package:airline_app/provider/review_feedback_provider.dart';
+import 'package:airline_app/provider/airline_info_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 
 import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
@@ -43,8 +43,8 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final flightData = ref.watch(flightInputProvider);
-    final reviewData = ref.watch(countLikeProvider);
+    final flightData = ref.watch(airlineInfoProvider);
+    final reviewData = ref.watch(reviewFeedBackProvider);
     final from = flightData.from;
     final to = flightData.to;
     final airline = flightData.airline;
@@ -108,7 +108,7 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
 
                               final review = Review(
                                 reviewer:
-                                    "673511a26b35199491bc3adf", // Replace with actual reviewer ID
+                                    "67359487d2dee6ec272b920f", // Replace with actual reviewer ID
                                 from: from,
                                 to: to,
                                 classTravel: classTravel,
