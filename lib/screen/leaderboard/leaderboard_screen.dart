@@ -8,6 +8,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LeaderboardScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     super.initState();
     fetchLeaderboard();
     fetchReviews();
-    _connectWebSocket();
+    connectWebSocket();
   }
 
   @override
@@ -39,22 +40,27 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     super.dispose();
   }
 
-  void _connectWebSocket() {
-    _channel = WebSocketChannel.connect(
-      Uri.parse('ws://$backendUrl/api/v1/airline-airport'),
-    );
-    _channel.stream.listen((message) {
-      final data = json.decode(message);
-      if (data['type'] == 'airlineAirport') {
-        setState(() {
-          leaderBoardList = List<Map<String, dynamic>>.from(data['data']);
-          isLeaderboardLoading = false;
-        });
-      }
-    });
+  Future<void> connectWebSocket() async {
+    try {
+      _channel = IOWebSocketChannel.connect(
+        'wss://$backendUrl/api/v1/airline-airport',
+      );
+
+      await _channel.ready;
+      _channel.stream.listen((message) {
+        final data = json.decode(message);
+        if (data['type'] == 'airlineAirport') {
+          setState(() {
+            leaderBoardList = List<Map<String, dynamic>>.from(data['data']);
+            isLeaderboardLoading = false;
+          });
+        }
+      });
+    } catch (e) {
+      print("error for connecting the websocket");
+    }
   }
 
-  /// Fetch the leaderboard data
   Future<void> fetchLeaderboard() async {
     try {
       final response =
@@ -70,7 +76,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         setState(() {
           isLeaderboardLoading = false;
         });
-        throw Exception('Failed to load leaderboard datas');
+        throw Exception('Failed to load leaderboard data');
       }
     } catch (e) {
       setState(() {
