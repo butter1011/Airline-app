@@ -1,5 +1,4 @@
 import 'package:airline_app/screen/profile/utils/terms_of_service_json.dart';
-import 'package:airline_app/utils/app_routes.dart';
 
 import 'package:airline_app/utils/app_styles.dart';
 

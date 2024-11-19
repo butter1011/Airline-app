@@ -11,7 +11,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final UserData = ref.watch(userDataProvider);
-    print('${UserData}');
+    print('💦💦💦${UserData}');
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(currentIndex: 4),
@@ -54,33 +54,38 @@ class ProfileScreen extends ConsumerWidget {
                                 Row(
                                   children: [
                                     Container(
-                                      width: 140,
+                                      // width: 140,
                                       height: 32,
                                       decoration: BoxDecoration(
                                         border: Border.all(),
                                         color: Colors.black,
                                         borderRadius: BorderRadius.circular(27),
                                       ),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/text.png',
-                                              color: Colors.white,
-                                              width: 16,
-                                              height: 16,
-                                            ),
-                                            Text(
-                                              ' ${UserData?['userData']['topReviewer']}',
-                                              style: TextStyle(
-                                                  fontFamily: 'Clash Grotesk',
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/icons/text.png',
+                                                color: Colors.white,
+                                                width: 16,
+                                                height: 16,
+                                              ),
+                                              Text(
+                                                ' ${UserData?['userData']['selectedbadges']}',
+                                                style: TextStyle(
+                                                    fontFamily: 'Clash Grotesk',
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -114,7 +119,7 @@ class ProfileScreen extends ConsumerWidget {
                                                   width: 4,
                                                 ),
                                                 Text(
-                                                  '${UserData?['userData']['badges']}',
+                                                  '${UserData?['userData']['badgeNumber']}',
                                                   style: TextStyle(
                                                       fontFamily:
                                                           'Clash Grotesk',
@@ -209,7 +214,8 @@ class ProfileScreen extends ConsumerWidget {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context).translate('My favorite Airline is'),
+                                AppLocalizations.of(context)
+                                    .translate('My favorite Airline is'),
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
@@ -237,7 +243,8 @@ class ProfileScreen extends ConsumerWidget {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context).translate('Points received:'),
+                                AppLocalizations.of(context)
+                                    .translate('Points received:'),
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
