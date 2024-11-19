@@ -86,8 +86,8 @@ class _CardChartState extends ConsumerState<CardChart> {
     final UserData = ref.watch(userDataProvider);
 
     final userInformationData = await http.post(
-        // Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
-        Uri.parse('http://10.0.2.2:3000/api/v1/badgeEditUser'),
+        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/badgeEditUser'),
+        // Uri.parse('http://10.0.2.2:3000/api/v1/badgeEditUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

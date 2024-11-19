@@ -293,8 +293,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final UserData = ref.watch(userDataProvider);
     print('✔✔✔💎💎💎$_selectedAirline');
     final userInformationData = await http.post(
-        // Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
-        Uri.parse('http://10.0.2.2:3000/api/v1/editUser'),
+        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
+        // Uri.parse('http://10.0.2.2:3000/api/v1/editUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
