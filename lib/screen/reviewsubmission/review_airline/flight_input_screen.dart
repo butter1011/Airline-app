@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/airline_info_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
@@ -27,7 +27,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
   void initState() {
     super.initState();
     _getAirlineData.getAirlineAirport().then((value) {
-      print('🚝${value["data"]}');
+      print('🚝 $value');
       setState(() {
         airlineData = (value["data"]["data"] as List)
             .where((element) => element['isAirline'] == true)
@@ -42,8 +42,8 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final flightInputState = ref.watch(airlineInfoProvider);
-    bool isValid = ref.read(airlineInfoProvider.notifier).isFormValid();
+    final flightInputState = ref.watch(aviationInfoProvider);
+    bool _isValid = ref.read(aviationInfoProvider.notifier).isAirlineValid();
     return Scaffold(
       appBar: _buildAppBar(context),
       body: isLoading
@@ -67,7 +67,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "From",
                         hintText: "departure Airport",
                         onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
+                            .read(aviationInfoProvider.notifier)
                             .updateFrom(value),
                         airlineNames: airportData,
                       ),
@@ -76,7 +76,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "To",
                         hintText: "destination Airport",
                         onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
+                            .read(aviationInfoProvider.notifier)
                             .updateTo(value),
                         airlineNames: airportData,
                       ),
@@ -85,7 +85,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                         labelText: "Airline",
                         hintText: "your Airline",
                         onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
+                            .read(aviationInfoProvider.notifier)
                             .updateAirline(value),
                         airlineNames: airlineData,
                       ),
@@ -102,7 +102,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               ),
             ),
       bottomNavigationBar:
-          _buildBottomNavigationBar(context, flightInputState, isValid),
+          _buildBottomNavigationBar(context, flightInputState, _isValid),
     );
   }
 
@@ -186,30 +186,30 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               buttonText: "Business",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Business",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Business"),
             ),
             ToggleBtn(
               buttonText: "Premium Economy",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Premium Economy",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Premium Economy"),
             ),
             ToggleBtn(
               buttonText: "Economy",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Economy",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Economy"),
             ),
           ],
@@ -231,28 +231,28 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             ToggleBtn(
               buttonText: "Boarding Passes",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "Boarding Passes",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("Boarding Passes"),
             ),
             ToggleBtn(
               buttonText: "Geolocation",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "Geolocation",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("Geolocation"),
             ),
             ToggleBtn(
               buttonText: "E-Tickets",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "E-Tickets",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("E-Tickets"),
             )
           ],
@@ -276,7 +276,8 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             onTap: () {
               print("🥈$isValid");
               if (isValid) {
-                Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
+                Navigator.pushNamed(
+                    context, AppRoutes.questionfirstscreenforairline);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

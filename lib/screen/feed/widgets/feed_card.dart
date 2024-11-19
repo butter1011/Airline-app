@@ -3,6 +3,7 @@ import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
+import 'package:airline_app/screen/profile/utils/review_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -15,8 +16,14 @@ class FeedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> images = List<String>.from(
-        singleFeedback['Image']); // Ensure it's a List<String>
+    print("This is singelFeedback =============> $singleFeedback");
+    final images = [
+      'review_abudhabi_1.png',
+      'review_ethiopian_2.png',
+      'review_turkish_1.png'
+    ];
+
+    // List<String>.from(singleFeedback['Image']); // Ensure it's a List<String>
     CarouselSliderController buttonCarouselController =
         CarouselSliderController();
     return Column(
@@ -33,8 +40,7 @@ class FeedCard extends StatelessWidget {
               decoration: AppStyles.circleDecoration,
               child: CircleAvatar(
                 radius: 20,
-                backgroundImage:
-                    AssetImage('assets/images/${singleFeedback['Avatar']}'),
+                backgroundImage: AssetImage('assets/images/avatar_1.png'),
               ),
             ),
             SizedBox(
@@ -44,11 +50,11 @@ class FeedCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Benedict Cumberbatch',
+                  singleFeedback['reviewer']['name'],
                   style: AppStyles.textStyle_14_600,
                 ),
                 Text(
-                  'Rated 9/10 on ${singleFeedback['Date']}',
+                  'Rated 9/10 on ${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(8, 10)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(5, 7)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(2, 4)}',
                   style: AppStyles.textStyle_14_400,
                 )
               ],
@@ -72,7 +78,7 @@ class FeedCard extends StatelessWidget {
               width: 6,
             ),
             Text(
-              singleFeedback['Used Airport'],
+              singleFeedback['airline']['name'],
               style: AppStyles.textStyle_14_600,
             )
           ],
@@ -83,14 +89,16 @@ class FeedCard extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Flex with',
+              'Flex From',
               style: AppStyles.textStyle_14_400,
             ),
             SizedBox(
               width: 6,
             ),
             Text(
-              singleFeedback['Path'],
+              singleFeedback['from']['country'] +
+                  " -> " +
+                  singleFeedback['to']['country'],
               style: AppStyles.textStyle_14_600,
             )
           ],
@@ -152,7 +160,7 @@ class FeedCard extends StatelessWidget {
           height: 11,
         ),
         Text(
-          singleFeedback['Content'],
+          singleFeedback['comment'],
           style: AppStyles.textStyle_14_400,
         ),
         SizedBox(

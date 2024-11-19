@@ -649,7 +649,7 @@ List<Map<String, dynamic>> socialList = [
   {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
   {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
 ];
-List<Map<String, dynamic>> mainCategoryAndSubcategory = [
+List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
     'mainCategory': ' Departure and Arrival Experience',
     'iconUrl': 'assets/icons/review_icon_boarding.png',
@@ -706,6 +706,63 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
       'IFE Choices': null,
       'Wi-Fi Speed': null,
       'Wi-Fi Value': null,
+    },
+  },
+];
+List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
+  {
+    'mainCategory': 'Accessibility',
+    'iconUrl': 'assets/icons/review_icon_access.png',
+    'subCategory': {
+      'Ease of Access': null,
+      'Parking Availability': null,
+      'Disability Access': null,
+      'Pet Friendliness': null,
+    },
+  },
+  {
+    'mainCategory': 'Wait Times',
+    'iconUrl': 'assets/icons/review_icon_wait.png',
+    'subCategory': {
+      'Security': null,
+      'Baggage Delivery Time': null,     
+    },
+  },
+  {
+    'mainCategory': 'Helpfulness/Ease of Travel',
+    'iconUrl': 'assets/icons/review_icon_help.png',
+    'subCategory': {
+      'Helpfulness of Airport Staff': null,
+      'Signage Clarity': null,
+      'Ease of Connection': null,
+    },
+  },
+  {
+    'mainCategory': 'Ambience/Comfort',
+    'iconUrl': 'assets/icons/review_icon_ambience.png',
+    'subCategory': {
+      'Ability to Relax/Work': null,
+      'Cleanliness': null,
+      'Availability of Seating Area': null,
+    },
+  },
+  {
+    'mainCategory': 'Food & Beverage and Shopping',
+    'iconUrl': 'assets/icons/review_icon_food.png',
+    'subCategory': {
+      'Value of Shops': null,
+      'Choice of Shops': null,
+      'Value of F&B': null,
+      'Choice of F&B': null,
+    },
+  },
+  {
+    'mainCategory': 'Amenities and Facilities',
+    'iconUrl': 'assets/icons/review_icon_entertainment.png',
+    'subCategory': {
+      'Wi-Fi': null,
+      'Restroom Facilities': null,
+      'Lounges': null,
     },
   },
 ];

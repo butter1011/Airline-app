@@ -13,7 +13,9 @@ class ExampleScreen extends StatelessWidget {
       appBar: AppBar(title: Text('examples mode')),
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        children: [],
+        children: [
+          Text("We are now living on what some people call the digital age, meaning that computer have become on essential")
+        ],
       ),
     );
   }

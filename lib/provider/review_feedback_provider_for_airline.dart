@@ -1,15 +1,15 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final reviewFeedBackProvider =
-    StateNotifierProvider<ReviewFeedBackNotifier, List<Map<String, dynamic>>>(
+final reviewFeedBackProviderForAirline =
+    StateNotifierProvider<ReviewFeedBackForAirlineNotifier, List<Map<String, dynamic>>>(
         (ref) {
-  return ReviewFeedBackNotifier();
+  return ReviewFeedBackForAirlineNotifier();
 });
 
-class ReviewFeedBackNotifier extends StateNotifier<List<Map<String, dynamic>>> {
-  ReviewFeedBackNotifier()
-      : super(mainCategoryAndSubcategory
+class ReviewFeedBackForAirlineNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+  ReviewFeedBackForAirlineNotifier()
+      : super(mainCategoryAndSubcategoryForAirline
             .map((category) => {
                   ...category,
                   'subCategory': category['subCategory']
@@ -90,5 +90,16 @@ class ReviewFeedBackNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     }
 
     return count;
+  }
+
+  void resetState() {
+    state = mainCategoryAndSubcategoryForAirline
+        .map((category) => {
+              ...category,
+              'subCategory': category['subCategory']
+                  .map((key, value) => MapEntry(key, value ?? null))
+                  .cast<String, bool?>()
+            })
+        .toList();
   }
 }

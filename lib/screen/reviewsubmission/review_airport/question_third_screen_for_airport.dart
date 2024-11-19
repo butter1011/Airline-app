@@ -1,34 +1,38 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:airline_app/controller/review_controller.dart';
-import 'package:airline_app/models/review.dart';
-import 'package:airline_app/provider/review_feedback_provider.dart';
-import 'package:airline_app/provider/airline_info_provider.dart';
+import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/models/airport_review_model.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
 
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-class QuestionThirdScreen extends ConsumerStatefulWidget {
-  const QuestionThirdScreen({super.key});
+class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
+  const QuestionThirdScreenForAirport({super.key});
 
   @override
-  ConsumerState<QuestionThirdScreen> createState() =>
-      _QuestionThirdScreenState();
+  ConsumerState<QuestionThirdScreenForAirport> createState() =>
+      _QuestionThirdScreenForAirportState();
 }
 
-class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
+class _QuestionThirdScreenForAirportState
+    extends ConsumerState<QuestionThirdScreenForAirport> {
   List<File> _image = []; // Initialize as an empty list
-  final ReviewController _reviewController = ReviewController();
+  final AirportReviewController _reviewController = AirportReviewController();
   final TextEditingController _commentController =
       TextEditingController(); // Step 1: Declare the controller
+
   String comment = "";
   bool _isLoading = false;
+  bool isSuccess = false;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -43,18 +47,19 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final flightData = ref.watch(airlineInfoProvider);
-    final reviewData = ref.watch(reviewFeedBackProvider);
-    final from = flightData.from;
-    final to = flightData.to;
-    final airline = flightData.airline;
-    final classTravel = flightData.selectedClassOfTravel;
-    final departureArrival = reviewData[0]["subCategory"];
-    final comfort = reviewData[1]["subCategory"];
-    final cleanliness = reviewData[2]["subCategory"];
-    final onboardService = reviewData[3]["subCategory"];
+    final airportData = ref.watch(aviationInfoProvider);
+    final reviewData = ref.watch(reviewFeedBackProviderForAirport);
+    // final userData = ref.watch(userDataProvider);
+    // final reviewer = userData!['userData']['_id'];
+    final airport = airportData.airport;
+    final airline = airportData.airline;
+    // final classTravel = airportData.selectedClassOfTravel;
+    final accessibility = reviewData[0]["subCategory"];
+    final waitTimes = reviewData[1]["subCategory"];
+    final helpfulness = reviewData[2]["subCategory"];
+    final ambienceComfort = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
-    final entertainmentWifi = reviewData[5]["subCategory"];
+    final amenities = reviewData[5]["subCategory"];
 
     return Stack(
       children: [
@@ -101,36 +106,43 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
                         child: NavPageButton(
                           text: 'Submit',
                           onPressed: () async {
+                            _isLoading = true;
                             try {
-                              setState(() {
-                                _isLoading = true;
-                              });
-
-                              final review = Review(
-                                reviewer:
-                                    "67359487d2dee6ec272b920f", // Replace with actual reviewer ID
-                                from: from,
-                                to: to,
-                                classTravel: classTravel,
+                              final review = AirportReviewModel(
+                                reviewer: "67375a13151c33aa85429a29",
+                                // classTravel:classTravel,
                                 airline: airline,
-                                departureArrival: departureArrival,
-                                comfort: comfort,
-                                cleanliness: cleanliness,
-                                onboardService: onboardService,
+                                airport: airport,
+                                accessibility: accessibility,
+                                waitTimes: waitTimes,
+                                helpfulness: helpfulness,
+                                ambienceComfort: ambienceComfort,
                                 foodBeverage: foodBeverage,
-                                entertainmentWifi: entertainmentWifi,
+                                amenities: amenities,
                                 comment: comment,
                               );
-                              print("📞${review.toJson()}");
-
+                              print("⭕${review.toJson()}");
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
-                                print("📞📞📞📞📞");
+                                ref
+                                    .read(aviationInfoProvider.notifier)
+                                    .resetState();
+                                ref
+                                    .read(reviewFeedBackProviderForAirport
+                                        .notifier)
+                                    .resetState();
                                 setState(() {
                                   _isLoading = false;
                                 });
-                                await _buildBottomSheet(context);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.leaderboardscreen);
+                                await _buildBottomSheet(context, () {
+                                  // Navigator.pop(context);
+                                  setState(() {
+                                    isSuccess = true;
+                                  });
+                                });
                               } else {
                                 setState(() {
                                   _isLoading = false;
@@ -276,7 +288,8 @@ class _QuestionThirdScreenState extends ConsumerState<QuestionThirdScreen> {
   }
 }
 
-Future<void> _buildBottomSheet(BuildContext context) {
+Future<void> _buildBottomSheet(
+    BuildContext context, VoidCallback isSucceded) async {
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent, // Make background transparent
@@ -285,60 +298,86 @@ Future<void> _buildBottomSheet(BuildContext context) {
     builder: (context) {
       return BackdropFilter(
         filter: ImageFilter.blur(
-            sigmaX: 10, sigmaY: 10), // Adjust sigma values for blur intensity
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(
-                0.9), // Slightly transparent white background for the sheet itself
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          height: MediaQuery.of(context).size.height * 0.37,
-          child: Column(
-            children: [
-              Container(
-                padding:
-                    EdgeInsets.only(top: 27, bottom: 16, left: 24, right: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text("Your Score is 9",
-                          style: AppStyles.textStyle_32_600),
+          sigmaX: 10,
+          sigmaY: 10,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FutureBuilder(
+              future: Future.delayed(Duration(seconds: 4)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return Container(
+                    height: 350,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/success.gif'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    SizedBox(height: 21),
-                    Text(
-                      "You've earned 100 points",
-                      style: AppStyles.textStyle_24_600
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "Your feedback helps make every journey better!",
-                      style: AppStyles.textStyle_14_400,
-                    ),
-                    SizedBox(height: 18),
-                    Row(
-                      children: [
-                        _ReviewScoreIcon(
-                            iconUrl: 'assets/icons/review_cup.png'),
-                        SizedBox(width: 16),
-                        _ReviewScoreIcon(
-                            iconUrl: 'assets/icons/review_notification.png'),
-                      ],
-                    )
-                  ],
-                ),
+                  );
+                }
+                return SizedBox(height: 350);
+              },
+            ),
+            SizedBox(height: 60),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              Divider(thickness: 2, color: Colors.black),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: NavButton(
-                    text: "Review airport",
-                    onPressed: () {},
-                    color: Colors.white),
-              )
-            ],
-          ),
+              height: MediaQuery.of(context).size.height * 0.37,
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 27, bottom: 16, left: 24, right: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text("Your Score is 9",
+                              style: AppStyles.textStyle_32_600),
+                        ),
+                        SizedBox(height: 21),
+                        Text(
+                          "You've earned 100 points",
+                          style: AppStyles.textStyle_24_600
+                              .copyWith(fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          "Your feedback helps make every journey better!",
+                          style: AppStyles.textStyle_14_400,
+                        ),
+                        SizedBox(height: 18),
+                        Row(
+                          children: [
+                            _ReviewScoreIcon(
+                                iconUrl: 'assets/icons/review_cup.png'),
+                            SizedBox(width: 16),
+                            _ReviewScoreIcon(
+                                iconUrl:
+                                    'assets/icons/review_notification.png'),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(thickness: 2, color: Colors.black),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    child: NavButton(
+                        text: "Review airport",
+                        onPressed: isSucceded,
+                        color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       );
     },

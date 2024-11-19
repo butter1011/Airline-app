@@ -1,34 +1,38 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AirlineInfoState {
+class AviationInfoState {
   final String from;
   final String to;
   final String airline;
+  final String airport;
   final String selectedClassOfTravel;
   final String? selectedSynchronize;
   final List<dynamic> dateRange;
 
-  AirlineInfoState({
+  AviationInfoState({
     this.from = '',
     this.to = '',
     this.airline = '',
+    this.airport = '',
     this.selectedClassOfTravel = '',
     this.selectedSynchronize = '',
     this.dateRange = const [],
   });
 
-  AirlineInfoState copyWith({
+  AviationInfoState copyWith({
     String? from,
     String? to,
     String? airline,
+    String? airport,
     String? selectedClassOfTravel,
     String? selectedSynchronize,
     List<dynamic>? dateRange,
   }) {
-    return AirlineInfoState(
+    return AviationInfoState(
       from: from ?? this.from,
       to: to ?? this.to,
       airline: airline ?? this.airline,
+      airport: airport ?? this.airport,
       selectedClassOfTravel:
           selectedClassOfTravel ?? this.selectedClassOfTravel,
       selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
@@ -36,7 +40,7 @@ class AirlineInfoState {
     );
   }
 
-  bool isValid() {
+  bool isValidForAirline() {
     return from.isNotEmpty &&
         to.isNotEmpty &&
         airline.isNotEmpty &&
@@ -45,10 +49,19 @@ class AirlineInfoState {
         selectedSynchronize!.isNotEmpty &&
         dateRange.isNotEmpty;
   }
+
+  bool isValidForAirport() {
+    return airline.isNotEmpty &&
+        airport.isNotEmpty &&
+        selectedClassOfTravel.isNotEmpty &&
+        selectedSynchronize != null &&
+        selectedSynchronize!.isNotEmpty &&
+        dateRange.isNotEmpty;
+  }
 }
 
-class AirlineInfoNorifier extends StateNotifier<AirlineInfoState> {
-  AirlineInfoNorifier() : super(AirlineInfoState());
+class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
+  AirlineInfoNorifier() : super(AviationInfoState());
 
   void updateFrom(String value) {
     state = state.copyWith(from: value);
@@ -60,6 +73,10 @@ class AirlineInfoNorifier extends StateNotifier<AirlineInfoState> {
 
   void updateAirline(String value) {
     state = state.copyWith(airline: value);
+  }
+
+  void updateAirport(String value) {
+    state = state.copyWith(airport: value);
   }
 
   void updateClassOfTravel(String value) {
@@ -74,13 +91,21 @@ class AirlineInfoNorifier extends StateNotifier<AirlineInfoState> {
     state = state.copyWith(dateRange: value);
   }
 
-  bool isFormValid() {
-    return state.isValid();
+  void resetState() {
+    state = AviationInfoState();
+  }
+
+  bool isAirlineValid() {
+    return state.isValidForAirline();
+  }
+
+  bool isAirportValid() {
+    return state.isValidForAirport();
   }
 }
 
 // Provider for the AirlineInfoNorifier
-final airlineInfoProvider =
-    StateNotifierProvider<AirlineInfoNorifier, AirlineInfoState>((ref) {
+final aviationInfoProvider =
+    StateNotifierProvider<AirlineInfoNorifier, AviationInfoState>((ref) {
   return AirlineInfoNorifier();
 });

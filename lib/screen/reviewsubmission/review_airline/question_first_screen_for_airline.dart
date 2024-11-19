@@ -1,5 +1,5 @@
-import 'package:airline_app/provider/review_feedback_provider.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -7,14 +7,15 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuestionFirstScreen extends ConsumerWidget {
-  const QuestionFirstScreen({super.key});
+class QuestionFirstScreenForAirline extends ConsumerWidget {
+  const QuestionFirstScreenForAirline({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(reviewFeedBackProvider);
-    final int numberOfSelectedAspects =
-        ref.watch(reviewFeedBackProvider.notifier).numberOfSelectedAspects();
+    final selections = ref.watch(reviewFeedBackProviderForAirline);
+    final int numberOfSelectedAspects = ref
+        .watch(reviewFeedBackProviderForAirline.notifier)
+        .numberOfSelectedAspects();
     print("❤$numberOfSelectedAspects");
 
     return Scaffold(
@@ -38,11 +39,11 @@ class QuestionFirstScreen extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(selections, int numberOfSelectedAspects) {
     final List<Map<String, dynamic>> feedbackOptions =
-        mainCategoryAndSubcategory;
+        mainCategoryAndSubcategoryForAirline;
 
     List<String> mainCategoryNames = [];
 
-    for (var category in mainCategoryAndSubcategory) {
+    for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
 
@@ -67,7 +68,7 @@ class QuestionFirstScreen extends ConsumerWidget {
               ),
               itemCount: feedbackOptions.length, // Use the length of the list
               itemBuilder: (context, index) {
-                return FeedbackOption(
+                return FeedbackOptionForAirline(
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
@@ -111,7 +112,7 @@ class QuestionFirstScreen extends ConsumerWidget {
                     text: 'Next',
                     onPressed: () {
                       Navigator.pushNamed(
-                          context, AppRoutes.questionsecondscreen);
+                          context, AppRoutes.questionsecondscreenforairline);
                     },
                     icon: Icons.arrow_forward),
               )

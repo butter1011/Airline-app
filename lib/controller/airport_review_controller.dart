@@ -1,14 +1,15 @@
 import 'dart:convert';
 
-import 'package:airline_app/models/review.dart';
+import 'package:airline_app/models/airline_review_model.dart';
+import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:http/http.dart' as http;
 
-class ReviewController {
-  Future<bool> saveReview(Review review) async {
+class AirportReviewController {
+  Future<bool> saveReview(AirportReviewModel review) async {
     try {
       final response = await http.post(
-        Uri.parse('$apiUrl/api/v1/airline-review'),
+        Uri.parse('$apiUrl/api/v1/airport-review'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

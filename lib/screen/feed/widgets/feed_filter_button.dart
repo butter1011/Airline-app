@@ -2,9 +2,14 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class FeedFilterButton extends StatefulWidget {
-  const FeedFilterButton({super.key, required this.text});
+  const FeedFilterButton({
+    super.key,
+    required this.text,
+    required this.onSelectionChanged,
+  });
 
   final String text;
+  final Function(bool) onSelectionChanged;
 
   @override
   State<FeedFilterButton> createState() => _FeedFilterButtonState();
@@ -27,15 +32,18 @@ class _FeedFilterButtonState extends State<FeedFilterButton> {
         setState(() {
           _isSelected = !_isSelected;
         });
+        widget.onSelectionChanged(_isSelected);
       },
       child: Container(
         // Diameter of the circular avatar
         height: 48, // Diameter of the circular avatar
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: _isSelected
+          color: widget.text == "All"
               ? AppStyles.mainColor
-              : Colors.white, // Background color
+              : (_isSelected
+                  ? AppStyles.mainColor
+                  : Colors.white), // Background color
           border: Border.all(width: 2, color: Colors.black), // Border color
           boxShadow: const [
             BoxShadow(color: Colors.black, offset: Offset(2, 2))

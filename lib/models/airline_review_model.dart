@@ -1,4 +1,4 @@
-class Review {
+class AirlineReviewModel {
   final String reviewer;
   final String from;
   final String to;
@@ -12,7 +12,7 @@ class Review {
   final Map<String, dynamic> entertainmentWifi;
   final String comment;
 
-  Review({
+  AirlineReviewModel({
     required this.reviewer,
     required this.from,
     required this.to,
@@ -44,8 +44,8 @@ class Review {
     };
   }
 
-  factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(
+  factory AirlineReviewModel.fromJson(Map<String, dynamic> json) {
+    return AirlineReviewModel(
       reviewer: json['reviewer'],
       from: json['from'],
       to: json['to'],

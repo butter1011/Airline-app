@@ -16,40 +16,6 @@ class ReviewsubmissionScreen extends StatefulWidget {
 }
 
 class _ReviewsubmissionScreenState extends State<ReviewsubmissionScreen> {
-  // Map<String, dynamic> _data = {}; // Initialize data
-  // bool _loading = true; // Add loading state
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchData(); // Call fetchData on initialization
-  // }
-
-  // Future<void> fetchData() async {
-  //   final String url =
-  //       'http://10.0.2.2:8000/data'; // Replace with your API endpoint
-
-  //   try {
-  //     final response = await http.get(Uri.parse(url));
-
-  //     if (response.statusCode == 200) {
-  //       setState(() {
-  //         _data = json
-  //             .decode(response.body); // Update the state with the fetched data
-  //         // _loading = false; // Set loading to false when data is fetched
-  //         print("🧡🧡 ${_data["message"]}");
-  //       });
-  //     } else {
-  //       throw Exception('Failed to load data: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       _data = {'error': e.toString()}; // Update the state with the error
-  //       // _loading = false; // Set loading to false on error
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     List<dynamic> flights = airportCardList['flights'];

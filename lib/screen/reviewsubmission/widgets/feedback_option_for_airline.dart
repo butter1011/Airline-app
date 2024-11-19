@@ -1,32 +1,32 @@
-import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class FeedbackOption extends StatelessWidget {
+class FeedbackOptionForAirline extends StatelessWidget {
   final int numForIdentifyOfParent;
   final String iconUrl;
   final int label;
   final int selectedNumberOfSubcategoryForLike;
   final int numberOfSelectedAspects;
 
-  const FeedbackOption(
+  const FeedbackOptionForAirline(
       {super.key,
       required this.numForIdentifyOfParent,
       required this.iconUrl,
       required this.label,
       required this.selectedNumberOfSubcategoryForLike,
       required this.numberOfSelectedAspects});
-  // final List<String> mainCategoryNames = mainCategoryAndSubcategory.keys.toList();
+  // final List<String> mainCategoryNames = mainCategoryAndSubcategoryForAirline.keys.toList();
 
   @override
   Widget build(BuildContext context) {
     List<String> mainCategoryNames = [];
 
-    for (var category in mainCategoryAndSubcategory) {
+    for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     final labelName = mainCategoryNames[label];
@@ -38,14 +38,14 @@ class FeedbackOption extends StatelessWidget {
           if (numberOfSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
-            Navigator.pushNamed(context, AppRoutes.detailfirstscreen,
+            Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairline,
                 arguments: {'singleAspect': label});
           }
         } else if (numForIdentifyOfParent == 2) {
           if (numberOfSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
-            Navigator.pushNamed(context, AppRoutes.detailsecondscreen,
+            Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairline,
                 arguments: {'singleAspect': label});
           }
         }
