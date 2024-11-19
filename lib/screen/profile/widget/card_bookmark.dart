@@ -37,23 +37,16 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      print('💚💚💚💚💚$responseData');
 
       if (responseData is Map<String, dynamic> &&
           responseData['formattedReviews'] is List) {
         final formattedReviews = responseData['formattedReviews'] as List;
 
         setState(() {
-          bookmarks = formattedReviews.expand((continent) {
-            if (continent is Map<String, dynamic> &&
-                continent['data'] is List) {
-              return (continent['data'] as List)
-                  .map((item) => item as Map<String, dynamic>);
-            }
-            return <Map<String, dynamic>>[];
-          }).toList();
+          bookmarks = List<Map<String, dynamic>>.from(
+              formattedReviews.map((item) => Map<String, dynamic>.from(item)));
         });
-        print(bookmarks);
+        print('💚💚💚💚💚$bookmarks');
       } else {
         throw Exception('Unexpected response format');
       }
@@ -81,7 +74,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      bookmarkvalue['continent'],
+                      '${bookmarkvalue['continent']} (${bookmarkvalue['data'].length})',
                       style: TextStyle(
                           fontFamily: 'Clash Grotesk',
                           fontSize: 20,
