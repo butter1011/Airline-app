@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:airline_app/provider/bookmark_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/profile/book_mark_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,11 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
             children: [
               InkWell(
                 onTap: () {
+                  print(bookmarkvalue);
+                  ref
+                      .read(bookmarkDataProvider.notifier)
+                      .setBookmarkData(bookmarkvalue['data']);
+
                   Navigator.pushNamed(
                     context,
                     AppRoutes.bookmarkprofilescreen,
