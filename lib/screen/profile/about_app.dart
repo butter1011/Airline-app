@@ -1,4 +1,4 @@
-import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/screen/profile/utils/about_app.dart';
 
 import 'package:airline_app/utils/app_styles.dart';
 
@@ -6,69 +6,69 @@ import 'package:flutter/material.dart';
 
 class AboutApp extends StatelessWidget {
   const AboutApp({super.key});
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+      centerTitle: true,
+      title: Text('About App',
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(4.0),
+        child: Container(color: Colors.black, height: 4.0),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, AppRoutes.profilescreen);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            size: 24,
-          ),
-        ),
-        title: Text(
-          "About the app",
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: _buildAppBar(context),
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(
-            thickness: 4,
-            color: Colors.black,
-          ),
           SizedBox(
             height: 24,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Headline goes here',
-                  style: AppStyles.textStyle_14_400,
+          ...aboutAppList.map((value) {
+            return Column(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(value['topic'], style: AppStyles.textStyle_16_600),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'The secondary next goes here, creating the\n second row next',
-                  style: AppStyles.textStyle_14_400,
-                  maxLines: null,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        value['contents'],
+                        style: AppStyles.textStyle_14_400,
+                        maxLines: null,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+            ]);
+          }).toList(),
         ],
       ),
     );

@@ -1,12 +1,6 @@
 import 'dart:convert';
-
 import 'package:airline_app/controller/get_airline_controller.dart';
-import 'package:airline_app/provider/airline_info_provider.dart';
-import 'package:airline_app/provider/favorite_airline_provider.dart';
-import 'package:airline_app/screen/logIn/logIn.dart';
-import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/screen/reviewsubmission/flight_input_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';

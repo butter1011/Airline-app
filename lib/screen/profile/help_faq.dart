@@ -1,12 +1,11 @@
-import 'package:airline_app/screen/profile/utils/terms_of_service_json.dart';
-import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/screen/profile/utils/help_faqs_json.dart';
 
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';
 
-class TermsOfService extends StatelessWidget {
-  const TermsOfService({super.key});
+class HelpFaq extends StatelessWidget {
+  const HelpFaq({super.key});
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: MediaQuery.of(context).size.height * 0.1,
@@ -16,7 +15,7 @@ class TermsOfService extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Terms of Service',
+      title: Text('Help & FAQs',
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),
@@ -36,7 +35,7 @@ class TermsOfService extends StatelessWidget {
           SizedBox(
             height: 24,
           ),
-          ...termsOfServiceList.map((value) {
+          ...helpAndFaqsList.map((value) {
             return Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),

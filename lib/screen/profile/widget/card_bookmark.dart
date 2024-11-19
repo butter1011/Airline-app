@@ -1,14 +1,71 @@
-import 'package:airline_app/screen/profile/utils/book_mark_json.dart';
+import 'dart:convert';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
-class CardBookMark extends StatelessWidget {
-  const CardBookMark({super.key});
+// Define a FutureProvider to fetch the bookmark data
+
+class CardBookMark extends ConsumerStatefulWidget {
+  const CardBookMark({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<CardBookMark> createState() => _CardBookMarkState();
+}
+
+class _CardBookMarkState extends ConsumerState<CardBookMark> {
+  List<Map<String, dynamic>> bookmarks = [];
+  @override
+  void initState() {
+    super.initState();
+    _profileBookmark();
+  }
+
+  void _profileBookmark() async {
+    final userData = ref.read(userDataProvider);
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/api/v1/airline/profile/review'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode({
+        '_id': userData?['userData']['_id'],
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print('💚💚💚💚💚$responseData');
+
+      if (responseData is Map<String, dynamic> &&
+          responseData['formattedReviews'] is List) {
+        final formattedReviews = responseData['formattedReviews'] as List;
+
+        setState(() {
+          bookmarks = formattedReviews.expand((continent) {
+            if (continent is Map<String, dynamic> &&
+                continent['data'] is List) {
+              return (continent['data'] as List)
+                  .map((item) => item as Map<String, dynamic>);
+            }
+            return <Map<String, dynamic>>[];
+          }).toList();
+        });
+        print(bookmarks);
+      } else {
+        throw Exception('Unexpected response format');
+      }
+    } else {
+      throw Exception('Failed to load bookmarks');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: bookMark.map((bookmarkvalue) {
+      children: bookmarks.map((bookmarkvalue) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
           child: Column(
@@ -24,7 +81,7 @@ class CardBookMark extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      bookmarkvalue['countryName'],
+                      bookmarkvalue['continent'],
                       style: TextStyle(
                           fontFamily: 'Clash Grotesk',
                           fontSize: 20,
@@ -46,5 +103,3 @@ class CardBookMark extends StatelessWidget {
     );
   }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////

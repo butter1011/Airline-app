@@ -1,7 +1,7 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
-
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -159,7 +159,7 @@ class ProfileScreen extends ConsumerWidget {
                                           ),
                                           Center(
                                             child: Text(
-                                              'Flyer type: ${UserData?['userData']['flyertype']}',
+                                              '${AppLocalizations.of(context).translate('Flyer type')}: ${UserData?['userData']['flyertype']}',
                                               style: TextStyle(
                                                   fontFamily: 'Clash Grotesk',
                                                   fontSize: 16,
@@ -209,7 +209,7 @@ class ProfileScreen extends ConsumerWidget {
                           child: Row(
                             children: [
                               Text(
-                                'My favorite Airline is',
+                                AppLocalizations.of(context).translate('My favorite Airline is'),
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,
@@ -232,12 +232,12 @@ class ProfileScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 4,
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Row(
                             children: [
                               Text(
-                                'Point received:',
+                                AppLocalizations.of(context).translate('Points received:'),
                                 style: TextStyle(
                                   fontFamily: 'Clash Grotesk',
                                   letterSpacing: 0.3,

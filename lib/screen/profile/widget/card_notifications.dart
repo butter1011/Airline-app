@@ -1,25 +1,29 @@
 import 'dart:ui';
-
+import 'package:airline_app/main.dart';
 import 'package:airline_app/screen/profile/widget/basic_button%20english.dart';
 
 import 'package:airline_app/screen/profile/widget/basic_language_button.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class CardNotifications extends StatefulWidget {
-  const CardNotifications({super.key});
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+class CardNotifications extends ConsumerStatefulWidget {
   @override
-  State<CardNotifications> createState() => _CardNotificationsState();
+  ConsumerState<CardNotifications> createState() => _CardNotificationsState();
 }
 
-class _CardNotificationsState extends State<CardNotifications> {
+class _CardNotificationsState extends ConsumerState<CardNotifications> {
   String _selectedLanguage = 'English';
-  void _changeLanguageFun(String language) {
+  String _selectedLanguageSym = 'en';
+  void _changeLanguageFun(String language, String lSym) {
     setState(() {
-      _selectedLanguage = language; // Update selected language
+      _selectedLanguage = language;
+      _selectedLanguageSym = lSym;
+      // Update selected language
     });
     // Call your modal bottom sheet or any other functionality here
     // showModalBottomSheet(...);
@@ -42,7 +46,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Notifications (5)',
+                  AppLocalizations.of(context).translate('Notifications (5)'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -71,7 +75,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Contact Support',
+                  AppLocalizations.of(context).translate('Contact Support'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -100,7 +104,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Calendar Sync',
+                  AppLocalizations.of(context).translate('Calendar Sync'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -129,7 +133,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Edit Profile',
+                  AppLocalizations.of(context).translate('Edit Profile'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -151,14 +155,14 @@ class _CardNotificationsState extends State<CardNotifications> {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                AppRoutes.cardnotificationscreen,
+                AppRoutes.helpFaqs,
               );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Help & FAQs',
+                  AppLocalizations.of(context).translate('Help & FAQs'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -187,7 +191,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'About the App',
+                  AppLocalizations.of(context).translate("About the app"),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -216,7 +220,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Terms of Service',
+                  AppLocalizations.of(context).translate('Terms of Service'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -239,7 +243,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'App Language',
+                  AppLocalizations.of(context).translate('App Language'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -260,7 +264,8 @@ class _CardNotificationsState extends State<CardNotifications> {
             children: [
               InkWell(
                 onTap: () {
-                  _changeLanguageFun('English');
+                  _changeLanguageFun('English', 'en');
+
                   // Navigator.pushNamed(context, AppRoutes.aboutapp);
                   _changeLanguage(context);
                 },
@@ -270,11 +275,11 @@ class _CardNotificationsState extends State<CardNotifications> {
                     myColor: _selectedLanguage == 'English'
                         ? AppStyles.mainColor
                         : Colors.white,
-                    btntext: "English"),
+                    btntext: AppLocalizations.of(context).translate("English")),
               ),
               InkWell(
                 onTap: () {
-                  _changeLanguageFun('Chinese');
+                  _changeLanguageFun('Chinese', 'zh');
                   // Navigator.pushNamed(context, AppRoutes.aboutapp);
                   _changeLanguage(context);
                 },
@@ -284,11 +289,11 @@ class _CardNotificationsState extends State<CardNotifications> {
                     myColor: _selectedLanguage == 'Chinese'
                         ? AppStyles.mainColor
                         : Colors.white,
-                    btntext: "Chinese"),
+                    btntext: AppLocalizations.of(context).translate("Chinese")),
               ),
               InkWell(
                 onTap: () {
-                  _changeLanguageFun('Russian');
+                  _changeLanguageFun('Russian', 'ru');
                   // Navigator.pushNamed(context, AppRoutes.aboutapp);
                   _changeLanguage(context);
                 },
@@ -298,7 +303,7 @@ class _CardNotificationsState extends State<CardNotifications> {
                     myColor: _selectedLanguage == 'Russian'
                         ? AppStyles.mainColor
                         : Colors.white,
-                    btntext: "Russian"),
+                    btntext: AppLocalizations.of(context).translate("Russian")),
               ),
             ],
           ),
@@ -319,7 +324,7 @@ class _CardNotificationsState extends State<CardNotifications> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Sign Out',
+                  AppLocalizations.of(context).translate('Sign Out'),
                   style: TextStyle(
                       fontFamily: 'Clash Grotesk',
                       fontSize: 20,
@@ -360,7 +365,7 @@ class _CardNotificationsState extends State<CardNotifications> {
             ),
             // Modal content
             Container(
-              height: 181,
+              height: MediaQuery.of(context).size.height * 0.26,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -394,7 +399,8 @@ class _CardNotificationsState extends State<CardNotifications> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      "Are you sure you want to change to Chinese?",
+                      AppLocalizations.of(context).translate(
+                          "Change to ${_selectedLanguage}? Are you sure you want to change to ${_selectedLanguage}?"),
                       style: AppStyles.textStyle_14_400,
                     ),
                   ),
@@ -415,19 +421,23 @@ class _CardNotificationsState extends State<CardNotifications> {
                             mywidth: 155,
                             myheight: 56,
                             myColor: Colors.white,
-                            btntext: "No, leave",
+                            btntext: AppLocalizations.of(context)
+                                .translate("No, leave"),
                           ),
                         ),
                         InkWell(
                           onTap: () {
-                            // Implement language change logic here
+                            ref.read(localeProvider.notifier).state = Locale(
+                                '$_selectedLanguageSym',
+                                ''); // Implement language change logic here
                             Navigator.pop(context);
                           },
                           child: BasicLanguageButton(
                             mywidth: 155,
                             myheight: 56,
                             myColor: AppStyles.mainColor,
-                            btntext: "Yes, change",
+                            btntext: AppLocalizations.of(context)
+                                .translate("Yes, change"),
                           ),
                         ),
                       ],
@@ -439,6 +449,32 @@ class _CardNotificationsState extends State<CardNotifications> {
           ],
         );
       },
+    );
+  }
+}
+
+class ItemWidget extends StatelessWidget {
+  const ItemWidget({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  final String? title;
+  final String? content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Text(title ?? '')),
+          const Text(' : '),
+          Expanded(child: Text(content ?? '')),
+        ],
+      ),
     );
   }
 }
