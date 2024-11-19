@@ -9,6 +9,7 @@ import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/about_app.dart';
 import 'package:airline_app/screen/profile/book_mark_screen.dart';
 import 'package:airline_app/screen/profile/edit_profile_screen.dart';
+import 'package:airline_app/screen/profile/help_faq.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
@@ -22,11 +23,15 @@ import 'package:airline_app/screen/reviewsubmission/flight_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 void main() {
@@ -37,16 +42,31 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+final localeProvider = StateProvider<Locale>((ref) => Locale('en', ''));
+
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return MaterialApp(
+      locale: locale,
+      supportedLocales: [
+        Locale('en', ''),
+        Locale('zh', ''),
+        Locale('ru', ''),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
@@ -88,8 +108,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
+        AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
-   
       },
       debugShowCheckedModeBanner: false,
     );

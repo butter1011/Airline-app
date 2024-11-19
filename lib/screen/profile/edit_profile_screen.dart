@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:airline_app/provider/favorite_airline_provider.dart';
-import 'package:airline_app/screen/logIn/logIn.dart';
-import 'package:airline_app/screen/profile/profile_screen.dart';
+import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -21,6 +18,11 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  List<dynamic> airlineData = [];
+  List<dynamic> airportData = [];
+  String? _selectedAirline;
+  bool isLoading = true;
+  final _getAirlineData = GetAirlineController();
 
   @override
   void dispose() {
@@ -30,35 +32,32 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _getAirlineData.getAirlineAirport().then((value) {
+      print('🚝${value["data"]}');
+      setState(() {
+        airlineData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == true)
+            .toList();
+        airportData = (value["data"]["data"] as List)
+            .where((element) => element['isAirline'] == false)
+            .toList();
+      });
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final UserData = ref.watch(userDataProvider);
     _nameController.text = '${UserData?['userData']['name']}';
     _bioController.text = '${UserData?['userData']['bio']}';
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, AppRoutes.profilescreen);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            size: 24,
-          ),
-        ),
-        title: Text(
-          "Edit Profile",
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
-      ),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 4,
-              color: AppStyles.littleBlackColor,
-            ),
             SizedBox(
               height: 20,
             ),
@@ -169,22 +168,22 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             SizedBox(
               height: 24,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Your Favorite Airline",
-                    style: AppStyles.textStyle_14_600,
-                  ),
-                ],
-              ),
-            ),
+
             SizedBox(
               height: 8,
             ),
-            FavoriteAirlineDropdown(),
+            // FavoriteAirlineDropdown(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: EditCustomDropdownButton(
+                labelText: "Your Favorite Airline",
+                hintText: "${UserData?['userData']['favoriteairlines']}",
+                onChanged: (value) => setState(() {
+                  _selectedAirline = value;
+                }),
+                airlineNames: airlineData,
+              ),
+            )
           ],
         ),
       ),
@@ -199,8 +198,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: InkWell(
               onTap: () {
-                showCustomSnackbar(context);
-
                 _editProfileFunction();
               },
               child: Container(
@@ -294,16 +291,18 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _editProfileFunction() async {
     final UserData = ref.watch(userDataProvider);
-
+    print('✔✔✔💎💎💎$_selectedAirline');
     final userInformationData = await http.post(
         Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
+        // Uri.parse('http://10.0.2.2:3000/api/v1/editUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
           'name': _nameController.text,
           'bio': _bioController.text,
-          '_id': UserData?['userData']['_id']
+          '_id': UserData?['userData']['_id'],
+          'favoriteAirline': _selectedAirline
         }));
 
     if (userInformationData.statusCode == 200) {
@@ -312,6 +311,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
+      showCustomSnackbar(context);
 
       // You might want to store the user ID or navigate to a new screen
     } else {
@@ -319,110 +319,142 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       print('Changing the userProfile failed: ${userInformationData.body}');
     }
   }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+      centerTitle: true,
+      title: Text('Edit  Profile',
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(4.0),
+        child: Container(color: Colors.black, height: 4.0),
+      ),
+    );
+  }
 }
 
-class FavoriteAirlineDropdown extends StatefulWidget {
+class EditCustomDropdownButton extends StatefulWidget {
+  const EditCustomDropdownButton(
+      {super.key,
+      required this.labelText,
+      required this.hintText,
+      required this.onChanged,
+      required this.airlineNames});
+
+  final String labelText;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+  final List<dynamic> airlineNames;
+
   @override
-  _FavoriteAirlineDropdownState createState() =>
-      _FavoriteAirlineDropdownState();
+  State<EditCustomDropdownButton> createState() =>
+      _EditCustomDropdownButtonState();
 }
 
-class _FavoriteAirlineDropdownState extends State<FavoriteAirlineDropdown> {
-  String? _selectedItem;
-  bool _isExpanded = false; // Variable to hold the selected item
-  final List<String> _favoriteAirlineItems = [
-    'American Airlines',
-    'Delta Air Lines',
-    'United Airlines',
-    'Southwest Airlines',
-  ];
+class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
+  final TextEditingController textEditingController = TextEditingController();
+  String? selectedValue;
 
   @override
-  void initState() {
-    super.initState();
-    _selectedItem = _favoriteAirlineItems[0]; // Set default selected item
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
-            },
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(width: 2),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectedItem ?? '',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.grey.shade600,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (_isExpanded)
-            Container(
-              margin: EdgeInsets.only(top: 4),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: ListView(
-                shrinkWrap: true,
-                children: _favoriteAirlineItems.map((String value) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedItem = value;
-                        _isExpanded = false;
-                      });
-                    },
-                    child: Container(
-                      height: 40,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: _selectedItem == value
-                            ? Colors.grey.withOpacity(0.2)
-                            : Colors.transparent,
-                      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.labelText, style: AppStyles.textStyle_14_600),
+        const SizedBox(height: 8),
+        DropdownButtonHideUnderline(
+          child: DropdownButton2<String>(
+            isExpanded: true,
+            hint: Text('Select ${widget.hintText}',
+                style: AppStyles.textStyle_15_400
+                    .copyWith(color: Color(0xFF38433E))),
+            items: widget.airlineNames
+                .map((item) => DropdownMenuItem<String>(
+                      value: item['name'],
                       child: Text(
-                        value,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
+                        item['name'],
+                        style: const TextStyle(
+                          fontSize: 14,
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
-              ),
+                    ))
+                .toList(),
+            value: selectedValue,
+            onChanged: (value) {
+              var id = widget.airlineNames
+                  .where((element) => element['name'] == value)
+                  .first['_id'];
+              print("👌  $value  $id");
+
+              setState(() {
+                selectedValue = value;
+              });
+              widget.onChanged(selectedValue ?? ""); // Call the callback
+            },
+            buttonStyleData: ButtonStyleData(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: AppStyles.cardDecoration,
+              height: 48,
             ),
-        ],
-      ),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 200,
+              decoration: AppStyles.cardDecoration,
+            ),
+            menuItemStyleData: const MenuItemStyleData(height: 40),
+            dropdownSearchData: DropdownSearchData(
+              searchController: textEditingController,
+              searchInnerWidgetHeight: 50,
+              searchInnerWidget: Container(
+                height: 50,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                padding: const EdgeInsets.only(
+                  top: 8,
+                  bottom: 4,
+                  right: 8,
+                  left: 8,
+                ),
+                child: TextFormField(
+                  expands: true,
+                  maxLines: null,
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    hintText: "Select ${widget.hintText}",
+                    hintStyle: AppStyles.textStyle_15_400
+                        .copyWith(color: Color(0xFF38433E)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              searchMatchFn: (item, searchValue) {
+                return item.value.toString().contains(searchValue);
+              },
+            ),
+            onMenuStateChange: (isOpen) {
+              if (!isOpen) {
+                textEditingController.clear();
+              }
+            },
+            iconStyleData: IconStyleData(icon: Icon(Icons.expand_more)),
+          ),
+        )
+      ],
     );
   }
 }
