@@ -96,7 +96,7 @@ class ReviewFlightCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    originAirport + "->" + destinationAirport,
+                    '$originAirport -> $destinationAirport',
                     style: AppStyles.textStyle_16_600
                         .copyWith(color: Colors.black),
                   ),
