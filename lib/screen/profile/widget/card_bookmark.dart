@@ -41,7 +41,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      print('💚💚💚💚💚$responseData');
+      // print('💚💚💚💚💚$responseData');
       if (responseData is Map<String, dynamic> &&
           responseData['formattedReviews'] is List) {
         final formattedReviews = responseData['formattedReviews'] as List;

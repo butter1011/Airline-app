@@ -26,7 +26,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   List<dynamic> airportData = [];
   String? _selectedAirline;
   bool isLoading = true;
-  final _getAirlineData = GetAirlineController();
+  final _getAirlineData = GetAirlineAirportController();
 
   @override
   void dispose() {
