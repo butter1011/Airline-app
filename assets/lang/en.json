@@ -6,8 +6,9 @@
   "Real-Time Insights": "Real-Time Insights",
   "Stay updated and share feedback while you're still in the moment": "Stay updated and share feedback while you're still in the moment",
   "Get Started": "Get Started",
-  "All Airline Airport": "All Airline Airport",
-
+  "All": "All",
+"Airline": "Airline",
+"Airport": "Airport",
   "Onboard": "Onboard",
   "Trending Airlines & Airports": "Trending Airlines & Airports",
   "Expand more": "Expand more",
@@ -82,5 +83,54 @@
   "Sam - AI Flight planner": "Sam - AI Flight planner",
   "Change to Chinese? Are you sure you want to change to Chinese?": "Change to Chinese? Are you sure you want to change to Chinese?",
   "Change to English? Are you sure you want to change to English?": "Change to English? Are you sure you want to change to English?",
-  "Change to Russian? Are you sure you want to change to Russian?": "Change to Russian? Are you sure you want to change to Russian?"
+  "Change to Russian? Are you sure you want to change to Russian?": "Change to Russian? Are you sure you want to change to Russian?",
+  
+    "Top Reviewer": "Top Reviewer",
+    "Service Maven": "Service Maven",
+    "Connoisseur": "Connoisseur",
+    "Enthusiast": "Enthusiast",
+    "Facility Virtuoso": "Facility Virtuoso",
+    "Spotless Traveler": "Spotless Traveler",
+    
+      "Showing": "Showing",
+      "Highest Score": "Highest Score",
+      "Mid Score": "Mid Score",
+      "Lowest Score": "Lowest Score",
+     
+        "Filter by category": "Filter by category",
+        
+          "Reviews": "Reviews",
+          "Flights": "Flights",
+          "Airports": "Airports",
+          "Not here?": "Not here?",
+          "WizAir 2923": "WizAir 2923",
+          "Japan": "Japan",
+          "Tokyo": "Tokyo",
+          "Romania": "Romania",
+          "Bucharest": "Bucharest",
+          "Recent Flight": "Recent Flight",
+          "London": "London",
+          "UK": "UK",
+          "United Arab Emirates": "United Arab Emirates",
+          "Abu Dhabi Airport": "Abu Dhabi Airport",
+          "Visited recently": "Visited recently",
+          "Chisinau Airport": "Chisinau Airport",
+          "Moldova": "Moldova",
+          "Heathrow Airport": "Heathrow Airport",
+          "Upcoming visit": "Upcoming visit",
+          
+            "Nothing to show here": "Nothing to show here",
+            "Here, you can synchronize your calendar and wallet or manually input the review details.": "Here, you can synchronize your calendar and wallet or manually input the review details.",
+            "Input manually": "Input manually",
+            "Synchronize": "Synchronize"
+          
+          
+        
+        
+    
+      
+    
+    
+  
+  
 }

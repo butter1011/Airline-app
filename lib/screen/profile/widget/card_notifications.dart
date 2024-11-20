@@ -97,7 +97,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                AppRoutes.cardnotificationscreen,
+                AppRoutes.calendersyncscreen,
               );
             },
             child: Row(

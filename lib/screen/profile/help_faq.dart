@@ -3,7 +3,7 @@ import 'package:airline_app/screen/profile/utils/help_faqs_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';
-
+import 'package:airline_app/utils/app_localizations.dart';
 class HelpFaq extends StatelessWidget {
   const HelpFaq({super.key});
   AppBar _buildAppBar(BuildContext context) {
@@ -15,7 +15,7 @@ class HelpFaq extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Help & FAQs',
+      title: Text(AppLocalizations.of(context).translate('Help & FAQs'),
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),

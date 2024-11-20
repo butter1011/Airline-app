@@ -66,7 +66,7 @@ class CairCategoryReviews extends StatelessWidget {
           Row(
             children: [
               Text(
-                AppLocalizations.of(context).translate('Flex with'),
+                AppLocalizations.of(context).translate("Flex with"),
                 style: AppStyles.normalTextStyle,
               ),
               SizedBox(

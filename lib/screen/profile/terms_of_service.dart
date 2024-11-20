@@ -3,7 +3,7 @@ import 'package:airline_app/screen/profile/utils/terms_of_service_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';
-
+import 'package:airline_app/utils/app_localizations.dart';
 class TermsOfService extends StatelessWidget {
   const TermsOfService({super.key});
   AppBar _buildAppBar(BuildContext context) {
@@ -15,7 +15,7 @@ class TermsOfService extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Terms of Service',
+      title: Text(AppLocalizations.of(context).translate('Terms of Service'),
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),

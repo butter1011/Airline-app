@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,7 @@ class _FeedFilterButtonState extends State<FeedFilterButton> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: Text(
-              widget.text,
+              AppLocalizations.of(context).translate('${widget.text}'),
               style: AppStyles.textStyle_14_600,
             ),
           ),

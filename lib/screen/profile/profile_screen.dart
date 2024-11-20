@@ -11,7 +11,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final UserData = ref.watch(userDataProvider);
-    print('💦💦💦${UserData}');
+    // print('💦💦💦${UserData}');
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(currentIndex: 4),
@@ -76,7 +76,9 @@ class ProfileScreen extends ConsumerWidget {
                                                 height: 16,
                                               ),
                                               Text(
-                                                ' ${UserData?['userData']['selectedbadges']}',
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        '${UserData?['userData']['selectedbadges']}'),
                                                 style: TextStyle(
                                                     fontFamily: 'Clash Grotesk',
                                                     fontSize: 16,

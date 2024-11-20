@@ -3,38 +3,38 @@ import 'package:airline_app/screen/profile/widget/support_sent_message_box.dart'
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
 
+
+AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+      centerTitle: true,
+      title: Text(AppLocalizations.of(context).translate('Support'),
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(4.0),
+        child: Container(color: Colors.black, height: 4.0),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, AppRoutes.profilescreen);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            size: 24,
-          ),
-        ),
-        title: Text(
-          "Support",
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
-      ),
+      appBar:_buildAppBar(context),
       body: Stack(
         children: [
           Column(
             children: [
-              Container(
-                height: 4,
-                color: AppStyles.littleBlackColor,
-              ),
+            
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),

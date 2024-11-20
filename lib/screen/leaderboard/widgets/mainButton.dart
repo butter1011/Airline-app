@@ -1,6 +1,6 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-
+import 'package:airline_app/utils/app_localizations.dart';
 class MainButton extends StatefulWidget {
   const MainButton({super.key, required this.text});
 
@@ -45,9 +45,10 @@ class _MainButtonState extends State<MainButton> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: Text(
-              widget.text,
+             AppLocalizations.of(context).translate('${widget.text}'),
               style: AppStyles.textStyle_14_600,
             ),
+            
           ),
         ),
       ),

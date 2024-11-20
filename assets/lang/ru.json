@@ -6,7 +6,9 @@
   "Real-Time Insights": "Аналитика в реальном времени",
   "Stay updated and share feedback while you're still in the moment": "Оставайтесь в курсе и делитесь отзывами, пока вы находитесь в моменте",
   "Get Started": "Начать",
-  "All Airline Airport": "Все аэропорты авиакомпаний",
+  "All": "Все",
+  "Airline": "аэропорты",
+  "Airport": "авиакомпаний",
   "Cleanliness": "Чистота",
   "Onboard": "На борту",
   "Trending Airlines & Airports": "Популярные авиакомпании и аэропорты",
@@ -80,8 +82,55 @@
   "No, leave": "Нет, оставить",
   "Yes, change": "Да, сменить",
   "Sam - AI Flight planner": "Сэм - AI планировщик полетов",  
-  "Are you sure you want to change to English?": "Сменить на английский? Вы уверены, что хотите сменить на английский?",
-  "Are you sure you want to change to Russian?": "Сменить на русский? Вы уверены, что хотите сменить на русский?"
+  "Change to English? Are you sure you want to change to English?": "Сменить на английский? Вы уверены, что хотите сменить на английский?",
+  "Change to Russian? Are you sure you want to change to Russian?": "Сменить на русский? Вы уверены, что хотите сменить на русский?",
+  "Top Reviewer": "Лучший рецензент",
+  "Service Maven": "Мастер сервиса",
+  "Connoisseur": "Знаток",
+  "Enthusiast": "Энтузиаст",
+  "Facility Virtuoso": "Виртуоз удобств",
+  "Spotless Traveler": "Безупречный путешественник",
   
+    "Showing": "Показать",
+    "Highest Score": "Высший балл",
+    "Mid Score": "Средний балл",
+    "Lowest Score": "Низший балл",
+    
+      "Filter by category": "Фильтр по категории",
+
+      
+        "Reviews": "Отзывы",
+        "Flights": "Рейсы",
+        "Airports": "Аэропорты",
+        "Not here?": "Не здесь?",
+        "WizAir 2923": "WizAir 2923",
+        "Japan": "Япония",
+        "Tokyo": "Токио",
+        "Romania": "Румыния",
+        "Bucharest": "Бухарест",
+        "Recent Flight": "Недавний рейс",
+        "London": "Лондон",
+        "UK": "Великобритания",
+        "United Arab Emirates": "Объединенные Арабские Эмираты",
+        "Abu Dhabi Airport": "Аэропорт Абу-Даби",
+        "Visited recently": "Недавно посещено",
+        "Chisinau Airport": "Аэропорт Кишинева",
+        "Moldova": "Молдова",
+        "Heathrow Airport": "Аэропорт Хитроу",
+        "Upcoming visit": "Предстоящий визит",
+      
+      
+        
+          "Nothing to show here": "Здесь нечего показывать",
+          "Here, you can synchronize your calendar and wallet or manually input the review details.": "Здесь вы можете синхронизировать свой календарь и кошелек или вручную ввести детали отзыва.",
+          "Input manually": "Ввести вручную",
+          "Synchronize": "Синхронизировать"
+        
+        
+      
+      
+   
+  
+
   
 }

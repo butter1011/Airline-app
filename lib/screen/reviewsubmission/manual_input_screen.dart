@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class ManualInputScreen extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Input Manually',
+          AppLocalizations.of(context).translate('Input Manually'),
           style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
@@ -31,7 +32,7 @@ class ManualInputScreen extends StatelessWidget {
           children: [
             _InputCard(
                 imagePath: 'assets/icons/input_airport.png',
-                title: 'Airport Input',
+                title: AppLocalizations.of(context).translate('Airport Input'),
                 onClick: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -48,7 +49,8 @@ class ManualInputScreen extends StatelessWidget {
             _buildOrDivider(),
             _InputCard(
               imagePath: 'assets/icons/input_flight.png',
-              title: 'Flight Input',
+              title: AppLocalizations.of(context).translate('Flight Input'),
+
               onClick: () => Navigator.pushNamed(
                   context,
                   AppRoutes
