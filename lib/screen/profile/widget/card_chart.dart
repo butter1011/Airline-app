@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_localizations.dart';
-
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/screen/profile/widget/review_button.dart';
@@ -85,17 +84,15 @@ class _CardChartState extends ConsumerState<CardChart> {
   void _badgeFunction(int index) async {
     final UserData = ref.watch(userDataProvider);
 
-    final userInformationData = await http.post(
-        Uri.parse(
-            'https://airline-backend-c8p8.onrender.com/api/v1/badgeEditUser'),
-        // Uri.parse('http://10.0.2.2:3000/api/v1/badgeEditUser'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'selectedbadges': buttons[index]['label']!,
-          '_id': UserData?['userData']['_id'],
-        }));
+    final userInformationData =
+        await http.post(Uri.parse('$apiUrl/api/v1/badgeEditUser'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode({
+              'selectedbadges': buttons[index]['label']!,
+              '_id': UserData?['userData']['_id'],
+            }));
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);

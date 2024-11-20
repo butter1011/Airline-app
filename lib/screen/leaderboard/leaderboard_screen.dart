@@ -98,7 +98,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        print('💚💚$data');
+        // print('💚💚$data');
         setState(() {
           reviewList = List<Map<String, dynamic>>.from(data);
           isReviewsLoading = false;

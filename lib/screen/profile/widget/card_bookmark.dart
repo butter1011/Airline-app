@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:airline_app/provider/bookmark_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:airline_app/utils/app_routes.dart';
 
 import 'package:flutter/material.dart';
@@ -28,9 +28,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
   void _profileBookmark() async {
     final userData = ref.read(userDataProvider);
     final response = await http.post(
-      Uri.parse(
-          'https://airline-backend-c8p8.onrender.com/api/v1/airline/profile/review'),
-      // Uri.parse('http://10.0.2.2:3000/api/v1/airline/profile/review'),
+      Uri.parse('$apiUrl/api/v1/airline/profile/review'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -41,7 +39,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      print('💚💚💚💚💚$responseData');
+      // print('💚💚💚💚💚$responseData');
       if (responseData is Map<String, dynamic> &&
           responseData['formattedReviews'] is List) {
         final formattedReviews = responseData['formattedReviews'] as List;

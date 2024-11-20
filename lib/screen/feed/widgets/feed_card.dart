@@ -94,12 +94,10 @@ class FeedCard extends StatelessWidget {
             SizedBox(
               width: 6,
             ),
-            Text(
-              singleFeedback['from']['country'] +
-                  " -> " +
-                  singleFeedback['to']['country'],
-              style: AppStyles.textStyle_14_600,
-            )
+              Text(
+                "${singleFeedback['from']['location']} -> ${singleFeedback['to']['location']}",
+                style: AppStyles.textStyle_14_600,
+              )
           ],
         ),
         SizedBox(
