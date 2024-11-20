@@ -77,25 +77,25 @@ class _ReviewsubmissionScreenState extends State<ReviewsubmissionScreen> {
               ],
             ),
             SizedBox(height: 12),
-            // Column(
-            //   children: [
-            //     // Display Flights
-            //     ...flights.map((singleFlight) {
-            //       return Padding(
-            //         padding: const EdgeInsets.symmetric(vertical: 12.0),
-            //         child: ReviewFlightCard(singleFlight: singleFlight),
-            //       );
-            //     }),
+            Column(
+              children: [
+                // Display Flights
+                ...flights.map((singleFlight) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: ReviewFlightCard(singleFlight: singleFlight),
+                  );
+                }),
 
-            //     // Display Airports
-            //     ...airports.map((singleAirport) {
-            //       return Padding(
-            //         padding: const EdgeInsets.symmetric(vertical: 12.0),
-            //         child: ReviewAirportCard(singleAirport: singleAirport),
-            //       );
-            //     }),
-            //   ],
-            // ),
+                // Display Airports
+                ...airports.map((singleAirport) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: ReviewAirportCard(singleAirport: singleAirport),
+                  );
+                }),
+              ],
+            ),
           ],
         ),
       ),
