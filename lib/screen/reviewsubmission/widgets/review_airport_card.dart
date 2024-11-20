@@ -34,8 +34,8 @@ class ReviewAirportCard extends ConsumerWidget {
           final String airportId = airlineAirportNotifier.getAirportId(airport);
           aviationInfoNotifier.updateAirport(airportId);
           final aviation = ref.watch(aviationInfoProvider);
-          // print(
-              // "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline}");
+          print(
+              "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline}");
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
         },
         child: Container(

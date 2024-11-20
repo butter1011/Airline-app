@@ -134,7 +134,7 @@ class MyApp extends ConsumerWidget {
             QuestionThirdScreenForAirport(),
 
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
-        AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
+        // AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
