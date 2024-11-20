@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:airline_app/provider/favorite_airline_provider.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
@@ -296,7 +296,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final UserData = ref.watch(userDataProvider);
 
     final userInformationData = await http.post(
-        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
+        Uri.parse('$apiUrl/api/v1/editUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

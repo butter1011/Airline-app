@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -24,7 +23,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   bool isLeaderboardLoading = true;
   bool isReviewsLoading = true;
   int expandedItems = 5;
-  late WebSocketChannel _channel;
+  late IOWebSocketChannel _channel;
 
   @override
   void initState() {
@@ -43,21 +42,26 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Future<void> connectWebSocket() async {
     try {
       _channel = IOWebSocketChannel.connect(
-        'wss://$backendUrl/api/v1/airline-airport',
+        Uri.parse('wss://$backendUrl:8080/ws'),
       );
+      print('WebSocket connected');
 
-      await _channel.ready;
       _channel.stream.listen((message) {
         final data = json.decode(message);
         if (data['type'] == 'airlineAirport') {
           setState(() {
             leaderBoardList = List<Map<String, dynamic>>.from(data['data']);
             isLeaderboardLoading = false;
+            print("leaderboard data: $leaderBoardList");
           });
         }
+      }, onError: (error) {
+        print("WebSocket error: $error");
+      }, onDone: () {
+        print("WebSocket connection closed");
       });
     } catch (e) {
-      print("error for connecting the websocket");
+      print("Error connecting to WebSocket: $e");
     }
   }
 
@@ -327,6 +331,8 @@ class _AirportListSection extends StatelessWidget {
               return AirportList(
                 name: singleAirport['name'],
                 isAirline: singleAirport['isAirline'],
+                isIncreasing: singleAirport['isIncreasing'],
+                totalReviews: singleAirport['totalReviews'],
                 index: index,
               );
             }

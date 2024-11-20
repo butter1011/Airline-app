@@ -8,7 +8,7 @@ class ReviewController {
   Future<bool> saveReview(Review review) async {
     try {
       final response = await http.post(
-        Uri.parse('$apiUrl/api/v1/airline-review'),
+        Uri.parse('$apiUrl/api/v2/airline-review'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
