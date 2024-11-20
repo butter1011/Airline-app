@@ -23,65 +23,68 @@ Map<String, dynamic> airportList = {
     'Polynesia'
   ]
 };
-Map<String, dynamic> airportCardList = {
-  'flights': [
-    {
-      'origin': {
-        'country': 'Japan',
-        'city': 'Tokyo',
-        'flag': 'assets/icons/flag_Japan.png',
-        'time': '17:55'
-      },
-      'destination': {
-        'country': 'Romania',
-        'city': 'Bucharest',
-        'flag': 'assets/icons/flag_Romania.png',
-        'time': '20:55'
-      },
-      'flight number': 'UO 2923',
-      'visit status': 'Recent Flight'
-    },
-    {
-      'origin': {
-        'country': 'Romania',
-        'city': 'Bucharest',
-        'flag': 'assets/icons/flag_Romania.png',
-        'time': '20:55'
-      },
-      'destination': {
-        'country': 'UK',
-        'city': 'London',
-        'flag': 'assets/icons/flag_UK.png',
-        'time': '14:55'
-      },
-      'flight number': 'U1 3933',
-      'visit status': 'Recent Flight'
-    },
-  ],
-  'airports': [
-    {
-      'country': 'United Arab Emirates',
-      'airport': 'Abu Dhabi Airport',
-      'flag': 'assets/icons/flag_United Arab Emirates.png',
-      'visit status': 'Visited recently',
+List<Map<String, Object>> airportCardList = [
+  {
+    'from': {
+      'country': 'Japan',
+      'airport': 'Beijing Capital',
+      'flag': 'assets/icons/flag_Japan.png',
       'time': '17:55'
     },
-    {
-      'country': 'Moldova',
-      'airport': 'Chisinau Airport',
-      'flag': 'assets/icons/flag_Moldova.png',
-      'visit status': 'Visited recently',
+    'to': {
+      'country': 'Romania',
+      'airport': 'Indira Gandhi',
+      'flag': 'assets/icons/flag_Romania.png',
       'time': '20:55'
     },
-    {
-      'country': 'UK',
-      'airport': 'Heathrow Airport',
-      'flag': 'assets/icons/flag_UK.png',
-      'visit status': 'Upcoming visit',
-      'time': '17:55'
+    "class of travel": "Economy",
+    'airline': 'Emirates',
+    'flight number': 'UO 2923',
+    'visit status': 'Recent Flight'
+  },
+  {
+    'from': {
+      'country': 'Istanbul',
+      'airport': 'Zurich Airport',
+      'flag': 'assets/icons/flag_Romania.png',
+      'time': '20:55'
     },
-  ]
-};
+    'to': {
+      'country': 'UK',
+      'airport': 'Tokyo Airport',
+      'flag': 'assets/icons/flag_UK.png',
+      'time': '14:55'
+    },
+    "class of travel": "First",
+    'airline': 'Air France',
+    'flight number': 'U1 3933',
+    'visit status': 'Recent Flight'
+  },
+];
+// 'airports': [
+//   {
+//     'country': 'United Arab Emirates',
+//     'airport': 'Abu Dhabi Airport',
+//     'flag': 'assets/icons/flag_United Arab Emirates.png',
+//     'visit status': 'Visited recently',
+//     'time': '17:55'
+//   },
+//   {
+//     'country': 'Moldova',
+//     'airport': 'Chisinau Airport',
+//     'flag': 'assets/icons/flag_Moldova.png',
+//     'visit status': 'Visited recently',
+//     'time': '20:55'
+//   },
+//   {
+//     'country': 'UK',
+//     'airport': 'Heathrow Airport',
+//     'flag': 'assets/icons/flag_UK.png',
+//     'visit status': 'Upcoming visit',
+//     'time': '17:55'
+//   },
+// ]
+
 List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
@@ -649,7 +652,7 @@ List<Map<String, dynamic>> socialList = [
   {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
   {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
 ];
-List<Map<String, dynamic>> mainCategoryAndSubcategory = [
+List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
     'mainCategory': ' Departure and Arrival Experience',
     'iconUrl': 'assets/icons/review_icon_boarding.png',
@@ -662,7 +665,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
   },
   {
     'mainCategory': 'Comfort',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_comfort.png',
     'subCategory': {
       'Seat Width': null,
       'Legroom': null,
@@ -673,7 +676,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
   },
   {
     'mainCategory': 'Cleanliness',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_cleanliness.png',
     'subCategory': {
       'Cabin': null,
       'Toilet': null,
@@ -681,7 +684,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
   },
   {
     'mainCategory': 'Onboard Service',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_onboard.png',
     'subCategory': {
       'Responsiveness': null,
       'Helpfulness': null,
@@ -689,7 +692,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
   },
   {
     'mainCategory': 'Food & Beverage',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Choice': null,
       'Taste': null,
@@ -700,12 +703,69 @@ List<Map<String, dynamic>> mainCategoryAndSubcategory = [
   },
   {
     'mainCategory': 'Entertainment and Wi-Fi',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_entertainment.png',
     'subCategory': {
       'IFE Availability': null,
       'IFE Choices': null,
       'Wi-Fi Speed': null,
       'Wi-Fi Value': null,
+    },
+  },
+];
+List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
+  {
+    'mainCategory': 'Accessibility',
+    'iconUrl': 'assets/icons/review_icon_access.png',
+    'subCategory': {
+      'Ease of Access': null,
+      'Parking Availability': null,
+      'Disability Access': null,
+      'Pet Friendliness': null,
+    },
+  },
+  {
+    'mainCategory': 'Wait Times',
+    'iconUrl': 'assets/icons/review_icon_wait.png',
+    'subCategory': {
+      'Security': null,
+      'Baggage Delivery Time': null,
+    },
+  },
+  {
+    'mainCategory': 'Helpfulness/Ease of Travel',
+    'iconUrl': 'assets/icons/review_icon_help.png',
+    'subCategory': {
+      'Helpfulness of Airport Staff': null,
+      'Signage Clarity': null,
+      'Ease of Connection': null,
+    },
+  },
+  {
+    'mainCategory': 'Ambience/Comfort',
+    'iconUrl': 'assets/icons/review_icon_ambience.png',
+    'subCategory': {
+      'Ability to Relax/Work': null,
+      'Cleanliness': null,
+      'Availability of Seating Area': null,
+    },
+  },
+  {
+    'mainCategory': 'Food & Beverage and Shopping',
+    'iconUrl': 'assets/icons/review_icon_food.png',
+    'subCategory': {
+      'Value of Shops': null,
+      'Choice of Shops': null,
+      'Value of F&B': null,
+      'Choice of F&B': null,
+    },
+  },
+  {
+    'mainCategory': 'Amenities and Facilities',
+    'iconUrl': 'assets/icons/review_icon_entertainment.png',
+    'subCategory': {
+      'Wi-Fi': null,
+      'Restroom Facilities': null,
+      'Lounges': null,
     },
   },
 ];

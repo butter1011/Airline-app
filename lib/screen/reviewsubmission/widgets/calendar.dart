@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/airline_info_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,9 +13,10 @@ class CalendarWidget extends ConsumerStatefulWidget {
 }
 
 class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
-  dynamic _startDate = ''; // Initialize with an empty string
-  dynamic _endDate = ''; // Initialize with an empty string
+  late String _startDate;
+  late String _endDate;
   final DateRangePickerController _controller = DateRangePickerController();
+  late List<String> dateRange;
 
   @override
   void initState() {
@@ -24,8 +25,15 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
     // Set initial dates
     _startDate = DateFormat('dd, MMMM yyyy').format(today);
     _endDate = DateFormat('dd, MMMM yyyy').format(today.add(Duration(days: 3)));
+    dateRange = [_startDate, _endDate];
     _controller.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(aviationInfoProvider.notifier)
+          .updateDateRange([_startDate, _endDate]);
+    });
   }
 
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -36,9 +44,9 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
           .format(args.value.endDate ?? args.value.startDate);
 
       List<String> dateRange = [_startDate, _endDate];
-      ref.read(airlineInfoProvider.notifier).updateDateRange(dateRange);
+      ref.read(aviationInfoProvider.notifier).updateDateRange(dateRange);
 
-      print("Selected dates👑: ${ref.watch(airlineInfoProvider).dateRange}");
+      // print("Selected dates👑: ${ref.watch(aviationInfoProvider).dateRange}");
     });
   }
 

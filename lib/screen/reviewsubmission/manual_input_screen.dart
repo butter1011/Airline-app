@@ -31,20 +31,11 @@ class ManualInputScreen extends StatelessWidget {
         child: ListView(
           children: [
             _InputCard(
-                imagePath: 'assets/icons/input_airport.png',
-                title: AppLocalizations.of(context).translate('Airport Input'),
-                onClick: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(seconds: 2),
-                      backgroundColor: AppStyles.mainColor,
-                      content: Text(
-                        "Coming Soon...",
-                        style: AppStyles.textStyle_15_600,
-                      ),
-                    ),
-                  );
-                }),
+              imagePath: 'assets/icons/input_airport.png',
+              title: 'Airport Input',
+              onClick: () =>
+                  Navigator.pushNamed(context, AppRoutes.airportinput),
+            ),
             const SizedBox(height: 23),
             _buildOrDivider(),
             _InputCard(

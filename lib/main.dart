@@ -15,13 +15,19 @@ import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
-import 'package:airline_app/screen/reviewsubmission/detail_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/detail_second_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_second_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/question_third_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/flight_input_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/detail_second_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_third_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/flight_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/airport_input_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/detail_first_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/detail_second_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_second_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_third_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -100,18 +106,40 @@ class MyApp extends ConsumerWidget {
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         AppRoutes.manualinput: (context) => ManualInputScreen(),
+
+        //Airlines routes
         AppRoutes.flightinput: (context) => FlightInputScreen(),
-        AppRoutes.questionfirstscreen: (context) => QuestionFirstScreen(),
-        AppRoutes.detailfirstscreen: (context) => DetailFirstScreen(),
-        AppRoutes.questionsecondscreen: (context) => QuestionSecondScreen(),
-        AppRoutes.detailsecondscreen: (context) => DetailSecondScreen(),
-        AppRoutes.questionthirdscreen: (context) => QuestionThirdScreen(),
+        AppRoutes.questionfirstscreenforairline: (context) =>
+            QuestionFirstScreenForAirline(),
+        AppRoutes.detailfirstscreenforairline: (context) =>
+            DetailFirstScreenForAirline(),
+        AppRoutes.questionsecondscreenforairline: (context) =>
+            QuestionSecondScreenForAirline(),
+        AppRoutes.detailsecondscreenforairline: (context) =>
+            DetailSecondScreenForAirline(),
+        AppRoutes.questionthirdscreenforairline: (context) =>
+            QuestionThirdScreenForAirline(),
+
+        // Airports routes
+        AppRoutes.airportinput: (context) => AirportInputScreen(),
+        AppRoutes.questionfirstscreenforairport: (context) =>
+            QuestionFirstScreenForAirport(),
+        AppRoutes.detailfirstscreenforairport: (context) =>
+            DetailFirstScreenForAirport(),
+        AppRoutes.questionsecondscreenforairport: (context) =>
+            QuestionSecondScreenForAirport(),
+        AppRoutes.detailsecondscreenforairport: (context) =>
+            DetailSecondScreenForAirport(),
+        AppRoutes.questionthirdscreenforairport: (context) =>
+            QuestionThirdScreenForAirport(),
+
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
         AppRoutes.calendersyncscreen: (context) => CalenderSyncScreen(),
+   
       },
       debugShowCheckedModeBanner: false,
     );

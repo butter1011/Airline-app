@@ -1,32 +1,33 @@
-import 'package:airline_app/provider/review_feedback_provider.dart';
-import 'package:airline_app/screen/reviewsubmission/question_first_screen.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetailFirstScreen extends ConsumerWidget {
-  const DetailFirstScreen({super.key});
+class DetailFirstScreenForAirline extends ConsumerWidget {
+  const DetailFirstScreenForAirline({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(reviewFeedBackProvider);
+    final selections = ref.watch(reviewFeedBackProviderForAirline);
 
     // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
     List<String> mainCategoryNames = [];
-    for (var category in mainCategoryAndSubcategory) {
+    for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     String singleAspect = mainCategoryNames[singleIndex];
 
     // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
-        mainCategoryAndSubcategory[singleIndex]['subCategory'];
+        mainCategoryAndSubcategoryForAirline[singleIndex]['subCategory'];
 
     final selectedItemNumter = ref
-        .watch(reviewFeedBackProvider.notifier)
+        .watch(reviewFeedBackProviderForAirline.notifier)
         .selectedNumberOfSubcategoryForLike(singleIndex);
 
     return Scaffold(
@@ -116,7 +117,7 @@ class DetailFirstScreen extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(
       WidgetRef ref, int singleIndex, subCategoryList, selections) {
-    // List isSelectedList = ref.watch(reviewFeedBackProvider);
+    // List isSelectedList = ref.watch(reviewFeedBackProviderForAirline);
 
     return Wrap(
       spacing: 16,
@@ -132,7 +133,7 @@ class DetailFirstScreen extends ConsumerWidget {
             value == false
                 ? print("Value is false, no action performed.")
                 : ref
-                    .read(reviewFeedBackProvider.notifier)
+                    .read(reviewFeedBackProviderForAirline.notifier)
                     .selectLike(singleIndex, key);
           },
           child: Opacity(
