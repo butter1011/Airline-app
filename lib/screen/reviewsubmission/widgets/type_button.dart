@@ -2,42 +2,28 @@ import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class TypeButton extends StatefulWidget {
-  const TypeButton({super.key, required this.text});
+class TypeButton extends StatelessWidget {
+  const TypeButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  @override
-  State<TypeButton> createState() => _TypeButtonButtonState();
-}
-
-class _TypeButtonButtonState extends State<TypeButton> {
-  late bool _isSelected = false;
-  @override
-  void initState() {
-    super.initState();
-    // Initialize _isSelected based on the text
-    _isSelected = widget.text == "All"; // Set to true if text is "All"
-  }
-
-  // final Color color;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isSelected = !_isSelected;
-        });
-      },
+      onTap: onTap,
       child: Container(
-        // Diameter of the circular avatar
-        height: 40, // Diameter of the circular avatar
+        height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: _isSelected
-              ? AppStyles.mainColor
-              : Colors.white, // Background color
-          border: Border.all(width: 2, color: Colors.black), // Border color
+          color: isSelected ? AppStyles.mainColor : Colors.white,
+          border: Border.all(width: 2, color: Colors.black),
           boxShadow: const [
             BoxShadow(color: Colors.black, offset: Offset(2, 2))
           ],
@@ -46,7 +32,7 @@ class _TypeButtonButtonState extends State<TypeButton> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Center(
             child: Text(
-              AppLocalizations.of(context).translate('${widget.text}'),
+              text,
               style: AppStyles.textStyle_14_600,
             ),
           ),

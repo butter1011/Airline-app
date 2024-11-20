@@ -11,9 +11,11 @@ class FeedbackCard extends StatelessWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
 
   final Map<String, dynamic> singleFeedback;
+  
 
   @override
   Widget build(BuildContext context) {
+  
     final List<String> images = List<String>.from([
       'review_abudhabi_1.png',
       'review_ethiopian_2.png',

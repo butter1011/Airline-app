@@ -1,4 +1,5 @@
-import 'package:airline_app/provider/airline_info_provider.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
@@ -10,97 +11,89 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 
-class FlightInputScreen extends ConsumerStatefulWidget {
-  FlightInputScreen({super.key});
+class AirportInputScreen extends ConsumerStatefulWidget {
+  AirportInputScreen({super.key});
 
   @override
-  ConsumerState<FlightInputScreen> createState() => _FlightInputScreenState();
+  ConsumerState<AirportInputScreen> createState() => _AirportInputScreenState();
 }
 
-class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
-  final _getAirlineData = GetAirlineController();
-  List<dynamic> airlineData = [];
-  List<dynamic> airportData = [];
-  bool isLoading = true;
+class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
+  // final _getAirlineData = GetAirlineAirportController();
+  // List<dynamic> airlineData = [];
+  // List<dynamic> airportData = [];
+  // bool isLoading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _getAirlineData.getAirlineAirport().then((value) {
-      print('🚝${value["data"]}');
-      setState(() {
-        airlineData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == true)
-            .toList();
-        airportData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == false)
-            .toList();
-      });
-      isLoading = false;
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getAirlineData.getAirlineAirport().then((value) {
+  //     print('🚝 $value');
+  //     setState(() {
+  //       airlineData = (value["data"]["data"] as List)
+  //           .where((element) => element['isAirline'] == true)
+  //           .toList();
+  //       airportData = (value["data"]["data"] as List)
+  //           .where((element) => element['isAirline'] == false)
+  //           .toList();
+  //     });
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final flightInputState = ref.watch(airlineInfoProvider);
-    bool isValid = ref.read(airlineInfoProvider.notifier).isFormValid();
+    final flightInputState = ref.watch(aviationInfoProvider);
+    final airlineAirportState = ref.watch(airlineAirportProvider);
+    List<dynamic> airlineData = airlineAirportState.airlineData;
+    List<dynamic> airportData = airlineAirportState.airportData;
+    bool isValid = ref.read(aviationInfoProvider.notifier).isAirportValid();
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: isLoading
-          ? Center(child: LoadingWidget())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 19),
-                  _buildInfoText(
-                      "Add your flight schedule below or sync your calendar/email"),
-                  const SizedBox(height: 22),
-                  _buildSectionTitle("Synchronize (Recommended):"),
-                  const SizedBox(height: 13),
-                  _buildSyncButtons(),
-                  const SizedBox(height: 18),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomDropdownButton(
-                        labelText: "From",
-                        hintText: "departure Airport",
-                        onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
-                            .updateFrom(value),
-                        airlineNames: airportData,
-                      ),
-                      const SizedBox(height: 18),
-                      CustomDropdownButton(
-                        labelText: "To",
-                        hintText: "destination Airport",
-                        onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
-                            .updateTo(value),
-                        airlineNames: airportData,
-                      ),
-                      const SizedBox(height: 18),
-                      CustomDropdownButton(
-                        labelText: "Airline",
-                        hintText: "your Airline",
-                        onChanged: (value) => ref
-                            .read(airlineInfoProvider.notifier)
-                            .updateAirline(value),
-                        airlineNames: airlineData,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  CalendarWidget(),
-                  const SizedBox(height: 18),
-                  _buildTravelClassSelection(ref),
-                  const SizedBox(height: 18),
-                  _buildAdditionalSyncOptions(ref),
-                  const SizedBox(height: 16),
-                ],
-              ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: ListView(
+          children: [
+            const SizedBox(height: 19),
+            _buildInfoText(
+                "Add your flight schedule below or sync your calendar/email"),
+            const SizedBox(height: 22),
+            _buildSectionTitle("Synchronize (Recommended):"),
+            const SizedBox(height: 13),
+            _buildSyncButtons(),
+            const SizedBox(height: 18),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomDropdownButton(
+                  labelText: "Airline",
+                  hintText: "your Airline",
+                  onChanged: (value) => ref
+                      .read(aviationInfoProvider.notifier)
+                      .updateAirline(value),
+                  airlineNames: airlineData,
+                ),
+                const SizedBox(height: 18),
+                CustomDropdownButton(
+                  labelText: "Airport",
+                  hintText: "your Airport",
+                  onChanged: (value) => ref
+                      .read(aviationInfoProvider.notifier)
+                      .updateAirport(value),
+                  airlineNames: airportData,
+                ),
+              ],
             ),
+            const SizedBox(height: 18),
+            CalendarWidget(),
+            const SizedBox(height: 18),
+            _buildTravelClassSelection(ref),
+            const SizedBox(height: 18),
+            _buildAdditionalSyncOptions(ref),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
       bottomNavigationBar:
           _buildBottomNavigationBar(context, flightInputState, isValid),
     );
@@ -115,7 +108,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Flight Input',
+      title: Text('Airport Input',
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),
@@ -163,7 +156,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
         ),
         onPressed: () {
           // Add functionality for syncing here
-          print('$label button pressed'); // Placeholder for functionality
+    // Placeholder for functionality
         },
         child: Center(
           child: Text(label, style: AppStyles.textStyle_14_600),
@@ -186,30 +179,30 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               buttonText: "Business",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Business",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Business"),
             ),
             ToggleBtn(
               buttonText: "Premium Economy",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Premium Economy",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Premium Economy"),
             ),
             ToggleBtn(
               buttonText: "Economy",
               height: 40,
               isSelected:
-                  ref.watch(airlineInfoProvider).selectedClassOfTravel ==
+                  ref.watch(aviationInfoProvider).selectedClassOfTravel ==
                       "Economy",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Economy"),
             ),
           ],
@@ -231,28 +224,28 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             ToggleBtn(
               buttonText: "Boarding Passes",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "Boarding Passes",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("Boarding Passes"),
             ),
             ToggleBtn(
               buttonText: "Geolocation",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "Geolocation",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("Geolocation"),
             ),
             ToggleBtn(
               buttonText: "E-Tickets",
               height: 40,
-              isSelected: ref.watch(airlineInfoProvider).selectedSynchronize ==
+              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
                   "E-Tickets",
               onSelected: () => ref
-                  .read(airlineInfoProvider.notifier)
+                  .read(aviationInfoProvider.notifier)
                   .updateSynchronize("E-Tickets"),
             )
           ],
@@ -274,9 +267,10 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
-              print("🥈$isValid");
+              // print("🥈$isValid");
               if (isValid) {
-                Navigator.pushNamed(context, AppRoutes.questionfirstscreen);
+                Navigator.pushNamed(
+                    context, AppRoutes.questionfirstscreenforairport);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
