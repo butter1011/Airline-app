@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +39,7 @@ class _LoginState extends ConsumerState<Login> {
 
       if (userData.channel == 'WHATSAPP') {
         response = await http.post(
-          Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/user'),
+          Uri.parse('$apiUrl/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -50,7 +51,7 @@ class _LoginState extends ConsumerState<Login> {
         );
       } else {
         response = await http.post(
-          Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/user'),
+          Uri.parse('$apiUrl/api/v1/user'),
           // Uri.parse('http://10.0.2.2:3000/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -65,7 +66,6 @@ class _LoginState extends ConsumerState<Login> {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print('🏀${responseData}');
         ref.read(userDataProvider.notifier).setUserData(responseData);
         if (responseData['userState'] == 0) {
           Navigator.pushNamed(context, AppRoutes.skipscreen);

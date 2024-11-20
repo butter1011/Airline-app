@@ -9,13 +9,17 @@ class AirportList extends StatelessWidget {
     super.key,
     required this.name,
     required this.isAirline,
+    required this.isIncreasing,
     required this.index,
+    required this.totalReviews,
     // required this.logo
   });
 
   final String name;
   final bool isAirline;
   final int index;
+  final bool? isIncreasing;
+  final int totalReviews;
   // final String logo;
 
   @override
@@ -78,10 +82,10 @@ class AirportList extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Image.asset('assets/icons/graph_danger.png'),
-                            // reviewStatus
-                            // ? Image.asset('assets/icons/graph_primary.png')
-                            // : Image.asset('assets/icons/graph_danger.png'),
+                            // Image.asset('assets/icons/graph_danger.png'),
+                            (isIncreasing ?? false)
+                                ? Image.asset('assets/icons/graph_primary.png')
+                                : Image.asset('assets/icons/graph_danger.png'),
                             SizedBox(
                               width: 8,
                             ),
@@ -97,7 +101,7 @@ class AirportList extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '+100',
+                                  "+${totalReviews.toString()}",
                                   style: AppStyles.textStyle_14_600.copyWith(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,

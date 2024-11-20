@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'package:airline_app/utils/global_variable.dart';
+import 'package:airline_app/provider/favorite_airline_provider.dart';
+import 'package:airline_app/screen/logIn/logIn.dart';
+import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -35,7 +39,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   void initState() {
     super.initState();
     _getAirlineData.getAirlineAirport().then((value) {
-      print('🚝${value["data"]}');
       setState(() {
         airlineData = (value["data"]["data"] as List)
             .where((element) => element['isAirline'] == true)
@@ -228,7 +231,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void showCustomSnackbar(BuildContext context) {
-    print('🌹💦💚💎✅');
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         top: 45, // Position from top
@@ -292,10 +294,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _editProfileFunction() async {
     final UserData = ref.watch(userDataProvider);
-    print('✔✔✔💎💎💎$_selectedAirline');
     final userInformationData = await http.post(
-        Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/editUser'),
-        // Uri.parse('http://10.0.2.2:3000/api/v1/editUser'),
+        Uri.parse('$apiUrl/api/v1/editUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -308,7 +308,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);
-      print('😜😜😜${responseChangeData}');
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
@@ -396,8 +395,6 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
               var id = widget.airlineNames
                   .where((element) => element['name'] == value)
                   .first['_id'];
-              print("👌  $value  $id");
-
               setState(() {
                 selectedValue = value;
               });

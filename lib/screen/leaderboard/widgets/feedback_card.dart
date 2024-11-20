@@ -75,10 +75,8 @@ class FeedbackCard extends StatelessWidget {
                 Text('Flex from', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
                 Text(
-                    singleFeedback['from']['country'] +
-                        "->" +
-                        singleFeedback['to']['country'],
-                    style: AppStyles.textStyle_14_600)
+                    '${singleFeedback['from']['location']} -> ${singleFeedback['to']['location']}',
+                    style: AppStyles.textStyle_14_600),
               ],
             ),
             SizedBox(height: 11),
