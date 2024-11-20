@@ -48,8 +48,8 @@ class ReviewFlightCard extends ConsumerWidget {
               airlineAirportNotifier.getAirlineId(airlineName);
           aviationInfoNotifier.updateAirline(airline);
           final aviation = ref.watch(aviationInfoProvider);
-          // print(
-          //     "👑👑👑This is arline card==============>fromId: ${aviation.from} toId: ${aviation.to} airlineId: ${aviation.airline}");
+          print(
+              "👑👑👑This is arline card==============>fromId: ${aviation.from} toId: ${aviation.to} airlineId: ${aviation.airline} classTravel:${aviation.selectedClassOfTravel}");
 
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairline);
         },

@@ -121,7 +121,7 @@ class _QuestionThirdScreenForAirportState
                                 amenities: amenities,
                                 comment: comment,
                               );
-                              // print("⭕${review.toJson()}");
+                              print("⭕${review.toJson()}");
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
