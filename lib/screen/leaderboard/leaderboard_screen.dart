@@ -42,7 +42,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Future<void> connectWebSocket() async {
     try {
       _channel = IOWebSocketChannel.connect(
-        Uri.parse('wss://$backendUrl:8080/ws'),
+        Uri.parse('ws://$backendUrl/ws'),
       );
       print('WebSocket connected');
 
@@ -55,7 +55,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             print("leaderboard data: $leaderBoardList");
           });
         }
-      }, onError: (error) {
+      }, onError: (error) { 
         print("WebSocket error: $error");
       }, onDone: () {
         print("WebSocket connection closed");
