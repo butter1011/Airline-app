@@ -1,7 +1,7 @@
 import 'package:airline_app/screen/profile/widget/cair_category_reviews.dart';
 
 import 'package:airline_app/utils/cairport_list_json.dart';
-
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CLeaderboardScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class CLeaderboardScreen extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Showing',
+                AppLocalizations.of(context).translate('Showing'),
                 // style: AppStyles.showTextStyle,
               ),
               Expanded(child: ReviewScore())

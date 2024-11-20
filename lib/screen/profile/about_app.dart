@@ -3,6 +3,7 @@ import 'package:airline_app/screen/profile/utils/about_app.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 
 class AboutApp extends StatelessWidget {
   const AboutApp({super.key});
@@ -15,7 +16,7 @@ class AboutApp extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('About App',
+      title: Text(AppLocalizations.of(context).translate('About the app'),
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),

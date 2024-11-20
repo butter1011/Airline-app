@@ -38,7 +38,7 @@ class _LoginState extends ConsumerState<Login> {
 
       if (userData.channel == 'WHATSAPP') {
         response = await http.post(
-          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
+          Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -50,7 +50,7 @@ class _LoginState extends ConsumerState<Login> {
         );
       } else {
         response = await http.post(
-          Uri.parse('https://airline-backend-pi.vercel.app/api/v1/user'),
+          Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/user'),
           // Uri.parse('http://10.0.2.2:3000/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

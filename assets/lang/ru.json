@@ -80,8 +80,20 @@
   "No, leave": "Нет, оставить",
   "Yes, change": "Да, сменить",
   "Sam - AI Flight planner": "Сэм - AI планировщик полетов",  
-  "Are you sure you want to change to English?": "Сменить на английский? Вы уверены, что хотите сменить на английский?",
-  "Are you sure you want to change to Russian?": "Сменить на русский? Вы уверены, что хотите сменить на русский?"
+  "Change to English? Are you sure you want to change to English?": "Сменить на английский? Вы уверены, что хотите сменить на английский?",
+  "Change to Russian? Are you sure you want to change to Russian?": "Сменить на русский? Вы уверены, что хотите сменить на русский?",
+  "Top Reviewer": "Лучший рецензент",
+  "Service Maven": "Мастер сервиса",
+  "Connoisseur": "Знаток",
+  "Enthusiast": "Энтузиаст",
+  "Facility Virtuoso": "Виртуоз удобств",
+  "Spotless Traveler": "Безупречный путешественник",
   
+    "Showing": "Показать",
+    "Highest Score": "Высший балл",
+    "Mid Score": "Средний балл",
+    "Lowest Score": "Низший балл"
+  
+
   
 }

@@ -82,5 +82,21 @@
   "Sam - AI Flight planner": "Sam - AI Flight planner",
   "Change to Chinese? Are you sure you want to change to Chinese?": "Change to Chinese? Are you sure you want to change to Chinese?",
   "Change to English? Are you sure you want to change to English?": "Change to English? Are you sure you want to change to English?",
-  "Change to Russian? Are you sure you want to change to Russian?": "Change to Russian? Are you sure you want to change to Russian?"
+  "Change to Russian? Are you sure you want to change to Russian?": "Change to Russian? Are you sure you want to change to Russian?",
+  
+    "Top Reviewer": "Top Reviewer",
+    "Service Maven": "Service Maven",
+    "Connoisseur": "Connoisseur",
+    "Enthusiast": "Enthusiast",
+    "Facility Virtuoso": "Facility Virtuoso",
+    "Spotless Traveler": "Spotless Traveler",
+    
+      "Showing": "Showing",
+      "Highest Score": "Highest Score",
+      "Mid Score": "Mid Score",
+      "Lowest Score": "Lowest Score"
+    
+    
+  
+  
 }

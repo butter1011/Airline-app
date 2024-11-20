@@ -8,6 +8,7 @@ import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/about_app.dart';
 import 'package:airline_app/screen/profile/book_mark_screen.dart';
+import 'package:airline_app/screen/profile/calender_sync_screen.dart';
 import 'package:airline_app/screen/profile/edit_profile_screen.dart';
 import 'package:airline_app/screen/profile/help_faq.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
@@ -110,6 +111,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
+        AppRoutes.calendersyncscreen: (context) => CalenderSyncScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

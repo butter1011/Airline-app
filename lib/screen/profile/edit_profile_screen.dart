@@ -7,7 +7,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:airline_app/utils/app_localizations.dart';
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
@@ -228,6 +228,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void showCustomSnackbar(BuildContext context) {
+    print('🌹💦💚💎✅');
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         top: 45, // Position from top
@@ -281,7 +282,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
     );
 
-    // Overlay.of(context)?.insert(overlayEntry);
+    Overlay.of(context)?.insert(overlayEntry);
 
     // Remove the overlay after some time
     Future.delayed(Duration(seconds: 3), () {
@@ -293,7 +294,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final UserData = ref.watch(userDataProvider);
     print('✔✔✔💎💎💎$_selectedAirline');
     final userInformationData = await http.post(
-        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/editUser'),
+        Uri.parse('https://airline-backend-c8p8.onrender.com/api/v1/editUser'),
         // Uri.parse('http://10.0.2.2:3000/api/v1/editUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -312,7 +313,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
       showCustomSnackbar(context);
-
       // You might want to store the user ID or navigate to a new screen
     } else {
       // Handle authentication error
@@ -329,7 +329,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         onPressed: () => Navigator.pop(context),
       ),
       centerTitle: true,
-      title: Text('Edit  Profile',
+      title: Text(AppLocalizations.of(context).translate('Edit Profile'),
           style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(4.0),

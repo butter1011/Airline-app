@@ -22,6 +22,7 @@ class AppRoutes {
   static const questionthirdscreen = "/questionthirdscreen";
   static const profilesupportscreen = "/supportscreen";
   static const eidtprofilescreen = "/eidtprofilescreen";
+  static const calendersyncscreen = "/calendersyncscreen";
   static const aboutapp = "/aboutapp";
   static const termsofservice = "/termsofservice";
   static const example = "/example";

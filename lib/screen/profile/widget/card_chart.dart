@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/screen/profile/widget/review_button.dart';
@@ -64,7 +65,9 @@ class _CardChartState extends ConsumerState<CardChart> {
               itemBuilder: (context, index) {
                 return ReviewButton(
                   iconUrl: sortedButtons[index]['iconUrl']!,
-                  label: sortedButtons[index]['label']!,
+                  label: AppLocalizations.of(context)!
+                      .translate('${sortedButtons[index]['label']!}')
+                      .toString(),
                   isSelected: selectedButtonIndex ==
                       buttons.indexOf(sortedButtons[index]),
                   onTap: () {
@@ -86,7 +89,8 @@ class _CardChartState extends ConsumerState<CardChart> {
     final UserData = ref.watch(userDataProvider);
 
     final userInformationData = await http.post(
-        Uri.parse('https://airline-backend-pi.vercel.app/api/v1/badgeEditUser'),
+        Uri.parse(
+            'https://airline-backend-c8p8.onrender.com/api/v1/badgeEditUser'),
         // Uri.parse('http://10.0.2.2:3000/api/v1/badgeEditUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
