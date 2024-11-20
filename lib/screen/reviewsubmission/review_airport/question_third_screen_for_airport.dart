@@ -121,7 +121,7 @@ class _QuestionThirdScreenForAirportState
                                 amenities: amenities,
                                 comment: comment,
                               );
-                              print("⭕${review.toJson()}");
+                              // print("⭕${review.toJson()}");
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
@@ -248,7 +248,7 @@ class _QuestionThirdScreenForAirportState
                 setState(() {
                   comment = value;
                 });
-                print("🤣$comment");
+                // print("🤣$comment");
               },
               controller: _commentController,
               maxLines: null, // Allows unlimited lines
@@ -304,24 +304,34 @@ Future<void> _buildBottomSheet(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FutureBuilder(
-              future: Future.delayed(Duration(seconds: 4)),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return Container(
-                    height: 350,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/success.gif'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                }
-                return SizedBox(height: 350);
-              },
+            Container(
+              height: 350,
+              width: 350,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/success.gif'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
+            // FutureBuilder(
+            //   future: Future.delayed(Duration(seconds: 4)),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState != ConnectionState.done) {
+            //       return Container(
+            //         height: 350,
+            //         width: 350,
+            //         decoration: BoxDecoration(
+            //           image: DecorationImage(
+            //             image: AssetImage('assets/images/success.gif'),
+            //             fit: BoxFit.cover,
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //     return SizedBox(height: 350);
+            //   },
+            // ),
             SizedBox(height: 60),
             Container(
               decoration: BoxDecoration(
@@ -370,8 +380,9 @@ Future<void> _buildBottomSheet(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     child: NavButton(
-                        text: "Review airport",
-                        onPressed: isSucceded,
+                        text: "Review airine",
+                        onPressed: () => Navigator.pushNamed(
+                            context, AppRoutes.reviewsubmissionscreen),
                         color: Colors.white),
                   )
                 ],

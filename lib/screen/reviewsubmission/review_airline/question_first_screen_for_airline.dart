@@ -16,7 +16,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     final int numberOfSelectedAspects = ref
         .watch(reviewFeedBackProviderForAirline.notifier)
         .numberOfSelectedAspects();
-    print("❤$numberOfSelectedAspects");
+
 
     return Scaffold(
       appBar: AppBar(

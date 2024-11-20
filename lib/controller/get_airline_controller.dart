@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:airline_app/utils/global_variable.dart';
+
 import 'package:http/http.dart' as http;
 
-class GetAirlineController {
+class GetAirlineAirportController {
   Future<Map<String, dynamic>> getAirlineAirport() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://airline-backend-pi.vercel.app/api/v2/airline-airport'));
+      final response =
+          await http.get(Uri.parse('$apiUrl/api/v2/airline-airport'));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch airline airport data');

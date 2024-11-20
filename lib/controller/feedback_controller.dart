@@ -7,7 +7,7 @@ class FeedbackController {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://airline-backend-pi.vercel.app/api/v2/airline-reviews'));
+          '${apiUrl}/api/v2/airline-reviews'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);

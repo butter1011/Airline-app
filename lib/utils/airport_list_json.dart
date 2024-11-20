@@ -23,65 +23,68 @@ Map<String, dynamic> airportList = {
     'Polynesia'
   ]
 };
-Map<String, dynamic> airportCardList = {
-  'flights': [
-    {
-      'origin': {
-        'country': 'Japan',
-        'city': 'Tokyo',
-        'flag': 'assets/icons/flag_Japan.png',
-        'time': '17:55'
-      },
-      'destination': {
-        'country': 'Romania',
-        'city': 'Bucharest',
-        'flag': 'assets/icons/flag_Romania.png',
-        'time': '20:55'
-      },
-      'flight number': 'UO 2923',
-      'visit status': 'Recent Flight'
-    },
-    {
-      'origin': {
-        'country': 'Romania',
-        'city': 'Bucharest',
-        'flag': 'assets/icons/flag_Romania.png',
-        'time': '20:55'
-      },
-      'destination': {
-        'country': 'UK',
-        'city': 'London',
-        'flag': 'assets/icons/flag_UK.png',
-        'time': '14:55'
-      },
-      'flight number': 'U1 3933',
-      'visit status': 'Recent Flight'
-    },
-  ],
-  'airports': [
-    {
-      'country': 'United Arab Emirates',
-      'airport': 'Abu Dhabi Airport',
-      'flag': 'assets/icons/flag_United Arab Emirates.png',
-      'visit status': 'Visited recently',
+List<Map<String, Object>> airportCardList = [
+  {
+    'from': {
+      'country': 'Japan',
+      'airport': 'Beijing Capital',
+      'flag': 'assets/icons/flag_Japan.png',
       'time': '17:55'
     },
-    {
-      'country': 'Moldova',
-      'airport': 'Chisinau Airport',
-      'flag': 'assets/icons/flag_Moldova.png',
-      'visit status': 'Visited recently',
+    'to': {
+      'country': 'Romania',
+      'airport': 'Indira Gandhi',
+      'flag': 'assets/icons/flag_Romania.png',
       'time': '20:55'
     },
-    {
-      'country': 'UK',
-      'airport': 'Heathrow Airport',
-      'flag': 'assets/icons/flag_UK.png',
-      'visit status': 'Upcoming visit',
-      'time': '17:55'
+    "class of travel": "Economy",
+    'airline': 'Emirates',
+    'flight number': 'UO 2923',
+    'visit status': 'Recent Flight'
+  },
+  {
+    'from': {
+      'country': 'Istanbul',
+      'airport': 'Zurich Airport',
+      'flag': 'assets/icons/flag_Romania.png',
+      'time': '20:55'
     },
-  ]
-};
+    'to': {
+      'country': 'UK',
+      'airport': 'Tokyo Airport',
+      'flag': 'assets/icons/flag_UK.png',
+      'time': '14:55'
+    },
+    "class of travel": "First",
+    'airline': 'Air France',
+    'flight number': 'U1 3933',
+    'visit status': 'Recent Flight'
+  },
+];
+// 'airports': [
+//   {
+//     'country': 'United Arab Emirates',
+//     'airport': 'Abu Dhabi Airport',
+//     'flag': 'assets/icons/flag_United Arab Emirates.png',
+//     'visit status': 'Visited recently',
+//     'time': '17:55'
+//   },
+//   {
+//     'country': 'Moldova',
+//     'airport': 'Chisinau Airport',
+//     'flag': 'assets/icons/flag_Moldova.png',
+//     'visit status': 'Visited recently',
+//     'time': '20:55'
+//   },
+//   {
+//     'country': 'UK',
+//     'airport': 'Heathrow Airport',
+//     'flag': 'assets/icons/flag_UK.png',
+//     'visit status': 'Upcoming visit',
+//     'time': '17:55'
+//   },
+// ]
+
 List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",
@@ -662,7 +665,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Comfort',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_comfort.png',
     'subCategory': {
       'Seat Width': null,
       'Legroom': null,
@@ -673,7 +676,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Cleanliness',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_cleanliness.png',
     'subCategory': {
       'Cabin': null,
       'Toilet': null,
@@ -681,7 +684,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Onboard Service',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_onboard.png',
     'subCategory': {
       'Responsiveness': null,
       'Helpfulness': null,
@@ -689,7 +692,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Food & Beverage',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Choice': null,
       'Taste': null,
@@ -700,7 +703,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Entertainment and Wi-Fi',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_entertainment.png',
     'subCategory': {
       'IFE Availability': null,
       'IFE Choices': null,
@@ -725,7 +728,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     'iconUrl': 'assets/icons/review_icon_wait.png',
     'subCategory': {
       'Security': null,
-      'Baggage Delivery Time': null,     
+      'Baggage Delivery Time': null,
     },
   },
   {

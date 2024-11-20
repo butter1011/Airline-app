@@ -28,7 +28,6 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     super.initState();
     _fetchReviews.fetchReviews().then((value) {
-      print('🚝   $value');
       setState(() {
         reviewList = List<Map<String, dynamic>>.from(value);
       });

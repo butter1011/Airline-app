@@ -46,7 +46,7 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
       List<String> dateRange = [_startDate, _endDate];
       ref.read(aviationInfoProvider.notifier).updateDateRange(dateRange);
 
-      print("Selected dates👑: ${ref.watch(aviationInfoProvider).dateRange}");
+      // print("Selected dates👑: ${ref.watch(aviationInfoProvider).dateRange}");
     });
   }
 

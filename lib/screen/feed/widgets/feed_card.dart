@@ -16,7 +16,6 @@ class FeedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("This is singelFeedback =============> $singleFeedback");
     final images = [
       'review_abudhabi_1.png',
       'review_ethiopian_2.png',

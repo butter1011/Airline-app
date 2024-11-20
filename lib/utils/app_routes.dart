@@ -10,10 +10,10 @@ class AppRoutes {
   static const prodetailairport = "/prodetailairport";
   static const bookmarkprofilescreen = "/bookmarkprofilescreen";
   static const cardnotificationscreen = "/cardnotificationscreen";
-  static const reviewsubmissionscreen = "/reviewsubmissionscreen";
+  static const reviewsubmissionscreen = "/";
   static const feedscreen = "/feedscreen";
   static const syncedscreen = "/syncedscreen";
-  static const manualinput = "/";
+  static const manualinput = "/manualinput";
   static const airportinput = "/airportinput";
   static const questionfirstscreenforairport = "/questionfirstscreenforairport";
   static const detailfirstscreenforairport = "/detailfirstscreenforairport";

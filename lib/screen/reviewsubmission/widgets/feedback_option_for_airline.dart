@@ -32,7 +32,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
     final labelName = mainCategoryNames[label];
     return GestureDetector(
       onTap: () {
-        print("🪂${numForIdentifyOfParent}");
+        // print("🪂${numForIdentifyOfParent}");
 
         if (numForIdentifyOfParent == 1) {
           if (numberOfSelectedAspects > 3) {

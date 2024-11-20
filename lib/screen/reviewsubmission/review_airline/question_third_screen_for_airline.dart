@@ -24,7 +24,8 @@ class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
       _QuestionThirdScreenForAirlineState();
 }
 
-class _QuestionThirdScreenForAirlineState extends ConsumerState<QuestionThirdScreenForAirline> {
+class _QuestionThirdScreenForAirlineState
+    extends ConsumerState<QuestionThirdScreenForAirline> {
   List<File> _image = []; // Initialize as an empty list
   final AirlineReviewController _reviewController = AirlineReviewController();
   final TextEditingController _commentController =
@@ -110,7 +111,7 @@ class _QuestionThirdScreenForAirlineState extends ConsumerState<QuestionThirdScr
                             _isLoading = true;
                             try {
                               final review = AirlineReviewModel(
-                                reviewer: "67375a13151c33aa85429a29",
+                                reviewer: "6735411845c6063ea7ddbee0",
                                 from: from,
                                 to: to,
                                 classTravel: classTravel,
@@ -123,6 +124,7 @@ class _QuestionThirdScreenForAirlineState extends ConsumerState<QuestionThirdScr
                                 entertainmentWifi: entertainmentWifi,
                                 comment: comment,
                               );
+                              // print(review.toJson());
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
@@ -249,7 +251,7 @@ class _QuestionThirdScreenForAirlineState extends ConsumerState<QuestionThirdScr
                 setState(() {
                   comment = value;
                 });
-                print("🤣$comment");
+                // print("🤣$comment");
               },
               controller: _commentController,
               maxLines: null, // Allows unlimited lines
@@ -305,24 +307,39 @@ Future<void> _buildBottomSheet(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FutureBuilder(
-              future: Future.delayed(Duration(seconds: 4)),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return Container(
-                    height: 350,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/success.gif'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                }
-                return SizedBox(height: 350);
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
               },
+              child: Container(
+                height: 350,
+                width: 350,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/success.gif'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
+            // FutureBuilder(
+            //   future: Future.delayed(Duration(seconds: 4)),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState != ConnectionState.done) {
+            //       return Container(
+            //         height: 350,
+            //         width: 350,
+            //         decoration: BoxDecoration(
+            //           image: DecorationImage(
+            //             image: AssetImage('assets/images/success.gif'),
+            //             fit: BoxFit.cover,
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //     return SizedBox(height: 350);
+            //   },
+            // ),
             SizedBox(height: 60),
             Container(
               decoration: BoxDecoration(
@@ -372,7 +389,8 @@ Future<void> _buildBottomSheet(
                         horizontal: 24, vertical: 12),
                     child: NavButton(
                         text: "Review airport",
-                        onPressed: isSucceded,
+                        onPressed: () => Navigator.pushNamed(
+                            context, AppRoutes.reviewsubmissionscreen),
                         color: Colors.white),
                   )
                 ],

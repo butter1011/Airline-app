@@ -1,3 +1,4 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
@@ -18,91 +19,90 @@ class FlightInputScreen extends ConsumerStatefulWidget {
 }
 
 class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
-  final _getAirlineData = GetAirlineController();
-  List<dynamic> airlineData = [];
-  List<dynamic> airportData = [];
+  // final _getAirlineData = GetAirlineAirportController();
+  // List<dynamic> airlineData = [];
+  // List<dynamic> airportData = [];
   bool isLoading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _getAirlineData.getAirlineAirport().then((value) {
-      print('🚝 $value');
-      setState(() {
-        airlineData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == true)
-            .toList();
-        airportData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == false)
-            .toList();
-      });
-      isLoading = false;
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getAirlineData.getAirlineAirport().then((value) {
+  //     print('🚝 $value');
+  //     setState(() {
+  //       airlineData = (value["data"]["data"] as List)
+  //           .where((element) => element['isAirline'] == true)
+  //           .toList();
+  //       airportData = (value["data"]["data"] as List)
+  //           .where((element) => element['isAirline'] == false)
+  //           .toList();
+  //     });
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final flightInputState = ref.watch(aviationInfoProvider);
-    bool _isValid = ref.read(aviationInfoProvider.notifier).isAirlineValid();
+    final airlineAirportState = ref.watch(airlineAirportProvider);
+    List<dynamic> airlineData = airlineAirportState.airlineData;
+    List<dynamic> airportData = airlineAirportState.airportData;
+    bool isValid = ref.read(aviationInfoProvider.notifier).isAirlineValid();
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: isLoading
-          ? Center(child: LoadingWidget())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 19),
-                  _buildInfoText(
-                      "Add your flight schedule below or sync your calendar/email"),
-                  const SizedBox(height: 22),
-                  _buildSectionTitle("Synchronize (Recommended):"),
-                  const SizedBox(height: 13),
-                  _buildSyncButtons(),
-                  const SizedBox(height: 18),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomDropdownButton(
-                        labelText: "From",
-                        hintText: "departure Airport",
-                        onChanged: (value) => ref
-                            .read(aviationInfoProvider.notifier)
-                            .updateFrom(value),
-                        airlineNames: airportData,
-                      ),
-                      const SizedBox(height: 18),
-                      CustomDropdownButton(
-                        labelText: "To",
-                        hintText: "destination Airport",
-                        onChanged: (value) => ref
-                            .read(aviationInfoProvider.notifier)
-                            .updateTo(value),
-                        airlineNames: airportData,
-                      ),
-                      const SizedBox(height: 18),
-                      CustomDropdownButton(
-                        labelText: "Airline",
-                        hintText: "your Airline",
-                        onChanged: (value) => ref
-                            .read(aviationInfoProvider.notifier)
-                            .updateAirline(value),
-                        airlineNames: airlineData,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  CalendarWidget(),
-                  const SizedBox(height: 18),
-                  _buildTravelClassSelection(ref),
-                  const SizedBox(height: 18),
-                  _buildAdditionalSyncOptions(ref),
-                  const SizedBox(height: 16),
-                ],
-              ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: ListView(
+          children: [
+            const SizedBox(height: 19),
+            _buildInfoText(
+                "Add your flight schedule below or sync your calendar/email"),
+            const SizedBox(height: 22),
+            _buildSectionTitle("Synchronize (Recommended):"),
+            const SizedBox(height: 13),
+            _buildSyncButtons(),
+            const SizedBox(height: 18),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomDropdownButton(
+                  labelText: "From",
+                  hintText: "departure Airport",
+                  onChanged: (value) =>
+                      ref.read(aviationInfoProvider.notifier).updateFrom(value),
+                  airlineNames: airportData,
+                ),
+                const SizedBox(height: 18),
+                CustomDropdownButton(
+                  labelText: "To",
+                  hintText: "destination Airport",
+                  onChanged: (value) =>
+                      ref.read(aviationInfoProvider.notifier).updateTo(value),
+                  airlineNames: airportData,
+                ),
+                const SizedBox(height: 18),
+                CustomDropdownButton(
+                  labelText: "Airline",
+                  hintText: "your Airline",
+                  onChanged: (value) => ref
+                      .read(aviationInfoProvider.notifier)
+                      .updateAirline(value),
+                  airlineNames: airlineData,
+                ),
+              ],
             ),
+            const SizedBox(height: 18),
+            CalendarWidget(),
+            const SizedBox(height: 18),
+            _buildTravelClassSelection(ref),
+            const SizedBox(height: 18),
+            _buildAdditionalSyncOptions(ref),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
       bottomNavigationBar:
-          _buildBottomNavigationBar(context, flightInputState, _isValid),
+          _buildBottomNavigationBar(context, flightInputState, isValid),
     );
   }
 
@@ -163,7 +163,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
         ),
         onPressed: () {
           // Add functionality for syncing here
-          print('$label button pressed'); // Placeholder for functionality
+     // Placeholder for functionality
         },
         child: Center(
           child: Text(label, style: AppStyles.textStyle_14_600),
@@ -274,7 +274,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
-              print("🥈$isValid");
+              // print("🥈$isValid");
               if (isValid) {
                 Navigator.pushNamed(
                     context, AppRoutes.questionfirstscreenforairline);
@@ -367,8 +367,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
             onChanged: (value) {
               var id = widget.airlineNames
                   .where((element) => element['name'] == value)
-                  .first['_id'];
-              print("👌  $value  $id");
+                  .first['_id'];        
 
               setState(() {
                 selectedValue = value;
