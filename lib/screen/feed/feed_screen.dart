@@ -5,6 +5,7 @@ import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
@@ -78,16 +79,14 @@ class FeedScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: [
                 Text(
-                  'Filter by category',
-                  style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15),
+                  AppLocalizations.of(context).translate('Filter by category'),
+                  style:
+                      AppStyles.textStyle_15_500.copyWith(color: Colors.black),
                 ),
               ],
             ),
@@ -106,7 +105,7 @@ class FeedScreen extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 FeedFilterButton(
-                  text: "Airports",
+                  text: "Airport",
                 ),
                 SizedBox(width: 8),
                 FeedFilterButton(

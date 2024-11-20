@@ -2,6 +2,7 @@ import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _ReviewsubmissionScreenState extends State<ReviewsubmissionScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Reviews',
+          AppLocalizations.of(context).translate('Reviews'),
           style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
@@ -87,7 +88,7 @@ class _ReviewsubmissionScreenState extends State<ReviewsubmissionScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(
-                    "Type",
+                    AppLocalizations.of(context).translate('Type'),
                     style: AppStyles.textStyle_18_600,
                   ),
                 ),
@@ -153,7 +154,7 @@ class _ReviewsubmissionScreenState extends State<ReviewsubmissionScreen> {
                 ),
                 child: Center(
                     child: Text(
-                  "Not here?",
+                  AppLocalizations.of(context).translate('Not here?'),
                   style: AppStyles.textStyle_15_600,
                 )),
               ),

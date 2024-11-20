@@ -41,7 +41,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-
+      print('💚💚💚💚💚$responseData');
       if (responseData is Map<String, dynamic> &&
           responseData['formattedReviews'] is List) {
         final formattedReviews = responseData['formattedReviews'] as List;
@@ -50,7 +50,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
           bookmarks = List<Map<String, dynamic>>.from(
               formattedReviews.map((item) => Map<String, dynamic>.from(item)));
         });
-        print('💚💚💚💚💚$bookmarks');
+        // print('💚💚💚💚💚$bookmarks');
       } else {
         throw Exception('Unexpected response format');
       }

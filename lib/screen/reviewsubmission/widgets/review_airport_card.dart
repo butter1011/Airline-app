@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,8 @@ class ReviewAirportCard extends StatelessWidget {
     final status = singleAirport["visit status"];
     final time = singleAirport['time'];
 
-   
     return Opacity(
-      opacity: status=="Upcoming visit"?0.2:1,
-
+      opacity: status == "Upcoming visit" ? 0.2 : 1,
       child: Container(
         decoration: AppStyles.cardDecoration,
         child: Padding(
@@ -33,7 +32,9 @@ class ReviewAirportCard extends StatelessWidget {
                     width: 4,
                   ),
                   Text(
-                    country + ', ' + time,
+                    AppLocalizations.of(context).translate('$country') +
+                        ', ' +
+                        time,
                     style: AppStyles.textStyle_13_600,
                   )
                 ],
@@ -45,9 +46,9 @@ class ReviewAirportCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    airport,
-                    style:
-                        AppStyles.textStyle_16_600.copyWith(color: Colors.black),
+                    AppLocalizations.of(context).translate('$airport'),
+                    style: AppStyles.textStyle_16_600
+                        .copyWith(color: Colors.black),
                   ),
                   Icon(Icons.arrow_forward)
                 ],
@@ -68,7 +69,7 @@ class ReviewAirportCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Center(
                       child: Text(
-                        status,
+                        AppLocalizations.of(context).translate('$status'),
                         style: AppStyles.textStyle_14_500
                             .copyWith(color: Colors.white),
                       ),

@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/chatbot/widgets/received_message_box.dart';
 import 'package:airline_app/screen/chatbot/widgets/sent_message_box.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,8 @@ class ChatbotScreen extends StatelessWidget {
           // Use FittedBox to handle long titles
           fit: BoxFit.scaleDown,
           child: Text(
-            "Sam-AI Flight Planner",
+            AppLocalizations.of(context).translate('Sam-AI Flight Planner'),
+
             style: AppStyles.textStyle_16_600,
             overflow:
                 TextOverflow.ellipsis, // Add ellipsis for very long titles

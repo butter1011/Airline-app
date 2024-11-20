@@ -2,6 +2,7 @@ import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -189,7 +190,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'Filter by category',
+                        AppLocalizations.of(context)
+                            .translate('Filter by category'),
                         style: AppStyles.textStyle_15_500
                             .copyWith(color: Colors.black),
                       ),
@@ -210,7 +212,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       ),
                       SizedBox(width: 8),
                       MainButton(
-                        text: "Airports",
+                        text: "Airport",
                       ),
                       SizedBox(width: 8),
                       MainButton(
@@ -240,7 +242,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Trending Airlines & Airports',
+                                AppLocalizations.of(context)
+                                    .translate('Trending Airlines & Airports'),
                                 style: AppStyles.textStyle_16_600.copyWith(
                                   color: Color(0xff38433E),
                                 ),
@@ -256,7 +259,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               ),
                               SizedBox(height: 28),
                               Text(
-                                'Trending Feedback',
+                                AppLocalizations.of(context)
+                                    .translate('Trending Feedback'),
                                 style: AppStyles.textStyle_16_600.copyWith(
                                   color: Color(0xff38433E),
                                 ),
@@ -285,7 +289,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "See all feedback",
+                                      AppLocalizations.of(context)
+                                          .translate('See all feedback'),
                                       style: AppStyles.textStyle_15_600,
                                     ),
                                     Icon(Icons.arrow_forward)
@@ -343,7 +348,7 @@ class _AirportListSection extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Expand more",
+                    Text(AppLocalizations.of(context).translate('Expand more'),
                         style:
                             AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
                     SizedBox(width: 8),

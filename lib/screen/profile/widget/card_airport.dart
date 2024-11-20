@@ -103,7 +103,7 @@ class _ReviewScoreState extends State<ReviewScore> {
                   color: Colors.transparent,
                 ),
                 child: Text(
-                  value,
+                  AppLocalizations.of(context).translate('$value'),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,

@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class SyncedScreen extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Reviews',
+          AppLocalizations.of(context).translate('Reviews'),
           style: AppStyles.textStyle_16_600,
         ),
         bottom: PreferredSize(
@@ -35,11 +36,12 @@ class SyncedScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Nothing to show here",
+              AppLocalizations.of(context).translate('Nothing to show here'),
               style: AppStyles.textStyle_24_600,
             ),
             Text(
-                "Here, you can synchronize your calendar and wallet or manually input the review details.",
+                AppLocalizations.of(context).translate(
+                    'Here, you can synchronize your calendar and wallet or manually input the review details.'),
                 style: AppStyles.textStyle_15_500
                     .copyWith(color: Color(0xff38433E))),
             Expanded(
@@ -47,7 +49,7 @@ class SyncedScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   NavButton(
-                    text: "Synchronize",
+                    text: AppLocalizations.of(context).translate('Synchronize'),
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);
                     },
@@ -57,7 +59,8 @@ class SyncedScreen extends StatelessWidget {
                     height: 24,
                   ),
                   NavButton(
-                    text: "Input manually",
+                    text: AppLocalizations.of(context)
+                        .translate('Input manually'),
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.manualinput);
                     },

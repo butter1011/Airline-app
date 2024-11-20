@@ -3,6 +3,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -15,7 +16,7 @@ class _FilterScreenState extends State<FilterScreen> {
   // Declare continents and selectedStates as instance variables
   final List<String> airType = [
     "All",
-    "Airports",
+    "Airport",
     "Airline",
   ];
   final List<String> flyerClass = [
@@ -146,7 +147,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
               )
             : Text(
-                "Filters",
+                AppLocalizations.of(context).translate('Filters'),
                 textAlign: TextAlign.center,
                 style: AppStyles.textStyle_16_600,
               ),
@@ -198,7 +199,8 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Type', style: AppStyles.textStyle_18_600),
+            Text(AppLocalizations.of(context).translate('Type'),
+                style: AppStyles.textStyle_18_600),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -220,7 +222,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   children: List.generate(
                       airType.length,
                       (index) => ContinentFilterButton(
-                            text: airType[index],
+                            text: AppLocalizations.of(context)
+                                .translate('${airType[index]}'),
                             isSelected: selectedairTypeStates[index],
                             onTap: () =>
                                 _toggleFilter(index, selectedairTypeStates),
@@ -239,7 +242,8 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Flyer Class', style: AppStyles.textStyle_18_600),
+            Text(AppLocalizations.of(context).translate('Flyer Class'),
+                style: AppStyles.textStyle_18_600),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -261,7 +265,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 children: List.generate(
                     flyerClass.length,
                     (index) => ContinentFilterButton(
-                          text: flyerClass[index],
+                          text: AppLocalizations.of(context)
+                              .translate('${flyerClass[index]}'),
                           isSelected: selectedFlyerClassStates[index],
                           onTap: () =>
                               _toggleFilter(index, selectedFlyerClassStates),
@@ -281,7 +286,8 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Categories', style: AppStyles.textStyle_18_600),
+            Text(AppLocalizations.of(context).translate('Categories'),
+                style: AppStyles.textStyle_18_600),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -304,7 +310,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   children: List.generate(
                       category.length,
                       (index) => ContinentFilterButton(
-                            text: category[index],
+                            text: AppLocalizations.of(context)
+                                .translate('${category[index]}'),
                             isSelected: selectedCategoryStates[index],
                             onTap: () =>
                                 _toggleFilter(index, selectedCategoryStates),
@@ -323,7 +330,8 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Filter Rank', style: AppStyles.textStyle_18_600),
+            Text(AppLocalizations.of(context).translate('Filter Rank'),
+                style: AppStyles.textStyle_18_600),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -357,7 +365,8 @@ class _FilterScreenState extends State<FilterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Best by Continents', style: AppStyles.textStyle_16_600),
+            Text(AppLocalizations.of(context).translate('Best by Continents'),
+                style: AppStyles.textStyle_16_600),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -380,7 +389,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   children: List.generate(
                       continent.length,
                       (index) => ContinentFilterButton(
-                            text: continent[index],
+                            text: AppLocalizations.of(context)
+                                .translate('${continent[index]}'),
                             isSelected: selectedContinentStates[index],
                             onTap: () =>
                                 _toggleFilter(index, selectedContinentStates),
@@ -420,7 +430,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   ]),
               child: Center(
                 child: Text(
-                  "Apply",
+                  AppLocalizations.of(context).translate('Apply'),
                   style: AppStyles.textStyle_15_600,
                 ),
               ),

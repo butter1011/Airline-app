@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,9 @@ class ReviewFlightCard extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      originCountry + ", " + originTime,
+                      AppLocalizations.of(context).translate('$originCountry') +
+                          ", " +
+                          originTime,
                       style: AppStyles.textStyle_13_600,
                     )
                   ],
@@ -48,7 +51,10 @@ class ReviewFlightCard extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      destinationCountry + ", " + destinationTime,
+                      AppLocalizations.of(context)
+                              .translate('$destinationCountry') +
+                          ", " +
+                          destinationTime,
                       style: AppStyles.textStyle_13_600,
                     )
                   ],
@@ -62,7 +68,10 @@ class ReviewFlightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  originCity + "->" + destinationCity,
+                  AppLocalizations.of(context).translate('$originCity') +
+                      "->" +
+                      AppLocalizations.of(context)
+                          .translate('$destinationCity'),
                   style:
                       AppStyles.textStyle_16_600.copyWith(color: Colors.black),
                 ),
@@ -76,7 +85,8 @@ class ReviewFlightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("UO 2923", style: AppStyles.textStyle_14_500),
-                Text("WizAir 2923", style: AppStyles.textStyle_14_500),
+                Text(AppLocalizations.of(context).translate('WizAir 2923'),
+                    style: AppStyles.textStyle_14_500),
               ],
             ),
             SizedBox(
@@ -92,7 +102,7 @@ class ReviewFlightCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Center(
                     child: Text(
-                      status,
+                      AppLocalizations.of(context).translate('$status'),
                       style: AppStyles.textStyle_14_500
                           .copyWith(color: Colors.white),
                     ),

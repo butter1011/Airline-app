@@ -17,10 +17,7 @@ class CardChart extends ConsumerStatefulWidget {
 class _CardChartState extends ConsumerState<CardChart> {
   final List<Map<String, String>> buttons = [
     {'iconUrl': 'assets/icons/reviewmessage.png', 'label': 'Top Reviewer'},
-    {
-      'iconUrl': 'assets/icons/review_icon_comfort.png',
-      'label': ' Connoisseur'
-    },
+    {'iconUrl': 'assets/icons/review_icon_comfort.png', 'label': 'Connoisseur'},
     {
       'iconUrl': 'assets/icons/review_icon_cleanliness.png',
       'label': 'Enthusiast'
