@@ -1,37 +1,28 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class ReviewButton extends StatefulWidget {
+class ReviewButton extends StatelessWidget {
   final String iconUrl;
   final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  ReviewButton({required this.iconUrl, required this.label});
-
-  @override
-  _ReviewButtonState createState() => _ReviewButtonState();
-}
-
-class _ReviewButtonState extends State<ReviewButton> {
-  bool _isClicked = false;
-
-  void _toggleClick() {
-    setState(() {
-      _isClicked = !_isClicked; // Toggle the click state
-    });
-  }
+  ReviewButton({
+    required this.iconUrl,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _toggleClick, // Change color on tap
+      onTap: onTap,
       child: Container(
         decoration: AppStyles.cardDecoration.copyWith(
-          color: _isClicked
-              ? AppStyles.mainColor
-              : Colors.white, // Change color based on click state
+          color: isSelected ? AppStyles.mainColor : Colors.white,
         ),
-        padding: EdgeInsets.only(
-            bottom: 10, top: 16), // Add padding for better spacing
+        padding: EdgeInsets.only(bottom: 10, top: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -39,16 +30,18 @@ class _ReviewButtonState extends State<ReviewButton> {
               height: 48,
               width: 48,
               decoration: AppStyles.cardDecoration.copyWith(
-                color: _isClicked ? Colors.white : AppStyles.mainColor,
+                color: isSelected ? Colors.white : AppStyles.mainColor,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Image.asset(widget.iconUrl, height: 40),
+              child: Image.asset(iconUrl, height: 40),
             ),
             SizedBox(height: 6),
             Text(
-              widget.label,
+              label,
               textAlign: TextAlign.center,
-              style: AppStyles.textStyle_14_600, // Optional styling
+              style: AppStyles.textStyle_14_600.copyWith(
+                color: Colors.black,
+              ),
             ),
           ],
         ),

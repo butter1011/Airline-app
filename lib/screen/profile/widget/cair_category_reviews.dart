@@ -2,6 +2,7 @@ import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -45,7 +46,8 @@ class CairCategoryReviews extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF181818),
                       )),
-                  Text('Rated 9/10 on ${review['Date']}',
+                  Text(
+                      '${AppLocalizations.of(context).translate('Rated')} 9/10 ${AppLocalizations.of(context).translate('on')} ${review['Date']}',
                       style: TextStyle(
                         fontFamily: 'Clash Grotesk',
                         fontSize: 16,
@@ -64,7 +66,7 @@ class CairCategoryReviews extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Flex with',
+                AppLocalizations.of(context).translate('Flex with'),
                 style: AppStyles.normalTextStyle,
               ),
               SizedBox(
@@ -82,7 +84,7 @@ class CairCategoryReviews extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Flex with',
+                AppLocalizations.of(context).translate('Flex with'),
                 style: AppStyles.normalTextStyle,
               ),
               SizedBox(
@@ -180,7 +182,7 @@ class VerifiedButton extends StatelessWidget {
           color: const Color(0xff181818),
           borderRadius: BorderRadius.circular(12)),
       child: Center(
-        child: Text("Verified",
+        child: Text(AppLocalizations.of(context).translate("Verified"),
             style: GoogleFonts.getFont("Schibsted Grotesk",
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
