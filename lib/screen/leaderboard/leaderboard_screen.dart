@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
@@ -56,7 +57,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             print("leaderboard data: $leaderBoardList");
           });
         }
-      }, onError: (error) { 
+      }, onError: (error) {
         print("WebSocket error: $error");
       }, onDone: () {
         print("WebSocket connection closed");
@@ -123,119 +124,116 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: 0,
       ),
-      body: isReviewsLoading || isLeaderboardLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
+      body: Column(
+        children: [
+          SizedBox(
+            height: 44,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: 44,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 271,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                          border: Border.all(width: 2, color: Colors.black),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                offset: Offset(2, 2))
-                          ],
-                        ),
-                        child: const Center(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                  fontFamily: 'Clash Grotesk', fontSize: 14),
-                              contentPadding: EdgeInsets.all(0),
-                              prefixIcon: Icon(Icons.search),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.filterscreen);
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            border: Border.all(width: 2, color: Colors.black),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset('assets/icons/setting.png'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)
-                            .translate('Filter by category'),
-                        style: AppStyles.textStyle_15_500
-                            .copyWith(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-                const SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      MainButton(
-                        text: "All",
-                      ),
-                      SizedBox(width: 8),
-                      MainButton(
-                        text: "Airline",
-                      ),
-                      SizedBox(width: 8),
-                      MainButton(
-                        text: "Airport",
-                      ),
-                      SizedBox(width: 8),
-                      MainButton(
-                        text: "Cleanliness",
-                      ),
-                      SizedBox(width: 8),
-                      MainButton(
-                        text: "Onboard",
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 14),
                 Container(
-                  height: 5,
-                  decoration: BoxDecoration(color: AppStyles.littleBlackColor),
+                  width: 271,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    border: Border.all(width: 2, color: Colors.black),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          offset: Offset(2, 2))
+                    ],
+                  ),
+                  child: const Center(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                            fontFamily: 'Clash Grotesk', fontSize: 14),
+                        contentPadding: EdgeInsets.all(0),
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(width: 2, color: Colors.black),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset('assets/icons/setting.png'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Text(
+                  AppLocalizations.of(context).translate('Filter by category'),
+                  style:
+                      AppStyles.textStyle_15_500.copyWith(color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          const SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                MainButton(
+                  text: "All",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Airline",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Airport",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Cleanliness",
+                ),
+                SizedBox(width: 8),
+                MainButton(
+                  text: "Onboard",
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 14),
+          Container(
+            height: 5,
+            decoration: BoxDecoration(color: AppStyles.littleBlackColor),
+          ),
+          Expanded(
+            child: isReviewsLoading || isLeaderboardLoading
+                ? Center(
+                    child: LoadingWidget(),
+                  )
+                : SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -307,9 +305,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
+          ),
+        ],
+      ),
     );
   }
 }

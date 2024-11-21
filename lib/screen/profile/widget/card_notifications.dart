@@ -29,6 +29,109 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
     // showModalBottomSheet(...);
   }
 
+  Future<void> _showSignOutConfirmation(BuildContext context) async {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.26,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 4,
+                          width: 32,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(
+                      AppLocalizations.of(context).translate("Sign Out"),
+                      style: AppStyles.textStyle_24_600
+                          .copyWith(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate("Are you sure you want to sign out?"),
+                      style: AppStyles.textStyle_14_400,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Divider(thickness: 2, color: Colors.black),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: BasicLanguageButton(
+                            mywidth: 155,
+                            myheight: 56,
+                            myColor: Colors.white,
+                            btntext: AppLocalizations.of(context)
+                                .translate("Cancel"),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.loginscreen,
+                            );
+                          },
+                          child: BasicLanguageButton(
+                            mywidth: 155,
+                            myheight: 56,
+                            myColor: AppStyles.mainColor,
+                            btntext: AppLocalizations.of(context)
+                                .translate("Sign Out"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -315,10 +418,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
           child: InkWell(
             onTap: () {
-              // Navigator.pushNamed(
-              //   context,
-              //   AppRoutes.cardnotificationscreen,
-              // );
+              _showSignOutConfirmation(context);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
