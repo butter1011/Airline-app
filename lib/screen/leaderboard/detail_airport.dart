@@ -19,21 +19,22 @@ class DetailAirport extends StatefulWidget {
 class _DetailAirportState extends State<DetailAirport> {
   bool _clickedBoolmark = false;
   bool isExpanded = false;
-  late int airportIndex = 0;
 
   @override
   void didChangeDependencies() {
-    if (ModalRoute.of(context)!.settings.arguments != null) {
-      var args = ModalRoute.of(context)!.settings.arguments as Map;
-   
-      airportIndex = args['index'];
-    }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
+    var args = ModalRoute.of(context)!.settings.arguments as Map;
+    final String name = args['name'];
+    final String descriptionBio = args['descriptionBio'];
+    final String perksBio = args['perksBio'];
+    final String trendingBio = args['trendingBio'];
+    final String backgroundImage = args['backgroundImage'];
+
+    // List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
 
     return Scaffold(
       body: CustomScrollView(
@@ -61,8 +62,8 @@ class _DetailAirportState extends State<DetailAirport> {
               background: Stack(
                 children: [
                   Positioned.fill(
-                    child: Image.asset(
-                      airportReviewList[airportIndex]['imagePath'],
+                    child: Image.network(
+                      backgroundImage,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -128,46 +129,37 @@ class _DetailAirportState extends State<DetailAirport> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ReviewStatus(reviewStatus: false),
-                    SizedBox(
-                      height: 9,
-                    ),
+                    SizedBox(height: 9),
                     Text(
-                      airportReviewList[airportIndex]['country'],
+                      name,
                       style: AppStyles.textStyle_24_600,
                     ),
-                    SizedBox(
-                      height: 2,
-                    ),
+                    SizedBox(height: 2),
                     Text(
-                      airportReviewList[airportIndex]['about'],
+                      descriptionBio,
                       style: AppStyles.textStyle_15_400
                           .copyWith(color: Color(0xff38433E)),
                     ),
-                    SizedBox(
-                      height: 14,
-                    ),
+                    SizedBox(height: 14),
                     Text(
                       "Trending now:",
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      airportReviewList[airportIndex]['trending'],
+                      trendingBio,
                       style: AppStyles.textStyle_15_400
                           .copyWith(color: Color(0xff38433E)),
                     ),
-                    SizedBox(
-                      height: 14,
-                    ),
+                    SizedBox(height: 14),
                     Text(
                       "Perks you'll love:",
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      airportReviewList[airportIndex]['perk'],
+                      perksBio,
                       style: AppStyles.textStyle_15_400
                           .copyWith(color: Color(0xff38433E)),
                     ),
@@ -193,13 +185,13 @@ class _DetailAirportState extends State<DetailAirport> {
                   ],
                 ),
               ),
-              Column(
-                children: reviews.map((singleReview) {       
-                  return CategoryReviews(
-                    review: singleReview,
-                  );
-                }).toList(),
-              ),
+              // Column(
+              //   children: reviews.map((singleReview) {
+              //     return CategoryReviews(
+              //       review: singleReview,
+              //     );
+              //   }).toList(),
+              // ),
               Container(
                 decoration: BoxDecoration(
                   // color: Colors.red,

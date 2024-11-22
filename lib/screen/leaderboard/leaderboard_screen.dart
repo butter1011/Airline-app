@@ -337,6 +337,11 @@ class _AirportListSection extends StatelessWidget {
                 isAirline: singleAirport['isAirline'],
                 isIncreasing: singleAirport['isIncreasing'],
                 totalReviews: singleAirport['totalReviews'],
+                logoImage: singleAirport['logoImage'],
+                perksBio: singleAirport['perksBio'],
+                trendingBio: singleAirport['trendingBio'],
+                backgroundImage: singleAirport['backgroundImage'],
+                descriptionBio: singleAirport['descriptionBio'],
                 index: index,
               );
             }
