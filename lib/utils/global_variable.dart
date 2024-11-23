@@ -1,3 +1,3 @@
-const apiUrl = "https://airline-backend-c8p8.onrender.com";
-const backendUrl = "airline-backend-c8p8.onrender.com";
+const apiUrl = "https://airlinereview-b835007a0bbc.herokuapp.com";
+const backendUrl = "airlinereview-b835007a0bbc.herokuapp.com";
 

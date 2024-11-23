@@ -10,24 +10,40 @@ class AirportList extends StatelessWidget {
     required this.name,
     required this.isAirline,
     required this.isIncreasing,
+    required this.logoImage,
     required this.index,
     required this.totalReviews,
+    required this.backgroundImage,
+    required this.perksBio,
+    required this.trendingBio,
+    required this.descriptionBio,
     // required this.logo
   });
 
   final String name;
   final bool isAirline;
   final int index;
+  final String logoImage;
   final bool? isIncreasing;
   final int totalReviews;
+  final String backgroundImage;
+  final String perksBio;
+  final String trendingBio;
+  final String descriptionBio;
   // final String logo;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.detailairport,
-            arguments: {'index': index});
+        Navigator.pushNamed(context, AppRoutes.detailairport, arguments: {
+          'index': index,
+          'name': name,
+          'descriptionBio': descriptionBio,
+          'perksBio': perksBio,
+          'trendingBio': trendingBio,
+          'backgroundImage': backgroundImage
+        });
       },
       child: Container(
         decoration: BoxDecoration(),
@@ -43,9 +59,7 @@ class AirportList extends StatelessWidget {
                     decoration: AppStyles.circleDecoration,
                     child: CircleAvatar(
                       radius: 20,
-                      // backgroundImage: logo.isNotEmpty
-                      //     ? AssetImage('assets/images/$logo')
-                      //     : AssetImage('assets/images/logo_empty.png'),
+                      backgroundImage: NetworkImage(logoImage),
                     ),
                   ),
                   const SizedBox(
