@@ -57,7 +57,6 @@ dependencies:
   loading_indicator: ^3.1.1
   permission_handler: ^11.3.1
   google_sign_in: ^6.2.2
-  cloud_firestore: ^5.4.5
   otpless_flutter: ^2.2.1
   web_socket_channel: ^3.0.1
 
