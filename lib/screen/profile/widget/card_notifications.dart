@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:airline_app/main.dart';
+
+import 'package:airline_app/provider/selected_language_provider.dart';
 import 'package:airline_app/screen/profile/widget/basic_button%20english.dart';
 
 import 'package:airline_app/screen/profile/widget/basic_language_button.dart';
@@ -19,6 +21,7 @@ class CardNotifications extends ConsumerStatefulWidget {
 class _CardNotificationsState extends ConsumerState<CardNotifications> {
   String _selectedLanguage = 'English';
   String _selectedLanguageSym = 'en';
+
   void _changeLanguageFun(String language, String lSym) {
     setState(() {
       _selectedLanguage = language;
@@ -375,7 +378,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: _selectedLanguage == 'English'
+                    myColor: ref.watch(selectedLanguageProvider) == 'English'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("English")),
@@ -389,7 +392,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: _selectedLanguage == 'Chinese'
+                    myColor: ref.watch(selectedLanguageProvider) == 'Chinese'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Chinese")),
@@ -403,7 +406,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: _selectedLanguage == 'Russian'
+                    myColor: ref.watch(selectedLanguageProvider) == 'Russian'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Russian")),
@@ -447,7 +450,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
     );
   }
 
-  Future _changeLanguage(BuildContext context) {
+  Future<void> _changeLanguage(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -527,9 +530,12 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                         ),
                         InkWell(
                           onTap: () {
-                            ref.read(localeProvider.notifier).state = Locale(
-                                '$_selectedLanguageSym',
-                                ''); // Implement language change logic here
+                            ref.read(localeProvider.notifier).state =
+                                Locale('$_selectedLanguageSym', '');
+                            ref
+                                .read(selectedLanguageProvider.notifier)
+                                .changeLanguage(
+                                    _selectedLanguage); // Implement language change logic here
                             Navigator.pop(context);
                           },
                           child: BasicLanguageButton(
@@ -551,30 +557,29 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
       },
     );
   }
-}
 
-class ItemWidget extends StatelessWidget {
-  const ItemWidget({
-    super.key,
-    required this.title,
-    required this.content,
-  });
+// class ItemWidget extends StatelessWidget {
+//   const ItemWidget({
+//     Key? key,
+//     required this.title,
+//     required this.content,
+//   }) : super(key: key);
 
-  final String? title;
-  final String? content;
+//   final String title;
+//   final String content;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: Text(title ?? '')),
-          const Text(' : '),
-          Expanded(child: Text(content ?? '')),
-        ],
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 8.0),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Expanded(child: Text(title)),
+//           const Text(' : '),
+//           Expanded(child: Text(content)),
+//         ],
+//       ),
+//     );
+//   }
 }
