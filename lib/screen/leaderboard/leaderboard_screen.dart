@@ -8,31 +8,32 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
 
-class LeaderboardScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
+
+class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
-  List<Map<String, dynamic>> leaderBoardList = [];
-  List<Map<String, dynamic>> reviewList = [];
-  bool isLeaderboardLoading = true;
-  bool isReviewsLoading = true;
+class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   int expandedItems = 5;
   late IOWebSocketChannel _channel;
+  bool isLeaderboardLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchLeaderboard();
-    fetchReviews();
     connectWebSocket();
+    setState(() {
+      isLeaderboardLoading = false;
+    });
   }
 
   @override
@@ -46,16 +47,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       _channel = IOWebSocketChannel.connect(
         Uri.parse('ws://$backendUrl/ws'),
       );
+
       print('WebSocket connected');
 
       _channel.stream.listen((message) {
         final data = json.decode(message);
         if (data['type'] == 'airlineAirport') {
-          setState(() {
-            leaderBoardList = List<Map<String, dynamic>>.from(data['data']);
-            isLeaderboardLoading = false;
-            print("leaderboard data: $leaderBoardList");
-          });
+          ref.read(airlineAirportProvider.notifier).setData(data);
         }
       }, onError: (error) {
         print("WebSocket error: $error");
@@ -67,58 +65,18 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     }
   }
 
-  Future<void> fetchLeaderboard() async {
-    try {
-      final response =
-          await http.get(Uri.parse('$apiUrl/api/v2/airline-airport'));
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        final List<dynamic> data = responseData['data'];
-        setState(() {
-          leaderBoardList = List<Map<String, dynamic>>.from(data);
-          isLeaderboardLoading = false;
-        });
-      } else {
-        setState(() {
-          isLeaderboardLoading = false;
-        });
-        throw Exception('Failed to load leaderboard data');
-      }
-    } catch (e) {
-      setState(() {
-        isLeaderboardLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchReviews() async {
-    try {
-      final response = await http.get(
-        Uri.parse('$apiUrl/api/v2/airline-reviews'),
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        // print('💚💚$data');
-        setState(() {
-          reviewList = List<Map<String, dynamic>>.from(data);
-          isReviewsLoading = false;
-        });
-      } else {
-        setState(() {
-          isReviewsLoading = false;
-        });
-        throw Exception('Failed to load reviews');
-      }
-    } catch (e) {
-      setState(() {
-        isReviewsLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final airlineAirportState = ref.watch(airlineAirportProvider);
+    final reviews = ref.watch(reviewsAirlineProvider);
+
+    final List<Map<String, dynamic>> leaderBoardList = [
+      ...airlineAirportState.airlineData
+          .map((e) => Map<String, dynamic>.from(e)),
+      ...airlineAirportState.airportData
+          .map((e) => Map<String, dynamic>.from(e)),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
@@ -229,7 +187,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             decoration: BoxDecoration(color: AppStyles.littleBlackColor),
           ),
           Expanded(
-            child: isReviewsLoading || isLeaderboardLoading
+            child: isLeaderboardLoading
                 ? Center(
                     child: LoadingWidget(),
                   )
@@ -271,10 +229,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: reviewList.map(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: reviews.map(
                                     (singleFeedback) {
-                                      return FeedbackCard(
-                                          singleFeedback: singleFeedback);
+                                      return SizedBox(
+                                        child: FeedbackCard(
+                                            singleFeedback: singleFeedback),
+                                      );
                                     },
                                   ).toList(),
                                 ),

@@ -11,11 +11,9 @@ class FeedbackCard extends StatelessWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
 
   final Map<String, dynamic> singleFeedback;
-  
 
   @override
   Widget build(BuildContext context) {
-  
     final List<String> images = List<String>.from([
       'review_abudhabi_1.png',
       'review_ethiopian_2.png',
@@ -39,6 +37,7 @@ class FeedbackCard extends StatelessWidget {
                   decoration: AppStyles.circleDecoration,
                   child: CircleAvatar(
                     radius: 20,
+                    backgroundImage: AssetImage('assets/images/avatar_1.png'),
                     // backgroundImage:
                     //     AssetImage('assets/images/${singleFeedback['Avatar']}'),
                   ),
@@ -77,7 +76,7 @@ class FeedbackCard extends StatelessWidget {
                 Text('Flex from', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
                 Text(
-                    '${singleFeedback['from']['location']} -> ${singleFeedback['to']['location']}',
+                    '${singleFeedback['from']['name']} -> ${singleFeedback['to']['name']}',
                     style: AppStyles.textStyle_14_600),
               ],
             ),
@@ -153,9 +152,10 @@ class FeedbackCard extends StatelessWidget {
                       icon: Icon(Icons.thumb_up_outlined),
                     ),
                     SizedBox(width: 8),
-                    Text("9998", style: AppStyles.textStyle_14_600)
+                    Text(singleFeedback["rating"].toString(),
+                        style: AppStyles.textStyle_14_600),
                   ],
-                )
+                ),
               ],
             ),
           ],

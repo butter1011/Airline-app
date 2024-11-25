@@ -24,7 +24,7 @@ class AirlineAirportState {
 class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   AirlineAirportNotifier() : super(AirlineAirportState());
 
-  void setData(Map<String, dynamic> value) {
+  void setData(Map<String, dynamic> value) { 
     final allData = value["data"]["data"] as List;
 
     state = state.copyWith(
