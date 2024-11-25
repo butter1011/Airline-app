@@ -1,15 +1,54 @@
+import 'dart:convert';
+
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
-class CairCategoryReviews extends StatelessWidget {
+class CairCategoryReviews extends ConsumerStatefulWidget {
   const CairCategoryReviews({super.key, required this.review});
 
   final Map review;
+
+  @override
+  ConsumerState<CairCategoryReviews> createState() =>
+      _CairCategoryReviewsState();
+}
+
+class _CairCategoryReviewsState extends ConsumerState<CairCategoryReviews> {
+  late final String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    userId = ref.read(userDataProvider)?['userData']?['_id'];
+    _userReviewData();
+  }
+
+  Future<List<dynamic>> _userReviewData() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$apiUrl/api/v2/airline-reviews/$userId'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        throw Exception('Failed to load reviews');
+      }
+    } catch (error) {
+      return [
+        {'success': false, 'message': error.toString()}
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +69,7 @@ class CairCategoryReviews extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 20,
                   backgroundImage:
-                      AssetImage('assets/images/${review['Avatar']}'),
+                      AssetImage('assets/images/${widget.review['Avatar']}'),
                 ),
               ),
               SizedBox(
@@ -39,7 +78,7 @@ class CairCategoryReviews extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(review['Name'],
+                  Text(widget.review['Name'],
                       style: TextStyle(
                         fontFamily: 'Clash Grotesk',
                         fontSize: 16,
@@ -47,7 +86,7 @@ class CairCategoryReviews extends StatelessWidget {
                         color: Color(0xFF181818),
                       )),
                   Text(
-                      '${AppLocalizations.of(context).translate('Rated')} 9/10 ${AppLocalizations.of(context).translate('on')} ${review['Date']}',
+                      '${AppLocalizations.of(context).translate('Rated')} 9/10 ${AppLocalizations.of(context).translate('on')} ${widget.review['Date']}',
                       style: TextStyle(
                         fontFamily: 'Clash Grotesk',
                         fontSize: 16,
@@ -73,7 +112,7 @@ class CairCategoryReviews extends StatelessWidget {
                 width: 6,
               ),
               Text(
-                review['Used Airport'],
+                widget.review['Used Airport'],
                 style: AppStyles.textStyle_14_600,
               )
             ],
@@ -91,7 +130,7 @@ class CairCategoryReviews extends StatelessWidget {
                 width: 6,
               ),
               Text(
-                review['Path'],
+                widget.review['Path'],
                 style: AppStyles.textStyle_14_600,
               )
             ],
@@ -99,20 +138,21 @@ class CairCategoryReviews extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          review['Image'] != null && review['Image'].isNotEmpty
+          widget.review['Image'] != null && widget.review['Image'].isNotEmpty
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(
                       20.0), // Set your desired border radius
                   child: InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                          arguments: review);
+                          arguments: widget.review);
                     },
                     child: Container(
                       height: 260.0,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                        image: AssetImage('assets/images/${review['Image']}'),
+                        image: AssetImage(
+                            'assets/images/${widget.review['Image']}'),
                         fit: BoxFit.cover,
                       )), // Set the height to 300 pixels
                     ),
@@ -123,7 +163,7 @@ class CairCategoryReviews extends StatelessWidget {
             height: 11,
           ),
           Text(
-            review['Content'],
+            widget.review['Content'],
             style: AppStyles.textStyle_14_400,
           ),
           SizedBox(
