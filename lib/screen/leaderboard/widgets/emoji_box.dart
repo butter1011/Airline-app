@@ -1,14 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EmojiBox {
   static Future<void> showCustomDialog(BuildContext context) async {
-    showGeneralDialog(
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final Offset position = button.localToGlobal(Offset.zero);
+
+    // Position the box below the thumb up button
+    double left = position.dx;
+    double top =
+        position.dy + button.size.height - 85; // Add offset below button
+
+    // Ensure the box stays within screen bounds
+    final Size screenSize = MediaQuery.of(context).size;
+    if (left < 0) left = 10;
+    if (left + 280 > screenSize.width) left = screenSize.width - 290;
+
+    await showDialog(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (context, animation1, animation2) {
-        return _EmojiPickerDialog();
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
+      builder: (BuildContext context) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
+            Positioned(
+              left: left,
+              top: top,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  height: 40,
+                  width: 280,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Color(0xff8B8B8B)),
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(6, (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: SvgPicture.asset(
+                            'assets/icons/emoji_${index + 1}.svg',
+                            width: 30,
+                            height: 30,
+                            placeholderBuilder: (context) {
+                              return Icon(Icons.sentiment_satisfied_alt,
+                                  size: 30);
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
       },
     );
   }
