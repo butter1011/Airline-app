@@ -1,29 +1,37 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_country_flag.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:country_codes/country_codes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:country_flags/country_flags.dart';
 
 class ReviewAirportCard extends ConsumerWidget {
-  const ReviewAirportCard(
-      {super.key,
-      required this.singleAirport,
-      required this.status,
-      required this.airline});
-  final Map<String, dynamic> singleAirport;
+  const ReviewAirportCard({
+    super.key,
+    required this.status,
+    required this.airline,
+    required this.countryCode,
+    required this.airport,
+    required this.flag,
+    required this.time,
+  });
+
   final String airline;
   final String status;
+
+  final String airport;
+  final String flag;
+  final String time;
+  final dynamic countryCode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
-    final flag = singleAirport["flag"];
-    final country = singleAirport["country"];
-    final airport = singleAirport["airport"] ?? "";
-    final time = singleAirport['time'];
-    final aviation = ref.watch(aviationInfoProvider);
+    final CountryDetails country = CountryCodes.detailsFromAlpha2(countryCode);
 
     return Opacity(
       opacity: status == "Upcoming visit" ? 0.2 : 1,
@@ -34,8 +42,10 @@ class ReviewAirportCard extends ConsumerWidget {
           final String airportId = airlineAirportNotifier.getAirportId(airport);
           aviationInfoNotifier.updateAirport(airportId);
           final aviation = ref.watch(aviationInfoProvider);
-          // print(
-          //     "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline}");
+          final airportExam = airlineAirportNotifier.getAirportData("Atlanta");
+
+          print(
+              "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline} Hey:$airportExam");
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
         },
         child: Container(
@@ -48,13 +58,13 @@ class ReviewAirportCard extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.asset(flag),
-                    // originFlag.isNotEmpty ? Image.asset(originFlag) : Text(""),
+                    buildCountryFlag(flag),
+                    // departureCountryCode.isNotEmpty ? Image.asset(departureCountryCode) : Text(""),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
-                      country + ', ' + time,
+                      "${country.name}, $time",
                       style: AppStyles.textStyle_13_600,
                     )
                   ],

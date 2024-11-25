@@ -44,6 +44,15 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return airport?['_id'] ?? '';
   }
 
+  Map getAirportData(String airportCode) {
+    final airportData = state.airportData;
+    final airport = airportData.firstWhere(
+      (airport) => airport['iataCode'] == airportCode,
+      orElse: () => null,
+    );
+    return airport ?? {};
+  }
+
   String getAirlineId(String airlineName) {
     final airlineData = state.airlineData;
     final airport = airlineData.firstWhere(
@@ -51,6 +60,15 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       orElse: () => null,
     );
     return airport?['_id'] ?? '';
+  }
+
+  Map getAirlineData(String airlineCode) {
+    final airlineData = state.airlineData;
+    final airline = airlineData.firstWhere(
+      (airline) => airline['iataCode'] == airlineCode,
+      orElse: () => null,
+    );
+    return airline ?? {};
   }
 }
 

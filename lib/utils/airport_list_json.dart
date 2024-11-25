@@ -25,66 +25,34 @@ Map<String, dynamic> airportList = {
 };
 List<Map<String, Object>> airportCardList = [
   {
-    'from': {
-      'country': 'Japan',
-      'airport': 'Beijing Capital',
-      'flag': 'assets/icons/flag_Japan.png',
-      'time': '17:55'
-    },
-    'to': {
-      'country': 'Romania',
-      'airport': 'Indira Gandhi',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
-    },
+    'departureCountry': 'Japan',
+    'departureAirport': 'Beijing Capital',
+    'departureCountryCode': 'assets/icons/flag_Japan.png',
+    'departureTime': '17:55',
+    'arrivalCountry': 'Romania',
+    'arrivalAirport': 'Indira Gandhi',
+    'arrivalCountryCode': 'assets/icons/flag_Romania.png',
+    'arrivalTime': '20:55',
     "class of travel": "Economy",
     'airline': 'Emirates',
     'flight number': 'UO 2923',
     'visit status': 'Recent Flight'
   },
   {
-    'from': {
-      'country': 'Istanbul',
-      'airport': 'Zurich Airport',
-      'flag': 'assets/icons/flag_Romania.png',
-      'time': '20:55'
-    },
-    'to': {
-      'country': 'UK',
-      'airport': 'Tokyo Airport',
-      'flag': 'assets/icons/flag_UK.png',
-      'time': '14:55'
-    },
+    'departureCountry': 'Istanbul',
+    'departureAirport': 'Zurich Airport',
+    'departureCountryCode': 'assets/icons/flag_Romania.png',
+    'departureTime': '20:55',
+    'arrivalCountry': 'UK',
+    'arrivalAirport': 'Tokyo Airport',
+    'arrivalCountryCode': 'assets/icons/flag_UK.png',
+    'arrivalTime': '14:55',
     "class of travel": "First",
     'airline': 'Air France',
     'flight number': 'U1 3933',
     'visit status': 'Recent Flight'
   },
 ];
-// 'airports': [
-//   {
-//     'country': 'United Arab Emirates',
-//     'airport': 'Abu Dhabi Airport',
-//     'flag': 'assets/icons/flag_United Arab Emirates.png',
-//     'visit status': 'Visited recently',
-//     'time': '17:55'
-//   },
-//   {
-//     'country': 'Moldova',
-//     'airport': 'Chisinau Airport',
-//     'flag': 'assets/icons/flag_Moldova.png',
-//     'visit status': 'Visited recently',
-//     'time': '20:55'
-//   },
-//   {
-//     'country': 'UK',
-//     'airport': 'Heathrow Airport',
-//     'flag': 'assets/icons/flag_UK.png',
-//     'visit status': 'Upcoming visit',
-//     'time': '17:55'
-//   },
-// ]
-
 List<Map<String, dynamic>> airportReviewList = [
   {
     'country': "Abu Dhabi Airport",

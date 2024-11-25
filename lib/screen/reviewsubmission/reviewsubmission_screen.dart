@@ -1,5 +1,7 @@
 import 'package:airline_app/controller/get_airline_controller.dart';
+import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
@@ -40,9 +42,9 @@ class _ReviewsubmissionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final airlineAirportState = ref.watch(airlineAirportProvider);
     // print("✈✈This is airline and airport data by http========> ${airlineAirportState.airportData}");
-    List<dynamic> flights = airportCardList;
+    final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
+    // List<dynamic> flights = airportCardList;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 52.2,
@@ -113,8 +115,9 @@ class _ReviewsubmissionScreenState
             SizedBox(height: 12),
             Column(
               children: [
-                ...flights.map((singleFlight) {
-                  return _CardWidget(singleFlight);
+                ...boardingPasses.map((singleBoardingPass) {
+                  print("⭕⭕⭕   ${singleBoardingPass.visitStatus}");
+                  return _CardWidget(singleBoardingPass);
                 }),
               ],
             ),
@@ -152,28 +155,34 @@ class _ReviewsubmissionScreenState
     );
   }
 
-  Widget _CardWidget(dynamic singleFlight) {
+  Widget _CardWidget(BoardingPass singleBoardingPass) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
         children: [
           if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(singleFlight: singleFlight),
+            ReviewFlightCard(singleBoardingPass: singleBoardingPass),
           if ((selectedType == "All" || selectedType == "Airports") &&
               (selectedType != "Flights"))
             Column(
               children: [
                 if (selectedType == "All") SizedBox(height: 10),
                 ReviewAirportCard(
-                  singleAirport: singleFlight["from"],
-                  status: singleFlight["visit status"],
-                  airline: singleFlight['airline'],
+                  status: singleBoardingPass.visitStatus,
+                  airline: singleBoardingPass.airline,
+                  countryCode: singleBoardingPass.departureCountryCode,
+                  airport: singleBoardingPass.departureAirport,
+                  flag: singleBoardingPass.departureCountryCode,
+                  time: singleBoardingPass.departureTime,
                 ),
                 SizedBox(height: 10),
                 ReviewAirportCard(
-                  singleAirport: singleFlight["to"],
-                  status: singleFlight["visit status"],
-                  airline: singleFlight['airline'],
+                  status: singleBoardingPass.visitStatus,
+                  airline: singleBoardingPass.airline,
+                  countryCode: singleBoardingPass.arrivalCountryCode,
+                  airport: singleBoardingPass.arrivalAirport,
+                  flag: singleBoardingPass.arrivalCountryCode,
+                  time: singleBoardingPass.arrivalTime,
                 ),
               ],
             ),

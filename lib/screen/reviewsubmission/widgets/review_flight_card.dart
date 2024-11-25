@@ -1,34 +1,49 @@
-import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_country_flag.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:country_codes/country_codes.dart';
 
-class ReviewFlightCard extends ConsumerWidget {
-  const ReviewFlightCard({super.key, required this.singleFlight});
-  final Map<String, dynamic> singleFlight;
+class ReviewFlightCard extends ConsumerStatefulWidget {
+  const ReviewFlightCard({super.key, required this.singleBoardingPass});
+  final BoardingPass singleBoardingPass;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReviewFlightCard> createState() => _ReviewFlightCardState();
+}
+
+class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
+  @override
+  Widget build(BuildContext context) {
     // final airlineAirportState = ref.watch(airlineAirportProvider);
     // final airlineData = airlineAirportState.airlineData;
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
-    // final aviation = ref.watch(aviationInfoProvider);
-    final originCountry = singleFlight["from"]?["country"] ?? "";
-    final originAirport = singleFlight["from"]?["airport"] ?? "";
-    final originTime = singleFlight["from"]?["time"] ?? "Unknown Country";
-    final originFlag = singleFlight["from"]?["flag"] ?? "";
-    final destinationCountry = singleFlight["to"]?["country"] ?? "";
-    final destinationAirport = singleFlight["to"]?["airport"] ?? "";
-    final destinationTime = singleFlight["from"]?["time"] ?? " ";
-    final destinationFlag = singleFlight["to"]?["flag"] ?? "";
-    final flightNumber = singleFlight["flight number"] ?? "";
-    final status = singleFlight['visit status'] ?? " ";
-    final String classTravel = singleFlight["class of travel"] ?? "";
-    final String airlineName = singleFlight["airline"] ?? "";
+
+    // final originCountry = widget.singleBoardingPass.departureCountry;
+    final departureAirport = widget.singleBoardingPass.departureAirport;
+    final departureCountryCode = widget.singleBoardingPass.departureCountryCode;
+    final originTime = widget.singleBoardingPass.departureTime;
+
+    // final destinationCountry = widget.singleBoardingPass.arrivalCountry;
+    final destinationAirport = widget.singleBoardingPass.arrivalAirport;
+    final destinationCountryCode = widget.singleBoardingPass.arrivalCountryCode;
+    final destinationTime = widget.singleBoardingPass.arrivalTime;
+
+    final flightNumber = widget.singleBoardingPass.flightNumber;
+    final status = widget.singleBoardingPass.visitStatus;
+    final String classTravel = widget.singleBoardingPass.classOfTravel;
+    final String airlineName = widget.singleBoardingPass.airline;
+
+    final CountryDetails departureCountry =
+        CountryCodes.detailsFromAlpha2(departureCountryCode);
+    final CountryDetails destinationCountry =
+        CountryCodes.detailsFromAlpha2(destinationCountryCode);
 
     return Container(
       decoration: AppStyles.cardDecoration,
@@ -37,7 +52,7 @@ class ReviewFlightCard extends ConsumerWidget {
           // print("Flight Card Tapped");
 
           final String fromId =
-              airlineAirportNotifier.getAirportId(originAirport);
+              airlineAirportNotifier.getAirportId(departureAirport);
           aviationInfoNotifier.updateFrom(fromId);
           final String toId =
               airlineAirportNotifier.getAirportId(destinationAirport);
@@ -50,7 +65,6 @@ class ReviewFlightCard extends ConsumerWidget {
           final aviation = ref.watch(aviationInfoProvider);
           print(
               "👑👑👑This is arline card==============>fromId: ${aviation.from} toId: ${aviation.to} airlineId: ${aviation.airline} classTravel:${aviation.selectedClassOfTravel}");
-
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairline);
         },
         child: Padding(
@@ -63,26 +77,26 @@ class ReviewFlightCard extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      Image.asset(originFlag),
-                      // originFlag.isNotEmpty ? Image.asset(originFlag) : Text(""),
+                      buildCountryFlag(departureCountryCode),
+                      // departureCountryCode.isNotEmpty ? Image.asset(departureCountryCode) : Text(""),
                       SizedBox(
                         width: 4,
                       ),
                       Text(
-                        originCountry + ", " + originTime,
+                        "${departureCountry.name != null && departureCountry.name!.length > 11 ? '${departureCountry.name!.substring(0, 11)}..' : departureCountry.name ?? 'Unknown'}, $originTime",
                         style: AppStyles.textStyle_13_600,
                       )
                     ],
                   ),
                   Row(
                     children: [
-                      if (destinationFlag.isNotEmpty)
-                        Image.asset(destinationFlag),
+                      if (destinationCountryCode.isNotEmpty)
+                        buildCountryFlag(destinationCountryCode),
                       SizedBox(
                         width: 4,
                       ),
                       Text(
-                        destinationCountry + ", " + destinationTime,
+                        "${destinationCountry.name != null && destinationCountry.name!.length > 11 ? '${destinationCountry.name!.substring(0, 11)}..' : destinationCountry.name ?? 'Unknown'}, $destinationTime",
                         style: AppStyles.textStyle_13_600,
                       )
                     ],
@@ -96,7 +110,7 @@ class ReviewFlightCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$originAirport -> $destinationAirport',
+                    '$departureAirport -> $destinationAirport',
                     style: AppStyles.textStyle_16_600
                         .copyWith(color: Colors.black),
                   ),
