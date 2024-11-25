@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -23,33 +22,6 @@ class CairCategoryReviews extends ConsumerStatefulWidget {
 }
 
 class _CairCategoryReviewsState extends ConsumerState<CairCategoryReviews> {
-  late final String? userId;
-
-  @override
-  void initState() {
-    super.initState();
-    userId = ref.read(userDataProvider)?['userData']?['_id'];
-    _userReviewData();
-  }
-
-  Future<List<dynamic>> _userReviewData() async {
-    try {
-      final response =
-          await http.get(Uri.parse('$apiUrl/api/v2/airline-reviews/$userId'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data;
-      } else {
-        throw Exception('Failed to load reviews');
-      }
-    } catch (error) {
-      return [
-        {'success': false, 'message': error.toString()}
-      ];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
