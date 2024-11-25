@@ -1,5 +1,5 @@
 import 'package:airline_app/models/boarding_pass.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
+
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
+    // final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan Boarding Pass'),
@@ -129,26 +129,24 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               final departureEntireTime = extractEntireDepartureTime(rawValue);
               final arrivalTime = extractArrivalTime(rawValue);
               final departureAirportCode = extractDepartureAirport(rawValue);
-              final departureAirport =
-                  airlineAirportNotifier.getAirportData(departureAirportCode);
+              // final departureAirport =
+              //     airlineAirportNotifier.getAirportData(departureAirportCode);
               final arrivalAirportCode = extractArrivalAirport(rawValue);
-              final arrivalAirport =
-                  airlineAirportNotifier.getAirportData(arrivalAirportCode);
+              // final arrivalAirport =
+              //     airlineAirportNotifier.getAirportData(arrivalAirportCode);
               final classOfTravel = extractClassOfTravel(rawValue);
-              final airline = extractAirline(flightNumber);
+              final airlineCode = extractAirline(flightNumber);
               final visitStatus = getVisitStatus(departureEntireTime);
               debugPrint(
                   "This is scanned data from barcode💎=======================>: $rawValue");
 
               final newPass = BoardingPass(
-                departureAirport: departureAirport['location'] ?? "",
-                departureCountryCode: departureAirport['countryCode'] ?? "",
+                departureAirportCode: departureAirportCode,               
                 departureTime: departureTime,
-                arrivalAirport: arrivalAirport['location'] ?? "",
-                arrivalCountryCode: arrivalAirport['countryCode'] ?? "",
+                arrivalAirportCode: arrivalAirportCode,              
                 arrivalTime: arrivalTime,
                 classOfTravel: classOfTravel,
-                airline: airline,
+                airlineCode: airlineCode,
                 flightNumber: flightNumber,
                 visitStatus: visitStatus,
               );

@@ -12,40 +12,39 @@ class ReviewAirportCard extends ConsumerWidget {
   const ReviewAirportCard({
     super.key,
     required this.status,
-    required this.airline,
-    required this.countryCode,
-    required this.airport,
-    required this.flag,
+    required this.airlineCode,
+    required this.airportCode,
     required this.time,
   });
 
-  final String airline;
   final String status;
-
-  final String airport;
-  final String flag;
   final String time;
-  final dynamic countryCode;
+  final String airlineCode;
+  final String airportCode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
-    final CountryDetails country = CountryCodes.detailsFromAlpha2(countryCode);
+    final airportData = airlineAirportNotifier.getAirportData(airportCode);
+    final airlineData = airlineAirportNotifier.getAirlineData(airlineCode);
+    final CountryDetails country =
+        CountryCodes.detailsFromAlpha2(airportData['countryCode']);
 
     return Opacity(
       opacity: status == "Upcoming visit" ? 0.2 : 1,
       child: InkWell(
         onTap: () {
-          final String airlineId = airlineAirportNotifier.getAirlineId(airline);
+          final String airlineId = airlineData['_id'];
           aviationInfoNotifier.updateAirline(airlineId);
-          final String airportId = airlineAirportNotifier.getAirportId(airport);
+          final String airportId = airportData['_id'];
+
           aviationInfoNotifier.updateAirport(airportId);
           final aviation = ref.watch(aviationInfoProvider);
-          final airportExam = airlineAirportNotifier.getAirportData("Atlanta");
+      
 
           print(
-              "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline} Hey:$airportExam");
+              "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline} ");
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
         },
         child: Container(
@@ -58,7 +57,7 @@ class ReviewAirportCard extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    buildCountryFlag(flag),
+                    buildCountryFlag(airportData['countryCode']),
                     // departureCountryCode.isNotEmpty ? Image.asset(departureCountryCode) : Text(""),
                     SizedBox(
                       width: 4,
@@ -76,7 +75,7 @@ class ReviewAirportCard extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      airport,
+                      airportData['name'],
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),

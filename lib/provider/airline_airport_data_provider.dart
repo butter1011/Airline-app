@@ -35,14 +35,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     );
   }
 
-  String getAirportId(String airportName) {
-    final airportData = state.airportData;
-    final airport = airportData.firstWhere(
-      (airport) => airport['name'] == airportName,
-      orElse: () => null,
-    );
-    return airport?['_id'] ?? '';
-  }
+ 
 
   Map getAirportData(String airportCode) {
     final airportData = state.airportData;
@@ -53,14 +46,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return airport ?? {};
   }
 
-  String getAirlineId(String airlineName) {
-    final airlineData = state.airlineData;
-    final airport = airlineData.firstWhere(
-      (airport) => airport['name'] == airlineName,
-      orElse: () => null,
-    );
-    return airport?['_id'] ?? '';
-  }
+ 
 
   Map getAirlineData(String airlineCode) {
     final airlineData = state.airlineData;

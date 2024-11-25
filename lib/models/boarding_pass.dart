@@ -1,57 +1,42 @@
 class BoardingPass {
-
-  final String departureAirport;
-  final String departureCountryCode;
+  final String departureAirportCode;
   final String departureTime;
+  final String arrivalAirportCode;
 
-  final String arrivalAirport;
-  final String arrivalCountryCode;
   final String arrivalTime;
   final String classOfTravel;
-  final String airline;
+  final String airlineCode;
   final String flightNumber;
   final String visitStatus;
 
   const BoardingPass({
-
-    this.departureAirport = '',
-    this.departureCountryCode = '',
+    this.departureAirportCode = '',
     this.departureTime = '',
-
-    this.arrivalAirport = '',
-    this.arrivalCountryCode = '',
+    this.arrivalAirportCode = '',
     this.arrivalTime = '',
     this.classOfTravel = '',
-    this.airline = '',
+    this.airlineCode = '',
     this.flightNumber = '',
     this.visitStatus = '',
   });
 
   BoardingPass copyWith({
-
-    String? departureAirport,
-    String? departureCountryCode,
+    String? departureAirportCode,
     String? departureTime,
-
-    String? arrivalAirport,
-    String? arrivalCountryCode,
+    String? arrivalAirportCode,
     String? arrivalTime,
     String? classOfTravel,
-    String? airline,
+    String? airlineCode,
     String? flightNumber,
     String? visitStatus,
   }) {
     return BoardingPass(
-   
-      departureAirport: departureAirport ?? this.departureAirport,
-      departureCountryCode: departureCountryCode ?? this.departureCountryCode,
+      departureAirportCode: departureAirportCode ?? this.departureAirportCode,
       departureTime: departureTime ?? this.departureTime,
- 
-      arrivalAirport: arrivalAirport ?? this.arrivalAirport,
-      arrivalCountryCode: arrivalCountryCode ?? this.arrivalCountryCode,
+      arrivalAirportCode: arrivalAirportCode ?? this.arrivalAirportCode,
       arrivalTime: arrivalTime ?? this.arrivalTime,
       classOfTravel: classOfTravel ?? this.classOfTravel,
-      airline: airline ?? this.airline,
+      airlineCode: airlineCode ?? this.airlineCode,
       flightNumber: flightNumber ?? this.flightNumber,
       visitStatus: visitStatus ?? this.visitStatus,
     );

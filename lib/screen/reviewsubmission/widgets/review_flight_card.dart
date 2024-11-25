@@ -24,26 +24,32 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     // final airlineData = airlineAirportState.airlineData;
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
+    final airlineData = airlineAirportNotifier
+        .getAirlineData(widget.singleBoardingPass.airlineCode);
+    final departureAirportData = airlineAirportNotifier
+        .getAirportData(widget.singleBoardingPass.departureAirportCode);
+    final arrivalAirportData = airlineAirportNotifier
+        .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
 
     // final originCountry = widget.singleBoardingPass.departureCountry;
-    final departureAirport = widget.singleBoardingPass.departureAirport;
-    final departureCountryCode = widget.singleBoardingPass.departureCountryCode;
+    final departureAirportCode = widget.singleBoardingPass.departureAirportCode;
+    final departureCountryCode = departureAirportData['countryCode'];
     final originTime = widget.singleBoardingPass.departureTime;
 
-    // final destinationCountry = widget.singleBoardingPass.arrivalCountry;
-    final destinationAirport = widget.singleBoardingPass.arrivalAirport;
-    final destinationCountryCode = widget.singleBoardingPass.arrivalCountryCode;
-    final destinationTime = widget.singleBoardingPass.arrivalTime;
+    // final arrivalCountry = widget.singleBoardingPass.arrivalCountry;
+    final arrivalAirport = widget.singleBoardingPass.arrivalAirportCode;
+    final arrivalCountryCode = arrivalAirportData['countryCode'];
+    final arrivalTime = widget.singleBoardingPass.arrivalTime;
 
     final flightNumber = widget.singleBoardingPass.flightNumber;
     final status = widget.singleBoardingPass.visitStatus;
     final String classTravel = widget.singleBoardingPass.classOfTravel;
-    final String airlineName = widget.singleBoardingPass.airline;
+    final String airlineName = airlineData["name"];
 
     final CountryDetails departureCountry =
         CountryCodes.detailsFromAlpha2(departureCountryCode);
-    final CountryDetails destinationCountry =
-        CountryCodes.detailsFromAlpha2(destinationCountryCode);
+    final CountryDetails arrivalCountry =
+        CountryCodes.detailsFromAlpha2(arrivalCountryCode);
 
     return Container(
       decoration: AppStyles.cardDecoration,
@@ -51,17 +57,14 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         onTap: () {
           // print("Flight Card Tapped");
 
-          final String fromId =
-              airlineAirportNotifier.getAirportId(departureAirport);
+          final String fromId = departureAirportData['_id'];
           aviationInfoNotifier.updateFrom(fromId);
-          final String toId =
-              airlineAirportNotifier.getAirportId(destinationAirport);
+          final String toId = arrivalAirportData['_id'];
           aviationInfoNotifier.updateTo(toId);
           aviationInfoNotifier.updateClassOfTravel(classTravel);
 
-          final String airline =
-              airlineAirportNotifier.getAirlineId(airlineName);
-          aviationInfoNotifier.updateAirline(airline);
+          final String airlineId = airlineData['_id'];
+          aviationInfoNotifier.updateAirline(airlineId);
           final aviation = ref.watch(aviationInfoProvider);
           print(
               "👑👑👑This is arline card==============>fromId: ${aviation.from} toId: ${aviation.to} airlineId: ${aviation.airline} classTravel:${aviation.selectedClassOfTravel}");
@@ -90,13 +93,13 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   ),
                   Row(
                     children: [
-                      if (destinationCountryCode.isNotEmpty)
-                        buildCountryFlag(destinationCountryCode),
+                      if (arrivalCountryCode.isNotEmpty)
+                        buildCountryFlag(arrivalCountryCode),
                       SizedBox(
                         width: 4,
                       ),
                       Text(
-                        "${destinationCountry.name != null && destinationCountry.name!.length > 11 ? '${destinationCountry.name!.substring(0, 11)}..' : destinationCountry.name ?? 'Unknown'}, $destinationTime",
+                        "${arrivalCountry.name != null && arrivalCountry.name!.length > 11 ? '${arrivalCountry.name!.substring(0, 11)}..' : arrivalCountry.name ?? 'Unknown'}, $arrivalTime",
                         style: AppStyles.textStyle_13_600,
                       )
                     ],
@@ -110,7 +113,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$departureAirport -> $destinationAirport',
+                    "${departureAirportData['name']} -> ${arrivalAirportData['name']}",
                     style: AppStyles.textStyle_16_600
                         .copyWith(color: Colors.black),
                   ),

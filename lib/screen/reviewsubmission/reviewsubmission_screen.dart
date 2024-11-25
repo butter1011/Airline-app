@@ -169,19 +169,17 @@ class _ReviewsubmissionScreenState
                 if (selectedType == "All") SizedBox(height: 10),
                 ReviewAirportCard(
                   status: singleBoardingPass.visitStatus,
-                  airline: singleBoardingPass.airline,
-                  countryCode: singleBoardingPass.departureCountryCode,
-                  airport: singleBoardingPass.departureAirport,
-                  flag: singleBoardingPass.departureCountryCode,
+                  airlineCode: singleBoardingPass.airlineCode,           
+                  airportCode: singleBoardingPass.departureAirportCode,              
                   time: singleBoardingPass.departureTime,
                 ),
                 SizedBox(height: 10),
                 ReviewAirportCard(
                   status: singleBoardingPass.visitStatus,
-                  airline: singleBoardingPass.airline,
-                  countryCode: singleBoardingPass.arrivalCountryCode,
-                  airport: singleBoardingPass.arrivalAirport,
-                  flag: singleBoardingPass.arrivalCountryCode,
+                  airlineCode: singleBoardingPass.airlineCode,
+          
+                  airportCode: singleBoardingPass.arrivalAirportCode,
+          
                   time: singleBoardingPass.arrivalTime,
                 ),
               ],
