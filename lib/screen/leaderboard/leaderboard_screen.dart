@@ -271,10 +271,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: reviewList.map(
                                     (singleFeedback) {
-                                      return FeedbackCard(
-                                          singleFeedback: singleFeedback);
+                                      return SizedBox(
+                                        child: FeedbackCard(
+                                          singleFeedback: singleFeedback
+                                        ),
+                                      );
                                     },
                                   ).toList(),
                                 ),
