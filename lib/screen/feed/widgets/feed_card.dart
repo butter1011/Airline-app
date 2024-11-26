@@ -94,10 +94,10 @@ class FeedCard extends StatelessWidget {
             SizedBox(
               width: 6,
             ),
-              Text(
-                "${singleFeedback['from']['location']} -> ${singleFeedback['to']['location']}",
-                style: AppStyles.textStyle_14_600,
-              )
+            Text(
+              "${singleFeedback['from']['location']} -> ${singleFeedback['to']['location']}",
+              style: AppStyles.textStyle_14_600,
+            )
           ],
         ),
         SizedBox(
@@ -178,8 +178,10 @@ class FeedCard extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () async {
-                    await EmojiBox.showCustomDialog(
-                        context); // Pass context here
+                    final RenderBox button =
+                        context.findRenderObject() as RenderBox;
+                    await EmojiBox.showCustomDialog(context, button);
+                    // Update selected emoji after dialog closes
                   },
                   icon: Icon(Icons.thumb_up_outlined),
                 ),

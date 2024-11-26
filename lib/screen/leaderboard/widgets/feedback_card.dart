@@ -6,11 +6,25 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class FeedbackCard extends StatelessWidget {
+class FeedbackCard extends StatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
-
   final Map<String, dynamic> singleFeedback;
+
+  @override
+  State<FeedbackCard> createState() => _FeedbackCardState();
+}
+
+class _FeedbackCardState extends State<FeedbackCard> {
+  int? selectedEmojiIndex;
+  final CarouselSliderController buttonCarouselController =
+      CarouselSliderController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +33,6 @@ class FeedbackCard extends StatelessWidget {
       'review_ethiopian_2.png',
       'review_turkish_1.png'
     ]); // Ensure it's a List<String>
-    CarouselSliderController buttonCarouselController =
-        CarouselSliderController();
 
     return Padding(
       padding: const EdgeInsets.only(right: 16),
@@ -47,11 +59,11 @@ class FeedbackCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      singleFeedback['reviewer']['name'],
+                      widget.singleFeedback['reviewer']['name'],
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      'Rated 9/10 on ${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(8, 10)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(5, 7)}.${DateTime.parse(singleFeedback['date']).toLocal().toString().substring(2, 4)}',
+                      'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(2, 4)}',
                       style: AppStyles.textStyle_14_400,
                     )
                   ],
@@ -64,9 +76,7 @@ class FeedbackCard extends StatelessWidget {
                 Text('Flex with', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
                 Text(
-                    singleFeedback['airline']['name'] +
-                        ", " +
-                        singleFeedback['classTravel'],
+                    '${widget.singleFeedback['airline']['name']}, ${widget.singleFeedback['classTravel']}',
                     style: AppStyles.textStyle_14_600)
               ],
             ),
@@ -76,7 +86,7 @@ class FeedbackCard extends StatelessWidget {
                 Text('Flex from', style: AppStyles.textStyle_14_400),
                 SizedBox(width: 6),
                 Text(
-                    '${singleFeedback['from']['name']} -> ${singleFeedback['to']['name']}',
+                    '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
                     style: AppStyles.textStyle_14_600),
               ],
             ),
@@ -88,6 +98,7 @@ class FeedbackCard extends StatelessWidget {
                     viewportFraction: 1,
                     height: 189,
                   ),
+                  carouselController: buttonCarouselController,
                   items: images.map((singleImage) {
                     return Builder(builder: (BuildContext context) {
                       return ClipRRect(
@@ -97,8 +108,7 @@ class FeedbackCard extends StatelessWidget {
                           width: 299,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/$singleImage'), // Ensure image paths are correct
+                              image: AssetImage('assets/images/$singleImage'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -106,7 +116,6 @@ class FeedbackCard extends StatelessWidget {
                       );
                     });
                   }).toList(),
-                  carouselController: buttonCarouselController,
                 ),
                 Positioned(
                   top: 79,
@@ -130,9 +139,10 @@ class FeedbackCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 11),
-            Text(singleFeedback['comment'], style: AppStyles.textStyle_14_400),
-            SizedBox(height: 16),
+            const SizedBox(height: 11),
+            Text(widget.singleFeedback['comment'],
+                style: AppStyles.textStyle_14_400),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -146,13 +156,25 @@ class FeedbackCard extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        await EmojiBox.showCustomDialog(
-                            context); // Pass context here
+                        final RenderBox button =
+                            context.findRenderObject() as RenderBox;
+                        final index =
+                            await EmojiBox.showCustomDialog(context, button);
+                        // Update selected emoji after dialog closes
+                        setState(() {
+                          selectedEmojiIndex = index != null ? index + 1 : null;
+                        });
                       },
-                      icon: Icon(Icons.thumb_up_outlined),
+                      icon: selectedEmojiIndex != null
+                          ? SvgPicture.asset(
+                              'assets/icons/emoji_$selectedEmojiIndex.svg',
+                              width: 24,
+                              height: 24,
+                            )
+                          : Icon(Icons.thumb_up_outlined),
                     ),
                     SizedBox(width: 8),
-                    Text(singleFeedback["rating"].toString(),
+                    Text(widget.singleFeedback["rating"].toString(),
                         style: AppStyles.textStyle_14_600),
                   ],
                 ),
