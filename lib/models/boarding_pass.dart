@@ -8,8 +8,12 @@ class BoardingPass {
   final String airlineCode;
   final String flightNumber;
   final String visitStatus;
+  final bool isFlightReviewed;
+  final bool isDepartureAirportReviewed;
+  final bool isArrivalAirportReviewed ;
 
-  const BoardingPass({
+
+  BoardingPass( {
     this.departureAirportCode = '',
     this.departureTime = '',
     this.arrivalAirportCode = '',
@@ -18,6 +22,9 @@ class BoardingPass {
     this.airlineCode = '',
     this.flightNumber = '',
     this.visitStatus = '',
+    this.isFlightReviewed =false,
+    this.isDepartureAirportReviewed=false ,
+    this.isArrivalAirportReviewed =false,
   });
 
   BoardingPass copyWith({
@@ -29,6 +36,9 @@ class BoardingPass {
     String? airlineCode,
     String? flightNumber,
     String? visitStatus,
+    bool? isFlightReviewed,
+    bool? isDepartureAirportReviewed,
+    bool? isArrivalAirportReviewed,
   }) {
     return BoardingPass(
       departureAirportCode: departureAirportCode ?? this.departureAirportCode,
@@ -39,6 +49,9 @@ class BoardingPass {
       airlineCode: airlineCode ?? this.airlineCode,
       flightNumber: flightNumber ?? this.flightNumber,
       visitStatus: visitStatus ?? this.visitStatus,
+      isFlightReviewed: isFlightReviewed ?? this.isFlightReviewed,
+      isDepartureAirportReviewed: isDepartureAirportReviewed ?? this.isDepartureAirportReviewed,
+      isArrivalAirportReviewed: isArrivalAirportReviewed ?? this.isArrivalAirportReviewed,
     );
   }
 }

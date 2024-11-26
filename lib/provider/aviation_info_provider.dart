@@ -8,8 +8,9 @@ class AviationInfoState {
   final String selectedClassOfTravel;
   final String? selectedSynchronize;
   final List<dynamic> dateRange;
-
-  AviationInfoState({
+  final int? index; // Add this field
+  final bool? isDeparture;
+  AviationInfoState( {
     this.from = '',
     this.to = '',
     this.airline = '',
@@ -17,6 +18,8 @@ class AviationInfoState {
     this.selectedClassOfTravel = '',
     this.selectedSynchronize = '',
     this.dateRange = const [],
+    this.index, // Initialize as nullable
+    this.isDeparture,
   });
 
   AviationInfoState copyWith({
@@ -27,6 +30,8 @@ class AviationInfoState {
     String? selectedClassOfTravel,
     String? selectedSynchronize,
     List<dynamic>? dateRange,
+    int? index,
+    bool? isDeparture,
   }) {
     return AviationInfoState(
       from: from ?? this.from,
@@ -37,6 +42,8 @@ class AviationInfoState {
           selectedClassOfTravel ?? this.selectedClassOfTravel,
       selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
       dateRange: dateRange ?? this.dateRange,
+      index: index ?? this.index,
+      isDeparture: isDeparture ?? this.isDeparture,
     );
   }
 
@@ -89,6 +96,13 @@ class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
 
   void updateDateRange(List<dynamic> value) {
     state = state.copyWith(dateRange: value);
+  }
+
+  void updateIndex(int value) {
+    state = state.copyWith(index: value);
+  }
+  void updateIsDeparture(bool value) {
+    state = state.copyWith(isDeparture: value);
   }
 
   void resetState() {

@@ -2,6 +2,7 @@ import 'package:airline_app/models/boarding_pass.dart';
 
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -124,26 +125,42 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
             final String rawValue = barcode.rawValue ?? '';
 
             if (rawValue.isNotEmpty) {
+              debugPrint(
+                  "This is scanned data from barcode💎=======================>: $rawValue");
               final flightNumber = extractFlightNumber(rawValue);
               final departureTime = extractDepartureTime(rawValue);
               final departureEntireTime = extractEntireDepartureTime(rawValue);
               final arrivalTime = extractArrivalTime(rawValue);
               final departureAirportCode = extractDepartureAirport(rawValue);
-              // final departureAirport =
-              //     airlineAirportNotifier.getAirportData(departureAirportCode);
+
               final arrivalAirportCode = extractArrivalAirport(rawValue);
-              // final arrivalAirport =
-              //     airlineAirportNotifier.getAirportData(arrivalAirportCode);
+
               final classOfTravel = extractClassOfTravel(rawValue);
               final airlineCode = extractAirline(flightNumber);
               final visitStatus = getVisitStatus(departureEntireTime);
-              debugPrint(
-                  "This is scanned data from barcode💎=======================>: $rawValue");
+
+              if (ref
+                  .read(boardingPassesProvider.notifier)
+                  .hasFlightNumber(flightNumber)) {
+                cameraController.stop();
+                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Flight $flightNumber already exists in your review list',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    backgroundColor: AppStyles.mainColor,
+                  ),
+                );
+                hasScanned = false; // Reset to allow new scan
+                return;
+              }
 
               final newPass = BoardingPass(
-                departureAirportCode: departureAirportCode,               
+                departureAirportCode: departureAirportCode,
                 departureTime: departureTime,
-                arrivalAirportCode: arrivalAirportCode,              
+                arrivalAirportCode: arrivalAirportCode,
                 arrivalTime: arrivalTime,
                 classOfTravel: classOfTravel,
                 airlineCode: airlineCode,

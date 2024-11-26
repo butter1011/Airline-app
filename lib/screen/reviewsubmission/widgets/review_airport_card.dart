@@ -9,18 +9,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:country_flags/country_flags.dart';
 
 class ReviewAirportCard extends ConsumerWidget {
-  const ReviewAirportCard({
-    super.key,
-    required this.status,
-    required this.airlineCode,
-    required this.airportCode,
-    required this.time,
-  });
-
+  const ReviewAirportCard(
+      {super.key,
+      required this.index,
+      required this.status,
+      required this.airlineCode,
+      required this.airportCode,
+      required this.time,
+      required this.isDeparture,
+      required this.isReviewed});
+  final int index;
   final String status;
   final String time;
   final String airlineCode;
   final String airportCode;
+  final bool isDeparture;
+  final bool isReviewed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,22 +36,22 @@ class ReviewAirportCard extends ConsumerWidget {
         CountryCodes.detailsFromAlpha2(airportData['countryCode']);
 
     return Opacity(
-      opacity: status == "Upcoming visit" ? 0.2 : 1,
+      opacity: status == "Upcoming visit" || isReviewed ? 0.5 : 1,
       child: InkWell(
-        onTap: () {
+        onTap: isReviewed ? null : () {
           final String airlineId = airlineData['_id'];
           aviationInfoNotifier.updateAirline(airlineId);
           final String airportId = airportData['_id'];
 
           aviationInfoNotifier.updateAirport(airportId);
+          aviationInfoNotifier.updateIndex(index);
+          aviationInfoNotifier.updateIsDeparture(isDeparture);
           final aviation = ref.watch(aviationInfoProvider);
-      
 
           print(
               "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline} ");
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
-        },
-        child: Container(
+        },        child: Container(
           decoration: AppStyles.cardDecoration,
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -88,24 +92,49 @@ class ReviewAirportCard extends ConsumerWidget {
                 SizedBox(
                   height: 18,
                 ),
-                IntrinsicWidth(
-                  child: Container(
-                    height: 24,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Center(
-                        child: Text(
-                          status,
-                          style: AppStyles.textStyle_14_500
-                              .copyWith(color: Colors.white),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IntrinsicWidth(
+                      child: Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Center(
+                            child: Text(
+                              status,
+                              style: AppStyles.textStyle_14_500
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                    if (isReviewed)
+                      IntrinsicWidth(
+                        child: Container(
+                          height: 24,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Center(
+                              child: Text(
+                                "Reviewed",
+                                style: AppStyles.textStyle_14_500
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                  ],
+                ),
               ],
             ),
           ),
