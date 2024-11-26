@@ -1,49 +1,97 @@
-import 'package:airline_app/screen/profile/widget/cair_category_reviews.dart';
-
-import 'package:airline_app/utils/cairport_list_json.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class CLeaderboardScreen extends StatelessWidget {
+class CLeaderboardScreen extends ConsumerWidget {
   const CLeaderboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // List reviews = cairportList[1]['reviews']['Seat Comfort'];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userData = ref.watch(userDataProvider);
+    final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
+
+    if (userData == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final userId = userData['userData']['_id'];
+
+    if (userId == null) {
+      return const Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Center(child: Text("User ID not found")),
+      );
+    }
+
+    final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 17.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                AppLocalizations.of(context).translate('Showing'),
-                // style: AppStyles.showTextStyle,
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(
+                  AppLocalizations.of(context).translate('Showing'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
               Expanded(child: ReviewScore())
             ],
           ),
         ),
-        Column(
-          children: trendingFeedbackList.map((singleReview) {
-            return CairCategoryReviews(
-              review: singleReview,
-            );
-          }).toList(),
-        ),
+        if (userReviews.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 16.0),
+            child: Center(child: Text("No reviews found")),
+          )
+        else
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: userReviews.map((singleReview) {
+              if (singleReview != null) {
+                final reviewer = singleReview['reviewer'];
+                final airline = singleReview['airline'];
+                final from = singleReview['from'];
+                final to = singleReview['to'];
+
+                if (reviewer != null &&
+                    airline != null &&
+                    from != null &&
+                    to != null) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 24.0),
+                    child: FeedbackCard(
+                      singleFeedback: singleReview,
+                    ),
+                  );
+                }
+              }
+              return const SizedBox.shrink();
+            }).toList(),
+          ),
       ],
     );
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 class ReviewScore extends StatefulWidget {
   @override
   _ReviewScoreState createState() => _ReviewScoreState();
 }
 
 class _ReviewScoreState extends State<ReviewScore> {
-  String? _selectedItem; // Variable to hold the selected item
+  String? _selectedItem;
   final List<String> _items = [
     'Highest Score',
     'Mid Score',
@@ -53,22 +101,16 @@ class _ReviewScoreState extends State<ReviewScore> {
   @override
   void initState() {
     super.initState();
-    _selectedItem = _items[0]; // Set default selected item
+    _selectedItem = _items[0];
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Main container for the dropdown
-      width: 300, // Set width as needed
-      padding: EdgeInsets.symmetric(horizontal: 25),
-
       child: DropdownButtonHideUnderline(
-        // Hides the default underline
         child: DropdownButton<String>(
           value: _selectedItem,
-
-          isExpanded: true, // Make dropdown fill available space
+          isExpanded: true,
           icon: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Icon(
@@ -76,22 +118,19 @@ class _ReviewScoreState extends State<ReviewScore> {
               color: Colors.grey.shade600,
             ),
           ),
-          // Style for the button when collapsed
-
           style: TextStyle(
-              color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500),
-          // Customize the dropdown menu appearance
-          menuMaxHeight: 600, // Maximum height of the dropdown menu
-          elevation: 8, // Shadow depth of the dropdown menu
-          // Style for the dropdown menu
+              color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
+          menuMaxHeight: 600,
+          elevation: 8,
           dropdownColor: Colors.white,
           borderRadius: BorderRadius.circular(8),
           onChanged: (String? newValue) {
-            setState(() {
-              _selectedItem = newValue;
-            });
+            if (newValue != null) {
+              setState(() {
+                _selectedItem = newValue;
+              });
+            }
           },
-          // Generate items for the dropdown
           items: _items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -99,11 +138,10 @@ class _ReviewScoreState extends State<ReviewScore> {
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
-                  // Hover effect (only visible on web)
                   color: Colors.transparent,
                 ),
                 child: Text(
-                  AppLocalizations.of(context).translate('$value'),
+                  AppLocalizations.of(context).translate(value) ?? value,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,

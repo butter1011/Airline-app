@@ -233,8 +233,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                   children: reviews.map(
                                     (singleFeedback) {
                                       return SizedBox(
-                                        child: FeedbackCard(
-                                            singleFeedback: singleFeedback),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(right: 16),
+                                          child: SizedBox(
+                                            width: 299,
+                                            child: FeedbackCard(
+                                                singleFeedback: singleFeedback),
+                                          ),
+                                        ),
                                       );
                                     },
                                   ).toList(),

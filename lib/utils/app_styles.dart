@@ -32,6 +32,20 @@ class AppStyles {
     color: Colors.black,
   );
 
+  static TextStyle textStyle_14_400_grey = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Colors.grey,
+  );
+
+  static TextStyle textStyle_14_400_littleGrey = const TextStyle(
+    fontFamily: 'Clash Grotesk',
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF38433E),
+  );
+
   static TextStyle textStyle_14_500 = const TextStyle(
     fontFamily: 'Clash Grotesk',
     fontSize: 14,
