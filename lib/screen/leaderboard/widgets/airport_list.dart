@@ -5,21 +5,22 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class AirportList extends StatelessWidget {
-  const AirportList({
-    super.key,
-    required this.name,
-    required this.isAirline,
-    required this.isIncreasing,
-    required this.logoImage,
-    required this.index,
-    required this.totalReviews,
-    required this.backgroundImage,
-    required this.perksBio,
-    required this.trendingBio,
-    required this.descriptionBio,
-    // required this.logo
-  });
-
+  const AirportList(
+      {super.key,
+      required this.name,
+      required this.isAirline,
+      required this.isIncreasing,
+      required this.logoImage,
+      required this.index,
+      required this.totalReviews,
+      required this.backgroundImage,
+      required this.perksBio,
+      required this.trendingBio,
+      required this.descriptionBio,
+      required this.bookMarkId
+      // required this.logo
+      });
+  final String bookMarkId;
   final String name;
   final bool isAirline;
   final int index;
@@ -42,7 +43,8 @@ class AirportList extends StatelessWidget {
           'descriptionBio': descriptionBio,
           'perksBio': perksBio,
           'trendingBio': trendingBio,
-          'backgroundImage': backgroundImage
+          'backgroundImage': backgroundImage,
+          'bookMarkId': bookMarkId
         });
       },
       child: Container(

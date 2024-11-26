@@ -1,28 +1,42 @@
 import 'package:airline_app/provider/button_expand_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
-class DetailAirport extends StatefulWidget {
+class DetailAirport extends ConsumerStatefulWidget {
   const DetailAirport({super.key});
 
   @override
-  State<DetailAirport> createState() => _DetailAirportState();
+  ConsumerState<DetailAirport> createState() => _DetailAirportState();
 }
 
-class _DetailAirportState extends State<DetailAirport> {
+class _DetailAirportState extends ConsumerState<DetailAirport> {
   bool _clickedBoolmark = false;
   bool isExpanded = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+
+  Future<void> _sharedBookMarkSaved(String bookMarkId) async {
+    if (_clickedBoolmark) {
+      final userId = ref.watch(userDataProvider)?['userData']['_id'];
+      final sendData = await http.post(
+        Uri.parse('$apiUrl/api/userInfo/adding-bookmark'),
+        body: {'userId': userId, 'bookMarkId': bookMarkId},
+      );
+      print('👏👏👏$bookMarkId, $userId');
+    }
   }
 
   @override
@@ -33,6 +47,7 @@ class _DetailAirportState extends State<DetailAirport> {
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
+    final String bookMarkId = args['bookMarkId'];
 
     // List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
 
@@ -107,6 +122,7 @@ class _DetailAirportState extends State<DetailAirport> {
                               setState(() {
                                 _clickedBoolmark = !_clickedBoolmark;
                               });
+                              _sharedBookMarkSaved(bookMarkId);
                             },
                             iconSize: 30,
                             icon: Icon(

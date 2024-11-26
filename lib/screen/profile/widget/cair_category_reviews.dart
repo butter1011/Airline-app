@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -22,8 +25,32 @@ class CairCategoryReviews extends ConsumerStatefulWidget {
 }
 
 class _CairCategoryReviewsState extends ConsumerState<CairCategoryReviews> {
+  late Map userReviewData;
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    final userAirlineReviewData = ref.watch(reviewsAirlineProvider);
+    final userId = ref.watch(userDataProvider)?['userData']['_id'];
+    userReviewData = userAirlineReviewData
+        .map((item) {
+          if (item['reivewer'] == userId) {
+            return item;
+          }
+          return null;
+        })
+        .whereType<Map>()
+        .toList()
+        .first;
+    print('💥💥💥$userReviewData');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userAirlineReviewData = ref.watch(reviewsAirlineProvider);
+    // print('📞👌📞👌$userAirlineReviewData');
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
