@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
+import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
@@ -52,6 +53,7 @@ class _QuestionThirdScreenForAirlineState
     final reviewData = ref.watch(reviewFeedBackProviderForAirline);
     // final userData = ref.watch(userDataProvider);
     // final reviewer = userData!['userData']['_id'];
+    final index = flightData.index;
     final from = flightData.from;
     final to = flightData.to;
     final airline = flightData.airline;
@@ -109,6 +111,7 @@ class _QuestionThirdScreenForAirlineState
                           text: 'Submit',
                           onPressed: () async {
                             _isLoading = true;
+                            print("This is index:⭕⭕$index");
                             try {
                               final review = AirlineReviewModel(
                                 reviewer: "673ce4b17b423be4af57fb8a",
@@ -128,6 +131,12 @@ class _QuestionThirdScreenForAirlineState
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
+                                if (index != null) {
+                                  ref
+                                      .read(boardingPassesProvider.notifier)
+                                      .markFlightAsReviewed(index);
+                                }
+
                                 ref
                                     .read(aviationInfoProvider.notifier)
                                     .resetState();

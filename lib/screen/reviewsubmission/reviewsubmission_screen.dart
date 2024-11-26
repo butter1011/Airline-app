@@ -1,9 +1,12 @@
 import 'package:airline_app/controller/get_airline_controller.dart';
+import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/boarding_passes_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/scanner_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
-import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -28,6 +31,7 @@ class _ReviewsubmissionScreenState
   void initState() {
     super.initState();
     _getAirlineData.getAirlineAirport().then((value) {
+      print("This is airlineAirport Data:🛹🛹🛹=================> $value");
       ref.read(airlineAirportProvider.notifier).setData(value);
     });
   }
@@ -40,9 +44,9 @@ class _ReviewsubmissionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final airlineAirportState = ref.watch(airlineAirportProvider);
     // print("✈✈This is airline and airport data by http========> ${airlineAirportState.airportData}");
-    List<dynamic> flights = airportCardList;
+    final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
+    // List<dynamic> flights = airportCardList;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 52.2,
@@ -68,83 +72,111 @@ class _ReviewsubmissionScreenState
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
         ),
-        child: ListView(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Text(
-                    AppLocalizations.of(context).translate('Type'),
-                    style: AppStyles.textStyle_18_600,
+        child: boardingPasses.isEmpty
+            ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  AppLocalizations.of(context)
+                      .translate('Nothing to show here'),
+                  style: AppStyles.textStyle_24_600,
+                ),
+                Text(
+                    AppLocalizations.of(context).translate(
+                        'Here, you can synchronize your calendar and wallet or manually input the review details.'),
+                    style: AppStyles.textStyle_15_500
+                        .copyWith(color: Color(0xff38433E))),
+              ])
+            : ListView(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24),
+                        child: Text(
+                          AppLocalizations.of(context).translate('Type'),
+                          style: AppStyles.textStyle_18_600,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TypeButton(
+                            text: "All",
+                            isSelected: selectedType == "All",
+                            onTap: () => onTypeSelected("All"),
+                          ),
+                          SizedBox(width: 8),
+                          TypeButton(
+                            text: "Flights",
+                            isSelected: selectedType == "Flights",
+                            onTap: () => onTypeSelected("Flights"),
+                          ),
+                          SizedBox(width: 8),
+                          TypeButton(
+                            text: "Airports",
+                            isSelected: selectedType == "Airports",
+                            onTap: () => onTypeSelected("Airports"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 26),
+                      Divider(
+                        color: Colors.black,
+                        thickness: 2,
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    TypeButton(
-                      text: "All",
-                      isSelected: selectedType == "All",
-                      onTap: () => onTypeSelected("All"),
-                    ),
-                    SizedBox(width: 8),
-                    TypeButton(
-                      text: "Flights",
-                      isSelected: selectedType == "Flights",
-                      onTap: () => onTypeSelected("Flights"),
-                    ),
-                    SizedBox(width: 8),
-                    TypeButton(
-                      text: "Airports",
-                      isSelected: selectedType == "Airports",
-                      onTap: () => onTypeSelected("Airports"),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 26),
-                Divider(
-                  color: Colors.black,
-                  thickness: 2,
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Column(
-              children: [
-                ...flights.map((singleFlight) {
-                  return _CardWidget(singleFlight);
-                }),
-              ],
-            ),
-          ],
-        ),
+                  SizedBox(height: 12),
+                  Column(
+                    children: [
+                      ...boardingPasses.map((singleBoardingPass) {
+                        return _CardWidget(singleBoardingPass);
+                      }),
+                    ],
+                  ),
+                ],
+              ),
       ),
       bottomNavigationBar: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: 2,
             color: Colors.black,
           ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.syncedscreen);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Container(
-                height: 56,
-                decoration: AppStyles.buttonDecoration.copyWith(
-                  borderRadius: BorderRadius.circular(28),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              children: [
+                NavButton(
+                  text: AppLocalizations.of(context).translate('Synchronize'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ScannerScreen(),
+                      ),
+                    );
+                  },
+                  color: Colors.white,
                 ),
-                child: Center(
-                    child: Text(
-                  AppLocalizations.of(context).translate('Not here?'),
-                  style: AppStyles.textStyle_15_600,
-                )),
-              ),
+                SizedBox(
+                  height: 12,
+                ),
+                NavButton(
+                  text:
+                      AppLocalizations.of(context).translate('Input manually'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.manualinput);
+                  },
+                  color: AppStyles.mainColor,
+                )
+              ],
             ),
           ),
         ],
@@ -152,28 +184,41 @@ class _ReviewsubmissionScreenState
     );
   }
 
-  Widget _CardWidget(dynamic singleFlight) {
+  Widget _CardWidget(BoardingPass singleBoardingPass) {
+    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
         children: [
           if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(singleFlight: singleFlight),
+            ReviewFlightCard(
+              singleBoardingPass: singleBoardingPass,
+              index: index,
+              isReviewed: singleBoardingPass.isFlightReviewed,
+            ),
           if ((selectedType == "All" || selectedType == "Airports") &&
               (selectedType != "Flights"))
             Column(
               children: [
                 if (selectedType == "All") SizedBox(height: 10),
                 ReviewAirportCard(
-                  singleAirport: singleFlight["from"],
-                  status: singleFlight["visit status"],
-                  airline: singleFlight['airline'],
+                  index: index,
+                  status: singleBoardingPass.visitStatus,
+                  airlineCode: singleBoardingPass.airlineCode,
+                  airportCode: singleBoardingPass.departureAirportCode,
+                  time: singleBoardingPass.departureTime,
+                  isDeparture:true,
+                  isReviewed:singleBoardingPass.isDepartureAirportReviewed
                 ),
                 SizedBox(height: 10),
                 ReviewAirportCard(
-                  singleAirport: singleFlight["to"],
-                  status: singleFlight["visit status"],
-                  airline: singleFlight['airline'],
+                  index: index,
+                  status: singleBoardingPass.visitStatus,
+                  airlineCode: singleBoardingPass.airlineCode,
+                  airportCode: singleBoardingPass.arrivalAirportCode,
+                  time: singleBoardingPass.arrivalTime,
+                  isDeparture: false,
+                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
                 ),
               ],
             ),

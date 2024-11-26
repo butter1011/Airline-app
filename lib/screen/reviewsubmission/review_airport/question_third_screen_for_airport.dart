@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
@@ -13,6 +14,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
 class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
@@ -51,6 +53,9 @@ class _QuestionThirdScreenForAirportState
     final reviewData = ref.watch(reviewFeedBackProviderForAirport);
     // final userData = ref.watch(userDataProvider);
     // final reviewer = userData!['userData']['_id'];
+    final index = airportData.index;
+    final isDeparture = airportData.isDeparture;
+
     final airport = airportData.airport;
     final airline = airportData.airline;
     // final classTravel = airportData.selectedClassOfTravel;
@@ -110,7 +115,6 @@ class _QuestionThirdScreenForAirportState
                             try {
                               final review = AirportReviewModel(
                                 reviewer: "67375a13151c33aa85429a29",
-                                // classTravel:classTravel,
                                 airline: airline,
                                 airport: airport,
                                 accessibility: accessibility,
@@ -125,6 +129,12 @@ class _QuestionThirdScreenForAirportState
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
+                                if (index != null && isDeparture != null) {
+                                  ref
+                                      .read(boardingPassesProvider.notifier)
+                                      .markAirportAsReviewed(
+                                          index, isDeparture);
+                                }
                                 ref
                                     .read(aviationInfoProvider.notifier)
                                     .resetState();
