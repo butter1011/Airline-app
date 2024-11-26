@@ -1,8 +1,8 @@
 import 'package:airline_app/controller/feedback_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/feed/widgets/feed_card.dart';
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +193,7 @@ class _FeedScreenState extends State<FeedScreen> {
                         children: [
                           Column(
                               children: reviewList.map((singleFeedback) {
-                            return FeedCard(
+                            return FeedbackCard(
                                 singleFeedback:
                                     singleFeedback); // Your custom widget
                           }).toList()),
