@@ -3,10 +3,13 @@ import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FeedbackCard extends StatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
@@ -154,10 +157,44 @@ class _FeedbackCardState extends State<FeedbackCard> {
                           context.findRenderObject() as RenderBox;
                       final index =
                           await EmojiBox.showCustomDialog(context, button);
-                      // Update selected emoji after dialog closes
-                      setState(() {
-                        selectedEmojiIndex = index != null ? index + 1 : null;
-                      });
+
+                      if (index != null) {
+                        setState(() {
+                          selectedEmojiIndex = index + 1;
+                        });
+                      }
+
+                      if (index != null) {
+                        try {
+                          // Make API call to update reaction in backend
+                          final response = await http.post(
+                            Uri.parse('$apiUrl/api/v1/airline-review/update'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: jsonEncode({
+                              'feedbackId': widget.singleFeedback['id'],
+                              'user_id': widget.singleFeedback['user_id'],
+                              'reactionType': selectedEmojiIndex,
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            // Update the local rating count on successful API call
+                            setState(() {
+                              widget.singleFeedback["rating"] += 1;
+                            });
+                          } else {
+                            // Show error message if API call fails
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Failed to update reaction')),
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Something went wrong')),
+                          );
+                        }
+                      } // Update selected emoji after dialog closes
                     },
                     icon: selectedEmojiIndex != null
                         ? SvgPicture.asset(

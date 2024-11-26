@@ -53,7 +53,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       _channel.stream.listen((message) {
         final data = json.decode(message);
         if (data['type'] == 'airlineAirport') {
-          ref.read(airlineAirportProvider.notifier).setData(data);
+          ref.read(airlineAirportProvider.notifier).setData(data['data']);
+        }
+        if (data['type'] == 'airlineReviews') {
+          ref.read(reviewsAirlineProvider.notifier).setReviews(data['data']);
         }
       }, onError: (error) {
         print("WebSocket error: $error");
