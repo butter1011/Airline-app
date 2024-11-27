@@ -41,7 +41,7 @@ class _ReviewsubmissionScreenState
       await Future.wait([
         _getAirlineData.getAirlineAirport().then((airlineData) {
           if (mounted) {
-            ref.read(airlineAirportProvider.notifier).setData(airlineData);
+            ref.read(airlineAirportProvider.notifier).setData(airlineData['data']);
           }
         }),
         _boardingPassController

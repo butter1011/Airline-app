@@ -191,10 +191,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               // Update the provider with the new review
                               ref
                                   .read(reviewsAirlineProvider.notifier)
-                                  .setReviews([
-                                ...ref.read(reviewsAirlineProvider),
-                                widget.singleFeedback
-                              ]);
+                                  .addReview(widget.singleFeedback);
 
                               widget.singleFeedback["rating"] += 1;
                             });

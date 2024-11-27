@@ -51,7 +51,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     if (reviewsResult['success']) {
       ref
           .read(reviewsAirlineProvider.notifier)
-          .setReviews(reviewsResult['data']);
+          .setData(reviewsResult['data']);
     }
   }
 
