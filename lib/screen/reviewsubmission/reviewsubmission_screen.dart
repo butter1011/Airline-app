@@ -25,7 +25,7 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
-  final _getAirlineData = GetAirlineAirportController();
+  final _getAirlineAirportData = GetAirlineAirportController();
   final _boardingPassController = BoardingPassController();
   bool isLoading = true;
   String selectedType = "All";
@@ -39,9 +39,10 @@ class _ReviewsubmissionScreenState
   Future<void> _loadData() async {
     try {
       await Future.wait([
-        _getAirlineData.getAirlineAirport().then((airlineData) {
+        _getAirlineAirportData.getAirlineAirport().then((airlineAirportData) {
+          print("This is airline, airport data 💎============> $airlineAirportData");
           if (mounted) {
-            ref.read(airlineAirportProvider.notifier).setData(airlineData);
+            ref.read(airlineAirportProvider.notifier).setData(airlineAirportData['data']);
           }
         }),
         _boardingPassController
@@ -59,15 +60,14 @@ class _ReviewsubmissionScreenState
         setState(() => isLoading = false);
       }
     }
-
   }
-
 
   void onTypeSelected(String type) {
     setState(() {
       selectedType = type;
     });
   }
+
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
