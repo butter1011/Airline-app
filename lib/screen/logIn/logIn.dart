@@ -104,7 +104,7 @@ class _LoginState extends ConsumerState<Login> {
         if (reviewsResult['success']) {
           ref
               .read(reviewsAirlineProvider.notifier)
-              .setReviews(reviewsResult['data']);
+              .setData(reviewsResult['data']);
         }
 
         Navigator.pop(context); // Remove loading dialog

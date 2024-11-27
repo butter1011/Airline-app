@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
@@ -175,28 +177,32 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                       if (index != null) {
                         try {
-                          // Make API call to update reaction in backend
+                          // Update reaction in backend
                           final response = await http.post(
                             Uri.parse('$apiUrl/api/v1/airline-review/update'),
-                            headers: {'Content-Type': 'application/json'},
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                            },
                             body: jsonEncode({
                               'feedbackId': widget.singleFeedback['id'],
-                              'user_id': widget.singleFeedback['user_id'],
+                              'user_id': ref
+                                  .watch(userDataProvider)?['userData']['_id'],
                               'reactionType': selectedEmojiIndex,
                             }),
                           );
 
                           if (response.statusCode == 200) {
+                            final userId =
+                                ref.watch(userDataProvider)?['userData']['_id'];
                             setState(() {
-                              // Update the provider with the new review
                               ref
                                   .read(reviewsAirlineProvider.notifier)
-                                  .setReviews([
-                                ...ref.read(reviewsAirlineProvider),
-                                widget.singleFeedback
-                              ]);
-
-                              widget.singleFeedback["rating"] += 1;
+                                  .updateReview(
+                                    widget.singleFeedback['id'],
+                                    userId,
+                                    selectedEmojiIndex,
+                                  );
                             });
                           } else {
                             // Show error message if API call fails
@@ -221,8 +227,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  // Text(widget.singleFeedback["rating"].toString(),
-                  //     style: AppStyles.textStyle_14_600),
+                  Text(widget.singleFeedback["rating"].length.toString(),
+                      style: AppStyles.textStyle_14_600),
                 ],
               ),
             ],

@@ -49,9 +49,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final reviewsController = GetReviewsAirlineController();
     final reviewsResult = await reviewsController.getReviews();
     if (reviewsResult['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviews(reviewsResult['data']);
+      ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
     }
   }
 
@@ -61,8 +59,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         Uri.parse('ws://$backendUrl/ws'),
       );
 
-      print('WebSocket connected');
-
       _channel.stream.listen((message) {
         final data = json.decode(message);
         if (data['type'] == 'airlineAirport') {
@@ -70,14 +66,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               .read(airlineAirportProvider.notifier)
               .setData(Map<String, dynamic>.from(data));
         }
-      }, onError: (error) {
-        print("WebSocket error: $error");
-      }, onDone: () {
-        print("WebSocket connection closed");
-      });
-    } catch (e) {
-      print("Error connecting to WebSocket: $e");
-    }
+      }, onError: (_) {}, onDone: () {});
+    } catch (_) {}
   }
 
   @override
@@ -312,9 +302,12 @@ class _AirportListSection extends StatelessWidget {
         Column(
           children: leaderBoardList.asMap().entries.map((entry) {
             int index = entry.key;
+
             Map<String, dynamic> singleAirport = entry.value;
+            // print('⚽🌹⚽🌹⚽🌹⚽$entry.value');
             if (index < expandedItems) {
               return AirportList(
+                bookMarkId: singleAirport['_id'],
                 name: singleAirport['name'],
                 isAirline: singleAirport['isAirline'],
                 isIncreasing: singleAirport['isIncreasing'],

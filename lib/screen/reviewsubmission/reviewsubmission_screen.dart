@@ -40,7 +40,6 @@ class _ReviewsubmissionScreenState
     try {
       await Future.wait([
         _getAirlineAirportData.getAirlineAirport().then((airlineAirportData) {
-          print("This is airline, airport data 💎============> $airlineAirportData");
           if (mounted) {
             ref.read(airlineAirportProvider.notifier).setData(airlineAirportData['data']);
           }

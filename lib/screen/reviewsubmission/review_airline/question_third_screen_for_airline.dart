@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
@@ -62,6 +63,8 @@ class _QuestionThirdScreenForAirlineState
     final boardingPassController = BoardingPassController();
     final flightData = ref.watch(aviationInfoProvider);
     final reviewData = ref.watch(reviewFeedBackProviderForAirline);
+    final userData = ref.watch(userDataProvider);
+    final reviewer = userData?['userData']['_id'] ?? '';
     final index = flightData.index;
     final from = flightData.from;
     final to = flightData.to;
@@ -102,7 +105,8 @@ class _QuestionThirdScreenForAirlineState
               children: [
                 Container(height: 2, color: Colors.black),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: Row(
                     children: [
                       Expanded(
@@ -117,14 +121,13 @@ class _QuestionThirdScreenForAirlineState
                         child: NavPageButton(
                           text: 'Submit',
                           onPressed: () async {
-
                             setState(() {
                               _isLoading = true;
                             });
 
                             try {
                               final review = AirlineReviewModel(
-                                reviewer: "673ce4b17b423be4af57fb8a",
+                                reviewer: reviewer,
                                 from: from,
                                 to: to,
                                 classTravel: classTravel,
@@ -138,7 +141,6 @@ class _QuestionThirdScreenForAirlineState
                                 comment: comment,
                               );
 
-
                               final result =
                                   await _reviewController.saveReview(review);
 
@@ -146,11 +148,7 @@ class _QuestionThirdScreenForAirlineState
                                 // Add the new review to the provider
                                 ref
                                     .read(reviewsAirlineProvider.notifier)
-                                    .addReview(
-                                        Map<String, dynamic>.from(result));
-
-                                print("Review saved successfully");
-                                print(ref.read(reviewsAirlineProvider));
+                                    .addReview(result['data']);
 
                                 if (index != null) {
                                   final updatedBoardingPass = ref
@@ -161,27 +159,32 @@ class _QuestionThirdScreenForAirlineState
                                       .updateBoardingPass(updatedBoardingPass);
                                 }
 
-                                ref.read(aviationInfoProvider.notifier).resetState();
-                                ref.read(reviewFeedBackProviderForAirline.notifier).resetState();
-                                
+                                ref
+                                    .read(aviationInfoProvider.notifier)
+                                    .resetState();
+                                ref
+                                    .read(reviewFeedBackProviderForAirline
+                                        .notifier)
+                                    .resetState();
+
                                 setState(() => _isLoading = false);
-                                
+
                                 if (!mounted) return;
                                 // ignore: use_build_context_synchronously
-                                Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.leaderboardscreen);
                                 await showReviewSuccessBottomSheet(
-                                  // ignore: use_build_context_synchronously
-                                  context, 
-                                  () => setState(() => isSuccess = true),
-                                  "Review airport"
-                                );
-
+                                    // ignore: use_build_context_synchronously
+                                    context,
+                                    () => setState(() => isSuccess = true),
+                                    "Review airport");
                               } else {
                                 setState(() => _isLoading = false);
                                 if (!mounted) return;
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Failed to submit review')),
+                                  const SnackBar(
+                                      content: Text('Failed to submit review')),
                                 );
                               }
                             } catch (e) {
@@ -189,7 +192,8 @@ class _QuestionThirdScreenForAirlineState
                               if (!mounted) return;
                               // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error: ${e.toString()}')),
+                                SnackBar(
+                                    content: Text('Error: ${e.toString()}')),
                               );
                             }
                           },
@@ -203,7 +207,8 @@ class _QuestionThirdScreenForAirlineState
             )),
         if (_isLoading)
           Container(
-              color: Colors.black.withOpacity(0.5), child: const LoadingWidget()),
+              color: Colors.black.withOpacity(0.5),
+              child: const LoadingWidget()),
       ],
     );
   }
@@ -280,7 +285,6 @@ class _QuestionThirdScreenForAirlineState
                   color: Colors.white,
                   size: 20,
                 ),
-
               ),
             ),
           ),
@@ -309,7 +313,8 @@ class _QuestionThirdScreenForAirlineState
             ),
           ),
           const SizedBox(height: 12),
-          Text("Choose your media for upload", style: AppStyles.textStyle_15_600),
+          Text("Choose your media for upload",
+              style: AppStyles.textStyle_15_600),
         ],
       ),
     );

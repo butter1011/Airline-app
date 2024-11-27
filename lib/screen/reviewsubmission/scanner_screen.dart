@@ -127,8 +127,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
             final String rawValue = barcode.rawValue ?? '';
 
             if (rawValue.isNotEmpty) {
-              debugPrint(
-                  "This is scanned data from barcode💎=======================>: $rawValue");
               final flightNumber = extractFlightNumber(rawValue);
               final departureTime = extractDepartureTime(rawValue);
               final departureEntireTime = extractEntireDepartureTime(rawValue);

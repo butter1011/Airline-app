@@ -6,7 +6,6 @@ import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:airline_app/utils/app_localizations.dart';
 
 class FeedScreen extends StatefulWidget {
   FeedScreen({super.key});

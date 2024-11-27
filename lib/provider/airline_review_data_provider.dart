@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Reviews notifier class
 class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
   ReviewsAirlineNotifier() : super([]);
-  void setReviews(List<dynamic> reviews) {
-    print(reviews);
-    print("------------------");
-    state = reviews;
+
+  void setData(Map<String, dynamic> value) {
+    final allData = value["data"] as List;
+    state = allData;
   }
 
   void clearReviews() {
@@ -14,9 +14,24 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
   }
 
   void addReview(Map<String, dynamic> reviewResponse) {
-    final allData = reviewResponse;
-    print(allData); 
-    state = [...state, allData];
+    state = [...state, reviewResponse];
+  }
+
+  void updateReview(String feedbackId, String userId, int? reactionIndex) {
+    state = state.map((review) {
+      if (review['_id'] == feedbackId) {
+        if (review['rating'] != null) {
+          return {
+            ...review,
+            'rating': {
+              ...review['rating'],
+              userId: reactionIndex,
+            },
+          };
+        }
+      }
+      return review;
+    }).toList();
   }
 
   List<dynamic> getReviewsByUserId(String userId) {
