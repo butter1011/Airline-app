@@ -32,6 +32,9 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airlineData = airlineAirportNotifier
         .getAirlineData(widget.singleBoardingPass.airlineCode);
+    print(
+        "This is airlineCode:🛹🛹🛹=================> ${widget.singleBoardingPass.airlineCode}");
+
     final departureAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
     final arrivalAirportData = airlineAirportNotifier
@@ -39,9 +42,9 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
 
     // final originCountry = widget.singleBoardingPass.departureCountry;
 
-    final departureCountryCode = departureAirportData['countryCode'];
+    final departureCountryCode = departureAirportData['countryCode'] ?? "";
     final originTime = widget.singleBoardingPass.departureTime;
-    final arrivalCountryCode = arrivalAirportData['countryCode'];
+    final arrivalCountryCode = arrivalAirportData['countryCode'] ?? "";
     final arrivalTime = widget.singleBoardingPass.arrivalTime;
 
     final flightNumber = widget.singleBoardingPass.flightNumber;
@@ -70,6 +73,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   final String toId = arrivalAirportData['_id'];
                   aviationInfoNotifier.updateTo(toId);
                   aviationInfoNotifier.updateClassOfTravel(classTravel);
+                  print("====================$airlineData");
 
                   final String airlineId = airlineData['_id'];
                   aviationInfoNotifier.updateAirline(airlineId);

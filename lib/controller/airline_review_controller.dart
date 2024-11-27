@@ -23,7 +23,6 @@ class AirlineReviewController {
         throw Exception('Error: $errorMessage');
       }
     } catch (e) {
-      // Optionally show a user-friendly message
       return {'success': false, 'message': e.toString()};
     }
   }
