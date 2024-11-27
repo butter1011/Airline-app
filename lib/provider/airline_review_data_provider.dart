@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
   ReviewsAirlineNotifier() : super([]);
   void setReviews(List<dynamic> reviews) {
+    print(reviews);
+    print("------------------");
     state = reviews;
   }
 
@@ -11,8 +13,16 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
     state = [];
   }
 
+  void addReview(Map<String, dynamic> reviewResponse) {
+    final allData = reviewResponse;
+    print(allData); 
+    state = [...state, allData];
+  }
+
   List<dynamic> getReviewsByUserId(String userId) {
-    return state.where((review) => review['reviewer']['_id'] == userId).toList();
+    return state
+        .where((review) => review['reviewer']['_id'] == userId)
+        .toList();
   }
 }
 

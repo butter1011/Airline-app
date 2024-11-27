@@ -1,44 +1,57 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_country_flag.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:country_codes/country_codes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:country_flags/country_flags.dart';
 
 class ReviewAirportCard extends ConsumerWidget {
   const ReviewAirportCard(
       {super.key,
-      required this.singleAirport,
+      required this.index,
       required this.status,
-      required this.airline});
-  final Map<String, dynamic> singleAirport;
-  final String airline;
+      required this.airlineCode,
+      required this.airportCode,
+      required this.time,
+      required this.isDeparture,
+      required this.isReviewed});
+  final int index;
   final String status;
+  final String time;
+  final String airlineCode;
+  final String airportCode;
+  final bool isDeparture;
+  final bool isReviewed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
-    final flag = singleAirport["flag"];
-    final country = singleAirport["country"];
-    final airport = singleAirport["airport"] ?? "";
-    final time = singleAirport['time'];
-    final aviation = ref.watch(aviationInfoProvider);
+    final airportData = airlineAirportNotifier.getAirportData(airportCode);
+    final airlineData = airlineAirportNotifier.getAirlineData(airlineCode);
+    final CountryDetails country =
+        CountryCodes.detailsFromAlpha2(airportData['countryCode']);
 
     return Opacity(
-      opacity: status == "Upcoming visit" ? 0.2 : 1,
+      opacity: status == "Upcoming visit" || isReviewed ? 0.5 : 1,
       child: InkWell(
-        onTap: () {
-          final String airlineId = airlineAirportNotifier.getAirlineId(airline);
+        onTap: isReviewed ? null : () {
+          final String airlineId = airlineData['_id'];
           aviationInfoNotifier.updateAirline(airlineId);
-          final String airportId = airlineAirportNotifier.getAirportId(airport);
+          final String airportId = airportData['_id'];
+
           aviationInfoNotifier.updateAirport(airportId);
+          aviationInfoNotifier.updateIndex(index);
+          aviationInfoNotifier.updateIsDeparture(isDeparture);
           final aviation = ref.watch(aviationInfoProvider);
-          // print(
-          //     "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline}");
+
+          print(
+              "🎁🎁🎁This is airport card==============>airportId: ${aviation.airport} airlineId: ${aviation.airline} ");
           Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
-        },
-        child: Container(
+        },        child: Container(
           decoration: AppStyles.cardDecoration,
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -48,13 +61,13 @@ class ReviewAirportCard extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.asset(flag),
-                    // originFlag.isNotEmpty ? Image.asset(originFlag) : Text(""),
+                    buildCountryFlag(airportData['countryCode']),
+                    // departureCountryCode.isNotEmpty ? Image.asset(departureCountryCode) : Text(""),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
-                      country + ', ' + time,
+                      "${country.name}, $time",
                       style: AppStyles.textStyle_13_600,
                     )
                   ],
@@ -66,7 +79,7 @@ class ReviewAirportCard extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      airport,
+                      airportData['name'],
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),
@@ -79,24 +92,49 @@ class ReviewAirportCard extends ConsumerWidget {
                 SizedBox(
                   height: 18,
                 ),
-                IntrinsicWidth(
-                  child: Container(
-                    height: 24,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Center(
-                        child: Text(
-                          status,
-                          style: AppStyles.textStyle_14_500
-                              .copyWith(color: Colors.white),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IntrinsicWidth(
+                      child: Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Center(
+                            child: Text(
+                              status,
+                              style: AppStyles.textStyle_14_500
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                    if (isReviewed)
+                      IntrinsicWidth(
+                        child: Container(
+                          height: 24,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Center(
+                              child: Text(
+                                "Reviewed",
+                                style: AppStyles.textStyle_14_500
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                  ],
+                ),
               ],
             ),
           ),

@@ -20,7 +20,7 @@ class EmojiBox {
 
     // Adjust horizontal position if box goes outside screen
     if (left + 280 > screenSize.width) {
-      left = screenSize.width - 280 - 16; // Add padding from right edge
+      left = screenSize.width - 280; // Add padding from right edge
     }
     if (left < 16) {
       left = 16; // Add padding from left edge

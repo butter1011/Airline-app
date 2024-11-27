@@ -25,7 +25,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   AirlineAirportNotifier() : super(AirlineAirportState());
 
   void setData(Map<String, dynamic> value) {
-    final allData = value["data"]["data"] as List;
+
+    final allData = value["data"] as List;
 
     state = state.copyWith(
       airlineData:
@@ -35,22 +36,22 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     );
   }
 
-  String getAirportId(String airportName) {
+  Map getAirportData(String airportCode) {
     final airportData = state.airportData;
     final airport = airportData.firstWhere(
-      (airport) => airport['name'] == airportName,
+      (airport) => airport['iataCode'] == airportCode,
       orElse: () => null,
     );
-    return airport?['_id'] ?? '';
+    return airport ?? {};
   }
 
-  String getAirlineId(String airlineName) {
+  Map getAirlineData(String airlineCode) {
     final airlineData = state.airlineData;
-    final airport = airlineData.firstWhere(
-      (airport) => airport['name'] == airlineName,
+    final airline = airlineData.firstWhere(
+      (airline) => airline['iataCode'] == airlineCode,
       orElse: () => null,
     );
-    return airport?['_id'] ?? '';
+    return airline ?? {};
   }
 }
 

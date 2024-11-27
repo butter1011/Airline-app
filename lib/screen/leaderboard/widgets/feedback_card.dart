@@ -3,20 +3,25 @@ import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 
-class FeedbackCard extends StatefulWidget {
+class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
   final Map<String, dynamic> singleFeedback;
 
   @override
-  State<FeedbackCard> createState() => _FeedbackCardState();
+  ConsumerState<FeedbackCard> createState() => _FeedbackCardState();
 }
 
-class _FeedbackCardState extends State<FeedbackCard> {
+class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   int? selectedEmojiIndex;
   final CarouselSliderController buttonCarouselController =
       CarouselSliderController();
@@ -28,6 +33,13 @@ class _FeedbackCardState extends State<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.singleFeedback['reviewer'] == null ||
+        widget.singleFeedback['airline'] == null ||
+        widget.singleFeedback['from'] == null ||
+        widget.singleFeedback['to'] == null) {
+      return Container(); // Return empty container if data is null
+    }
+
     final List<String> images = List<String>.from([
       'review_abudhabi_1.png',
       'review_ethiopian_2.png',
@@ -54,11 +66,11 @@ class _FeedbackCardState extends State<FeedbackCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.singleFeedback['reviewer']['name'],
+                    widget.singleFeedback['reviewer']['name'] ?? '',
                     style: AppStyles.textStyle_14_600,
                   ),
                   Text(
-                    'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date']).toLocal().toString().substring(2, 4)}',
+                    'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                     style: AppStyles.textStyle_14_400_grey,
                   )
                 ],
@@ -154,10 +166,51 @@ class _FeedbackCardState extends State<FeedbackCard> {
                           context.findRenderObject() as RenderBox;
                       final index =
                           await EmojiBox.showCustomDialog(context, button);
-                      // Update selected emoji after dialog closes
-                      setState(() {
-                        selectedEmojiIndex = index != null ? index + 1 : null;
-                      });
+
+                      if (index != null) {
+                        setState(() {
+                          selectedEmojiIndex = index + 1;
+                        });
+                      }
+
+                      if (index != null) {
+                        try {
+                          // Make API call to update reaction in backend
+                          final response = await http.post(
+                            Uri.parse('$apiUrl/api/v1/airline-review/update'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: jsonEncode({
+                              'feedbackId': widget.singleFeedback['id'],
+                              'user_id': widget.singleFeedback['user_id'],
+                              'reactionType': selectedEmojiIndex,
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            setState(() {
+                              // Update the provider with the new review
+                              ref
+                                  .read(reviewsAirlineProvider.notifier)
+                                  .setReviews([
+                                ...ref.read(reviewsAirlineProvider),
+                                widget.singleFeedback
+                              ]);
+
+                              widget.singleFeedback["rating"] += 1;
+                            });
+                          } else {
+                            // Show error message if API call fails
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Failed to update reaction')),
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Something went wrong')),
+                          );
+                        }
+                      } // Update selected emoji after dialog closes
                     },
                     icon: selectedEmojiIndex != null
                         ? SvgPicture.asset(
@@ -168,8 +221,8 @@ class _FeedbackCardState extends State<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  Text(widget.singleFeedback["rating"].toString(),
-                      style: AppStyles.textStyle_14_600),
+                  // Text(widget.singleFeedback["rating"].toString(),
+                  //     style: AppStyles.textStyle_14_600),
                 ],
               ),
             ],
