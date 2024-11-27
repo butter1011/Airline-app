@@ -61,12 +61,12 @@ class _ReviewsubmissionScreenState
     }
   }
 
+
   void onTypeSelected(String type) {
     setState(() {
       selectedType = type;
     });
   }
-
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
