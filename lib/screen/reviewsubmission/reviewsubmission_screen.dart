@@ -1,3 +1,4 @@
+import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
@@ -24,6 +25,7 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
   final _getAirlineData = GetAirlineAirportController();
+  final _boardingPassController = BoardingPassController();
   bool isLoading = true;
   String selectedType = "All";
 
@@ -33,6 +35,16 @@ class _ReviewsubmissionScreenState
     _getAirlineData.getAirlineAirport().then((value) {
       print("This is airlineAirport Data:🛹🛹🛹=================> $value");
       ref.read(airlineAirportProvider.notifier).setData(value);
+    });
+    _boardingPassController
+        .getBoardingPasses("67464377db2e9fc2dd022f69")
+        .then((boardingPasses) {
+      print(
+          "This is boarding passes:🎈🎈🎈=================> ${boardingPasses[0].id}");
+      ref.read(boardingPassesProvider.notifier).setData(boardingPasses);
+      // setState(() {
+      //   isLoading = false;
+      // });
     });
   }
 
@@ -87,6 +99,58 @@ class _ReviewsubmissionScreenState
                         'Here, you can synchronize your calendar and wallet or manually input the review details.'),
                     style: AppStyles.textStyle_15_500
                         .copyWith(color: Color(0xff38433E))),
+                FloatingActionButton(
+                  onPressed: () /* async */ {
+                    final updatingBoardingPass = BoardingPass(
+                      id: "67462231346b33ffde96fa13",
+                      name: "Simba Chan",
+                      isDepartureAirportReviewed: true,
+                    );
+                    final result = _boardingPassController
+                        .updateBoardingPass(updatingBoardingPass);
+                    print("😍😍😍😍😍😍😍😍😍$result");
+                    // final boardingPasses =
+                    //     _boardingPassController.getBoardingPasses("Maert Chan");
+                    //                   boardingPasses.then((passes) {
+                    //                     print("💎 Boarding Passes Details:");
+                    //                     for (var pass in passes) {
+                    //                       print("id:${pass.id}");
+                    //                       print("Name: ${pass.name}");
+                    //                       print("Flight: ${pass.flightNumber}");
+                    //                       print("From: ${pass.departureAirportCode} at ${pass.departureTime}");
+                    //                       print("To: ${pass.arrivalAirportCode} at ${pass.arrivalTime}");
+                    //                       print("Class: ${pass.classOfTravel}");
+                    //                       print("Airline: ${pass.airlineCode}");
+                    //                       print("Visit Status: ${pass.visitStatus}");
+                    //                       print("------------------------");
+                    //                     }
+                    //                   });                    // try {
+                    //   final boardingPass = BoardingPass(
+                    //       name: "Honda Kanjiro",
+                    //       departureAirportCode: "YUO",
+                    //       departureTime: "2024-01-20T10:00:00Z",
+                    //       arrivalAirportCode: "TEW",
+                    //       arrivalTime: "2024-01-20T12:00:00Z",
+                    //       classOfTravel: "Economy",
+                    //       airlineCode: "QA",
+                    //       flightNumber: "QA 123",
+                    //       visitStatus: "Recently",
+                    //       isFlightReviewed: true,
+                    //       isDepartureAirportReviewed: true,
+                    //       isArrivalAirportReviewed: true);
+                    //   final result = await _boardingPassController
+                    //       .saveBoardingPass(boardingPass);
+                    //   if (result) {
+                    //     ScaffoldMessenger.of(context)
+                    //         .showSnackBar(SnackBar(content: Text("Completed")));
+                    //   }
+                    // } catch (e) {
+                    //   ScaffoldMessenger.of(context)
+                    //       .showSnackBar(SnackBar(content: Text("Failed")));
+                    // }
+                  },
+                  child: Text("Get"),
+                ),
               ])
             : ListView(
                 children: [
@@ -184,6 +248,7 @@ class _ReviewsubmissionScreenState
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget _CardWidget(BoardingPass singleBoardingPass) {
     final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
     return Padding(
@@ -202,14 +267,13 @@ class _ReviewsubmissionScreenState
               children: [
                 if (selectedType == "All") SizedBox(height: 10),
                 ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.departureAirportCode,
-                  time: singleBoardingPass.departureTime,
-                  isDeparture:true,
-                  isReviewed:singleBoardingPass.isDepartureAirportReviewed
-                ),
+                    index: index,
+                    status: singleBoardingPass.visitStatus,
+                    airlineCode: singleBoardingPass.airlineCode,
+                    airportCode: singleBoardingPass.departureAirportCode,
+                    time: singleBoardingPass.departureTime,
+                    isDeparture: true,
+                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
                 SizedBox(height: 10),
                 ReviewAirportCard(
                   index: index,

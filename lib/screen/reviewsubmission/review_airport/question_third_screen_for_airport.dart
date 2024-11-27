@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
+import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -49,6 +51,8 @@ class _QuestionThirdScreenForAirportState
 
   @override
   Widget build(BuildContext context) {
+    final BoardingPassController _boardingPassController =
+        BoardingPassController();
     final airportData = ref.watch(aviationInfoProvider);
     final reviewData = ref.watch(reviewFeedBackProviderForAirport);
     // final userData = ref.watch(userDataProvider);
@@ -65,6 +69,12 @@ class _QuestionThirdScreenForAirportState
     final ambienceComfort = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
     final amenities = reviewData[5]["subCategory"];
+    late BoardingPass singleBoardingPassData;
+
+    if (index != null) {
+      final boardingPassesData = ref.watch(boardingPassesProvider);
+      singleBoardingPassData = boardingPassesData[index];
+    }
 
     return Stack(
       children: [
@@ -130,6 +140,46 @@ class _QuestionThirdScreenForAirportState
                                   await _reviewController.saveReview(review);
                               if (result) {
                                 if (index != null && isDeparture != null) {
+                                  final updatedBoardingPass = BoardingPass(
+                                      id: singleBoardingPassData.id,
+                                      name: singleBoardingPassData.name,
+                                      departureAirportCode:
+                                          singleBoardingPassData
+                                              .departureAirportCode,
+                                      departureTime:
+                                          singleBoardingPassData.departureTime,
+                                      arrivalAirportCode: singleBoardingPassData
+                                          .arrivalAirportCode,
+                                      arrivalTime:
+                                          singleBoardingPassData.arrivalTime,
+                                      classOfTravel:
+                                          singleBoardingPassData.classOfTravel,
+                                      airlineCode:
+                                          singleBoardingPassData.airlineCode,
+                                      flightNumber:
+                                          singleBoardingPassData.flightNumber,
+                                      visitStatus:
+                                          singleBoardingPassData.visitStatus,
+                                      isFlightReviewed: singleBoardingPassData
+                                          .isFlightReviewed,
+                                      isDepartureAirportReviewed: isDeparture
+                                          ? true
+                                          : singleBoardingPassData
+                                              .isDepartureAirportReviewed,
+                                      isArrivalAirportReviewed: !isDeparture
+                                          ? true
+                                          : singleBoardingPassData
+                                              .isArrivalAirportReviewed);
+                                  final result = _boardingPassController
+                                      .updateBoardingPass(updatedBoardingPass);
+                                  if (await result) {
+                                    print(
+                                        "==========================> Updated successfully");
+                                  } else {
+                                    print(
+                                        "===========================> Failed to update");
+                                  }
+
                                   ref
                                       .read(boardingPassesProvider.notifier)
                                       .markAirportAsReviewed(

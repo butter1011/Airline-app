@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
+import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
+import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
@@ -49,8 +51,12 @@ class _QuestionThirdScreenForAirlineState
 
   @override
   Widget build(BuildContext context) {
+    final BoardingPassController _boardingPassController =
+        BoardingPassController();
+
     final flightData = ref.watch(aviationInfoProvider);
     final reviewData = ref.watch(reviewFeedBackProviderForAirline);
+
     // final userData = ref.watch(userDataProvider);
     // final reviewer = userData!['userData']['_id'];
     final index = flightData.index;
@@ -64,7 +70,6 @@ class _QuestionThirdScreenForAirlineState
     final onboardService = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
     final entertainmentWifi = reviewData[5]["subCategory"];
-
     return Stack(
       children: [
         Scaffold(
@@ -131,10 +136,20 @@ class _QuestionThirdScreenForAirlineState
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
-                                if (index != null) {
-                                  ref
+                                if (index != null) {                           
+                                  final updatedBoardingPass = ref
                                       .read(boardingPassesProvider.notifier)
                                       .markFlightAsReviewed(index);
+                                
+                                  final result = _boardingPassController
+                                      .updateBoardingPass(updatedBoardingPass);
+                                  if (await result) {
+                                    print(
+                                        "==========================> Updated successfully");
+                                  } else {
+                                    print(
+                                        "===========================> Failed to update");
+                                  }
                                 }
 
                                 ref
@@ -148,7 +163,10 @@ class _QuestionThirdScreenForAirlineState
                                   _isLoading = false;
                                 });
                                 Navigator.pushNamed(
-                                    context, AppRoutes.leaderboardscreen);
+                                    // ignore: use_build_context_synchronously
+                                    context,
+                                    AppRoutes.leaderboardscreen);
+                                // ignore: use_build_context_synchronously
                                 await _buildBottomSheet(context, () {
                                   // Navigator.pop(context);
                                   setState(() {

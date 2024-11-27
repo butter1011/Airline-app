@@ -24,7 +24,6 @@ class AirlineReviewController {
       }
     } catch (e) {
       print('Error saving review: $e');
-      // Optionally show a user-friendly message
       return false;
     }
   }

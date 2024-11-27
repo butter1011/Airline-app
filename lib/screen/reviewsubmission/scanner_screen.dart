@@ -1,3 +1,4 @@
+import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 
 import 'package:airline_app/provider/boarding_passes_provider.dart';
@@ -15,6 +16,7 @@ class ScannerScreen extends ConsumerStatefulWidget {
 }
 
 class _ScannerScreenState extends ConsumerState<ScannerScreen> {
+  final _boardingPassController = BoardingPassController();
   MobileScannerController cameraController = MobileScannerController();
   bool hasScanned = false;
 
@@ -118,7 +120,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       ),
       body: MobileScanner(
         controller: cameraController,
-        onDetect: (capture) {
+        onDetect: (capture) async {
           if (!hasScanned && capture.barcodes.isNotEmpty) {
             hasScanned = true;
             final barcode = capture.barcodes.first;
@@ -158,6 +160,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               }
 
               final newPass = BoardingPass(
+                name: "67464377db2e9fc2dd022f69",
                 departureAirportCode: departureAirportCode,
                 departureTime: departureTime,
                 arrivalAirportCode: arrivalAirportCode,
@@ -167,12 +170,40 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                 flightNumber: flightNumber,
                 visitStatus: visitStatus,
               );
+              final result =
+                  await _boardingPassController.saveBoardingPass(newPass);
+              if (result) {
+                cameraController.stop();
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Boarding pass scanned successfully',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    backgroundColor: AppStyles.mainColor,
+                  ),
+                );
+              } else {
+                cameraController.stop();
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                SnackBar(
+                  content: Text(
+                    'Boarding pass not scanned',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  backgroundColor: AppStyles.mainColor,
+                );
+              }
 
-              ref
-                  .read(boardingPassesProvider.notifier)
-                  .addBoardingPass(newPass);
-              cameraController.stop();
-              Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+              // ref
+              //     .read(boardingPassesProvider.notifier)
+              //     .addBoardingPass(newPass);
+              // cameraController.stop();
+              // Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
             }
           }
         },
