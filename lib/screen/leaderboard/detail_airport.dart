@@ -51,8 +51,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
         );
       });
     }
-
-    print('💥💥$_bookmarkItems');
   }
 
   Future<void> _saveBookmarks() async {

@@ -75,6 +75,7 @@ class ProfileScreen extends ConsumerWidget {
                                                 width: 16,
                                                 height: 16,
                                               ),
+                                              const SizedBox(width: 8),
                                               Text(
                                                 AppLocalizations.of(context)
                                                     .translate(

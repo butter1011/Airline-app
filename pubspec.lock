@@ -190,6 +190,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  country_codes:
+    dependency: "direct main"
+    description:
+      name: country_codes
+      sha256: "83a68a4641d6cb1de430d402474fbee3dd3bb65481c0fed85aa8200d5f8bbe06"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0+2"
   cross_file:
     dependency: transitive
     description:
@@ -254,6 +262,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.1"
+  easy_country_picker:
+    dependency: "direct main"
+    description:
+      name: easy_country_picker
+      sha256: "9d558d1b61576af4d2a4af5a21099baee6205135a4f43303c757568cf2a4c179"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   fake_async:
     dependency: transitive
     description:
