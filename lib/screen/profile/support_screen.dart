@@ -1,6 +1,6 @@
 import 'package:airline_app/screen/profile/widget/support_received_message_box.dart';
 import 'package:airline_app/screen/profile/widget/support_sent_message_box.dart';
-import 'package:airline_app/utils/app_routes.dart';
+
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -8,8 +8,7 @@ import 'package:airline_app/utils/app_localizations.dart';
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
 
-
-AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: MediaQuery.of(context).size.height * 0.1,
       backgroundColor: Colors.white,
@@ -26,15 +25,15 @@ AppBar _buildAppBar(BuildContext context) {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:_buildAppBar(context),
+      appBar: _buildAppBar(context),
       body: Stack(
         children: [
           Column(
             children: [
-            
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),

@@ -1,38 +1,104 @@
+import 'dart:convert';
+
 import 'package:airline_app/provider/button_expand_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
+import 'package:airline_app/screen/profile/utils/book_mark_json.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DetailAirport extends StatefulWidget {
+class DetailAirport extends ConsumerStatefulWidget {
   const DetailAirport({super.key});
 
   @override
-  State<DetailAirport> createState() => _DetailAirportState();
+  ConsumerState<DetailAirport> createState() => _DetailAirportState();
 }
 
-class _DetailAirportState extends State<DetailAirport> {
-  bool _clickedBoolmark = false;
+class _DetailAirportState extends ConsumerState<DetailAirport> {
+  bool _clickedBookmark = false;
   bool isExpanded = false;
+  Map<String, List<String>> _bookmarkItems = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookmarks();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
+  Future<void> _loadBookmarks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? bookmarksJson = prefs.getString('bookmarks');
+    if (bookmarksJson != null) {
+      setState(() {
+        _bookmarkItems = Map<String, List<String>>.from(
+          jsonDecode(bookmarksJson).map(
+            (key, value) => MapEntry(key, List<String>.from(value)),
+          ),
+        );
+      });
+    }
+  }
+
+  Future<void> _saveBookmarks() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('bookmarks', json.encode(_bookmarkItems));
+  }
+
+  Future<void> _sharedBookMarkSaved(String bookMarkId) async {
+    final userId = ref.watch(userDataProvider)?['userData']['_id'];
+
+    if (userId != null) {
+      setState(() {
+        if (!_bookmarkItems.containsKey(userId)) {
+          _bookmarkItems[userId] = [];
+        }
+
+        if (_clickedBookmark) {
+          if (!_bookmarkItems[userId]!.contains(bookMarkId)) {
+            _bookmarkItems[userId]!.add(bookMarkId);
+          }
+        } else {
+          _bookmarkItems[userId]!.remove(bookMarkId);
+          if (_bookmarkItems[userId]!.isEmpty) {
+            _bookmarkItems.remove(userId);
+          }
+        }
+      });
+
+      await _saveBookmarks();
+      // print('👏👏👏$_bookmarkItems');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
     final String name = args['name'];
     final String descriptionBio = args['descriptionBio'];
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
+    final String bookMarkId = args['bookMarkId'];
+
+    if (_userId != null &&
+        _bookmarkItems[_userId]?.contains(bookMarkId) == true) {
+      _clickedBookmark = true;
+    }
 
     // List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
 
@@ -105,12 +171,13 @@ class _DetailAirportState extends State<DetailAirport> {
                           icon: IconButton(
                             onPressed: () {
                               setState(() {
-                                _clickedBoolmark = !_clickedBoolmark;
+                                _clickedBookmark = !_clickedBookmark;
                               });
+                              _sharedBookMarkSaved(bookMarkId);
                             },
                             iconSize: 30,
                             icon: Icon(
-                              _clickedBoolmark
+                              _clickedBookmark
                                   ? Icons.bookmark
                                   : Icons.bookmark_border,
                               color: Colors.white,

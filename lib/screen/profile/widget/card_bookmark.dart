@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'package:airline_app/provider/bookmark_provider.dart';
-import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/utils/global_variable.dart';
-import 'package:airline_app/utils/app_routes.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-
-// Define a FutureProvider to fetch the bookmark data
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/screen/profile/utils/country_code_json.dart';
 
 class CardBookMark extends ConsumerStatefulWidget {
   const CardBookMark({Key? key}) : super(key: key);
@@ -18,70 +15,103 @@ class CardBookMark extends ConsumerStatefulWidget {
 }
 
 class _CardBookMarkState extends ConsumerState<CardBookMark> {
-  List<Map<String, dynamic>> bookmarks = [];
+  Map<String, List<dynamic>> _userBookmarkList = {};
+  Map<String, List<Map<String, dynamic>>> _bookmarksItems = {};
+  Map<String, String> _continentMap = {};
+
   @override
   void initState() {
     super.initState();
-    _profileBookmark();
+    _initializeContinentMap();
+    _loadBookmarks();
   }
 
-  void _profileBookmark() async {
-    final userData = ref.read(userDataProvider);
-    final response = await http.post(
-      Uri.parse('$apiUrl/api/v1/airline/profile/review'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode({
-        '_id': userData?['userData']['_id'],
-      }),
-    );
+  void _initializeContinentMap() {
+    _continentMap = Map<String, String>.from(countryCode[0]);
+  }
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      // print('💚💚💚💚💚$responseData');
-      if (responseData is Map<String, dynamic> &&
-          responseData['formattedReviews'] is List) {
-        final formattedReviews = responseData['formattedReviews'] as List;
+  String _getContinentFromCountryCode(String countryCode) {
+    return _continentMap[countryCode.toUpperCase()] ?? 'Unknown';
+  }
 
+  Future<void> _loadBookmarks() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? bookmarksJson = prefs.getString('bookmarks');
+      if (bookmarksJson != null) {
         setState(() {
-          bookmarks = List<Map<String, dynamic>>.from(
-              formattedReviews.map((item) => Map<String, dynamic>.from(item)));
+          _userBookmarkList = Map<String, List<dynamic>>.from(
+            jsonDecode(bookmarksJson).map(
+              (key, value) => MapEntry(key, List<dynamic>.from(value)),
+            ),
+          );
         });
-        // print('💚💚💚💚💚$bookmarks');
-      } else {
-        throw Exception('Unexpected response format');
       }
-    } else {
-      throw Exception('Failed to load bookmarks');
+
+      final userId = ref.read(userDataProvider)?['userData']?['_id'];
+      final airlineInfo = ref.read(airlineAirportProvider);
+      final List<Map<String, dynamic>> leaderBoardList = [
+        ...airlineInfo.airlineData.map((e) => Map<String, dynamic>.from(e)),
+        ...airlineInfo.airportData.map((e) => Map<String, dynamic>.from(e)),
+      ];
+
+      if (userId != null) {
+        final bookmarks = _userBookmarkList[userId];
+        if (bookmarks != null) {
+          final Map<String, List<Map<String, dynamic>>> sortedBookmarks = {};
+
+          for (var bookmarkId in bookmarks) {
+            final airline = leaderBoardList.firstWhere(
+              (airline) => airline['_id'] == bookmarkId,
+              orElse: () => <String, dynamic>{},
+            );
+            if (airline.isNotEmpty && airline['countryCode'] != null) {
+              final countryCode =
+                  airline['countryCode'].toString().toUpperCase();
+              final continent = _getContinentFromCountryCode(countryCode);
+              if (!sortedBookmarks.containsKey(continent)) {
+                sortedBookmarks[continent] = [];
+              }
+              sortedBookmarks[continent]!.add(airline);
+            }
+          }
+
+          setState(() {
+            _bookmarksItems = sortedBookmarks;
+          });
+        }
+      }
+
+      print('💚💚$_bookmarksItems');
+    } catch (e) {
+      print('Error loading bookmarks: $e');
+      // Handle the error appropriately, e.g., show a snackbar to the user
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: bookmarks.map((bookmarkvalue) {
+      children: _bookmarksItems.entries.map((entry) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
           child: Column(
             children: [
               InkWell(
                 onTap: () {
-                  print(bookmarkvalue);
-                  ref
-                      .read(bookmarkDataProvider.notifier)
-                      .setBookmarkData(bookmarkvalue['data']);
-
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.bookmarkprofilescreen,
-                  );
+                  // print('👏👏👏${entry.value}');
+                  Navigator.pushNamed(context, AppRoutes.bookmarkprofilescreen,
+                      arguments: {
+                        'continentAirlineList': entry.value,
+                        'continent': entry.key,
+                        'countryNumber': entry.value.length
+                      });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${bookmarkvalue['continent']} (${bookmarkvalue['data'].length})',
+                      ' ${entry.key} (${entry.value.length})',
                       style: TextStyle(
                           fontFamily: 'Clash Grotesk',
                           fontSize: 20,
