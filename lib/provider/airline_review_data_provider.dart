@@ -17,6 +17,23 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
     state = [...state, reviewResponse];
   }
 
+  void updateReview(String feedbackId, String userId, int? reactionIndex) {
+    state = state.map((review) {
+      if (review['_id'] == feedbackId) {
+        if (review['rating'] != null) {
+          return {
+            ...review,
+            'rating': {
+              ...review['rating'],
+              userId: reactionIndex,
+            },
+          };
+        }
+      }
+      return review;
+    }).toList();
+  }
+
   List<dynamic> getReviewsByUserId(String userId) {
     return state
         .where((review) => review['reviewer']['_id'] == userId)

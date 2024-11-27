@@ -32,8 +32,6 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airlineData = airlineAirportNotifier
         .getAirlineData(widget.singleBoardingPass.airlineCode);
-    print(
-        "This is airlineCode:🛹🛹🛹=================> ${widget.singleBoardingPass.airlineCode}");
 
     final departureAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
@@ -50,8 +48,6 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final flightNumber = widget.singleBoardingPass.flightNumber;
     final status = widget.singleBoardingPass.visitStatus;
     final String classTravel = widget.singleBoardingPass.classOfTravel;
-    print(
-        "💎💎 departureAirportCode Number: ${widget.singleBoardingPass.departureAirportCode}");
 
     final CountryDetails departureCountry =
         CountryCodes.detailsFromAlpha2(departureCountryCode);
@@ -73,14 +69,10 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   final String toId = arrivalAirportData['_id'];
                   aviationInfoNotifier.updateTo(toId);
                   aviationInfoNotifier.updateClassOfTravel(classTravel);
-                  print("====================$airlineData");
-
                   final String airlineId = airlineData['_id'];
                   aviationInfoNotifier.updateAirline(airlineId);
                   aviationInfoNotifier.updateIndex(widget.index);
                   final aviation = ref.watch(aviationInfoProvider);
-                  print(
-                      "👑👑👑This is arline card==============>fromId: ${aviation.from} toId: ${aviation.to} airlineId: ${aviation.airline} classTravel:${aviation.selectedClassOfTravel}");
                   Navigator.pushNamed(
                       context, AppRoutes.questionfirstscreenforairline);
                 },
