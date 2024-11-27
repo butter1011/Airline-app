@@ -25,10 +25,10 @@ class BoardingPassesNotifier extends StateNotifier<List<BoardingPass>> {
       updatedPass,
       ...state.sublist(index + 1)
     ];
-    return state[index];
+    return updatedPass;
   }
 
-  void markAirportAsReviewed(int index, bool isDeparture) {
+  BoardingPass markAirportAsReviewed(int index, bool isDeparture) {
     final updatedPass = isDeparture
         ? state[index].copyWith(isDepartureAirportReviewed: true)
         : state[index].copyWith(isArrivalAirportReviewed: true);
@@ -38,6 +38,7 @@ class BoardingPassesNotifier extends StateNotifier<List<BoardingPass>> {
       updatedPass,
       ...state.sublist(index + 1)
     ];
+    return updatedPass;
   }
 
   bool hasFlightNumber(String flightNumber) {
