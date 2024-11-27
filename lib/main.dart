@@ -33,6 +33,7 @@ import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:country_code_manager/country_code_manager.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,7 +43,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main() {
+void main()  {
+
   runApp(
     ProviderScope(
       child: MyApp(),
