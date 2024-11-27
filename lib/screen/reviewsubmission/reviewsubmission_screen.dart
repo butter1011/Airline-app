@@ -40,7 +40,6 @@ class _ReviewsubmissionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final airlineAirportState = ref.watch(airlineAirportProvider);
     // print("✈✈This is airline and airport data by http========> ${airlineAirportState.airportData}");
     List<dynamic> flights = airportCardList;
     return Scaffold(

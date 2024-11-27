@@ -1,7 +1,5 @@
-import 'package:airline_app/screen/profile/utils/calender_sync_json.dart';
-import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/screen/profile/widget/basic_button.dart';
-import 'package:airline_app/utils/app_routes.dart';
+
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';

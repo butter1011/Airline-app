@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:airline_app/utils/global_variable.dart';
-import 'package:airline_app/provider/favorite_airline_provider.dart';
-import 'package:airline_app/screen/logIn/logIn.dart';
-import 'package:airline_app/screen/profile/profile_screen.dart';
+
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -12,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/app_localizations.dart';
+
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
@@ -294,17 +293,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _editProfileFunction() async {
     final UserData = ref.watch(userDataProvider);
-    final userInformationData = await http.post(
-        Uri.parse('$apiUrl/api/v1/editUser'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({
-          'name': _nameController.text,
-          'bio': _bioController.text,
-          '_id': UserData?['userData']['_id'],
-          'favoriteAirline': _selectedAirline
-        }));
+    final userInformationData =
+        await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: json.encode({
+              'name': _nameController.text,
+              'bio': _bioController.text,
+              '_id': UserData?['userData']['_id'],
+              'favoriteAirline': _selectedAirline
+            }));
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);

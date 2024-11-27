@@ -1,6 +1,6 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
-import 'package:airline_app/screen/app_widgets/loading.dart';
+
 import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -9,7 +9,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
 
 class AirportInputScreen extends ConsumerStatefulWidget {
   AirportInputScreen({super.key});
@@ -156,7 +155,7 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
         ),
         onPressed: () {
           // Add functionality for syncing here
-    // Placeholder for functionality
+          // Placeholder for functionality
         },
         child: Center(
           child: Text(label, style: AppStyles.textStyle_14_600),
