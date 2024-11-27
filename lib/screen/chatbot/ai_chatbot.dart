@@ -1,4 +1,7 @@
 import 'package:airline_app/provider/chatbot_notifier.dart';
+import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,26 +29,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Sam - AI Flight planner',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+          },
+          icon: const Icon(Icons.arrow_back_ios, size: 20),
         ),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: Colors.black12,
-            height: 1.0,
+            preferredSize: Size.fromHeight(4),
+            child: Container(height: 4, color: AppStyles.littleBlackColor)),
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            AppLocalizations.of(context).translate('Sam-AI Flight Planner'),
+            style: AppStyles.textStyle_16_600,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
@@ -55,7 +54,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: ListView.builder(
               controller: _scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              reverse: true,
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final message = messages[index];
@@ -79,138 +77,84 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         children: [
           if (!message.isUser) ...[
             Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.assistant,
-                color: Colors.white,
-                size: 20,
+              width: 40,
+              height: 40,
+              decoration: AppStyles.circleDecoration,
+              child: const CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage('assets/icons/bot.png'),
               ),
             ),
             const SizedBox(width: 8),
           ],
           Flexible(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75,
-              ),
-              decoration: BoxDecoration(
-                color: message.isUser ? const Color(0xFF4CAF50) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border:
-                    message.isUser ? null : Border.all(color: Colors.black12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
+            child: Stack(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.75,
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      message.text,
-                      style: TextStyle(
-                        color: message.isUser ? Colors.white : Colors.black,
-                        fontSize: 14,
-                      ),
+                  decoration: BoxDecoration(
+                    color: message.isUser ? AppStyles.mainColor : Colors.white,
+                    border: Border.all(width: 2, color: Colors.black),
+                    borderRadius: BorderRadius.only(
+                      topLeft: message.isUser
+                          ? const Radius.circular(15)
+                          : Radius.zero,
+                      topRight: message.isUser
+                          ? Radius.zero
+                          : const Radius.circular(15),
+                      bottomLeft: const Radius.circular(15),
+                      bottomRight: const Radius.circular(15),
                     ),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                    ],
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 12, right: 12, bottom: 6),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _formatTime(message.timestamp),
-                          style: TextStyle(
-                            color: message.isUser
-                                ? Colors.white.withOpacity(0.7)
-                                : Colors.black45,
-                            fontSize: 12,
+                          message.text,
+                          style: AppStyles.textStyle_15_500.copyWith(
+                            color: Colors.black,
                           ),
                         ),
-                        if (message.isUser) ...[
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.check,
-                            size: 12,
-                            color: Colors.white.withOpacity(0.7),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: Text(
+                              _formatTime(message.timestamp),
+                              style: AppStyles.textStyle_15_500.copyWith(
+                                color: message.isUser
+                                    ? const Color(0xff22762C)
+                                    : const Color(0xff97A09C),
+                              ),
+                            ),
                           ),
-                        ],
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  bottom: 12,
+                  right: 8,
+                  child: Icon(
+                    Icons.check,
+                    color: message.isUser
+                        ? const Color(0xff22762C)
+                        : const Color(0xff97A09C),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildAirlineCard(AirlineCard airline) {
-    return Card(
-      margin: const EdgeInsets.only(right: 16),
-      child: Container(
-        width: 280,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                imageUrl: airline.imageUrl,
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: Colors.grey[300],
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              airline.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Icon(Icons.star, size: 16, color: Colors.amber),
-                Text(airline.rating),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Wrap(
-              spacing: 4,
-              children: airline.tags
-                  .map((tag) => Chip(
-                        label: Text(
-                          tag,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        padding: const EdgeInsets.all(4),
-                      ))
-                  .toList(),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -251,31 +195,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                   ),
                   IconButton(
-                    icon:
-                        const Icon(Icons.mic, color: Colors.black54, size: 20),
+                    icon: const Icon(Icons.send, color: Color(0xFF4CAF50)),
                     onPressed: () {
-                      // Implement voice input
+                      if (_controller.text.isNotEmpty) {
+                        ref
+                            .read(chatProvider.notifier)
+                            .processUserMessage(_controller.text);
+                        _controller.clear();
+                        _scrollToBottom();
+                      }
                     },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
                   ),
                 ],
               ),
             ),
           ),
           const SizedBox(width: 8),
-          IconButton(
-            icon: const Icon(Icons.send, color: Color(0xFF4CAF50)),
-            onPressed: () {
-              if (_controller.text.isNotEmpty) {
-                ref
-                    .read(chatProvider.notifier)
-                    .processUserMessage(_controller.text);
-                _controller.clear();
-                _scrollToBottom();
-              }
-            },
-          ),
         ],
       ),
     );
@@ -285,7 +220,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
-          0,
+          _scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );

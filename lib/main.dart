@@ -43,8 +43,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main()  {
-
+void main() {
   runApp(
     ProviderScope(
       child: MyApp(),
