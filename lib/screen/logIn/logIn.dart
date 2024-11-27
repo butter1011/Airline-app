@@ -16,7 +16,6 @@ import 'package:airline_app/controller/get_reviews_airline_controller.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 
-
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -97,7 +96,7 @@ class _LoginState extends ConsumerState<Login> {
         final airlineController = GetAirlineAirportController();
         final result = await airlineController.getAirlineAirport();
         if (result['success']) {
-          ref.read(airlineAirportProvider.notifier).setData(result);
+          ref.read(airlineAirportProvider.notifier).setData(result['data']);
         }
 
         final reviewsController = GetReviewsAirlineController();

@@ -1,7 +1,7 @@
 class AppRoutes {
-  static const loginscreen = "/loginscreen";
+  static const loginscreen = "/leaderboardscreen";
   static const skipscreen = "/skipscreen";
-  static const leaderboardscreen = "/leaderboardscreen";
+  static const leaderboardscreen = "/";
   static const profilescreen = "/profilescreen";
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
@@ -10,7 +10,7 @@ class AppRoutes {
   static const prodetailairport = "/prodetailairport";
   static const bookmarkprofilescreen = "/bookmarkprofilescreen";
   static const cardnotificationscreen = "/cardnotificationscreen";
-  static const reviewsubmissionscreen = "/";
+  static const reviewsubmissionscreen = "/reviewsubmissionscreen";
   static const feedscreen = "/feedscreen";
   static const syncedscreen = "/syncedscreen";
   static const manualinput = "/manualinput";

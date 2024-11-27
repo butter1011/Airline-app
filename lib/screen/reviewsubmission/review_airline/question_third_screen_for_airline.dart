@@ -111,7 +111,6 @@ class _QuestionThirdScreenForAirlineState
                           text: 'Submit',
                           onPressed: () async {
                             _isLoading = true;
-                            print("This is index:⭕⭕$index");
                             try {
                               final review = AirlineReviewModel(
                                 reviewer: "673ce4b17b423be4af57fb8a",
@@ -127,7 +126,7 @@ class _QuestionThirdScreenForAirlineState
                                 entertainmentWifi: entertainmentWifi,
                                 comment: comment,
                               );
-                              print("📞${review.toJson()}");
+
                               final result =
                                   await _reviewController.saveReview(review);
                               if (result) {
@@ -260,7 +259,6 @@ class _QuestionThirdScreenForAirlineState
                 setState(() {
                   comment = value;
                 });
-                print("🤣$comment");
               },
               controller: _commentController,
               maxLines: null, // Allows unlimited lines

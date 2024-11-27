@@ -31,8 +31,7 @@ class _ReviewsubmissionScreenState
   void initState() {
     super.initState();
     _getAirlineData.getAirlineAirport().then((value) {
-      print("This is airlineAirport Data:🛹🛹🛹=================> $value");
-      ref.read(airlineAirportProvider.notifier).setData(value);
+      ref.read(airlineAirportProvider.notifier).setData(value['data']);
     });
   }
 
@@ -202,14 +201,13 @@ class _ReviewsubmissionScreenState
               children: [
                 if (selectedType == "All") SizedBox(height: 10),
                 ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.departureAirportCode,
-                  time: singleBoardingPass.departureTime,
-                  isDeparture:true,
-                  isReviewed:singleBoardingPass.isDepartureAirportReviewed
-                ),
+                    index: index,
+                    status: singleBoardingPass.visitStatus,
+                    airlineCode: singleBoardingPass.airlineCode,
+                    airportCode: singleBoardingPass.departureAirportCode,
+                    time: singleBoardingPass.departureTime,
+                    isDeparture: true,
+                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
                 SizedBox(height: 10),
                 ReviewAirportCard(
                   index: index,
