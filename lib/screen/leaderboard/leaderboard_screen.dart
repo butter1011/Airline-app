@@ -15,6 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
 
+import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -31,6 +33,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void initState() {
     super.initState();
     connectWebSocket();
+    fetchLeaderboardData();
     setState(() {
       isLeaderboardLoading = false;
     });
@@ -40,6 +43,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void dispose() {
     _channel.sink.close();
     super.dispose();
+  }
+
+  Future<void> fetchLeaderboardData() async {
+    final reviewsController = GetReviewsAirlineController();
+    final reviewsResult = await reviewsController.getReviews();
+    if (reviewsResult['success']) {
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviews(reviewsResult['data']);
+    }
   }
 
   Future<void> connectWebSocket() async {

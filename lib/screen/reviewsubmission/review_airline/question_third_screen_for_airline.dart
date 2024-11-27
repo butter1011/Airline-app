@@ -6,6 +6,7 @@ import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
@@ -110,7 +111,10 @@ class _QuestionThirdScreenForAirlineState
                         child: NavPageButton(
                           text: 'Submit',
                           onPressed: () async {
-                            _isLoading = true;
+                            setState(() {
+                              _isLoading = true;
+                            });
+
                             try {
                               final review = AirlineReviewModel(
                                 reviewer: "673ce4b17b423be4af57fb8a",
@@ -129,7 +133,17 @@ class _QuestionThirdScreenForAirlineState
 
                               final result =
                                   await _reviewController.saveReview(review);
-                              if (result) {
+
+                              if (result['success']) {
+                                // Add the new review to the provider
+                                ref
+                                    .read(reviewsAirlineProvider.notifier)
+                                    .addReview(
+                                        Map<String, dynamic>.from(result));
+
+                                print("Review saved successfully");
+                                print(ref.read(reviewsAirlineProvider));
+
                                 if (index != null) {
                                   ref
                                       .read(boardingPassesProvider.notifier)
@@ -143,6 +157,7 @@ class _QuestionThirdScreenForAirlineState
                                     .read(reviewFeedBackProviderForAirline
                                         .notifier)
                                     .resetState();
+
                                 setState(() {
                                   _isLoading = false;
                                 });
