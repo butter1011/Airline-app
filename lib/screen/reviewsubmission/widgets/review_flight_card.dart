@@ -26,8 +26,6 @@ class ReviewFlightCard extends ConsumerStatefulWidget {
 class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
   @override
   Widget build(BuildContext context) {
-    // final airlineAirportState = ref.watch(airlineAirportProvider);
-    // final airlineData = airlineAirportState.airlineData;
     final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airlineData = airlineAirportNotifier
@@ -37,8 +35,6 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
     final arrivalAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
-
-    // final originCountry = widget.singleBoardingPass.departureCountry;
 
     final departureCountryCode = departureAirportData['countryCode'] ?? "";
     final originTime = widget.singleBoardingPass.departureTime;
@@ -62,17 +58,17 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
           onTap: widget.isReviewed
               ? null
               : () {
-                  // print("Flight Card Tapped");
-
                   final String fromId = departureAirportData['_id'];
-                  aviationInfoNotifier.updateFrom(fromId);
                   final String toId = arrivalAirportData['_id'];
-                  aviationInfoNotifier.updateTo(toId);
-                  aviationInfoNotifier.updateClassOfTravel(classTravel);
                   final String airlineId = airlineData['_id'];
-                  aviationInfoNotifier.updateAirline(airlineId);
-                  aviationInfoNotifier.updateIndex(widget.index);
-                  final aviation = ref.watch(aviationInfoProvider);
+
+                  aviationInfoNotifier
+                    ..updateFrom(fromId)
+                    ..updateTo(toId)
+                    ..updateClassOfTravel(classTravel)
+                    ..updateAirline(airlineId)
+                    ..updateIndex(widget.index);
+
                   Navigator.pushNamed(
                       context, AppRoutes.questionfirstscreenforairline);
                 },
@@ -87,10 +83,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                     Row(
                       children: [
                         buildCountryFlag(departureCountryCode),
-                        // departureCountryCode.isNotEmpty ? Image.asset(departureCountryCode) : Text(""),
-                        SizedBox(
-                          width: 4,
-                        ),
+                        const SizedBox(width: 4),
                         Text(
                           "${departureCountry.name != null && departureCountry.name!.length > 11 ? '${departureCountry.name!.substring(0, 11)}..' : departureCountry.name ?? 'Unknown'}, $originTime",
                           style: AppStyles.textStyle_13_600,
@@ -101,9 +94,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                       children: [
                         if (arrivalCountryCode.isNotEmpty)
                           buildCountryFlag(arrivalCountryCode),
-                        SizedBox(
-                          width: 4,
-                        ),
+                        const SizedBox(width: 4),
                         Text(
                           "${arrivalCountry.name != null && arrivalCountry.name!.length > 11 ? '${arrivalCountry.name!.substring(0, 11)}..' : arrivalCountry.name ?? 'Unknown'}, $arrivalTime",
                           style: AppStyles.textStyle_13_600,
@@ -112,9 +103,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 7,
-                ),
+                const SizedBox(height: 7),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -123,12 +112,10 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),
-                    Icon(Icons.arrow_forward)
+                    const Icon(Icons.arrow_forward)
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -136,9 +123,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                     Text("WizAir 2923", style: AppStyles.textStyle_14_500),
                   ],
                 ),
-                SizedBox(
-                  height: 18,
-                ),
+                const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
