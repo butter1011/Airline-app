@@ -6,6 +6,9 @@ import 'package:airline_app/models/airline_review_model.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+
+import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -114,7 +117,11 @@ class _QuestionThirdScreenForAirlineState
                         child: NavPageButton(
                           text: 'Submit',
                           onPressed: () async {
-                            setState(() => _isLoading = true);
+
+                            setState(() {
+                              _isLoading = true;
+                            });
+
                             try {
                               final review = AirlineReviewModel(
                                 reviewer: "673ce4b17b423be4af57fb8a",
@@ -131,8 +138,20 @@ class _QuestionThirdScreenForAirlineState
                                 comment: comment,
                               );
 
-                              final result = await _reviewController.saveReview(review);
-                              if (result) {
+
+                              final result =
+                                  await _reviewController.saveReview(review);
+
+                              if (result['success']) {
+                                // Add the new review to the provider
+                                ref
+                                    .read(reviewsAirlineProvider.notifier)
+                                    .addReview(
+                                        Map<String, dynamic>.from(result));
+
+                                print("Review saved successfully");
+                                print(ref.read(reviewsAirlineProvider));
+
                                 if (index != null) {
                                   final updatedBoardingPass = ref
                                       .read(boardingPassesProvider.notifier)
@@ -156,6 +175,7 @@ class _QuestionThirdScreenForAirlineState
                                   () => setState(() => isSuccess = true),
                                   "Review airport"
                                 );
+
                               } else {
                                 setState(() => _isLoading = false);
                                 if (!mounted) return;
@@ -260,6 +280,7 @@ class _QuestionThirdScreenForAirlineState
                   color: Colors.white,
                   size: 20,
                 ),
+
               ),
             ),
           ),

@@ -5,7 +5,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:http/http.dart' as http;
 
 class AirlineReviewController {
-  Future<bool> saveReview(AirlineReviewModel review) async {
+  Future<Map<String, dynamic>> saveReview(AirlineReviewModel review) async {
     try {
       final response = await http.post(
         Uri.parse('$apiUrl/api/v1/airline-review'),
@@ -16,15 +16,14 @@ class AirlineReviewController {
       );
 
       if (response.statusCode == 201) {
-        return true;
+        return {'success': true, 'data': response.body};
       } else {
         final errorMessage =
             jsonDecode(response.body)['message'] ?? 'Unknown error';
         throw Exception('Error: $errorMessage');
       }
     } catch (e) {
-      print('Error saving review: $e');
-      return false;
+      return {'success': false, 'message': e.toString()};
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -6,7 +7,14 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/controller/get_airline_controller.dart';
+import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+
+import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,7 +25,9 @@ class Login extends ConsumerStatefulWidget {
 
 class _LoginState extends ConsumerState<Login> {
   final _otplessFlutterPlugin = Otpless();
-  static const String appId = "bzpl0offchgcjrm8a4sj";
+  List<Map<String, dynamic>> leaderBoardList = [];
+  List<Map<String, dynamic>> reviewList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -35,6 +45,22 @@ class _LoginState extends ConsumerState<Login> {
     String jsonString = jsonEncode(result);
     final response;
     if (result != null && result['data'] != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.black.withOpacity(0.5),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: const Center(
+                child: LoadingWidget(),
+              ),
+            ),
+          );
+        },
+      );
+
       UserData userData = UserData.fromJson(jsonString);
 
       if (userData.channel == 'WHATSAPP') {
@@ -52,7 +78,6 @@ class _LoginState extends ConsumerState<Login> {
       } else {
         response = await http.post(
           Uri.parse('$apiUrl/api/v1/user'),
-          // Uri.parse('http://10.0.2.2:3000/api/v1/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -67,15 +92,30 @@ class _LoginState extends ConsumerState<Login> {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
+
+        final airlineController = GetAirlineAirportController();
+        final result = await airlineController.getAirlineAirport();
+        if (result['success']) {
+          ref.read(airlineAirportProvider.notifier).setData(result['data']);
+        }
+
+        final reviewsController = GetReviewsAirlineController();
+        final reviewsResult = await reviewsController.getReviews();
+        if (reviewsResult['success']) {
+          ref
+              .read(reviewsAirlineProvider.notifier)
+              .setReviews(reviewsResult['data']);
+        }
+
+        Navigator.pop(context); // Remove loading dialog
+
         if (responseData['userState'] == 0) {
           Navigator.pushNamed(context, AppRoutes.skipscreen);
         } else {
           Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         }
-
-        // You might want to store the user ID or navigate to a new screen
       } else {
-        // Handle authentication error
+        Navigator.pop(context); // Remove loading dialog
         print('Authentication failed: ${response.body}');
       }
     } else {
@@ -96,49 +136,51 @@ class _LoginState extends ConsumerState<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppStyles.mainColor,
-        body: Center(
-          // width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/plane.png',
-                width: 575,
-                height: 575,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(
-                height: 82,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _loginWithWhatsApp();
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 26, horizontal: 48),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                        child: Divider(
-                      color: Colors.black,
-                    )),
-                    Text(
-                      "   Tap here to signin   ",
-                      style: TextStyle(
-                          fontFamily: 'Clash Grotesk',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600),
-                      selectionColor: Colors.black,
+        body: isLoading
+            ? const LoadingWidget()
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/plane.png',
+                      width: 575,
+                      height: 575,
+                      fit: BoxFit.cover,
                     ),
-                    Expanded(
-                        child: Divider(
-                      color: Colors.black,
-                    )),
-                  ]),
+                    SizedBox(
+                      height: 82,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _loginWithWhatsApp();
+                      },
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 26, horizontal: 48),
+                        child: Row(children: <Widget>[
+                          Expanded(
+                              child: Divider(
+                            color: Colors.black,
+                          )),
+                          Text(
+                            "   Tap here to signin   ",
+                            style: TextStyle(
+                                fontFamily: 'Clash Grotesk',
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600),
+                            selectionColor: Colors.black,
+                          ),
+                          Expanded(
+                              child: Divider(
+                            color: Colors.black,
+                          )),
+                        ]),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ));
+              ));
   }
 
   void _showErrorSnackBar(String message) {

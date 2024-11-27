@@ -59,6 +59,7 @@ class _ReviewsubmissionScreenState
         setState(() => isLoading = false);
       }
     }
+
   }
 
 
@@ -239,6 +240,48 @@ class _ReviewsubmissionScreenState
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _CardWidget(BoardingPass singleBoardingPass) {
+    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Column(
+        children: [
+          if (selectedType == "All" || selectedType == "Flights")
+            ReviewFlightCard(
+              singleBoardingPass: singleBoardingPass,
+              index: index,
+              isReviewed: singleBoardingPass.isFlightReviewed,
+            ),
+          if ((selectedType == "All" || selectedType == "Airports") &&
+              (selectedType != "Flights"))
+            Column(
+              children: [
+                if (selectedType == "All") SizedBox(height: 10),
+                ReviewAirportCard(
+                    index: index,
+                    status: singleBoardingPass.visitStatus,
+                    airlineCode: singleBoardingPass.airlineCode,
+                    airportCode: singleBoardingPass.departureAirportCode,
+                    time: singleBoardingPass.departureTime,
+                    isDeparture: true,
+                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
+                SizedBox(height: 10),
+                ReviewAirportCard(
+                  index: index,
+                  status: singleBoardingPass.visitStatus,
+                  airlineCode: singleBoardingPass.airlineCode,
+                  airportCode: singleBoardingPass.arrivalAirportCode,
+                  time: singleBoardingPass.arrivalTime,
+                  isDeparture: false,
+                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
+                ),
+              ],
+            ),
         ],
       ),
     );

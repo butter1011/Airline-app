@@ -1,7 +1,7 @@
 class AppRoutes {
   static const loginscreen = "/";
   static const skipscreen = "/skipscreen";
-  static const leaderboardscreen = "/leaderboardscreen";
+  static const leaderboardscreen = "/";
   static const profilescreen = "/profilescreen";
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
