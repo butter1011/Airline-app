@@ -1,42 +1,29 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
-class MainButton extends StatefulWidget {
-  const MainButton({super.key, required this.text});
+
+class MainButton extends StatelessWidget {
+  const MainButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  @override
-  State<MainButton> createState() => _MainButtonState();
-}
-
-class _MainButtonState extends State<MainButton> {
-  late bool _isSelected = false;
-  @override
-  void initState() {
-    super.initState();
-    // Initialize _isSelected based on the text
-    _isSelected = widget.text == "All"; // Set to true if text is "All"
-  }
-
-  // final Color color;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isSelected = !_isSelected;
-        });
-      },
+      onTap: onTap,
       child: Container(
-        // Diameter of the circular avatar
-        height: 48, // Diameter of the circular avatar
+        height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: _isSelected
-              ? AppStyles.mainColor
-              : Colors.white, // Background color
-          border: Border.all(width: 2, color: Colors.black), // Border color
+          color: isSelected ? AppStyles.mainColor : Colors.white,
+          border: Border.all(width: 2, color: Colors.black),
           boxShadow: const [
             BoxShadow(color: Colors.black, offset: Offset(2, 2))
           ],
@@ -45,10 +32,9 @@ class _MainButtonState extends State<MainButton> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: Text(
-             AppLocalizations.of(context).translate('${widget.text}'),
+              AppLocalizations.of(context).translate('${text}'),
               style: AppStyles.textStyle_14_600,
             ),
-            
           ),
         ),
       ),
