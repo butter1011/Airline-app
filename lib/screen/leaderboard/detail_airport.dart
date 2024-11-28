@@ -80,7 +80,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
       });
 
       await _saveBookmarks();
-      // print('👏👏👏$_bookmarkItems');
     }
   }
 
@@ -94,6 +93,9 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
     final String bookMarkId = args['bookMarkId'];
+    final int totalReviews = args['totalReviews'];
+    final bool isIncreasing = args['isIncreasing'];
+    final num overallScore = args['overall'];
 
     if (_userId != null &&
         _bookmarkItems[_userId]?.contains(bookMarkId) == true) {
@@ -198,7 +200,10 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ReviewStatus(reviewStatus: false),
+                    ReviewStatus(
+                        reviewStatus: isIncreasing,
+                        overallScore: overallScore,
+                        totalReviews: totalReviews),
                     SizedBox(height: 9),
                     Text(
                       name,

@@ -89,7 +89,6 @@ class _AirportListSection extends StatelessWidget {
             int index = entry.key;
 
             Map<String, dynamic> singleAirport = entry.value;
-            // print('⚽🌹⚽🌹⚽🌹⚽$entry.value');
             if (index < expandedItems) {
               return AirportList(
                 bookMarkId: singleAirport['_id'],
@@ -102,6 +101,7 @@ class _AirportListSection extends StatelessWidget {
                 trendingBio: singleAirport['trendingBio'],
                 backgroundImage: singleAirport['backgroundImage'],
                 descriptionBio: singleAirport['descriptionBio'],
+                overallScore: singleAirport['overall'],
                 index: index,
               );
             }
