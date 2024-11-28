@@ -109,7 +109,7 @@ class AirportList extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  'Onboard Service',
+                                  'Total Reviews',
                                   style: AppStyles.textStyle_14_600.copyWith(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
