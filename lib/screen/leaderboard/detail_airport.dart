@@ -7,6 +7,7 @@ import 'package:airline_app/screen/leaderboard/widgets/category_reviews.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/utils/book_mark_json.dart';
+import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -222,7 +223,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     ),
                     Text(
                       trendingBio,
-                      style: AppStyles.textStyle_15_400
+                      style: AppStyles.textStyle_14_400
                           .copyWith(color: Color(0xff38433E)),
                     ),
                     SizedBox(height: 14),
@@ -232,7 +233,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     ),
                     Text(
                       perksBio,
-                      style: AppStyles.textStyle_15_400
+                      style: AppStyles.textStyle_14_400
                           .copyWith(color: Color(0xff38433E)),
                     ),
                     SizedBox(
@@ -274,39 +275,49 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     ),
                   ),
                 ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  child: Container(
-                    // Diameter of the circular avatar
-                    height: 56, // Diameter of the circular avatar
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: AppStyles.mainColor, // Background color
-                      border: Border.all(
-                          width: 2, color: Colors.black), // Border color
-                      boxShadow: [
-                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Leave a review",
-                              style: GoogleFonts.getFont("Schibsted Grotesk",
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -0.3),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Image.asset('assets/icons/edit.png')
-                          ],
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReviewsubmissionScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    child: Container(
+                      // Diameter of the circular avatar
+                      height: 56, // Diameter of the circular avatar
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppStyles.mainColor, // Background color
+                        border: Border.all(
+                            width: 2, color: Colors.black), // Border color
+                        boxShadow: [
+                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Leave a review",
+                                style: GoogleFonts.getFont("Schibsted Grotesk",
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -0.3),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Image.asset('assets/icons/edit.png')
+                            ],
+                          ),
                         ),
                       ),
                     ),
