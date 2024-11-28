@@ -10,7 +10,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
-
+import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
@@ -28,6 +28,45 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   int expandedItems = 5;
   late IOWebSocketChannel _channel;
   bool isLeaderboardLoading = true;
+  final airlineController = GetAirlineAirportController();
+
+  Map<String, bool> buttonStates = {
+    "All": true,
+    "Airline": false,
+    "Airport": false,
+    "Cleanliness": false,
+    "Onboard": false,
+  };
+
+  void toggleButton(String buttonText) {
+    setState(() {
+      if (buttonText == "All") {
+        // If "All" is clicked, reset all other buttons to false
+        buttonStates.forEach((key, value) {
+          buttonStates[key] = false;
+        });
+        buttonStates["All"] = true;
+      } else {
+        // If any other button is clicked
+        buttonStates.forEach((key, value) {
+          buttonStates[key] = false;
+        });
+        buttonStates[buttonText] = true;
+
+        // Check if all non-"All" buttons are selected
+        bool allOthersSelected = buttonStates.entries
+            .where((e) => e.key != "All")
+            .every((e) => e.value);
+
+        if (allOthersSelected) {
+          buttonStates.forEach((key, value) {
+            buttonStates[key] = false;
+          });
+          buttonStates["All"] = true;
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -51,6 +90,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     if (reviewsResult['success']) {
       ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
     }
+    final result = await airlineController.getAirlineAirport();
+    if (result['success']) {
+      ref.read(airlineAirportProvider.notifier).setData(result['data']);
+    }
   }
 
   Future<void> connectWebSocket() async {
@@ -70,17 +113,43 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     } catch (_) {}
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final airlineAirportState = ref.watch(airlineAirportProvider);
-    final reviews = ref.watch(reviewsAirlineProvider);
+  List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
+    print(
+        "This is airlineAirportState💖💖=====>${airlineAirportState.airlineData}");
 
-    final List<Map<String, dynamic>> leaderBoardList = [
+    if (buttonStates["All"]!) {
+      return [
+        ...airlineAirportState.airlineData
+            .map((e) => Map<String, dynamic>.from(e)),
+        ...airlineAirportState.airportData
+            .map((e) => Map<String, dynamic>.from(e)),
+      ];
+    } else if (buttonStates["Airline"]!) {
+      return [
+        ...airlineAirportState.airlineData
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
+    } else if (buttonStates["Airport"]!) {
+      return [
+        ...airlineAirportState.airportData
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
+    }
+    return [
       ...airlineAirportState.airlineData
           .map((e) => Map<String, dynamic>.from(e)),
       ...airlineAirportState.airportData
           .map((e) => Map<String, dynamic>.from(e)),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final airlineAirportState = ref.watch(airlineAirportProvider);
+    final reviews = ref.watch(reviewsAirlineProvider);
+
+    final List<Map<String, dynamic>> leaderBoardList =
+        getFilteredList(airlineAirportState);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -159,29 +228,39 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               ],
             ),
           ),
-          const SingleChildScrollView(
+          SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 MainButton(
                   text: "All",
+                  isSelected: buttonStates["All"]!,
+                  onTap: () => toggleButton("All"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Airline",
+                  isSelected: buttonStates["Airline"]!,
+                  onTap: () => toggleButton("Airline"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Airport",
+                  isSelected: buttonStates["Airport"]!,
+                  onTap: () => toggleButton("Airport"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Cleanliness",
+                  isSelected: buttonStates["Cleanliness"]!,
+                  onTap: () => toggleButton("Cleanliness"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Onboard",
+                  isSelected: buttonStates["Onboard"]!,
+                  onTap: () => toggleButton("Onboard"),
                 ),
               ],
             ),
