@@ -72,7 +72,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void initState() {
     super.initState();
     connectWebSocket();
-    fetchLeaderboardData();
+    // fetchLeaderboardData();
     setState(() {
       isLeaderboardLoading = false;
     });
@@ -84,17 +84,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     super.dispose();
   }
 
-  Future<void> fetchLeaderboardData() async {
-    final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
-    if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
-    }
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
-    }
-  }
+  // Future<void> fetchLeaderboardData() async {
+  //   final reviewsController = GetReviewsAirlineController();
+  //   final reviewsResult = await reviewsController.getReviews();
+  //   if (reviewsResult['success']) {
+  //     ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+  //   }
+  //   final result = await airlineController.getAirlineAirport();
+  //   if (result['success']) {
+  //     ref.read(airlineAirportProvider.notifier).setData(result['data']);
+  //   }
+  // }
 
   Future<void> connectWebSocket() async {
     try {
@@ -114,9 +114,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
-    print(
-        "This is airlineAirportState💖💖=====>${airlineAirportState.airlineData}");
-
     if (buttonStates["All"]!) {
       return [
         ...airlineAirportState.airlineData
@@ -383,7 +380,6 @@ class _AirportListSection extends StatelessWidget {
             int index = entry.key;
 
             Map<String, dynamic> singleAirport = entry.value;
-            // print('⚽🌹⚽🌹⚽🌹⚽$entry.value');
             if (index < expandedItems) {
               return AirportList(
                 bookMarkId: singleAirport['_id'],

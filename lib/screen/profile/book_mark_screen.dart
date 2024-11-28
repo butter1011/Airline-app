@@ -18,7 +18,6 @@ class _BookMarkScreenState extends State<BookMarkScreen> {
   @override
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)!.settings.arguments as Map;
-    print('💖💖💖$args');
     final List<Map<String, dynamic>> leaderBoardList =
         args['continentAirlineList'];
     setState(() {
