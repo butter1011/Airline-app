@@ -3,6 +3,7 @@ import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
@@ -39,13 +40,8 @@ class _ReviewsubmissionScreenState
   Future<void> _loadData() async {
     try {
       await Future.wait([
-        _getAirlineAirportData.getAirlineAirport().then((airlineAirportData) {
-          if (mounted) {
-            ref.read(airlineAirportProvider.notifier).setData(airlineAirportData['data']);
-          }
-        }),
         _boardingPassController
-            .getBoardingPasses("67464377db2e9fc2dd022f69")
+            .getBoardingPasses(ref.read(userDataProvider)?['userData']?['_id'])
             .then((boardingPasses) {
           if (mounted) {
             ref.read(boardingPassesProvider.notifier).setData(boardingPasses);

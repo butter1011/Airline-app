@@ -2,8 +2,14 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class ReviewStatus extends StatefulWidget {
-  const ReviewStatus({super.key, required this.reviewStatus});
+  const ReviewStatus(
+      {super.key,
+      required this.reviewStatus,
+      required this.overallScore,
+      required this.totalReviews});
   final bool reviewStatus;
+  final num overallScore;
+  final int totalReviews;
 
   @override
   State<ReviewStatus> createState() => _ReviewStatusState();
@@ -27,7 +33,9 @@ class _ReviewStatusState extends State<ReviewStatus> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
-              Text('9/10 from 382 reviews', style: AppStyles.textStyle_14_600),
+              Text(
+                  '${widget.overallScore.toStringAsFixed(1)}/10 from ${widget.totalReviews} reviews',
+                  style: AppStyles.textStyle_14_600),
               const SizedBox(
                 width: 3,
               ),

@@ -18,7 +18,6 @@ class _BookMarkScreenState extends State<BookMarkScreen> {
   @override
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)!.settings.arguments as Map;
-    print('💖💖💖$args');
     final List<Map<String, dynamic>> leaderBoardList =
         args['continentAirlineList'];
     setState(() {
@@ -90,7 +89,6 @@ class _AirportListSection extends StatelessWidget {
             int index = entry.key;
 
             Map<String, dynamic> singleAirport = entry.value;
-            // print('⚽🌹⚽🌹⚽🌹⚽$entry.value');
             if (index < expandedItems) {
               return AirportList(
                 bookMarkId: singleAirport['_id'],
@@ -103,6 +101,7 @@ class _AirportListSection extends StatelessWidget {
                 trendingBio: singleAirport['trendingBio'],
                 backgroundImage: singleAirport['backgroundImage'],
                 descriptionBio: singleAirport['descriptionBio'],
+                overallScore: singleAirport['overall'],
                 index: index,
               );
             }
