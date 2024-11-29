@@ -35,6 +35,7 @@ class ReviewAirportCard extends ConsumerWidget {
     final airportData = airlineAirportNotifier.getAirportData(airportCode);
     final airlineData = airlineAirportNotifier.getAirlineData(airlineCode);
     final CountryDetails country = CountryCodes.detailsFromAlpha2(airportData['countryCode']);
+   
 
     return Opacity(
       opacity: status == "Upcoming visit" || isReviewed ? 0.5 : 1,

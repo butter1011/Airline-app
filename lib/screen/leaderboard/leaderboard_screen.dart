@@ -26,6 +26,8 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
   int expandedItems = 5;
   late IOWebSocketChannel _channel;
   bool isLeaderboardLoading = true;
@@ -34,6 +36,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
 
+  String filterType = 'All';
+  List<Map<String, dynamic>> leaderBoardList = [];
   Map<String, bool> buttonStates = {
     "All": true,
     "Airline": false,
@@ -69,7 +73,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           buttonStates["All"] = true;
         }
       }
+
+      buttonStates.forEach((key, value) {
+        if (value) {
+          filterType = key;
+        }
+      });
+      print("This is filterType 😍 $filterType");
     });
+    ref.read(airlineAirportProvider.notifier).getFilteredList(filterType, null);
+    
   }
 
   @override
@@ -84,6 +97,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   void dispose() {
+     _searchController.dispose();
     _channel.sink.close();
     super.dispose();
   }
@@ -101,15 +115,18 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final airlineScores = await airlineScoreController.getAirlineScore();
     if (airlineScores['success']) {
       final airlineScoreData = airlineScores['data']['data'];
-      setState(() {
-        airlineDataSortedByCleanliness = ref
-            .watch(airlineAirportProvider.notifier)
-            .getAirlineDataSortedByCleanliness(airlineScoreData);
-        airlineDataSortedByOnboardSevice= ref
-            .watch(airlineAirportProvider.notifier)
-            .getAirlineDataSortedByOnboardSevice(airlineScoreData);
-      });
+      ref
+          .read(airlineAirportProvider.notifier)
+          .setAirlineScoreData(airlineScoreData);
     }
+    ref.read(airlineAirportProvider.notifier).getFilteredList("All", null);
+    // setState(() {
+    //   leaderBoardList = [
+    //     ...ref.watch(airlineAirportProvider).airlineData,
+    //     ...ref.watch(airlineAirportProvider).airportData,
+    //   ];
+    // });
+    print(" This is leaderBoardList 🛹  $leaderBoardList");
   }
 
   Future<void> connectWebSocket() async {
@@ -129,47 +146,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     } catch (_) {}
   }
 
-  List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
-    print(
-        "This is airlineAirportState💖💖=====>${airlineAirportState.airlineData}");
-
-    if (buttonStates["All"]!) {
-      return [
-        ...airlineAirportState.airlineData
-            .map((e) => Map<String, dynamic>.from(e)),
-        ...airlineAirportState.airportData
-            .map((e) => Map<String, dynamic>.from(e)),
-      ];
-    } else if (buttonStates["Airline"]!) {
-      return [
-        ...airlineAirportState.airlineData
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    } else if (buttonStates["Airport"]!) {
-      return [
-        ...airlineAirportState.airportData
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    } else if (buttonStates["Cleanliness"]!) {
-      return [
-        ...airlineDataSortedByCleanliness
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    }
-    return [     
-      ...airlineDataSortedByOnboardSevice
-          .map((e) => Map<String, dynamic>.from(e)),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
-    final airlineAirportState = ref.watch(airlineAirportProvider);
+  
     final reviews = ref.watch(reviewsAirlineProvider);
-
-    final List<Map<String, dynamic>> leaderBoardList =
-        getFilteredList(airlineAirportState);
-
+    setState(() {
+      leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
+      print(" This is leaderBoardList  📞  $leaderBoardList");
+      
+    });
+    print(" This is leaderBoardList  🧨  $leaderBoardList");
+    leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
@@ -199,8 +186,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           offset: Offset(2, 2))
                     ],
                   ),
-                  child: const Center(
+                  child: Center(
                     child: TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value.toLowerCase();
+                        });
+                        ref.read(airlineAirportProvider.notifier).getFilteredList(filterType, _searchQuery);
+                      },
                       decoration: InputDecoration(
                         hintText: 'Search',
                         hintStyle: TextStyle(
