@@ -105,7 +105,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         airlineDataSortedByCleanliness = ref
             .watch(airlineAirportProvider.notifier)
             .getAirlineDataSortedByCleanliness(airlineScoreData);
-        airlineDataSortedByOnboardSevice= ref
+        airlineDataSortedByOnboardSevice = ref
             .watch(airlineAirportProvider.notifier)
             .getAirlineDataSortedByOnboardSevice(airlineScoreData);
       });
@@ -153,7 +153,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             .map((e) => Map<String, dynamic>.from(e))
       ];
     }
-    return [     
+    return [
       ...airlineDataSortedByOnboardSevice
           .map((e) => Map<String, dynamic>.from(e)),
     ];
@@ -163,7 +163,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final airlineAirportState = ref.watch(airlineAirportProvider);
     final reviews = ref.watch(reviewsAirlineProvider);
-
+    final trendingreviews =
+        ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
+    print('😂😂${trendingreviews}');
     final List<Map<String, dynamic>> leaderBoardList =
         getFilteredList(airlineAirportState);
 
@@ -330,7 +332,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: reviews.map(
+                                  children: trendingreviews.map(
                                     (singleFeedback) {
                                       return SizedBox(
                                         child: Padding(

@@ -29,6 +29,24 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
   List<dynamic> getReviewsByUserId(String userId) {
     return state.where((review) => review['id'] == userId).toList();
   }
+
+  List<dynamic> getTopFiveReviews() {
+    var sortedReviews =
+        state.where((review) => review['rating'] != null).toList()
+          ..sort((a, b) {
+            var ratingA = a['rating'];
+            var ratingB = b['rating'];
+            if (ratingA is num && ratingB is num) {
+              return ratingB.compareTo(ratingA);
+            } else if (ratingA is String && ratingB is String) {
+              return double.parse(ratingB).compareTo(double.parse(ratingA));
+            } else {
+              return 0;
+            }
+          });
+
+    return sortedReviews.take(5).toList();
+  }
 }
 
 // Provider for reviews data
