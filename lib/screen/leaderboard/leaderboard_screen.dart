@@ -1,3 +1,4 @@
+import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -29,6 +30,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   late IOWebSocketChannel _channel;
   bool isLeaderboardLoading = true;
   final airlineController = GetAirlineAirportController();
+  final airlineScoreController = GetAirlineScoreController();
+  List airlineDataSortedByCleanliness = [];
+  List airlineDataSortedByOnboardSevice = [];
 
   Map<String, bool> buttonStates = {
     "All": true,
@@ -84,17 +88,29 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     super.dispose();
   }
 
-  // Future<void> fetchLeaderboardData() async {
-  //   final reviewsController = GetReviewsAirlineController();
-  //   final reviewsResult = await reviewsController.getReviews();
-  //   if (reviewsResult['success']) {
-  //     ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
-  //   }
-  //   final result = await airlineController.getAirlineAirport();
-  //   if (result['success']) {
-  //     ref.read(airlineAirportProvider.notifier).setData(result['data']);
-  //   }
-  // }
+  Future<void> fetchLeaderboardData() async {
+//     final reviewsController = GetReviewsAirlineController();
+//     final reviewsResult = await reviewsController.getReviews();
+//     if (reviewsResult['success']) {
+//       ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+//     }
+//     final result = await airlineController.getAirlineAirport();
+//     if (result['success']) {
+//       ref.read(airlineAirportProvider.notifier).setData(result['data']);
+//     }
+    final airlineScores = await airlineScoreController.getAirlineScore();
+    if (airlineScores['success']) {
+      final airlineScoreData = airlineScores['data']['data'];
+      setState(() {
+        airlineDataSortedByCleanliness = ref
+            .watch(airlineAirportProvider.notifier)
+            .getAirlineDataSortedByCleanliness(airlineScoreData);
+        airlineDataSortedByOnboardSevice= ref
+            .watch(airlineAirportProvider.notifier)
+            .getAirlineDataSortedByOnboardSevice(airlineScoreData);
+      });
+    }
+  }
 
   Future<void> connectWebSocket() async {
     try {
@@ -131,11 +147,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         ...airlineAirportState.airportData
             .map((e) => Map<String, dynamic>.from(e))
       ];
+    } else if (buttonStates["Cleanliness"]!) {
+      return [
+        ...airlineDataSortedByCleanliness
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
     }
-    return [
-      ...airlineAirportState.airlineData
-          .map((e) => Map<String, dynamic>.from(e)),
-      ...airlineAirportState.airportData
+    return [     
+      ...airlineDataSortedByOnboardSevice
           .map((e) => Map<String, dynamic>.from(e)),
     ];
   }
