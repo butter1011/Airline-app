@@ -445,35 +445,3 @@ List<Map<String, dynamic>> reviewjsonlist = [
   },
 ];
 
-List<Map<String, dynamic>> trendingFeedbackList = [
-  {
-    'Name': 'Benedict Cumberbatch',
-    'Avatar': 'avatar_1.png',
-    'Date': '16.09.24',
-    'Used Airport': 'Abu Dhabi Airport',
-    'Path': 'Tokyo -> Bucharest',
-    'Content':
-        'Loved the adjustable headrest, soft  cushioning. Made the trip very relaxing.',
-    'Image': 'review_abudhabi_1.png'
-  },
-  {
-    'Name': 'Andy Cumberbatch',
-    'Avatar': 'avatar_2.png',
-    'Date': '16.08.24',
-    'Used Airport': 'Abu Dhabi Airport',
-    'Path': 'Tokyo -> Bucharest',
-    'Content':
-        'Liked the adjustable headrest, soft cushioning. Made the trip very relaxing.',
-    'Image': 'review_ethiopian_2.png'
-  },
-  {
-    'Name': 'Amanda Russel',
-    'Avatar': 'avatar_3.png',
-    'Date': '16.07.24',
-    'Used Airport': 'Abu Dhabi Airport',
-    'Path': 'Tokyo -> Bucharest',
-    'Content':
-        'Loved the adjustable headrest, soft cushioning. Made the trip very relaxing.',
-    'Image': 'review_turkish_1.png'
-  },
-];

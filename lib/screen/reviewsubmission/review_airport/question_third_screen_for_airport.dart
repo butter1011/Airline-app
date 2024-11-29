@@ -32,7 +32,8 @@ class _QuestionThirdScreenForAirportState
   final List<File> _image = [];
   final AirportReviewController _reviewController = AirportReviewController();
   final TextEditingController _commentController = TextEditingController();
-  final BoardingPassController _boardingPassController = BoardingPassController();
+  final BoardingPassController _boardingPassController =
+      BoardingPassController();
 
   String comment = "";
   bool _isLoading = false;
@@ -101,7 +102,8 @@ class _QuestionThirdScreenForAirportState
               children: [
                 Container(height: 2, color: Colors.black),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   child: Row(
                     children: [
                       Expanded(
@@ -115,7 +117,7 @@ class _QuestionThirdScreenForAirportState
                       Expanded(
                         child: NavPageButton(
                           text: 'Submit',
-                          onPressed: () async {
+                          onPressed: () async {                            
                             setState(() => _isLoading = true);
                             try {
                               final review = AirportReviewModel(
@@ -139,12 +141,12 @@ class _QuestionThirdScreenForAirportState
                                       .markAirportAsReviewed(index, isDeparture);
                                   await _boardingPassController.updateBoardingPass(updatedBoardingPass);
                                 }
-                                
+
                                 ref.read(aviationInfoProvider.notifier).resetState();
                                 ref.read(reviewFeedBackProviderForAirport.notifier).resetState();
-                                
+
                                 setState(() => _isLoading = false);
-                                
+
                                 if (!mounted) return;
                                 // ignore: use_build_context_synchronously
                                 Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -179,7 +181,8 @@ class _QuestionThirdScreenForAirportState
             )),
         if (_isLoading)
           Container(
-              color: Colors.black.withOpacity(0.5), child: const LoadingWidget()),
+              color: Colors.black.withOpacity(0.5),
+              child: const LoadingWidget()),
       ],
     );
   }
@@ -284,12 +287,10 @@ class _QuestionThirdScreenForAirportState
             ),
           ),
           const SizedBox(height: 12),
-          Text("Choose your media for upload", style: AppStyles.textStyle_15_600),
+          Text("Choose your media for upload",
+              style: AppStyles.textStyle_15_600),
         ],
       ),
     );
   }
 }
-
-
-

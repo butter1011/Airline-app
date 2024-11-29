@@ -1,3 +1,4 @@
+import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -10,7 +11,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
-
+import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
@@ -28,12 +29,54 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   int expandedItems = 5;
   late IOWebSocketChannel _channel;
   bool isLeaderboardLoading = true;
+  final airlineController = GetAirlineAirportController();
+  final airlineScoreController = GetAirlineScoreController();
+  List airlineDataSortedByCleanliness = [];
+  List airlineDataSortedByOnboardSevice = [];
+
+  Map<String, bool> buttonStates = {
+    "All": true,
+    "Airline": false,
+    "Airport": false,
+    "Cleanliness": false,
+    "Onboard": false,
+  };
+
+  void toggleButton(String buttonText) {
+    setState(() {
+      if (buttonText == "All") {
+        // If "All" is clicked, reset all other buttons to false
+        buttonStates.forEach((key, value) {
+          buttonStates[key] = false;
+        });
+        buttonStates["All"] = true;
+      } else {
+        // If any other button is clicked
+        buttonStates.forEach((key, value) {
+          buttonStates[key] = false;
+        });
+        buttonStates[buttonText] = true;
+
+        // Check if all non-"All" buttons are selected
+        bool allOthersSelected = buttonStates.entries
+            .where((e) => e.key != "All")
+            .every((e) => e.value);
+
+        if (allOthersSelected) {
+          buttonStates.forEach((key, value) {
+            buttonStates[key] = false;
+          });
+          buttonStates["All"] = true;
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     connectWebSocket();
-    fetchLeaderboardData();
+    // fetchLeaderboardData();
     setState(() {
       isLeaderboardLoading = false;
     });
@@ -46,12 +89,26 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Future<void> fetchLeaderboardData() async {
-    final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
-    if (reviewsResult['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviews(reviewsResult['data']);
+//     final reviewsController = GetReviewsAirlineController();
+//     final reviewsResult = await reviewsController.getReviews();
+//     if (reviewsResult['success']) {
+//       ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+//     }
+//     final result = await airlineController.getAirlineAirport();
+//     if (result['success']) {
+//       ref.read(airlineAirportProvider.notifier).setData(result['data']);
+//     }
+    final airlineScores = await airlineScoreController.getAirlineScore();
+    if (airlineScores['success']) {
+      final airlineScoreData = airlineScores['data']['data'];
+      setState(() {
+        airlineDataSortedByCleanliness = ref
+            .watch(airlineAirportProvider.notifier)
+            .getAirlineDataSortedByCleanliness(airlineScoreData);
+        airlineDataSortedByOnboardSevice= ref
+            .watch(airlineAirportProvider.notifier)
+            .getAirlineDataSortedByOnboardSevice(airlineScoreData);
+      });
     }
   }
 
@@ -61,8 +118,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         Uri.parse('ws://$backendUrl/ws'),
       );
 
-      print('WebSocket connected');
-
       _channel.stream.listen((message) {
         final data = json.decode(message);
         if (data['type'] == 'airlineAirport') {
@@ -70,14 +125,38 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               .read(airlineAirportProvider.notifier)
               .setData(Map<String, dynamic>.from(data));
         }
-      }, onError: (error) {
-        print("WebSocket error: $error");
-      }, onDone: () {
-        print("WebSocket connection closed");
-      });
-    } catch (e) {
-      print("Error connecting to WebSocket: $e");
+      }, onError: (_) {}, onDone: () {});
+    } catch (_) {}
+  }
+
+  List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
+    if (buttonStates["All"]!) {
+      return [
+        ...airlineAirportState.airlineData
+            .map((e) => Map<String, dynamic>.from(e)),
+        ...airlineAirportState.airportData
+            .map((e) => Map<String, dynamic>.from(e)),
+      ];
+    } else if (buttonStates["Airline"]!) {
+      return [
+        ...airlineAirportState.airlineData
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
+    } else if (buttonStates["Airport"]!) {
+      return [
+        ...airlineAirportState.airportData
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
+    } else if (buttonStates["Cleanliness"]!) {
+      return [
+        ...airlineDataSortedByCleanliness
+            .map((e) => Map<String, dynamic>.from(e))
+      ];
     }
+    return [     
+      ...airlineDataSortedByOnboardSevice
+          .map((e) => Map<String, dynamic>.from(e)),
+    ];
   }
 
   @override
@@ -85,12 +164,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final airlineAirportState = ref.watch(airlineAirportProvider);
     final reviews = ref.watch(reviewsAirlineProvider);
 
-    final List<Map<String, dynamic>> leaderBoardList = [
-      ...airlineAirportState.airlineData
-          .map((e) => Map<String, dynamic>.from(e)),
-      ...airlineAirportState.airportData
-          .map((e) => Map<String, dynamic>.from(e)),
-    ];
+    final List<Map<String, dynamic>> leaderBoardList =
+        getFilteredList(airlineAirportState);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -169,29 +244,39 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               ],
             ),
           ),
-          const SingleChildScrollView(
+          SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 MainButton(
                   text: "All",
+                  isSelected: buttonStates["All"]!,
+                  onTap: () => toggleButton("All"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Airline",
+                  isSelected: buttonStates["Airline"]!,
+                  onTap: () => toggleButton("Airline"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Airport",
+                  isSelected: buttonStates["Airport"]!,
+                  onTap: () => toggleButton("Airport"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Cleanliness",
+                  isSelected: buttonStates["Cleanliness"]!,
+                  onTap: () => toggleButton("Cleanliness"),
                 ),
                 SizedBox(width: 8),
                 MainButton(
                   text: "Onboard",
+                  isSelected: buttonStates["Onboard"]!,
+                  onTap: () => toggleButton("Onboard"),
                 ),
               ],
             ),
@@ -314,19 +399,19 @@ class _AirportListSection extends StatelessWidget {
             int index = entry.key;
 
             Map<String, dynamic> singleAirport = entry.value;
-            // print('⚽🌹⚽🌹⚽🌹⚽$entry.value');
             if (index < expandedItems) {
               return AirportList(
                 bookMarkId: singleAirport['_id'],
                 name: singleAirport['name'],
                 isAirline: singleAirport['isAirline'],
-                isIncreasing: singleAirport['isIncreasing'],
                 totalReviews: singleAirport['totalReviews'],
                 logoImage: singleAirport['logoImage'],
                 perksBio: singleAirport['perksBio'],
                 trendingBio: singleAirport['trendingBio'],
                 backgroundImage: singleAirport['backgroundImage'],
                 descriptionBio: singleAirport['descriptionBio'],
+                isIncreasing: singleAirport['isIncreasing'],
+                overallScore: singleAirport['overall'],
                 index: index,
               );
             }

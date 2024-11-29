@@ -16,7 +16,7 @@ class AirlineReviewController {
       );
 
       if (response.statusCode == 201) {
-        return {'success': true, 'data': response.body};
+        return {'success': true, 'data': jsonDecode(response.body)};
       } else {
         final errorMessage =
             jsonDecode(response.body)['message'] ?? 'Unknown error';

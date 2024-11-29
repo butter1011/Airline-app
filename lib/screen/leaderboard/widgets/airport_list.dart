@@ -5,33 +5,33 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class AirportList extends StatelessWidget {
-  const AirportList(
-      {super.key,
-      required this.name,
-      required this.isAirline,
-      required this.isIncreasing,
-      required this.logoImage,
-      required this.index,
-      required this.totalReviews,
-      required this.backgroundImage,
-      required this.perksBio,
-      required this.trendingBio,
-      required this.descriptionBio,
-      required this.bookMarkId
-      // required this.logo
-      });
-  final String bookMarkId;
+  const AirportList({
+    super.key,
+    required this.name,
+    required this.isAirline,
+    required this.isIncreasing,
+    required this.logoImage,
+    required this.index,
+    required this.totalReviews,
+    required this.backgroundImage,
+    required this.perksBio,
+    required this.trendingBio,
+    required this.descriptionBio,
+    required this.bookMarkId,
+    required this.overallScore,
+  });
   final String name;
   final bool isAirline;
-  final int index;
+  final bool isIncreasing;
   final String logoImage;
-  final bool? isIncreasing;
+  final int index;
   final int totalReviews;
   final String backgroundImage;
   final String perksBio;
   final String trendingBio;
   final String descriptionBio;
-  // final String logo;
+  final String bookMarkId;
+  final num overallScore;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,11 @@ class AirportList extends StatelessWidget {
           'perksBio': perksBio,
           'trendingBio': trendingBio,
           'backgroundImage': backgroundImage,
-          'bookMarkId': bookMarkId
+          'bookMarkId': bookMarkId,
+          'totalReviews': totalReviews,
+          'isIncreasing': isIncreasing,
+          'overall': overallScore,
+          'logoImage': logoImage,
         });
       },
       child: Container(
@@ -109,7 +113,7 @@ class AirportList extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  'Onboard Service',
+                                  'Total Reviews',
                                   style: AppStyles.textStyle_14_600.copyWith(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,

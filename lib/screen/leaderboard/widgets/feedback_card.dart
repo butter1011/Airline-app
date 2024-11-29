@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
@@ -39,6 +41,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         widget.singleFeedback['to'] == null) {
       return Container(); // Return empty container if data is null
     }
+
+    final userId = ref.watch(userDataProvider)?['userData']?['_id'];
+    selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
 
     final List<String> images = List<String>.from([
       'review_abudhabi_1.png',
@@ -146,8 +151,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             ],
           ),
           const SizedBox(height: 11),
-          Text(widget.singleFeedback['comment'],
-              style: AppStyles.textStyle_14_400),
+          if (widget.singleFeedback['comment'] != null &&
+              widget.singleFeedback['comment'] != '')
+            Text(widget.singleFeedback['comment'],
+                style: AppStyles.textStyle_14_400),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,32 +178,28 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         setState(() {
                           selectedEmojiIndex = index + 1;
                         });
-                      }
 
-                      if (index != null) {
                         try {
-                          // Make API call to update reaction in backend
+                          // Update reaction in backend
                           final response = await http.post(
                             Uri.parse('$apiUrl/api/v1/airline-review/update'),
-                            headers: {'Content-Type': 'application/json'},
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'Accept': 'application/json',
+                            },
                             body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['id'],
-                              'user_id': widget.singleFeedback['user_id'],
+                              'feedbackId': widget.singleFeedback['_id'],
+                              'user_id': userId,
                               'reactionType': selectedEmojiIndex,
                             }),
                           );
 
                           if (response.statusCode == 200) {
                             setState(() {
-                              // Update the provider with the new review
                               ref
                                   .read(reviewsAirlineProvider.notifier)
-                                  .setReviews([
-                                ...ref.read(reviewsAirlineProvider),
-                                widget.singleFeedback
-                              ]);
-
-                              widget.singleFeedback["rating"] += 1;
+                                  .updateReview(
+                                      jsonDecode(response.body)['data']);
                             });
                           } else {
                             // Show error message if API call fails
@@ -212,7 +215,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         }
                       } // Update selected emoji after dialog closes
                     },
-                    icon: selectedEmojiIndex != null
+                    icon: selectedEmojiIndex != 0
                         ? SvgPicture.asset(
                             'assets/icons/emoji_$selectedEmojiIndex.svg',
                             width: 24,
@@ -221,8 +224,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  // Text(widget.singleFeedback["rating"].toString(),
-                  //     style: AppStyles.textStyle_14_600),
+                  Text(
+                      (widget.singleFeedback["rating"] ?? []).length.toString(),
+                      style: AppStyles.textStyle_14_600),
                 ],
               ),
             ],
