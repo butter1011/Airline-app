@@ -482,14 +482,14 @@ class FilterButton extends StatelessWidget {
           child: Container(
             height: 40,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(20),
                 color: isSelected ? AppStyles.mainColor : Colors.white,
                 border: Border(
-                  top: BorderSide(color: Colors.black, width: 2.0),
-                  left: BorderSide(color: Colors.black, width: 2.0),
+                  top: BorderSide(color: Colors.black, width: 2),
+                  left: BorderSide(color: Colors.black, width: 2),
                   bottom: BorderSide(
-                      color: const Color.fromARGB(255, 71, 71, 71), width: 4.0),
-                  right: BorderSide(color: Colors.black, width: 4.0),
+                      color:  Colors.black, width: 4),
+                  right: BorderSide(color: Colors.black, width: 4),
                 )),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
