@@ -188,7 +188,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               'Accept': 'application/json',
                             },
                             body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['_id'],
+                              'feedbackId': widget.singleFeedback['id'],
                               'user_id': userId,
                               'reactionType': selectedEmojiIndex,
                             }),
