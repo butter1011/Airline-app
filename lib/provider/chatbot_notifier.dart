@@ -53,7 +53,7 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'message': text}),
       );
-      print('💚💚💚$text');
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         String reply = data['reply'];

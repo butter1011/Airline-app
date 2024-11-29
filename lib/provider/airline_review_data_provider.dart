@@ -27,7 +27,9 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
   }
 
   List<dynamic> getReviewsByUserId(String userId) {
-    return state.where((review) => review['id'] == userId).toList();
+    return state
+        .where((review) => review['reviewer']['_id'] == userId)
+        .toList();
   }
 
   List<dynamic> getTopFiveReviews() {
