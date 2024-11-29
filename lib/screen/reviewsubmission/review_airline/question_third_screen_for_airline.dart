@@ -150,7 +150,7 @@ class _QuestionThirdScreenForAirlineState
                                 // Add the new review to the provider
                                 ref
                                     .read(reviewsAirlineProvider.notifier)
-                                    .addReview(result['data']);
+                                    .addReview(result['data']['data']);
 
                                 if (index != null) {
                                   final updatedBoardingPass = ref

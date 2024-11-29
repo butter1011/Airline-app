@@ -76,7 +76,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void initState() {
     super.initState();
     connectWebSocket();
-    fetchLeaderboardData();
+    // fetchLeaderboardData();
     setState(() {
       isLeaderboardLoading = false;
     });
@@ -89,15 +89,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Future<void> fetchLeaderboardData() async {
-    final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
-    if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
-    }
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
-    }
+//     final reviewsController = GetReviewsAirlineController();
+//     final reviewsResult = await reviewsController.getReviews();
+//     if (reviewsResult['success']) {
+//       ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+//     }
+//     final result = await airlineController.getAirlineAirport();
+//     if (result['success']) {
+//       ref.read(airlineAirportProvider.notifier).setData(result['data']);
+//     }
     final airlineScores = await airlineScoreController.getAirlineScore();
     if (airlineScores['success']) {
       final airlineScoreData = airlineScores['data']['data'];
@@ -130,9 +130,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
-    print(
-        "This is airlineAirportState💖💖=====>${airlineAirportState.airlineData}");
-
     if (buttonStates["All"]!) {
       return [
         ...airlineAirportState.airlineData
@@ -407,13 +404,14 @@ class _AirportListSection extends StatelessWidget {
                 bookMarkId: singleAirport['_id'],
                 name: singleAirport['name'],
                 isAirline: singleAirport['isAirline'],
-                isIncreasing: singleAirport['isIncreasing'],
                 totalReviews: singleAirport['totalReviews'],
                 logoImage: singleAirport['logoImage'],
                 perksBio: singleAirport['perksBio'],
                 trendingBio: singleAirport['trendingBio'],
                 backgroundImage: singleAirport['backgroundImage'],
                 descriptionBio: singleAirport['descriptionBio'],
+                isIncreasing: singleAirport['isIncreasing'],
+                overallScore: singleAirport['overall'],
                 index: index,
               );
             }
