@@ -59,18 +59,18 @@ class _CardChartState extends ConsumerState<CardChart> {
               itemCount: sortedButtons.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
+                final buttonIndex = buttons.indexOf(sortedButtons[index]);
                 return ReviewButton(
                   iconUrl: sortedButtons[index]['iconUrl']!,
-                  label: AppLocalizations.of(context)!
-                      .translate('${sortedButtons[index]['label']!}')
+                  label: AppLocalizations.of(context)
+                      .translate('${sortedButtons[index]['label']}')
                       .toString(),
-                  isSelected: selectedButtonIndex ==
-                      buttons.indexOf(sortedButtons[index]),
+                  isSelected: selectedButtonIndex == buttonIndex,
                   onTap: () {
                     ref
                         .read(selectedButtonProvider.notifier)
-                        .selectButton(buttons.indexOf(sortedButtons[index]));
-                    _badgeFunction(index);
+                        .selectButton(buttonIndex);
+                    _badgeFunction(buttonIndex);
                   },
                 );
               },
@@ -90,7 +90,7 @@ class _CardChartState extends ConsumerState<CardChart> {
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode({
-              'selectedbadges': buttons[index]['label']!,
+              'selectedbadges': buttons[index]['label'],
               '_id': UserData?['userData']['_id'],
             }));
 
