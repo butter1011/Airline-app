@@ -165,7 +165,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final reviews = ref.watch(reviewsAirlineProvider);
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
-    print('😂😂${trendingreviews}');
+
     final List<Map<String, dynamic>> leaderBoardList =
         getFilteredList(airlineAirportState);
 

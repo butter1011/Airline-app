@@ -19,7 +19,8 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
 
   void updateReview(Map<String, dynamic> value) {
     state = state.map((review) {
-      if (review['_id'] == value['id']) {
+      if (review['id'] == value['_id']) {
+        print('💍💍🏓🏓$review');
         review['rating'] = value['rating'];
       }
       return review;

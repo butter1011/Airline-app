@@ -181,8 +181,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                         try {
                           // Update reaction in backend
-                          print("-------------");
-                          print(widget.singleFeedback);
+
                           final response = await http.post(
                             Uri.parse('$apiUrl/api/v1/airline-review/update'),
                             headers: {
@@ -203,6 +202,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                   .updateReview(
                                       jsonDecode(response.body)['data']);
                             });
+                            print(
+                                '🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞${jsonDecode(response.body)['data']}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(

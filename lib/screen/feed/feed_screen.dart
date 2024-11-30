@@ -1,7 +1,7 @@
 import 'package:airline_app/controller/feedback_controller.dart';
 import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
-import 'package:airline_app/screen/app_widgets/loading.dart';
+
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -10,16 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
-  FeedScreen({super.key});
+  const FeedScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<FeedScreen> createState() => _FeedScreenState();
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
-  final _fetchReviews = FeedbackController();
-  // bool _isLoading = false;
-  final List<dynamic> reviewList = [];
   late bool selectedAll = true;
   late bool selectedAirline = false;
   late bool selectedAirport = false;
@@ -27,26 +24,13 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   late bool selectedOnboard = false;
 
   @override
-  void initState() {
-    super.initState();
-    // _fetchReviews.fetchReviews().then((value) {
-    //   setState(() {
-    //     // reviewList = List<Map<String, dynamic>>.from(value);
-    //   });
-    //   _isLoading = false;
-    // });
-    reviewList.addAll(ref.read(reviewsAirlineProvider));
-    print('🍿$reviewList');
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final reviewList = ref.watch(reviewsAirlineProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(currentIndex: 3),
       body: Column(
         children: [
-          // This section will always stay at the top
           SizedBox(
             height: 44,
           ),
@@ -61,9 +45,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.white, // Background color
-                    border: Border.all(
-                        width: 2, color: Colors.black), // Border color
+                    color: Colors.white,
+                    border: Border.all(width: 2, color: Colors.black),
                     boxShadow: [
                       BoxShadow(
                           color: Colors.black.withOpacity(0.2),
@@ -78,7 +61,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                             fontFamily: 'Clash Grotesk', fontSize: 14),
                         contentPadding: EdgeInsets.all(0),
                         prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none, // Remove the underline
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
@@ -88,20 +71,18 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     Navigator.pushNamed(context, AppRoutes.filterscreen);
                   },
                   child: Container(
-                    width: 40, // Diameter of the circular avatar
-                    height: 40, // Diameter of the circular avatar
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, // Background color
-                      border: Border.all(
-                          width: 2, color: Colors.black), // Border color
+                      color: Colors.white,
+                      border: Border.all(width: 2, color: Colors.black),
                       boxShadow: const [
                         BoxShadow(color: Colors.black, offset: Offset(2, 2))
                       ],
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                          'assets/icons/setting.png'), // Local image asset
+                      child: Image.asset('assets/icons/setting.png'),
                     ),
                   ),
                 ),
@@ -142,7 +123,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     setState(() {
                       selectedAirline = value;
                     });
-                    print(selectedAirline);
                   },
                 ),
                 SizedBox(width: 8),
@@ -152,7 +132,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     setState(() {
                       selectedAirport = value;
                     });
-                    print(" This is selectedAirport $selectedAirport");
                   },
                 ),
                 SizedBox(width: 8),
@@ -178,8 +157,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           ),
           const SizedBox(height: 14),
           Container(height: 4, color: AppStyles.littleBlackColor),
-
-          // The rest of your content goes here inside a scrollable area
           Expanded(
               child: SingleChildScrollView(
                   child: Column(
@@ -192,8 +169,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   children: [
                     Column(
                         children: reviewList.map((singleFeedback) {
-                      return FeedbackCard(
-                          singleFeedback: singleFeedback); // Your custom widget
+                      return FeedbackCard(singleFeedback: singleFeedback);
                     }).toList()),
                     SizedBox(
                       height: 18,
