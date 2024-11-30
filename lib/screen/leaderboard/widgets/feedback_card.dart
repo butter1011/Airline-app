@@ -181,6 +181,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                         try {
                           // Update reaction in backend
+
                           final response = await http.post(
                             Uri.parse('$apiUrl/api/v1/airline-review/update'),
                             headers: {
@@ -188,7 +189,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               'Accept': 'application/json',
                             },
                             body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['_id'],
+                              'feedbackId': widget.singleFeedback['id'],
                               'user_id': userId,
                               'reactionType': selectedEmojiIndex,
                             }),
@@ -201,6 +202,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                   .updateReview(
                                       jsonDecode(response.body)['data']);
                             });
+                            print(
+                                '🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞${jsonDecode(response.body)['data']}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(

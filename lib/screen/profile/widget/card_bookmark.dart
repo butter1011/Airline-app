@@ -81,8 +81,6 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
           });
         }
       }
-
-      print('💚💚$_bookmarksItems');
     } catch (e) {
       print('Error loading bookmarks: $e');
       // Handle the error appropriately, e.g., show a snackbar to the user

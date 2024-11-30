@@ -68,6 +68,8 @@ dependencies:
   flutter_emoji_feedback: ^0.4.0
   shared_preferences: ^2.3.3
   easy_country_picker: ^0.0.2
+  dialog_flowtter: ^0.2.0-nullsafety.0
+  cached_network_image: ^3.4.1
   mobile_scanner: ^6.0.2
   country_flags: ^3.0.0
   country_codes: ^3.1.0+2
