@@ -214,14 +214,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  country_code_manager:
-    dependency: "direct main"
-    description:
-      name: country_code_manager
-      sha256: "5653436620dd00ad7e76fe320cf783cb634f38e24f087920782c077c799fda64"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.9"
   country_codes:
     dependency: "direct main"
     description:
@@ -1146,6 +1138,32 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.1"
+
+  sealed_countries:
+    dependency: "direct main"
+    description:
+      name: sealed_countries
+      sha256: cab25d9244502220f69069d569dedb39ba7983113746ba44b9ec05113c72ee81
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
+  sealed_currencies:
+    dependency: transitive
+    description:
+      name: sealed_currencies
+      sha256: b8aa884a4b5c061883d818e8e58f62b9057d59530b71660e4ced4edfa6b514fc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
+  sealed_languages:
+    dependency: transitive
+    description:
+      name: sealed_languages
+      sha256: fbe2763bfac54ee8a52674c61588c4f1f9f260fd7db3782cbff3d154e952a918
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
+
   rxdart:
     dependency: transitive
     description:
@@ -1154,6 +1172,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1455,14 +1474,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  very_good_analysis:
-    dependency: transitive
-    description:
-      name: very_good_analysis
-      sha256: "1fb637c0022034b1f19ea2acb42a3603cbd8314a470646a59a2fb01f5f3a8629"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.0"
   vm_service:
     dependency: transitive
     description:
