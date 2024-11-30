@@ -86,7 +86,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
 
   @override
   Widget build(BuildContext context) {
-    final _userId = ref.watch(userDataProvider)?['userData']['_id'];
+    final userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
     final String name = args['name'];
     final String descriptionBio = args['descriptionBio'];
@@ -98,8 +98,8 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
 
-    if (_userId != null &&
-        _bookmarkItems[_userId]?.contains(bookMarkId) == true) {
+    if (userId != null &&
+        _bookmarkItems[userId]?.contains(bookMarkId) == true) {
       _clickedBookmark = true;
     }
 
@@ -333,6 +333,8 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
 }
 
 class ExpandButtons extends ConsumerWidget {
+  const ExpandButtons({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var isExpanded = ref.watch(buttonExpandNotifierProvider);

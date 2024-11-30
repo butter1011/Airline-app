@@ -48,48 +48,26 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   void toggleButton(String buttonText) {
     setState(() {
-      if (buttonText == "All") {
-        // If "All" is clicked, reset all other buttons to false
-        buttonStates.forEach((key, value) {
-          buttonStates[key] = false;
-        });
-        buttonStates["All"] = true;
-      } else {
-        // If any other button is clicked
-        buttonStates.forEach((key, value) {
-          buttonStates[key] = false;
-        });
-        buttonStates[buttonText] = true;
-
-        // Check if all non-"All" buttons are selected
-        bool allOthersSelected = buttonStates.entries
-            .where((e) => e.key != "All")
-            .every((e) => e.value);
-
-        if (allOthersSelected) {
-          buttonStates.forEach((key, value) {
-            buttonStates[key] = false;
-          });
-          buttonStates["All"] = true;
-        }
-      }
-
-      buttonStates.forEach((key, value) {
-        if (value) {
-          filterType = key;
-        }
-      });
-      print("This is filterType 😍 $filterType");
+      buttonStates.updateAll((key, value) => false);
+      buttonStates[buttonText] = true;
+      filterType = buttonText;
     });
-    ref.read(airlineAirportProvider.notifier).getFilteredList(filterType, null);
-    
+    ref
+        .read(airlineAirportProvider.notifier)
+        .getFilteredList(filterType, null, null);
   }
 
   @override
   void initState() {
     super.initState();
-    connectWebSocket();
-    fetchLeaderboardData();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await Future.wait([
+      connectWebSocket(),
+      fetchLeaderboardData(),
+    ]);
     setState(() {
       isLeaderboardLoading = false;
     });
@@ -97,65 +75,57 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   void dispose() {
-     _searchController.dispose();
+    _searchController.dispose();
     _channel.sink.close();
     super.dispose();
   }
 
   Future<void> fetchLeaderboardData() async {
     final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
-    if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+    final futures = await Future.wait([
+      reviewsController.getReviews(),
+      airlineController.getAirlineAirport(),
+      airlineScoreController.getAirlineScore(),
+    ]);
+
+    if (futures[0]['success']) {
+      ref.read(reviewsAirlineProvider.notifier).setData(futures[0]['data']);
     }
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
+    if (futures[1]['success']) {
+      ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
     }
-    final airlineScores = await airlineScoreController.getAirlineScore();
-    if (airlineScores['success']) {
-      final airlineScoreData = airlineScores['data']['data'];
+    if (futures[2]['success']) {
       ref
           .read(airlineAirportProvider.notifier)
-          .setAirlineScoreData(airlineScoreData);
+          .setAirlineScoreData(futures[2]['data']['data']);
     }
-    ref.read(airlineAirportProvider.notifier).getFilteredList("All", null);
-    // setState(() {
-    //   leaderBoardList = [
-    //     ...ref.watch(airlineAirportProvider).airlineData,
-    //     ...ref.watch(airlineAirportProvider).airportData,
-    //   ];
-    // });
-    print(" This is leaderBoardList 🛹  $leaderBoardList");
+
+    ref
+        .read(airlineAirportProvider.notifier)
+        .getFilteredList("All", null, null);
   }
 
   Future<void> connectWebSocket() async {
     try {
-      _channel = IOWebSocketChannel.connect(
-        Uri.parse('ws://$backendUrl/ws'),
+      _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
+      _channel.stream.listen(
+        (message) {
+          final data = json.decode(message);
+          if (data['type'] == 'airlineAirport') {
+            ref
+                .read(airlineAirportProvider.notifier)
+                .setData(Map<String, dynamic>.from(data));
+          }
+        },
+        onError: (_) {},
+        onDone: () {},
       );
-
-      _channel.stream.listen((message) {
-        final data = json.decode(message);
-        if (data['type'] == 'airlineAirport') {
-          ref
-              .read(airlineAirportProvider.notifier)
-              .setData(Map<String, dynamic>.from(data));
-        }
-      }, onError: (_) {}, onDone: () {});
     } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
-  
     final reviews = ref.watch(reviewsAirlineProvider);
-    setState(() {
-      leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
-      print(" This is leaderBoardList  📞  $leaderBoardList");
-      
-    });
-    print(" This is leaderBoardList  🧨  $leaderBoardList");
     leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -193,7 +163,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                         setState(() {
                           _searchQuery = value.toLowerCase();
                         });
-                        ref.read(airlineAirportProvider.notifier).getFilteredList(filterType, _searchQuery);
+                        ref
+                            .read(airlineAirportProvider.notifier)
+                            .getFilteredList(filterType, _searchQuery, null);
                       },
                       decoration: InputDecoration(
                         hintText: 'Search',
@@ -389,52 +361,64 @@ class _AirportListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          children: leaderBoardList.asMap().entries.map((entry) {
-            int index = entry.key;
-
-            Map<String, dynamic> singleAirport = entry.value;
-            if (index < expandedItems) {
-              return AirportList(
-                bookMarkId: singleAirport['_id'],
-                name: singleAirport['name'],
-                isAirline: singleAirport['isAirline'],
-                totalReviews: singleAirport['totalReviews'],
-                logoImage: singleAirport['logoImage'],
-                perksBio: singleAirport['perksBio'],
-                trendingBio: singleAirport['trendingBio'],
-                backgroundImage: singleAirport['backgroundImage'],
-                descriptionBio: singleAirport['descriptionBio'],
-                isIncreasing: singleAirport['isIncreasing'],
-                overallScore: singleAirport['overall'],
-                index: index,
-              );
-            }
-            return const SizedBox.shrink();
-          }).toList(),
-        ),
-        SizedBox(height: 19),
-        if (expandedItems < leaderBoardList.length)
-          Center(
-            child: InkWell(
-              onTap: onExpand,
-              child: IntrinsicWidth(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocalizations.of(context).translate('Expand more'),
-                        style:
-                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_downward),
-                  ],
-                ),
+    return leaderBoardList.isEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Center(
+              child: Text(
+                'Nothing to show here',
+                style: AppStyles.textStyle_14_600,
               ),
             ),
-          ),
-      ],
-    );
+          )
+        : Column(
+            children: [
+              Column(
+                children: leaderBoardList.asMap().entries.map((entry) {
+                  int index = entry.key;
+
+                  Map<String, dynamic> singleAirport = entry.value;
+                  if (index < expandedItems) {
+                    return AirportList(
+                      bookMarkId: singleAirport['_id'],
+                      name: singleAirport['name'],
+                      isAirline: singleAirport['isAirline'],
+                      totalReviews: singleAirport['totalReviews'],
+                      logoImage: singleAirport['logoImage'],
+                      perksBio: singleAirport['perksBio'],
+                      trendingBio: singleAirport['trendingBio'],
+                      backgroundImage: singleAirport['backgroundImage'],
+                      descriptionBio: singleAirport['descriptionBio'],
+                      isIncreasing: singleAirport['isIncreasing'],
+                      overallScore: singleAirport['overall'],
+                      index: index,
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }).toList(),
+              ),
+              SizedBox(height: 19),
+              if (expandedItems < leaderBoardList.length)
+                Center(
+                  child: InkWell(
+                    onTap: onExpand,
+                    child: IntrinsicWidth(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              AppLocalizations.of(context)
+                                  .translate('Expand more'),
+                              style: AppStyles.textStyle_18_600
+                                  .copyWith(fontSize: 15)),
+                          SizedBox(width: 8),
+                          Icon(Icons.arrow_downward),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
   }
 }

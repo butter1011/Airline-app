@@ -21,7 +21,6 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
   ];
   final List<String> flyerClass = [
     "All",
-    "First Class",
     "Business",
     "Premium economy",
     "Economy",
@@ -58,8 +57,8 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
   bool continentIsExpanded = true;
   bool openedSearchTextField = false;
 
-  List<String> selectedAirTypes = [];
-  List<String> selectedFlyerClasses = [];
+  String selectedAirType = "";
+  String selectedFlyerClass = "";
   List<String> selectedContinents = [];
 
   @override
@@ -109,21 +108,8 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
             selectedStates[i] = false;
           }
         }
-      }
-      // Update selected items lists
-      selectedAirTypes = [];
-      for (int i = 0; i < selectedairTypeStates.length; i++) {
-        if (selectedairTypeStates[i]) {
-          selectedAirTypes.add(airType[i]);
-        }
-      }
-
-      selectedFlyerClasses = [];
-      for (int i = 0; i < selectedFlyerClassStates.length; i++) {
-        if (selectedFlyerClassStates[i]) {
-          selectedFlyerClasses.add(flyerClass[i]);
-        }
-      }
+      }    
+     
 
       selectedContinents = [];
       for (int i = 0; i < selectedContinentStates.length; i++) {
@@ -133,18 +119,44 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
       }
     });
     ref.read(airlineAirportProvider.notifier).getFilteredList(
-          selectedAirTypes[0],
+          selectedAirType,
           null,
+          selectedFlyerClass,
           selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
         );
-
-    print("selectedAirTypes💎💎: $selectedAirTypes");
-    print("selectedFlyerClasses⭕⭕: $selectedFlyerClasses");
+    print("selectedAirType💎💎: $selectedAirType");
+    print("selectedFlyerClasses⭕⭕: $selectedFlyerClass");
     print("selectedContinents🎈🎈: $selectedContinents");
   }
+  void _toggleOnlyOneFilter(int index, List selectedStates) {
+    setState(() {
+      // Set all states to false first
+      for (int i = 0; i < selectedStates.length; i++) {
+        selectedStates[i] = false;
+      }
+      // Set only the clicked button to true
+      selectedStates[index] = true;
 
+      // Update selected values based on which list is being modified
+      if (selectedStates == selectedairTypeStates) {
+        selectedAirType = airType[index];
+      } else if (selectedStates == selectedFlyerClassStates) {
+        selectedFlyerClass = flyerClass[index];
+      }
+    });
+
+    // Update the filtered list after selection
+    ref.read(airlineAirportProvider.notifier).getFilteredList(
+          selectedAirType,
+          null,
+          selectedFlyerClass == "All" ? null : selectedFlyerClass,
+          selectedContinents.isEmpty || selectedContinents[0] == "All"
+              ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+              : selectedContinents,
+        );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,7 +270,7 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
                                 .translate(airType[index]),
                             isSelected: selectedairTypeStates[index],
                             onTap: () =>
-                                _toggleFilter(index, selectedairTypeStates),
+                                _toggleOnlyOneFilter(index, selectedairTypeStates),
                           )),
                 ),
               ],
@@ -301,7 +313,7 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
                               .translate('${flyerClass[index]}'),
                           isSelected: selectedFlyerClassStates[index],
                           onTap: () =>
-                              _toggleFilter(index, selectedFlyerClassStates),
+                              _toggleOnlyOneFilter(index, selectedFlyerClassStates),
                         )),
               ),
             ],
@@ -434,7 +446,7 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+              Navigator.of(context).pop();
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.87,
@@ -487,8 +499,7 @@ class FilterButton extends StatelessWidget {
                 border: Border(
                   top: BorderSide(color: Colors.black, width: 2),
                   left: BorderSide(color: Colors.black, width: 2),
-                  bottom: BorderSide(
-                      color:  Colors.black, width: 4),
+                  bottom: BorderSide(color: Colors.black, width: 4),
                   right: BorderSide(color: Colors.black, width: 4),
                 )),
             child: Padding(
@@ -501,3 +512,4 @@ class FilterButton extends StatelessWidget {
         ));
   }
 }
+
