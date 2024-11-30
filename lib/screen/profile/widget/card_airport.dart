@@ -27,6 +27,7 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+    print('🌭🌭$userReviews');
 
     return Column(
       children: [
@@ -70,7 +71,8 @@ class CLeaderboardScreen extends ConsumerWidget {
                     from != null &&
                     to != null) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 7.0, horizontal: 24.0),
                     child: FeedbackCard(
                       singleFeedback: singleReview,
                     ),

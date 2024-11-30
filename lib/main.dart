@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/chatbot/ai_chatbot.dart';
 import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/filter_screen.dart';
@@ -42,8 +43,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main()  {
-
+void main() {
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -93,6 +93,7 @@ class MyApp extends ConsumerWidget {
         ),
       ),
       routes: {
+        AppRoutes.chatbotscreen: (context) => const ChatScreen(),
         AppRoutes.loginscreen: (context) => const Login(),
         AppRoutes.skipscreen: (context) => const SkipScreen(),
         AppRoutes.reviewsubmissionscreen: (context) =>
@@ -104,7 +105,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.mediafullscreen: (context) => const MediaFullScreen(),
         AppRoutes.profilescreen: (context) => const ProfileScreen(),
         AppRoutes.filterscreen: (context) => const FilterScreen(),
-        AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
+        // AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         AppRoutes.manualinput: (context) => ManualInputScreen(),
@@ -136,12 +137,11 @@ class MyApp extends ConsumerWidget {
             QuestionThirdScreenForAirport(),
 
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
-        // AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
+        AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
         AppRoutes.calendersyncscreen: (context) => CalenderSyncScreen(),
-   
       },
       debugShowCheckedModeBanner: false,
     );
