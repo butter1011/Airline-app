@@ -122,48 +122,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       );
     } catch (_) {}
   }
-
-  List<Map<String, dynamic>> getFilteredList(airlineAirportState) {
-    if (buttonStates["All"]!) {
-      return [
-        ...airlineAirportState.airlineData
-            .map((e) => Map<String, dynamic>.from(e)),
-        ...airlineAirportState.airportData
-            .map((e) => Map<String, dynamic>.from(e)),
-      ];
-    } else if (buttonStates["Airline"]!) {
-      return [
-        ...airlineAirportState.airlineData
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    } else if (buttonStates["Airport"]!) {
-      return [
-        ...airlineAirportState.airportData
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    } else if (buttonStates["Cleanliness"]!) {
-      return [
-        ...airlineDataSortedByCleanliness
-            .map((e) => Map<String, dynamic>.from(e))
-      ];
-    }
-    return [
-      ...airlineDataSortedByOnboardSevice
-          .map((e) => Map<String, dynamic>.from(e)),
-    ];
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     final reviews = ref.watch(reviewsAirlineProvider);
-
-    leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
+    final List<Map<String, dynamic>>  leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
 
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
 
-    final List<Map<String, dynamic>> leaderBoardList =
-        getFilteredList(airlineAirportState);
+  
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
