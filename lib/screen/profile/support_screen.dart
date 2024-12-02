@@ -225,11 +225,11 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
                     .read(chatProvider.notifier)
                     .processUserMessage(_controller.text);
 
+                _controller.clear();
                 setState(() {
                   _isLoading = false;
                 });
 
-                _controller.clear();
               }
             },
           ),

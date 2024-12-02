@@ -45,8 +45,7 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
   void initializeMessages() {
     addMessage(
       ChatMessage(
-        text:
-            'Hello! How can I assist you today?',
+        text: 'Hello! How can I assist you today?',
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -66,8 +65,15 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
       final endpoint = type == ChatbotType.support ? '/support' : '/chat';
       final response = await http.post(
         Uri.parse('$chatbotUrl$endpoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'message': text}),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'message': text,
+          'timestamp': DateTime.now().toIso8601String(),
+          'type': type.toString().split('.').last,
+        }),
       );
 
       if (response.statusCode == 200) {
