@@ -49,6 +49,7 @@ class AirportList extends StatelessWidget {
           'isIncreasing': isIncreasing,
           'overall': overallScore,
           'logoImage': logoImage,
+          'isAirline': isAirline,
         });
       },
       child: Container(
@@ -103,7 +104,7 @@ class AirportList extends StatelessWidget {
                         Row(
                           children: [
                             // Image.asset('assets/icons/graph_danger.png'),
-                            (isIncreasing ?? false)
+                            (isIncreasing)
                                 ? Image.asset('assets/icons/graph_primary.png')
                                 : Image.asset('assets/icons/graph_danger.png'),
                             SizedBox(

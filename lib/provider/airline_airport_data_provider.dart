@@ -67,6 +67,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   }
 
   void setAirlineScoreData(List<dynamic> value) {
+    final allData = List<Map<String, dynamic>>.from(value);
+    
     state = state.copyWith(
       airlineScoreData: List<Map<String, dynamic>>.from(value),
     );

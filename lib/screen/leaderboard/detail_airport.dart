@@ -97,6 +97,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
+    final bool isAirline = args['isAirline'];
 
     if (userId != null &&
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {
@@ -254,7 +255,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    ExpandButtons(),
+                    CategoryButtons(isAirline: isAirline),
                   ],
                 ),
               ),
@@ -332,8 +333,10 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   }
 }
 
-class ExpandButtons extends ConsumerWidget {
-  const ExpandButtons({super.key});
+class CategoryButtons extends ConsumerWidget {
+  final bool isAirline;
+
+  const CategoryButtons({super.key, required this.isAirline});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -348,23 +351,39 @@ class ExpandButtons extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_boarding.png',
-                      label: 'Boarding and\nArrival Experience',
-                      badgeScore: '10',
-                    ),
-                  ),
+                  isAirline
+                      ? Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_boarding.png',
+                            label: 'Boarding and\nArrival Experience',
+                            badgeScore: '10',
+                          ),
+                        )
+                      : Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_access.png',
+                            label: 'Accessibility',
+                            badgeScore: '10',
+                          ),
+                        ),
                   SizedBox(
                     width: 16,
                   ),
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_comfort.png',
-                      label: 'Comfort',
-                      badgeScore: '10',
-                    ),
-                  ),
+                  isAirline
+                      ? Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_comfort.png',
+                            label: 'Comfort',
+                            badgeScore: '10',
+                          ),
+                        )
+                      : Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_wait.png',
+                            label: 'Wait Times',
+                            badgeScore: '10',
+                          ),
+                        ),
                 ],
               ),
               SizedBox(
@@ -372,23 +391,39 @@ class ExpandButtons extends ConsumerWidget {
               ),
               Row(
                 children: [
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                      label: 'Cleanliness',
-                      badgeScore: '10',
-                    ),
-                  ),
+                  isAirline
+                      ? Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_cleanliness.png',
+                            label: 'Cleanliness',
+                            badgeScore: '10',
+                          ),
+                        )
+                      : Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_help.png',
+                            label: 'Helpfulness/Ease of Travel',
+                            badgeScore: '10',
+                          ),
+                        ),
                   SizedBox(
                     width: 16,
                   ),
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_onboard.png',
-                      label: 'Onboard Service',
-                      badgeScore: '9',
-                    ),
-                  ),
+                  isAirline
+                      ? Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_onboard.png',
+                            label: 'Onboard Service',
+                            badgeScore: '9',
+                          ),
+                        )
+                      : Expanded(
+                          child: CategoryRatingOptions(
+                            iconUrl: 'assets/icons/review_icon_ambience.png',
+                            label: 'Ambience/Comfort',
+                            badgeScore: '10',
+                          ),
+                        ),
                 ],
               ),
               Visibility(
@@ -400,24 +435,43 @@ class ExpandButtons extends ConsumerWidget {
                       ),
                       Row(
                         children: [
-                          Expanded(
-                            child: CategoryRatingOptions(
-                              iconUrl: 'assets/icons/review_icon_food.png',
-                              label: 'Food & Beverage',
-                              badgeScore: '8',
-                            ),
-                          ),
+                          isAirline
+                              ? Expanded(
+                                  child: CategoryRatingOptions(
+                                    iconUrl:
+                                        'assets/icons/review_icon_food.png',
+                                    label: 'Food & Beverage',
+                                    badgeScore: '8',
+                                  ),
+                                )
+                              : Expanded(
+                                  child: CategoryRatingOptions(
+                                    iconUrl:
+                                        'assets/icons/review_icon_food.png',
+                                    label: 'Food & Beverage and Shopping',
+                                    badgeScore: '10',
+                                  ),
+                                ),
                           SizedBox(
                             width: 16,
                           ),
-                          Expanded(
-                            child: CategoryRatingOptions(
-                              iconUrl:
-                                  'assets/icons/review_icon_entertainment.png',
-                              label: 'In-Flight\nEntertainment',
-                              badgeScore: '7',
-                            ),
-                          ),
+                          isAirline
+                              ? Expanded(
+                                  child: CategoryRatingOptions(
+                                    iconUrl:
+                                        'assets/icons/review_icon_entertainment.png',
+                                    label: 'In-Flight\nEntertainment',
+                                    badgeScore: '7',
+                                  ),
+                                )
+                              : Expanded(
+                                  child: CategoryRatingOptions(
+                                    iconUrl:
+                                        'assets/icons/review_icon_entertainment.png',
+                                    label: 'Amenities and Facilities',
+                                    badgeScore: '10',
+                                  ),
+                                ),
                         ],
                       ),
                     ],
