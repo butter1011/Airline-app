@@ -331,10 +331,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               SizedBox(
                                 height: 18,
                               ),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.feedscreen);
+                                  // Navigator.pushNamed(
+                                  //     context, AppRoutes.feedscreen);
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -407,7 +407,7 @@ class _AirportListSection extends StatelessWidget {
               SizedBox(height: 19),
               if (expandedItems < leaderBoardList.length)
                 Center(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: onExpand,
                     child: IntrinsicWidth(
                       child: Row(

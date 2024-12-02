@@ -159,11 +159,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () async {
-                  await BottomSheetHelper.showScoreBottomSheet(context);
+              IconButton(
+                onPressed: () async {
+                  // await BottomSheetHelper.showScoreBottomSheet(context);
                 },
-                child: Image.asset('assets/icons/share.png'),
+                icon: Image.asset('assets/icons/share.png'),
               ),
               Row(
                 children: [
