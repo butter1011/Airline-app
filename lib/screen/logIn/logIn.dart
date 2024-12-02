@@ -76,6 +76,10 @@ class _LoginState extends ConsumerState<Login> {
           }),
         );
       } else {
+        print('🎄🎄🎄🎄${userData.idToken}');
+
+        // Remove the jwt.decdecode line as it's not defined
+
         response = await http.post(
           Uri.parse('$apiUrl/api/v1/user'),
           headers: <String, String>{
@@ -194,9 +198,13 @@ class UserData {
   final String name;
   final String identityValue;
   final String channel;
+  final String idToken;
 
   UserData(
-      {required this.name, required this.identityValue, required this.channel});
+      {required this.name,
+      required this.identityValue,
+      required this.channel,
+      required this.idToken});
 
   factory UserData.fromJson(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
@@ -211,6 +219,7 @@ class UserData {
     return UserData(
         name: firstIdentity['name'] ?? 'Unknown',
         identityValue: firstIdentity['identityValue'] ?? 'Unknown',
-        channel: firstIdentity['channel'] ?? 'Unknown');
+        channel: firstIdentity['channel'] ?? 'Unknown',
+        idToken: json['data']['idToken'] ?? 'Unknown');
   }
 }
