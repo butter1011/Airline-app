@@ -32,7 +32,7 @@ List<Map<String, dynamic>> socialList = [
 ];
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
-    'mainCategory': ' Departure and Arrival Experience',
+    'mainCategory': 'Boarding and Arrival Experience',
     'iconUrl': 'assets/icons/review_icon_boarding.png',
     'subCategory': {
       'Check-In Process': null,
