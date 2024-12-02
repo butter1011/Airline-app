@@ -122,17 +122,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       );
     } catch (_) {}
   }
- 
 
   @override
   Widget build(BuildContext context) {
     final reviews = ref.watch(reviewsAirlineProvider);
-    final List<Map<String, dynamic>>  leaderBoardList = ref.watch(airlineAirportProvider).filteredList;
+    final List<Map<String, dynamic>> leaderBoardList =
+        ref.watch(airlineAirportProvider).filteredList;
 
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
 
-  
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
