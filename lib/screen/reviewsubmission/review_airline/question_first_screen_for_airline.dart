@@ -17,21 +17,26 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirline.notifier)
         .numberOfSelectedAspects();
 
-
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(
-          subTitle: "Tell us what you liked about your journey.",
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.flightinput);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          flexibleSpace: BuildQuestionHeader(
+            subTitle: "Tell us what you liked about your journey.",
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildFeedbackOptions(selections, numberOfSelectedAspects),
-            _buildNavigationButtons(context),
-          ],
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildFeedbackOptions(selections, numberOfSelectedAspects),
+              _buildNavigationButtons(context),
+            ],
+          ),
         ),
       ),
     );

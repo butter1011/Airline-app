@@ -132,222 +132,231 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 0,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 44,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 271,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    border: Border.all(width: 2, color: Colors.black),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: Offset(2, 2))
-                    ],
-                  ),
-                  child: Center(
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value.toLowerCase();
-                        });
-                        ref
-                            .read(airlineAirportProvider.notifier)
-                            .getFilteredList(filterType, _searchQuery, null);
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                            fontFamily: 'Clash Grotesk', fontSize: 14),
-                        contentPadding: EdgeInsets.all(0),
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: 0,
+        ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 44,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 271,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      border: Border.all(width: 2, color: Colors.black),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: Center(
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.toLowerCase();
+                          });
+                          ref
+                              .read(airlineAirportProvider.notifier)
+                              .getFilteredList(filterType, _searchQuery, null);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                              fontFamily: 'Clash Grotesk', fontSize: 14),
+                          contentPadding: EdgeInsets.all(0),
+                          prefixIcon: Icon(Icons.search),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.filterscreen);
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(width: 2, color: Colors.black),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: Image.asset('assets/icons/setting.png'),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.filterscreen);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(width: 2, color: Colors.black),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Image.asset('assets/icons/setting.png'),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('Filter by category'),
-                  style:
-                      AppStyles.textStyle_15_500.copyWith(color: Colors.black),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)
+                        .translate('Filter by category'),
+                    style: AppStyles.textStyle_15_500
+                        .copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                MainButton(
-                  text: "All",
-                  isSelected: buttonStates["All"]!,
-                  onTap: () => toggleButton("All"),
-                ),
-                SizedBox(width: 8),
-                MainButton(
-                  text: "Airline",
-                  isSelected: buttonStates["Airline"]!,
-                  onTap: () => toggleButton("Airline"),
-                ),
-                SizedBox(width: 8),
-                MainButton(
-                  text: "Airport",
-                  isSelected: buttonStates["Airport"]!,
-                  onTap: () => toggleButton("Airport"),
-                ),
-                SizedBox(width: 8),
-                MainButton(
-                  text: "Cleanliness",
-                  isSelected: buttonStates["Cleanliness"]!,
-                  onTap: () => toggleButton("Cleanliness"),
-                ),
-                SizedBox(width: 8),
-                MainButton(
-                  text: "Onboard",
-                  isSelected: buttonStates["Onboard"]!,
-                  onTap: () => toggleButton("Onboard"),
-                ),
-              ],
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  MainButton(
+                    text: "All",
+                    isSelected: buttonStates["All"]!,
+                    onTap: () => toggleButton("All"),
+                  ),
+                  SizedBox(width: 8),
+                  MainButton(
+                    text: "Airline",
+                    isSelected: buttonStates["Airline"]!,
+                    onTap: () => toggleButton("Airline"),
+                  ),
+                  SizedBox(width: 8),
+                  MainButton(
+                    text: "Airport",
+                    isSelected: buttonStates["Airport"]!,
+                    onTap: () => toggleButton("Airport"),
+                  ),
+                  SizedBox(width: 8),
+                  MainButton(
+                    text: "Cleanliness",
+                    isSelected: buttonStates["Cleanliness"]!,
+                    onTap: () => toggleButton("Cleanliness"),
+                  ),
+                  SizedBox(width: 8),
+                  MainButton(
+                    text: "Onboard",
+                    isSelected: buttonStates["Onboard"]!,
+                    onTap: () => toggleButton("Onboard"),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 14),
-          Container(
-            height: 5,
-            decoration: BoxDecoration(color: AppStyles.littleBlackColor),
-          ),
-          Expanded(
-            child: isLeaderboardLoading
-                ? Center(
-                    child: LoadingWidget(),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)
-                                    .translate('Trending Airlines & Airports'),
-                                style: AppStyles.textStyle_16_600.copyWith(
-                                  color: Color(0xff38433E),
+            SizedBox(height: 14),
+            Container(
+              height: 5,
+              decoration: BoxDecoration(color: AppStyles.littleBlackColor),
+            ),
+            Expanded(
+              child: isLeaderboardLoading
+                  ? Center(
+                      child: LoadingWidget(),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context).translate(
+                                      'Trending Airlines & Airports'),
+                                  style: AppStyles.textStyle_16_600.copyWith(
+                                    color: Color(0xff38433E),
+                                  ),
                                 ),
-                              ),
-                              _AirportListSection(
-                                leaderBoardList: leaderBoardList,
-                                expandedItems: expandedItems,
-                                onExpand: () {
-                                  setState(() {
-                                    expandedItems += 5;
-                                  });
-                                },
-                              ),
-                              SizedBox(height: 28),
-                              Text(
-                                AppLocalizations.of(context)
-                                    .translate('Trending Feedback'),
-                                style: AppStyles.textStyle_16_600.copyWith(
-                                  color: Color(0xff38433E),
+                                _AirportListSection(
+                                  leaderBoardList: leaderBoardList,
+                                  expandedItems: expandedItems,
+                                  onExpand: () {
+                                    setState(() {
+                                      expandedItems += 5;
+                                    });
+                                  },
                                 ),
-                              ),
-                              SizedBox(height: 17),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: trendingreviews.map(
-                                    (singleFeedback) {
-                                      return SizedBox(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: SizedBox(
-                                            width: 299,
-                                            child: FeedbackCard(
-                                                singleFeedback: singleFeedback),
+                                SizedBox(height: 28),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('Trending Feedback'),
+                                  style: AppStyles.textStyle_16_600.copyWith(
+                                    color: Color(0xff38433E),
+                                  ),
+                                ),
+                                SizedBox(height: 17),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: trendingreviews.map(
+                                      (singleFeedback) {
+                                        return SizedBox(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(right: 16),
+                                            child: SizedBox(
+                                              width: 299,
+                                              child: FeedbackCard(
+                                                  singleFeedback:
+                                                      singleFeedback),
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ).toList(),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.feedscreen);
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate('See all feedback'),
-                                      style: AppStyles.textStyle_15_600,
-                                    ),
-                                    Icon(Icons.arrow_forward)
-                                  ],
+                                SizedBox(
+                                  height: 18,
                                 ),
-                              ),
-                            ],
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.feedscreen);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('See all feedback'),
+                                        style: AppStyles.textStyle_15_600,
+                                      ),
+                                      Icon(Icons.arrow_forward)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

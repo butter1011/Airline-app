@@ -26,201 +26,207 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final reviewList = ref.watch(reviewsAirlineProvider);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(currentIndex: 3),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 44,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 271,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    border: Border.all(width: 2, color: Colors.black),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: Offset(2, 2))
-                    ],
-                  ),
-                  child: const Center(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                            fontFamily: 'Clash Grotesk', fontSize: 14),
-                        contentPadding: EdgeInsets.all(0),
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: BottomNavBar(currentIndex: 3),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 44,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 271,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      border: Border.all(width: 2, color: Colors.black),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: const Center(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                              fontFamily: 'Clash Grotesk', fontSize: 14),
+                          contentPadding: EdgeInsets.all(0),
+                          prefixIcon: Icon(Icons.search),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.filterscreen);
-                  },
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(width: 2, color: Colors.black),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.filterscreen);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(width: 2, color: Colors.black),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Image.asset('assets/icons/setting.png'),
+                      ),
                     ),
-                    child: ClipOval(
-                      child: Image.asset('assets/icons/setting.png'),
-                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Text(
+                    'Filter by category',
+                    style: TextStyle(
+                        fontFamily: 'Clash Grotesk',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  FeedFilterButton(
+                    text: "All",
+                    onSelectionChanged: (value) {
+                      setState(() {
+                        selectedAll = value;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 8),
+                  FeedFilterButton(
+                    text: "Airline",
+                    onSelectionChanged: (value) {
+                      setState(() {
+                        selectedAirline = value;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 8),
+                  FeedFilterButton(
+                    text: "Airport",
+                    onSelectionChanged: (value) {
+                      setState(() {
+                        selectedAirport = value;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 8),
+                  FeedFilterButton(
+                    text: "Cleanliness",
+                    onSelectionChanged: (value) {
+                      setState(() {
+                        selectedCleanliness = value;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 8),
+                  FeedFilterButton(
+                    text: "Onboard",
+                    onSelectionChanged: (value) {
+                      setState(() {
+                        selectedOnboard = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Container(height: 4, color: AppStyles.littleBlackColor),
+            Expanded(
+                child: SingleChildScrollView(
+                    child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: reviewList.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final singleReview = entry.value;
+                            if (singleReview != null) {
+                              final reviewer = singleReview['reviewer'];
+                              final airline = singleReview['airline'];
+                              final from = singleReview['from'];
+                              final to = singleReview['to'];
+
+                              if (reviewer != null &&
+                                  airline != null &&
+                                  from != null &&
+                                  to != null) {
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 9,
+                                      ),
+                                      child: FeedbackCard(
+                                        singleFeedback: singleReview,
+                                      ),
+                                    ),
+                                    if (index != reviewList.length - 1)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 18,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Divider(
+                                              height: 2,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              }
+                            }
+                            return const SizedBox.shrink();
+                          }).toList()),
+                      SizedBox(
+                        height: 18,
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Text(
-                  'Filter by category',
-                  style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15),
-                ),
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                FeedFilterButton(
-                  text: "All",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAll = value;
-                    });
-                  },
-                ),
-                SizedBox(width: 8),
-                FeedFilterButton(
-                  text: "Airline",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAirline = value;
-                    });
-                  },
-                ),
-                SizedBox(width: 8),
-                FeedFilterButton(
-                  text: "Airport",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAirport = value;
-                    });
-                  },
-                ),
-                SizedBox(width: 8),
-                FeedFilterButton(
-                  text: "Cleanliness",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedCleanliness = value;
-                    });
-                  },
-                ),
-                SizedBox(width: 8),
-                FeedFilterButton(
-                  text: "Onboard",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedOnboard = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          Container(height: 4, color: AppStyles.littleBlackColor),
-          Expanded(
-              child: SingleChildScrollView(
-                  child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: reviewList.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final singleReview = entry.value;
-                          if (singleReview != null) {
-                            final reviewer = singleReview['reviewer'];
-                            final airline = singleReview['airline'];
-                            final from = singleReview['from'];
-                            final to = singleReview['to'];
-
-                            if (reviewer != null &&
-                                airline != null &&
-                                from != null &&
-                                to != null) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 9,
-                                    ),
-                                    child: FeedbackCard(
-                                      singleFeedback: singleReview,
-                                    ),
-                                  ),
-                                  if (index != reviewList.length - 1)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 18,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Divider(
-                                            height: 2,
-                                            color: Colors.black,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              );
-                            }
-                          }
-                          return const SizedBox.shrink();
-                        }).toList()),
-                    SizedBox(
-                      height: 18,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )))
-        ],
+            )))
+          ],
+        ),
       ),
     );
   }

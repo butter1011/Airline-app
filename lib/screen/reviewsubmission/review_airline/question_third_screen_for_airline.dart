@@ -77,143 +77,151 @@ class _QuestionThirdScreenForAirlineState
     final foodBeverage = reviewData[4]["subCategory"];
     final entertainmentWifi = reviewData[5]["subCategory"];
 
-    return Stack(
-      children: [
-        Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-              flexibleSpace: BuildQuestionHeader(
-                subTitle: "Share your experience.",
-              ),
-            ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildFeedbackOptions(context),
-                    const SizedBox(height: 20),
-                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.questionsecondscreenforairline);
+        return false;
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+                flexibleSpace: BuildQuestionHeader(
+                  subTitle: "Share your experience.",
                 ),
               ),
-            ),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(height: 2, color: Colors.black),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  child: Row(
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: NavPageButton(
-                          text: 'Go back',
-                          onPressed: () => Navigator.pop(context),
-                          icon: Icons.arrow_back,
+                      _buildFeedbackOptions(context),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
+              bottomNavigationBar: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(height: 2, color: Colors.black),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: NavPageButton(
+                            text: 'Go back',
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icons.arrow_back,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: NavPageButton(
-                          text: 'Submit',
-                          onPressed: () async {
-                            setState(() {
-                              _isLoading = true;
-                            });
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: NavPageButton(
+                            text: 'Submit',
+                            onPressed: () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
 
-                            try {
-                              final review = AirlineReviewModel(
-                                reviewer:
-                                    ref.watch(userDataProvider)?['userData']
-                                        ['_id'],
-                                from: from,
-                                to: to,
-                                classTravel: classTravel,
-                                airline: airline,
-                                departureArrival: departureArrival,
-                                comfort: comfort,
-                                cleanliness: cleanliness,
-                                onboardService: onboardService,
-                                foodBeverage: foodBeverage,
-                                entertainmentWifi: entertainmentWifi,
-                                comment: comment,
-                              );
-                              print(
-                                  "This is review ===========>   ${review.toJson()}");
+                              try {
+                                final review = AirlineReviewModel(
+                                  reviewer:
+                                      ref.watch(userDataProvider)?['userData']
+                                          ['_id'],
+                                  from: from,
+                                  to: to,
+                                  classTravel: classTravel,
+                                  airline: airline,
+                                  departureArrival: departureArrival,
+                                  comfort: comfort,
+                                  cleanliness: cleanliness,
+                                  onboardService: onboardService,
+                                  foodBeverage: foodBeverage,
+                                  entertainmentWifi: entertainmentWifi,
+                                  comment: comment,
+                                );
+                                print(
+                                    "This is review ===========>   ${review.toJson()}");
 
-                              final result =
-                                  await _reviewController.saveReview(review);
+                                final result =
+                                    await _reviewController.saveReview(review);
 
-                              if (result['success']) {
-                                // Add the new review to the provider
-                                ref
-                                    .read(reviewsAirlineProvider.notifier)
-                                    .addReview(result['data']['data']);
+                                if (result['success']) {
+                                  // Add the new review to the provider
+                                  ref
+                                      .read(reviewsAirlineProvider.notifier)
+                                      .addReview(result['data']['data']);
 
-                                if (index != null) {
-                                  final updatedBoardingPass = ref
-                                      .read(boardingPassesProvider.notifier)
-                                      .markFlightAsReviewed(index);
+                                  if (index != null) {
+                                    final updatedBoardingPass = ref
+                                        .read(boardingPassesProvider.notifier)
+                                        .markFlightAsReviewed(index);
 
-                                  await boardingPassController
-                                      .updateBoardingPass(updatedBoardingPass);
+                                    await boardingPassController
+                                        .updateBoardingPass(
+                                            updatedBoardingPass);
+                                  }
+
+                                  ref
+                                      .read(aviationInfoProvider.notifier)
+                                      .resetState();
+                                  ref
+                                      .read(reviewFeedBackProviderForAirline
+                                          .notifier)
+                                      .resetState();
+
+                                  setState(() => _isLoading = false);
+
+                                  if (!mounted) return;
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.leaderboardscreen);
+                                  await showReviewSuccessBottomSheet(
+                                      // ignore: use_build_context_synchronously
+                                      context,
+                                      () => setState(() => isSuccess = true),
+                                      "Review airport");
+                                } else {
+                                  setState(() => _isLoading = false);
+                                  if (!mounted) return;
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Failed to submit review')),
+                                  );
                                 }
-
-                                ref
-                                    .read(aviationInfoProvider.notifier)
-                                    .resetState();
-                                ref
-                                    .read(reviewFeedBackProviderForAirline
-                                        .notifier)
-                                    .resetState();
-
-                                setState(() => _isLoading = false);
-
-                                if (!mounted) return;
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushNamed(
-                                    context, AppRoutes.leaderboardscreen);
-                                await showReviewSuccessBottomSheet(
-                                    // ignore: use_build_context_synchronously
-                                    context,
-                                    () => setState(() => isSuccess = true),
-                                    "Review airport");
-                              } else {
+                              } catch (e) {
                                 setState(() => _isLoading = false);
                                 if (!mounted) return;
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Failed to submit review')),
+                                  SnackBar(
+                                      content: Text('Error: ${e.toString()}')),
                                 );
                               }
-                            } catch (e) {
-                              setState(() => _isLoading = false);
-                              if (!mounted) return;
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Error: ${e.toString()}')),
-                              );
-                            }
-                          },
-                          icon: Icons.arrow_forward,
+                            },
+                            icon: Icons.arrow_forward,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )),
-        if (_isLoading)
-          Container(
-              color: Colors.black.withOpacity(0.5),
-              child: const LoadingWidget()),
-      ],
+                ],
+              )),
+          if (_isLoading)
+            Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const LoadingWidget()),
+        ],
+      ),
     );
   }
 
