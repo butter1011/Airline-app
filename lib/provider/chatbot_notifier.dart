@@ -30,14 +30,29 @@ class AirlineCard {
   });
 }
 
+enum ChatbotType { support, general }
+
 class ChatNotifier extends StateNotifier<List<ChatMessage>> {
-  ChatNotifier() : super([]);
+  final ChatbotType type;
+
+  ChatNotifier({required this.type}) : super([]);
 
   void addMessage(ChatMessage message) {
     state = [...state, message];
   }
 
-  Future<void> processUserMessage(String text) async {
+  void initializeMessages() {
+    addMessage(
+      ChatMessage(
+        text:
+            'Hello! How can I assist you today?',
+        isUser: false,
+        timestamp: DateTime.now(),
+      ),
+    );
+  }
+
+  Future<bool> processUserMessage(String text) async {
     addMessage(
       ChatMessage(
         text: text,
@@ -47,9 +62,9 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
     );
 
     try {
+      final endpoint = type == ChatbotType.support ? '/support' : '/chat';
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000/chat'), // Use this for Android emulator
-        // Uri.parse('http://localhost:5000/chat'),  // Use this for iOS simulator
+        Uri.parse('http://10.0.2.2:5000$endpoint'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'message': text}),
       );
@@ -58,37 +73,13 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
         final data = json.decode(response.body);
         String reply = data['reply'];
 
-        if (text.toLowerCase().contains('airline')) {
-          addMessage(
-            ChatMessage(
-              text: reply,
-              isUser: false,
-              airlines: [
-                AirlineCard(
-                  name: 'Emirates Airlines',
-                  imageUrl: 'https://example.com/emirates.jpg',
-                  rating: '4.8',
-                  tags: ['First Class', 'Good Food', 'Best Staff'],
-                ),
-                AirlineCard(
-                  name: 'Abu Dhabi Airport',
-                  imageUrl: 'https://example.com/abudhabi.jpg',
-                  rating: '4.6',
-                  tags: ['Clean', 'Fast Service'],
-                ),
-              ],
-              timestamp: DateTime.now(),
-            ),
-          );
-        } else {
-          addMessage(
-            ChatMessage(
-              text: reply,
-              isUser: false,
-              timestamp: DateTime.now(),
-            ),
-          );
-        }
+        addMessage(
+          ChatMessage(
+            text: reply,
+            isUser: false,
+            timestamp: DateTime.now(),
+          ),
+        );
       } else {
         addMessage(
           ChatMessage(
@@ -108,9 +99,16 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
         ),
       );
     }
+    return true;
   }
 }
 
-final chatProvider = StateNotifierProvider<ChatNotifier, List<ChatMessage>>(
-  (ref) => ChatNotifier(),
+final supportChatProvider =
+    StateNotifierProvider<ChatNotifier, List<ChatMessage>>(
+  (ref) => ChatNotifier(type: ChatbotType.support),
+);
+
+final generalChatProvider =
+    StateNotifierProvider<ChatNotifier, List<ChatMessage>>(
+  (ref) => ChatNotifier(type: ChatbotType.general),
 );
