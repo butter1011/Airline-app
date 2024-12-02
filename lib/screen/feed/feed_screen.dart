@@ -168,9 +168,50 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                        children: reviewList.map((singleFeedback) {
-                      return FeedbackCard(singleFeedback: singleFeedback);
-                    }).toList()),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: reviewList.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final singleReview = entry.value;
+                          if (singleReview != null) {
+                            final reviewer = singleReview['reviewer'];
+                            final airline = singleReview['airline'];
+                            final from = singleReview['from'];
+                            final to = singleReview['to'];
+
+                            if (reviewer != null &&
+                                airline != null &&
+                                from != null &&
+                                to != null) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 9,
+                                    ),
+                                    child: FeedbackCard(
+                                      singleFeedback: singleReview,
+                                    ),
+                                  ),
+                                  if (index != reviewList.length - 1)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 18,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Divider(
+                                            height: 2,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }
+                          }
+                          return const SizedBox.shrink();
+                        }).toList()),
                     SizedBox(
                       height: 18,
                     ),
