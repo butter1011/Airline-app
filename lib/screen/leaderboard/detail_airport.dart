@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -97,7 +99,11 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
-
+    final airlineReviewLists = ref
+        .watch(reviewsAirlineProvider.notifier)
+        .getReviewsByBookMarkId(bookMarkId);
+    print('🥻🥻🥻👜👝👝👜👛$airlineReviewLists');
+    print('🥻🥻🥻$bookMarkId');
     if (userId != null &&
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {
       _clickedBookmark = true;
@@ -258,13 +264,50 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                   ],
                 ),
               ),
-              // Column(
-              //   children: reviews.map((singleReview) {
-              //     return CategoryReviews(
-              //       review: singleReview,
-              //     );
-              //   }).toList(),
-              // ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: airlineReviewLists.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final singleReview = entry.value;
+                  if (singleReview != null) {
+                    final reviewer = singleReview['reviewer'];
+                    final airline = singleReview['airline'];
+                    final from = singleReview['from'];
+                    final to = singleReview['to'];
+
+                    if (reviewer != null &&
+                        airline != null &&
+                        from != null &&
+                        to != null) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24.0),
+                            child: FeedbackCard(
+                              singleFeedback: singleReview,
+                            ),
+                          ),
+                          if (index != airlineReviewLists.length - 1)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 24.0),
+                              child: Column(
+                                children: [
+                                  Divider(
+                                    height: 2,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                  }
+                  return const SizedBox.shrink();
+                }).toList(),
+              ),
               Container(
                 decoration: BoxDecoration(
                   // color: Colors.red,

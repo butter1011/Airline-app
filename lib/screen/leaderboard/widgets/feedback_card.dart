@@ -2,6 +2,7 @@ import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
+import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -83,6 +84,14 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             ],
           ),
           SizedBox(height: 12),
+          BasicBlackButton(
+              mywidth: 68,
+              myheight: 24,
+              myColor: Colors.black,
+              btntext: "Verified"),
+          SizedBox(
+            height: 12,
+          ),
           Row(
             children: [
               Text('Flex with', style: AppStyles.textStyle_14_400_littleGrey),

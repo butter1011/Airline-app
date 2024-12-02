@@ -33,6 +33,12 @@ class ReviewsAirlineNotifier extends StateNotifier<List<dynamic>> {
         .toList();
   }
 
+  List<dynamic> getReviewsByBookMarkId(String BookMarkId) {
+    return state
+        .where((review) => review['airline']['_id'] == BookMarkId)
+        .toList();
+  }
+
   List<dynamic> getTopFiveReviews() {
     var sortedReviews =
         state.where((review) => review['rating'] != null).toList()
