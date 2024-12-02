@@ -9,6 +9,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
@@ -123,6 +124,30 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     } catch (_) {}
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Do you want to exit the app?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                  SystemNavigator.pop(); // This will exit the app
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final reviews = ref.watch(reviewsAirlineProvider);
@@ -133,10 +158,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
 
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-        return false;
-      },
+      onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNavBar(

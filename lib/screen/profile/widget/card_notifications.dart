@@ -120,11 +120,18 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            // Delete token from SharedPreferences
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.remove('token');
+
+                            // Close the modal bottom sheet
                             Navigator.pop(context);
-                            Navigator.pushNamed(
-                              context,
+
+                            // Navigate to login screen and remove all previous routes
+                            Navigator.of(context).pushNamedAndRemoveUntil(
                               AppRoutes.loginscreen,
+                              (Route<dynamic> route) => false,
                             );
                           },
                           child: BasicLanguageButton(

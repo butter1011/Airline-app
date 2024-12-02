@@ -293,6 +293,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _editProfileFunction() async {
     final UserData = ref.watch(userDataProvider);
+
     final userInformationData =
         await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
             headers: <String, String>{
@@ -302,11 +303,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               'name': _nameController.text,
               'bio': _bioController.text,
               '_id': UserData?['userData']['_id'],
-              'favoriteAirline': _selectedAirline
+              'favoriteAirlines': _selectedAirline
             }));
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);
+      print('🎎🎎$responseChangeData');
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
