@@ -6,9 +6,9 @@ import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.d
 
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
-import 'package:airline_app/screen/profile/utils/book_mark_json.dart';
+
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
-import 'package:airline_app/utils/airport_list_json.dart';
+
 import 'package:airline_app/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';

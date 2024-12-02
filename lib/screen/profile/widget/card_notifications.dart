@@ -1,17 +1,14 @@
 import 'dart:ui';
 import 'package:airline_app/main.dart';
-
 import 'package:airline_app/provider/selected_language_provider.dart';
 import 'package:airline_app/screen/profile/widget/basic_button%20english.dart';
-
 import 'package:airline_app/screen/profile/widget/basic_language_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CardNotifications extends ConsumerStatefulWidget {
   @override
@@ -22,14 +19,29 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
   String _selectedLanguage = 'English';
   String _selectedLanguageSym = 'en';
 
-  void _changeLanguageFun(String language, String lSym) {
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguagePreference();
+  }
+
+  void _loadLanguagePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLanguage = prefs.getString('selectedLanguage') ?? 'English';
+      _selectedLanguageSym = prefs.getString('selectedLanguageSym') ?? 'en';
+    });
+  }
+
+  void _changeLanguageFun(String language, String lSym) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedLanguage = language;
       _selectedLanguageSym = lSym;
-      // Update selected language
     });
-    // Call your modal bottom sheet or any other functionality here
-    // showModalBottomSheet(...);
+    await prefs.setString('selectedLanguage', language);
+    await prefs.setString('selectedLanguageSym', lSym);
+    _changeLanguage(context);
   }
 
   Future<void> _showSignOutConfirmation(BuildContext context) async {
@@ -168,6 +180,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             ),
           ),
         ),
+        // ... (rest of the UI code remains the same)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
           child: InkWell(
@@ -369,44 +382,31 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: () {
-                  _changeLanguageFun('English', 'en');
-
-                  // Navigator.pushNamed(context, AppRoutes.aboutapp);
-                  _changeLanguage(context);
-                },
+                onTap: () => _changeLanguageFun('English', 'en'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: ref.watch(selectedLanguageProvider) == 'English'
+                    myColor: _selectedLanguage == 'English'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("English")),
               ),
               InkWell(
-                onTap: () {
-                  _changeLanguageFun('Chinese', 'zh');
-                  // Navigator.pushNamed(context, AppRoutes.aboutapp);
-                  _changeLanguage(context);
-                },
+                onTap: () => _changeLanguageFun('Chinese', 'zh'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: ref.watch(selectedLanguageProvider) == 'Chinese'
+                    myColor: _selectedLanguage == 'Chinese'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Chinese")),
               ),
               InkWell(
-                onTap: () {
-                  _changeLanguageFun('Russian', 'ru');
-                  // Navigator.pushNamed(context, AppRoutes.aboutapp);
-                  _changeLanguage(context);
-                },
+                onTap: () => _changeLanguageFun('Russian', 'ru'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: ref.watch(selectedLanguageProvider) == 'Russian'
+                    myColor: _selectedLanguage == 'Russian'
                         ? AppStyles.mainColor
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Russian")),
@@ -457,7 +457,6 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
       builder: (BuildContext context) {
         return Stack(
           children: [
-            // Blurred background
             Positioned.fill(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -529,13 +528,18 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             ref.read(localeProvider.notifier).state =
                                 Locale('$_selectedLanguageSym', '');
                             ref
                                 .read(selectedLanguageProvider.notifier)
-                                .changeLanguage(
-                                    _selectedLanguage); // Implement language change logic here
+                                .changeLanguage(_selectedLanguage);
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.setString(
+                                'selectedLanguage', _selectedLanguage);
+                            await prefs.setString(
+                                'selectedLanguageSym', _selectedLanguageSym);
                             Navigator.pop(context);
                           },
                           child: BasicLanguageButton(
@@ -557,29 +561,4 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
       },
     );
   }
-
-// class ItemWidget extends StatelessWidget {
-//   const ItemWidget({
-//     Key? key,
-//     required this.title,
-//     required this.content,
-//   }) : super(key: key);
-
-//   final String title;
-//   final String content;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 8.0),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Expanded(child: Text(title)),
-//           const Text(' : '),
-//           Expanded(child: Text(content)),
-//         ],
-//       ),
-//     );
-//   }
 }
