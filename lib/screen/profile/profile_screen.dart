@@ -36,19 +36,21 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                           Row(
                             children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black,
-                                          offset: Offset(4, 4)),
-                                    ]),
-                                child: const CircleAvatar(
-                                  radius: 36,
-                                  backgroundImage:
-                                      AssetImage('assets/images/avatar_1.png'),
+                              InkWell(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black,
+                                            offset: Offset(4, 4)),
+                                      ]),
+                                  child: const CircleAvatar(
+                                    radius: 36,
+                                    backgroundImage: AssetImage(
+                                        'assets/images/avatar_1.png'),
+                                  ),
                                 ),
                               ),
                               const SizedBox(

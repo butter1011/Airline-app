@@ -3,6 +3,7 @@ import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -47,9 +48,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
 
     final List<String> images = List<String>.from([
-      'review_abudhabi_1.png',
-      'review_ethiopian_2.png',
-      'review_turkish_1.png'
+      'assets/images/review_abudhabi_1.png',
+      'assets/images/review_ethiopian_2.png',
+      'assets/images/review_turkish_1.png'
     ]); // Ensure it's a List<String>
 
     return SizedBox(
@@ -114,28 +115,47 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           SizedBox(height: 11),
           Stack(
             children: [
-              CarouselSlider(
-                options: CarouselOptions(
-                  viewportFraction: 1,
-                  height: 189,
-                ),
-                carouselController: buttonCarouselController,
-                items: images.map((singleImage) {
-                  return Builder(builder: (BuildContext context) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        height: 189,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/$singleImage'),
-                            fit: BoxFit.cover,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                      arguments: {
+                        'Images': images,
+                        'Name': widget.singleFeedback['reviewer']['name'],
+                        'Avatar': 'assets/images/avatar_6.png',
+                        'Date':
+                            'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                        'Usedairport': widget.singleFeedback['airline']['name'],
+                        'Content': widget.singleFeedback['comment'] != null &&
+                                widget.singleFeedback['comment'] != ''
+                            ? widget.singleFeedback['comment']
+                            : '',
+                      });
+                },
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    viewportFraction: 1,
+                    height: 189,
+                    enableInfiniteScroll: false,
+                    scrollPhysics: NeverScrollableScrollPhysics(),
+                  ),
+                  carouselController: buttonCarouselController,
+                  items: images.map((singleImage) {
+                    return Builder(builder: (BuildContext context) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Container(
+                          height: 189,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('$singleImage'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  });
-                }).toList(),
+                      );
+                    });
+                  }).toList(),
+                ),
               ),
               Positioned(
                 top: 79,
