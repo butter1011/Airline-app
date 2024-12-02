@@ -1,4 +1,5 @@
 import 'package:airline_app/controller/get_airline_score_controller.dart';
+import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -33,6 +34,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   bool isLeaderboardLoading = true;
   final airlineController = GetAirlineAirportController();
   final airlineScoreController = GetAirlineScoreController();
+  final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
 
@@ -86,6 +88,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       reviewsController.getReviews(),
       airlineController.getAirlineAirport(),
       airlineScoreController.getAirlineScore(),
+      airportScoreController.getAirportScore(),
     ]);
 
     if (futures[0]['success']) {
@@ -98,6 +101,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       ref
           .read(airlineAirportProvider.notifier)
           .setAirlineScoreData(futures[2]['data']['data']);
+    }
+    if (futures[3]['success']) {
+      print("=============================${futures[3]['data']['data']}");
+      ref
+          .read(airlineAirportProvider.notifier)
+          .setAirportScoreData(futures[3]['data']['data']);
     }
 
     ref
@@ -125,7 +134,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final reviews = ref.watch(reviewsAirlineProvider);
     final List<Map<String, dynamic>> leaderBoardList =
         ref.watch(airlineAirportProvider).filteredList;
 
@@ -384,20 +392,13 @@ class _AirportListSection extends StatelessWidget {
 
                   Map<String, dynamic> singleAirport = entry.value;
                   if (index < expandedItems) {
-                    print("This si single airport 🧡============>$singleAirport");
+                    print(
+                        "This is single airport 🧡============>$singleAirport");
                     return AirportList(
-                      bookMarkId: singleAirport['_id'],
-                      name: singleAirport['name'],
-                      isAirline: singleAirport['isAirline'],
-                      totalReviews: singleAirport['totalReviews'],
-                      logoImage: singleAirport['logoImage'],
-                      perksBio: singleAirport['perksBio'],
-                      trendingBio: singleAirport['trendingBio'],
-                      backgroundImage: singleAirport['backgroundImage'],
-                      descriptionBio: singleAirport['descriptionBio'],
-                      isIncreasing: singleAirport['isIncreasing'],
-                      overallScore: singleAirport['overall'],           
-                      index: index,
+                      airportData: {
+                        ...singleAirport,
+                        'index': index,
+                      },
                     );
                   }
                   return const SizedBox.shrink();

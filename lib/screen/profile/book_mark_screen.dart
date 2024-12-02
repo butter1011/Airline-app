@@ -91,18 +91,10 @@ class _AirportListSection extends StatelessWidget {
             Map<String, dynamic> singleAirport = entry.value;
             if (index < expandedItems) {
               return AirportList(
-                bookMarkId: singleAirport['_id'],
-                name: singleAirport['name'],
-                isAirline: singleAirport['isAirline'],
-                isIncreasing: singleAirport['isIncreasing'],
-                totalReviews: singleAirport['totalReviews'],
-                logoImage: singleAirport['logoImage'],
-                perksBio: singleAirport['perksBio'],
-                trendingBio: singleAirport['trendingBio'],
-                backgroundImage: singleAirport['backgroundImage'],
-                descriptionBio: singleAirport['descriptionBio'],
-                overallScore: singleAirport['overall'],
-                index: index,
+                airportData: {
+                  ...singleAirport,
+                  'index': index,
+                },
               );
             }
             return const SizedBox.shrink();
