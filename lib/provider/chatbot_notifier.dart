@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:airline_app/utils/global_variable.dart';
 
 class ChatMessage {
   final String text;
@@ -64,7 +65,7 @@ class ChatNotifier extends StateNotifier<List<ChatMessage>> {
     try {
       final endpoint = type == ChatbotType.support ? '/support' : '/chat';
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000$endpoint'),
+        Uri.parse('$chatbotUrl$endpoint'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'message': text}),
       );
