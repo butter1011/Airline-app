@@ -7,50 +7,20 @@ import 'package:flutter/material.dart';
 class AirportList extends StatelessWidget {
   const AirportList({
     super.key,
-    required this.name,
-    required this.isAirline,
-    required this.isIncreasing,
-    required this.logoImage,
-    required this.index,
-    required this.totalReviews,
-    required this.backgroundImage,
-    required this.perksBio,
-    required this.trendingBio,
-    required this.descriptionBio,
-    required this.bookMarkId,
-    required this.overallScore,
+    required this.airportData,
   });
-  final String name;
-  final bool isAirline;
-  final bool isIncreasing;
-  final String logoImage;
-  final int index;
-  final int totalReviews;
-  final String backgroundImage;
-  final String perksBio;
-  final String trendingBio;
-  final String descriptionBio;
-  final String bookMarkId;
-  final num overallScore;
+  
+  final Map<String, dynamic> airportData;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.detailairport, arguments: {
-          'index': index,
-          'name': name,
-          'descriptionBio': descriptionBio,
-          'perksBio': perksBio,
-          'trendingBio': trendingBio,
-          'backgroundImage': backgroundImage,
-          'bookMarkId': bookMarkId,
-          'totalReviews': totalReviews,
-          'isIncreasing': isIncreasing,
-          'overall': overallScore,
-          'logoImage': logoImage,
-          'isAirline': isAirline,
-        });
+        Navigator.pushNamed(
+          context, 
+          AppRoutes.detailairport, 
+          arguments: airportData
+        );
       },
       child: Container(
         decoration: BoxDecoration(),
@@ -66,7 +36,7 @@ class AirportList extends StatelessWidget {
                     decoration: AppStyles.circleDecoration,
                     child: CircleAvatar(
                       radius: 20,
-                      backgroundImage: NetworkImage(logoImage),
+                      backgroundImage: NetworkImage(airportData['logoImage']),
                     ),
                   ),
                   const SizedBox(
@@ -76,11 +46,11 @@ class AirportList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        airportData['name'],
                         style: AppStyles.textStyle_14_600,
                       ),
                       Text(
-                        isAirline ? 'Airline' : 'Airport',
+                        airportData['isAirline'] ? 'Airline' : 'Airport',
                         style: AppStyles.textStyle_14_600.copyWith(
                             fontSize: 13, fontWeight: FontWeight.w500),
                       ),
@@ -104,7 +74,7 @@ class AirportList extends StatelessWidget {
                         Row(
                           children: [
                             // Image.asset('assets/icons/graph_danger.png'),
-                            (isIncreasing)
+                            (airportData['isIncreasing'])
                                 ? Image.asset('assets/icons/graph_primary.png')
                                 : Image.asset('assets/icons/graph_danger.png'),
                             SizedBox(
@@ -122,7 +92,7 @@ class AirportList extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "+${totalReviews.toString()}",
+                                  "+${airportData['totalReviews'].toString()}",
                                   style: AppStyles.textStyle_14_600.copyWith(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
