@@ -12,6 +12,7 @@ class AppRoutes {
   static const cardnotificationscreen = "/cardnotificationscreen";
   static const reviewsubmissionscreen = "/reviewsubmissionscreen";
   static const feedscreen = "/feedscreen";
+  static const feedfilterscreen = "/feedfilterscreen";
   static const syncedscreen = "/syncedscreen";
   static const manualinput = "/manualinput";
   static const airportinput = "/airportinput";

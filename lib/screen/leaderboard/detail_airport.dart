@@ -1,22 +1,18 @@
 import 'dart:convert';
-
-import 'package:airline_app/provider/airline_review_data_provider.dart';
 import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
-
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
-
 import 'package:airline_app/utils/app_styles.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailAirport extends ConsumerStatefulWidget {
@@ -28,23 +24,22 @@ class DetailAirport extends ConsumerStatefulWidget {
 
 class _DetailAirportState extends ConsumerState<DetailAirport> {
   bool _clickedBookmark = false;
-  bool isExpanded = false;
   Map<String, List<String>> _bookmarkItems = {};
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
+    _initPrefs();
+  }
+
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
     _loadBookmarks();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  Future<void> _loadBookmarks() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? bookmarksJson = prefs.getString('bookmarks');
+  void _loadBookmarks() {
+    final String? bookmarksJson = _prefs.getString('bookmarks');
     if (bookmarksJson != null) {
       setState(() {
         _bookmarkItems = Map<String, List<String>>.from(
@@ -57,12 +52,11 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   }
 
   Future<void> _saveBookmarks() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('bookmarks', json.encode(_bookmarkItems));
+    await _prefs.setString('bookmarks', json.encode(_bookmarkItems));
   }
 
   Future<void> _sharedBookMarkSaved(String bookMarkId) async {
-    final userId = ref.watch(userDataProvider)?['userData']['_id'];
+    final userId = ref.read(userDataProvider)?['userData']['_id'];
 
     if (userId != null) {
       setState(() {
@@ -91,6 +85,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
     final String name = args['name'];
+    final bool isAirline = args['isAirline'];
     final String descriptionBio = args['descriptionBio'];
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
@@ -102,14 +97,11 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
-    print('🥻🥻🥻👜👝👝👜👛$airlineReviewLists');
-    print('🥻🥻🥻$bookMarkId');
+
     if (userId != null &&
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {
       _clickedBookmark = true;
     }
-
-    // List reviews = airportReviewList[airportIndex]['reviews']['Seat Comfort'];
 
     return Scaffold(
       body: CustomScrollView(
@@ -260,7 +252,10 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    ExpandButtons(),
+                    CategoryButtons(
+                      isAirline: isAirline,
+                      airportData: args,
+                    ),
                   ],
                 ),
               ),
@@ -310,7 +305,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  // color: Colors.red,
                   border: Border(
                     top: BorderSide(
                       color: Colors.black.withOpacity(0.8),
@@ -323,7 +317,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ReviewsubmissionScreen(),
+                        builder: (context) => const ReviewsubmissionScreen(),
                       ),
                     );
                   },
@@ -331,14 +325,12 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 24),
                     child: Container(
-                      // Diameter of the circular avatar
-                      height: 56, // Diameter of the circular avatar
+                      height: 56,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: AppStyles.mainColor, // Background color
-                        border: Border.all(
-                            width: 2, color: Colors.black), // Border color
-                        boxShadow: [
+                        color: AppStyles.mainColor,
+                        border: Border.all(width: 2, color: Colors.black),
+                        boxShadow: const [
                           BoxShadow(color: Colors.black, offset: Offset(2, 2))
                         ],
                       ),
@@ -350,14 +342,13 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                             children: [
                               Text(
                                 "Leave a review",
-                                style: GoogleFonts.getFont("Schibsted Grotesk",
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: -0.3),
+                                style: GoogleFonts.schibstedGrotesk(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.3,
+                                ),
                               ),
-                              SizedBox(
-                                width: 8,
-                              ),
+                              const SizedBox(width: 8),
                               Image.asset('assets/icons/edit.png')
                             ],
                           ),
@@ -375,124 +366,126 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   }
 }
 
-class ExpandButtons extends ConsumerWidget {
-  const ExpandButtons({super.key});
+class CategoryButtons extends ConsumerWidget {
+  final bool isAirline;
+  final Map airportData;
+
+  const CategoryButtons(
+      {super.key, required this.isAirline, required this.airportData});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var isExpanded = ref.watch(buttonExpandNotifierProvider);
+    final isExpanded = ref.watch(buttonExpandNotifierProvider);
+
+    Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
+      return Expanded(
+        child: CategoryRatingOptions(
+          iconUrl: iconUrl,
+          label: label,
+          badgeScore: badgeScore,
+        ),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                isAirline
+                    ? buildCategoryRow(
+                        'assets/icons/review_icon_boarding.png',
+                        'Boarding and\nArrival Experience',
+                        airportData['departureArrival'].round().toString())
+                    : buildCategoryRow(
+                        'assets/icons/review_icon_access.png',
+                        'Accessibility',
+                        airportData['accessibility'].round().toString()),
+                const SizedBox(width: 16),
+                isAirline
+                    ? buildCategoryRow('assets/icons/review_icon_comfort.png',
+                        'Comfort', airportData['comfort'].round().toString())
+                    : buildCategoryRow(
+                        'assets/icons/review_icon_wait.png',
+                        'Wait Times',
+                        airportData['waitTimes'].round().toString()),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                isAirline
+                    ? buildCategoryRow(
+                        'assets/icons/review_icon_cleanliness.png',
+                        'Cleanliness',
+                        airportData['cleanliness'].round().toString())
+                    : buildCategoryRow(
+                        'assets/icons/review_icon_help.png',
+                        'Helpfulness/Ease of Travel',
+                        airportData['helpfulness'].round().toString()),
+                const SizedBox(width: 16),
+                isAirline
+                    ? buildCategoryRow(
+                        'assets/icons/review_icon_onboard.png',
+                        'Onboard Service',
+                        airportData['onboardService'].round().toString())
+                    : buildCategoryRow(
+                        'assets/icons/review_icon_ambience.png',
+                        'Ambience/Comfort',
+                        airportData['ambienceComfort'].round().toString()),
+              ],
+            ),
+            if (isExpanded) ...[
+              const SizedBox(height: 16),
               Row(
                 children: [
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_boarding.png',
-                      label: 'Boarding and\nArrival Experience',
-                      badgeScore: '10',
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_comfort.png',
-                      label: 'Comfort',
-                      badgeScore: '10',
-                    ),
-                  ),
+                  isAirline
+                      ? buildCategoryRow(
+                          'assets/icons/review_icon_food.png',
+                          'Food & Beverage',
+                          airportData['foodBeverage'].round().toString())
+                      : buildCategoryRow(
+                          'assets/icons/review_icon_food.png',
+                          'Food & Beverage and Shopping',
+                          airportData['foodBeverage'].round().toString()),
+                  const SizedBox(width: 16),
+                  isAirline
+                      ? buildCategoryRow(
+                          'assets/icons/review_icon_entertainment.png',
+                          'In-Flight\nEntertainment',
+                          airportData['entertainmentWifi'].round().toString())
+                      : buildCategoryRow(
+                          'assets/icons/review_icon_entertainment.png',
+                          'Amenities and Facilities',
+                          airportData['amenities'].round().toString()),
                 ],
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_cleanliness.png',
-                      label: 'Cleanliness',
-                      badgeScore: '10',
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: CategoryRatingOptions(
-                      iconUrl: 'assets/icons/review_icon_onboard.png',
-                      label: 'Onboard Service',
-                      badgeScore: '9',
-                    ),
-                  ),
-                ],
-              ),
-              Visibility(
-                  visible: isExpanded,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CategoryRatingOptions(
-                              iconUrl: 'assets/icons/review_icon_food.png',
-                              label: 'Food & Beverage',
-                              badgeScore: '8',
-                            ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Expanded(
-                            child: CategoryRatingOptions(
-                              iconUrl:
-                                  'assets/icons/review_icon_entertainment.png',
-                              label: 'In-Flight\nEntertainment',
-                              badgeScore: '7',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-              const SizedBox(height: 19),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    ref
-                        .read(buttonExpandNotifierProvider.notifier)
-                        .toggleButton(isExpanded);
-                  },
-                  child: IntrinsicWidth(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                            isExpanded
-                                ? "Show less categories"
-                                : "Show more categories",
-                            style: AppStyles.textStyle_18_600
-                                .copyWith(fontSize: 15)),
-                        const SizedBox(width: 8),
-                        Icon(
-                            isExpanded ? Icons.expand_less : Icons.expand_more),
-                      ],
-                    ),
-                  ),
-                ),
-              )
             ],
-          ),
+            const SizedBox(height: 19),
+            InkWell(
+              onTap: () => ref
+                  .read(buttonExpandNotifierProvider.notifier)
+                  .toggleButton(isExpanded),
+              child: IntrinsicWidth(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        isExpanded
+                            ? "Show less categories"
+                            : "Show more categories",
+                        style:
+                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
+                    const SizedBox(width: 8),
+                    Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ],
     );

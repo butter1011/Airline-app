@@ -9,7 +9,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -150,8 +150,8 @@ class _QuestionThirdScreenForAirlineState
                                 print(
                                     "This is review ===========>   ${review.toJson()}");
 
-                                final result =
-                                    await _reviewController.saveReview(review);
+                              final result =
+                                  await _reviewController.saveAirlineReview(review);
 
                                 if (result['success']) {
                                   // Add the new review to the provider

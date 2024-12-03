@@ -11,7 +11,8 @@ import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/controller/get_reviews_airline_controller.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,7 +71,7 @@ class _LoginState extends ConsumerState<Login> {
     final reviewsController = GetReviewsAirlineController();
     final reviewsResult = await reviewsController.getReviews();
     if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setData(reviewsResult['data']);
+      ref.read(reviewsAirlineProvider.notifier).setReviewData(reviewsResult['data']);
     }
 
     Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
@@ -151,7 +152,7 @@ class _LoginState extends ConsumerState<Login> {
         if (reviewsResult['success']) {
           ref
               .read(reviewsAirlineProvider.notifier)
-              .setData(reviewsResult['data']);
+              .setReviewData(reviewsResult['data']);
         }
 
         Navigator.pop(context); // Remove loading dialog
