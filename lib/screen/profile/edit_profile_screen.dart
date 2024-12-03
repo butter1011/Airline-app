@@ -95,8 +95,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   child: CircleAvatar(
                     backgroundImage: _selectedImage != null
                         ? FileImage(File(_selectedImage!.path))
-                        : UserData?['userData']['avatarUrl'] != null
-                            ? NetworkImage(UserData?['userData']['avatarUrl'])
+                        : UserData?['userData']['profilePhoto'] != null
+                            ? NetworkImage(UserData?['userData']['profilePhoto'])
                             : AssetImage("assets/images/avatar_1.png")
                                 as ImageProvider,
                     radius: 48,
@@ -358,57 +358,50 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void _editProfileFunction() async {
-    final UserData = ref.watch(userDataProvider);
+    final userData = ref.watch(userDataProvider);
 
-    // Upload image if selected
-    String? avatarUrl;
     if (_selectedImage != null) {
       final url = Uri.parse('$apiUrl/api/v1/editUser/avatar');
-      var request = http.MultipartRequest('POST', url);
+      final request = http.MultipartRequest('POST', url);
 
-      // Add the image file to the request
-      var bytes = await _selectedImage!.readAsBytes();
-      var file = http.MultipartFile.fromBytes(
-        'avatar',
-        bytes,
-        filename: 'avatar.jpg',
+      final file = File(_selectedImage!.path);
+      final filename = file.path.split('/').last;
+
+      request.files.add(
+        http.MultipartFile(
+          'avatar',
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: filename,
+        ),
       );
-      request.files.add(file);
 
-      // Add user ID to reque st
-      request.fields['userId'] = UserData?['userData']['_id'];
+      request.fields['userId'] = userData?['userData']['_id'];
 
-      var response = await request.send();
-      // var responseData = await response.stream.bytesToString();
-      // // var jsonResponse = json.decode(responseData);
-
-      // if (response.statusCode == 200) {
-      //   avatarUrl = jsonResponse['avatarUrl'];
-      // }
+      await request.send();
     }
 
-    final userInformationData =
-        await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: json.encode({
-              'name': _nameController.text,
-              'bio': _bioController.text,
-              '_id': UserData?['userData']['_id'],
-              'favoriteAirline': _selectedAirline,
-              if (avatarUrl != null) 'avatarUrl': avatarUrl,
-            }));
+    final userInformationResponse = await http.post(
+      Uri.parse('$apiUrl/api/v1/editUser'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode({
+        'name': _nameController.text,
+        'bio': _bioController.text,
+        '_id': userData?['userData']['_id'],
+        'favoriteAirline': _selectedAirline,
+      }),
+    );
 
-    if (userInformationData.statusCode == 200) {
-      final responseChangeData = jsonDecode(userInformationData.body);
-      print('🎎🎎$responseChangeData');
-      ref.read(userDataProvider.notifier).setUserData(responseChangeData);
+    if (userInformationResponse.statusCode == 200) {
+      final responseData = jsonDecode(userInformationResponse.body);
+      ref.read(userDataProvider.notifier).setUserData(responseData);
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
       showCustomSnackbar(context);
     } else {
-      print('Changing the userProfile failed: ${userInformationData.body}');
+      print('Failed to update user profile: ${userInformationResponse.body}');
     }
   }
 
