@@ -75,7 +75,12 @@ class _QuestionThirdScreenForAirportState
     final foodBeverage = reviewData[4]["subCategory"];
     final amenities = reviewData[5]["subCategory"];
 
-    return Stack(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.questionsecondscreenforairport);
+        return false;
+      },
+      child:Stack(
       children: [
         Scaffold(
             resizeToAvoidBottomInset: true,
@@ -144,48 +149,59 @@ class _QuestionThirdScreenForAirportState
                                   await _boardingPassController.updateBoardingPass(updatedBoardingPass);
                                 }
 
-                                ref.read(aviationInfoProvider.notifier).resetState();
-                                ref.read(reviewFeedBackProviderForAirport.notifier).resetState();
+                                  ref
+                                      .read(aviationInfoProvider.notifier)
+                                      .resetState();
+                                  ref
+                                      .read(reviewFeedBackProviderForAirport
+                                          .notifier)
+                                      .resetState();
 
-                                setState(() => _isLoading = false);
+                                  setState(() => _isLoading = false);
 
-                                if (!mounted) return;
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-                                // ignore: use_build_context_synchronously
-                               await showReviewSuccessBottomSheet(context, () {
-                                  setState(() => isSuccess = true);
-                                }, "Review airline");
-                              } else {
+                                  if (!mounted) return;
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.leaderboardscreen);
+                                  // ignore: use_build_context_synchronously
+                                  await showReviewSuccessBottomSheet(context,
+                                      () {
+                                    setState(() => isSuccess = true);
+                                  }, "Review airline");
+                                } else {
+                                  setState(() => _isLoading = false);
+                                  if (!mounted) return;
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Failed to submit review')),
+                                  );
+                                }
+                              } catch (e) {
                                 setState(() => _isLoading = false);
                                 if (!mounted) return;
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Failed to submit review')),
+                                  SnackBar(
+                                      content: Text('Error: ${e.toString()}')),
                                 );
                               }
-                            } catch (e) {
-                              setState(() => _isLoading = false);
-                              if (!mounted) return;
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error: ${e.toString()}')),
-                              );
-                            }
-                          },
-                          icon: Icons.arrow_forward,
+                            },
+                            icon: Icons.arrow_forward,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )),
-        if (_isLoading)
-          Container(
-              color: Colors.black.withOpacity(0.5),
-              child: const LoadingWidget()),
-      ],
+                ],
+              )),
+          if (_isLoading)
+            Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const LoadingWidget()),
+        ],
+      ),
     );
   }
 

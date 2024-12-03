@@ -1,8 +1,10 @@
 import 'dart:convert';
-
 import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
+
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
@@ -80,13 +82,24 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> airportData =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
-    final userId = ref.read(userDataProvider)?['userData']['_id'];
+    final userId = ref.watch(userDataProvider)?['userData']['_id'];
+    var args = ModalRoute.of(context)!.settings.arguments as Map;
+    final String name = args['name'];
+    final bool isAirline = args['isAirline'];
+    final String descriptionBio = args['descriptionBio'];
+    final String perksBio = args['perksBio'];
+    final String trendingBio = args['trendingBio'];
+    final String backgroundImage = args['backgroundImage'];
+    final String bookMarkId = args['bookMarkId'];
+    final int totalReviews = args['totalReviews'];
+    final bool isIncreasing = args['isIncreasing'];
+    final num overallScore = args['overall'];
+    final airlineReviewLists = ref
+        .watch(reviewsAirlineProvider.notifier)
+        .getReviewsByBookMarkId(bookMarkId);
 
     if (userId != null &&
-        _bookmarkItems[userId]?.contains(airportData['_id']) == true) {
+        _bookmarkItems[userId]?.contains(bookMarkId) == true) {
       _clickedBookmark = true;
     }
 
@@ -98,10 +111,17 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
             leading: Padding(
               padding: const EdgeInsets.only(left: 24),
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Icon(Icons.arrow_back_ios, color: Colors.white),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -109,32 +129,10 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
               background: Stack(
                 children: [
                   Positioned.fill(
-                    child: CachedNetworkImage(
-                      imageUrl: airportData['backgroundImage'],
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) => Center(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 315,
-                          color: AppStyles.mainColor.withOpacity(0.5),
-                          child: Center(
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator(
-                                value: downloadProgress.progress,
-                                strokeWidth: 3,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    child: Image.network(
+                      backgroundImage,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ), //   airportData['backgroundImage'],
-                    //   fit: BoxFit.cover,
-                    //   cacheWidth: 1080,
-                    // ),
+                    ),
                   ),
                   Positioned(
                     child: Container(
@@ -144,12 +142,18 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
+                            // No color at the top
                             Colors.black.withOpacity(0.8),
-                            Colors.transparent,
+                            Colors
+                                .transparent, // Gradient color from 30px downwards
                           ],
-                          stops: const [0.1, 1],
+                          stops: const [
+                            0.1,
+                            1
+                          ], // Adjust stops to control where the gradient starts and ends
                         ),
                       ),
+                      // Start the gradient 30px from the top
                     ),
                   ),
                   Positioned(
@@ -158,26 +162,29 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     child: Column(
                       children: [
                         IconButton(
-                          onPressed: () async =>
+                            onPressed: () async {
                               await BottomSheetHelper.showScoreBottomSheet(
-                                  context),
-                          icon: Image.asset('assets/icons/share_white.png'),
-                        ),
+                                  context);
+                            },
+                            icon: Image.asset('assets/icons/share_white.png')),
                         IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _clickedBookmark = !_clickedBookmark;
-                            });
-                            _sharedBookMarkSaved(airportData['_id']);
-                          },
-                          iconSize: 30,
-                          icon: Icon(
-                            _clickedBookmark
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
-                            color: Colors.white,
+                          onPressed: () {},
+                          icon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _clickedBookmark = !_clickedBookmark;
+                              });
+                              _sharedBookMarkSaved(bookMarkId);
+                            },
+                            iconSize: 30,
+                            icon: Icon(
+                              _clickedBookmark
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -188,48 +195,48 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ReviewStatus(
-                      reviewStatus: airportData['isIncreasing'],
-                      overallScore: airportData['overall'],
-                      totalReviews: airportData['totalReviews'],
-                    ),
-                    const SizedBox(height: 9),
+                        reviewStatus: isIncreasing,
+                        overallScore: overallScore,
+                        totalReviews: totalReviews),
+                    SizedBox(height: 9),
                     Text(
-                      airportData['name'],
+                      name,
                       style: AppStyles.textStyle_24_600,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
-                      airportData['descriptionBio'],
+                      descriptionBio,
                       style: AppStyles.textStyle_15_400
-                          .copyWith(color: const Color(0xff38433E)),
+                          .copyWith(color: Color(0xff38433E)),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     Text(
                       "Trending now:",
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      airportData['trendingBio'],
+                      trendingBio,
                       style: AppStyles.textStyle_14_400
-                          .copyWith(color: const Color(0xff38433E)),
+                          .copyWith(color: Color(0xff38433E)),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     Text(
                       "Perks you'll love:",
                       style: AppStyles.textStyle_14_600,
                     ),
                     Text(
-                      airportData['perksBio'],
+                      perksBio,
                       style: AppStyles.textStyle_14_400
-                          .copyWith(color: const Color(0xff38433E)),
+                          .copyWith(color: Color(0xff38433E)),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -238,18 +245,63 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           style: AppStyles.textStyle_18_600,
                         ),
                         IconButton(
-                          onPressed: () {},
-                          icon: Image.asset('assets/icons/switch.png'),
-                        )
+                            onPressed: () {},
+                            icon: Image.asset('assets/icons/switch.png'))
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 12,
+                    ),
                     CategoryButtons(
-                      isAirline: airportData['isAirline'],
-                      airportData: airportData,
+                      isAirline: isAirline,
+                      airportData: args,
                     ),
                   ],
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: airlineReviewLists.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final singleReview = entry.value;
+                  if (singleReview != null) {
+                    final reviewer = singleReview['reviewer'];
+                    final airline = singleReview['airline'];
+                    final from = singleReview['from'];
+                    final to = singleReview['to'];
+
+                    if (reviewer != null &&
+                        airline != null &&
+                        from != null &&
+                        to != null) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24.0),
+                            child: FeedbackCard(
+                              singleFeedback: singleReview,
+                            ),
+                          ),
+                          if (index != airlineReviewLists.length - 1)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 24.0),
+                              child: Column(
+                                children: [
+                                  Divider(
+                                    height: 2,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                  }
+                  return const SizedBox.shrink();
+                }).toList(),
               ),
               Container(
                 decoration: BoxDecoration(

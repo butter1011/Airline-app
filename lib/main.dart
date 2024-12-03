@@ -33,24 +33,33 @@ import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_language.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final String languageCode = prefs.getString('selectedLanguageSym') ?? 'en';
+
   runApp(
     ProviderScope(
+      overrides: [
+        localeProvider.overrideWith((ref) => Locale(languageCode)),
+      ],
       child: MyApp(),
     ),
   );
 }
 
-final localeProvider = StateProvider<Locale>((ref) => Locale('en', ''));
+final localeProvider = StateProvider<Locale>((ref) => Locale('en'));
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -62,6 +71,7 @@ class MyApp extends ConsumerWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return MaterialApp(
       locale: locale,
       supportedLocales: [
@@ -75,7 +85,7 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      title: 'Flutter Demo',
+      title: 'Airline App',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(

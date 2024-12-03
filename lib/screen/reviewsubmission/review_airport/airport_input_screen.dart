@@ -47,54 +47,60 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
     List<dynamic> airlineData = airlineAirportState.airlineData;
     List<dynamic> airportData = airlineAirportState.airportData;
     bool isValid = ref.read(aviationInfoProvider.notifier).isAirportValid();
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: ListView(
-          children: [
-            const SizedBox(height: 19),
-            _buildInfoText(
-                "Add your flight schedule below or sync your calendar/email"),
-            const SizedBox(height: 22),
-            _buildSectionTitle("Synchronize (Recommended):"),
-            const SizedBox(height: 13),
-            _buildSyncButtons(),
-            const SizedBox(height: 18),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomDropdownButton(
-                  labelText: "Airline",
-                  hintText: "your Airline",
-                  onChanged: (value) => ref
-                      .read(aviationInfoProvider.notifier)
-                      .updateAirline(value),
-                  airlineNames: airlineData,
-                ),
-                const SizedBox(height: 18),
-                CustomDropdownButton(
-                  labelText: "Airport",
-                  hintText: "your Airport",
-                  onChanged: (value) => ref
-                      .read(aviationInfoProvider.notifier)
-                      .updateAirport(value),
-                  airlineNames: airportData,
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            CalendarWidget(),
-            const SizedBox(height: 18),
-            _buildTravelClassSelection(ref),
-            const SizedBox(height: 18),
-            _buildAdditionalSyncOptions(ref),
-            const SizedBox(height: 16),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.manualinput);
+        return false;
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(context),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: ListView(
+            children: [
+              const SizedBox(height: 19),
+              _buildInfoText(
+                  "Add your flight schedule below or sync your calendar/email"),
+              const SizedBox(height: 22),
+              _buildSectionTitle("Synchronize (Recommended):"),
+              const SizedBox(height: 13),
+              _buildSyncButtons(),
+              const SizedBox(height: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDropdownButton(
+                    labelText: "Airline",
+                    hintText: "your Airline",
+                    onChanged: (value) => ref
+                        .read(aviationInfoProvider.notifier)
+                        .updateAirline(value),
+                    airlineNames: airlineData,
+                  ),
+                  const SizedBox(height: 18),
+                  CustomDropdownButton(
+                    labelText: "Airport",
+                    hintText: "your Airport",
+                    onChanged: (value) => ref
+                        .read(aviationInfoProvider.notifier)
+                        .updateAirport(value),
+                    airlineNames: airportData,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              CalendarWidget(),
+              const SizedBox(height: 18),
+              _buildTravelClassSelection(ref),
+              const SizedBox(height: 18),
+              _buildAdditionalSyncOptions(ref),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
+        bottomNavigationBar:
+            _buildBottomNavigationBar(context, flightInputState, isValid),
       ),
-      bottomNavigationBar:
-          _buildBottomNavigationBar(context, flightInputState, isValid),
     );
   }
 

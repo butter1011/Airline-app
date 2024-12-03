@@ -81,6 +81,12 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     );
   }
 
+  List<Map<String, dynamic>> getReviewsByBookMarkId(String bookMarkId) {
+    return state.reviews
+        .where((review) => review['airline']['_id'] == bookMarkId)
+        .toList();
+  }
+
   List<Map<String, dynamic>> getReviewsByUserId(String userId) {
     return state.reviews
         .where((review) => review['reviewer']['_id'] == userId)

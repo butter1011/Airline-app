@@ -386,6 +386,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       //   avatarUrl = jsonResponse['avatarUrl'];
       // }
     }
+
     final userInformationData =
         await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
             headers: <String, String>{
@@ -401,6 +402,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);
+      print('🎎🎎$responseChangeData');
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
