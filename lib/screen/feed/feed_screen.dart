@@ -1,9 +1,15 @@
+import 'package:airline_app/controller/airline_review_controller.dart';
+import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/feedback_controller.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/controller/get_airline_score_controller.dart';
+import 'package:airline_app/controller/get_airport_score_controller.dart';
+import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
+import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +28,78 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   late bool selectedAirport = false;
   late bool selectedCleanliness = false;
   late bool selectedOnboard = false;
+  String filterType = 'All';
+  Map<String, bool> buttonStates = {
+    "All": true,
+    "Airline": false,
+    "Airport": false,
+    "Cleanliness": false,
+    "Onboard": false,
+  };
+  void toggleButton(String buttonText) {
+    setState(() {
+      buttonStates.updateAll((key, value) => false);
+      buttonStates[buttonText] = true;
+      filterType = buttonText;
+    });
+    ref
+        .read(reviewsAirlineProvider.notifier)
+        .getFilteredReviews(filterType, null, null);
+    ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore();
+
+    print(
+        "This is onboardService============🧡${ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore().map((item) => item["cleanliness"])} ");
+    // print(
+    // "This is onboardService============🥉${ref.watch(reviewsAirlineProvider).filteredReviews.map((item) => item["cleanliness"])}");
+  }
 
   @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+
+  Future<void> _initPrefs() async {
+    print("initPrefs called🧨");
+    final reviewAirlineController = AirlineReviewController();
+    final airlineResult = await reviewAirlineController.getAirlineReviews();
+    if (airlineResult['success']) {
+      print("Airline Reviews fetched successfully😍${airlineResult['data']}");
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(airlineResult['data']);
+    }
+    final reviewAirportController = AirportReviewController();
+    final airportResult = await reviewAirportController.getAirportReviews();
+    if (airportResult['success']) {
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(airportResult['data']);
+    }
+    final airlineScoreController = GetAirlineScoreController();
+    final airportScoreController = GetAirportScoreController();
+    final airlineScore = await airlineScoreController.getAirlineScore();
+    if (airlineScore['success']) {
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setAirlineScoreData(airlineScore['data']['data']);
+    }
+    final airportScore = await airportScoreController.getAirportScore();
+    if (airportScore['success']) {
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setAirportScoreData(airportScore['data']['data']);
+    }
+
+    ref
+        .read(reviewsAirlineProvider.notifier)
+        .getFilteredReviews("All", null, null);
+  }
+
+  @override
+  // ignore: unused_element
   Widget build(BuildContext context) {
-    final reviewList = ref.watch(reviewsAirlineProvider);
+    final reviewList = ref.watch(reviewsAirlineProvider).filteredReviews;
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(currentIndex: 3),
@@ -68,7 +142,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                    Navigator.pushNamed(context, AppRoutes.feedfilterscreen);
                   },
                   child: Container(
                     width: 40,
@@ -108,49 +182,34 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                FeedFilterButton(
+                MainButton(
                   text: "All",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAll = value;
-                    });
-                  },
+                  isSelected: buttonStates["All"]!,
+                  onTap: () => toggleButton("All"),
                 ),
                 SizedBox(width: 8),
-                FeedFilterButton(
+                MainButton(
                   text: "Airline",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAirline = value;
-                    });
-                  },
+                  isSelected: buttonStates["Airline"]!,
+                  onTap: () => toggleButton("Airline"),
                 ),
                 SizedBox(width: 8),
-                FeedFilterButton(
+                MainButton(
                   text: "Airport",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedAirport = value;
-                    });
-                  },
+                  isSelected: buttonStates["Airport"]!,
+                  onTap: () => toggleButton("Airport"),
                 ),
                 SizedBox(width: 8),
-                FeedFilterButton(
+                MainButton(
                   text: "Cleanliness",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedCleanliness = value;
-                    });
-                  },
+                  isSelected: buttonStates["Cleanliness"]!,
+                  onTap: () => toggleButton("Cleanliness"),
                 ),
                 SizedBox(width: 8),
-                FeedFilterButton(
+                MainButton(
                   text: "Onboard",
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      selectedOnboard = value;
-                    });
-                  },
+                  isSelected: buttonStates["Onboard"]!,
+                  onTap: () => toggleButton("Onboard"),
                 ),
               ],
             ),
@@ -167,10 +226,21 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 24,
+                    ),
                     Column(
-                        children: reviewList.map((singleFeedback) {
-                      return FeedbackCard(singleFeedback: singleFeedback);
-                    }).toList()),
+                        children: reviewList.isEmpty
+                            ? [
+                                Text(
+                                  "No reviews available",
+                                  style: AppStyles.textStyle_14_600,
+                                )
+                              ]
+                            : reviewList.map((singleFeedback) {
+                                return FeedbackCard(
+                                    singleFeedback: singleFeedback);
+                              }).toList()),
                     SizedBox(
                       height: 18,
                     ),

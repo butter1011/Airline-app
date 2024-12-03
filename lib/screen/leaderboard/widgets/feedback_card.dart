@@ -12,7 +12,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
@@ -36,14 +36,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   @override
   Widget build(BuildContext context) {
     if (widget.singleFeedback['reviewer'] == null ||
-        widget.singleFeedback['airline'] == null ||
-        widget.singleFeedback['from'] == null ||
-        widget.singleFeedback['to'] == null) {
+        widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
+    selectedEmojiIndex =
+        widget.singleFeedback['rating']?["6747afbef453f821c279c7df"] ?? 0;
 
     final List<String> images = List<String>.from([
       'review_abudhabi_1.png',
@@ -93,15 +92,26 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             ],
           ),
           SizedBox(height: 7),
-          Row(
-            children: [
-              Text('Flex from', style: AppStyles.textStyle_14_400_littleGrey),
-              SizedBox(width: 6),
-              Text(
-                  '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
-                  style: AppStyles.textStyle_14_600),
-            ],
-          ),
+          widget.singleFeedback['from'] != null
+              ? Row(
+                  children: [
+                    Text('Flex from',
+                        style: AppStyles.textStyle_14_400_littleGrey),
+                    SizedBox(width: 6),
+                    Text(
+                        '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
+                        style: AppStyles.textStyle_14_600),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Text('Flex in',
+                        style: AppStyles.textStyle_14_400_littleGrey),
+                    SizedBox(width: 6),
+                    Text('${widget.singleFeedback['airport']['name']}',
+                        style: AppStyles.textStyle_14_600),
+                  ],
+                ),
           SizedBox(height: 11),
           Stack(
             children: [
@@ -159,11 +169,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () async {
-                  await BottomSheetHelper.showScoreBottomSheet(context);
+              IconButton(
+                onPressed: () async {
+                  // await BottomSheetHelper.showScoreBottomSheet(context);
                 },
-                child: Image.asset('assets/icons/share.png'),
+                icon: Image.asset('assets/icons/share.png'),
               ),
               Row(
                 children: [
