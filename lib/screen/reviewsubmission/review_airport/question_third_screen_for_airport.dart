@@ -67,6 +67,7 @@ class _QuestionThirdScreenForAirportState
     final isDeparture = airportData.isDeparture;
     final airport = airportData.airport;
     final airline = airportData.airline;
+    final classTravel = airportData.selectedClassOfTravel;
     final accessibility = reviewData[0]["subCategory"];
     final waitTimes = reviewData[1]["subCategory"];
     final helpfulness = reviewData[2]["subCategory"];
@@ -79,77 +80,74 @@ class _QuestionThirdScreenForAirportState
         Navigator.pushNamed(context, AppRoutes.questionsecondscreenforairport);
         return false;
       },
-      child: Stack(
-        children: [
-          Scaffold(
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeader(
-                  subTitle: "Share your experience.",
+      child:Stack(
+      children: [
+        Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+              flexibleSpace: BuildQuestionHeader(
+                subTitle: "Share your experience.",
+              ),
+            ),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFeedbackOptions(context),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            bottomNavigationBar: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(height: 2, color: Colors.black),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  child: Row(
                     children: [
-                      _buildFeedbackOptions(context),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-              bottomNavigationBar: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(height: 2, color: Colors.black),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Go back',
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icons.arrow_back,
-                          ),
+                      Expanded(
+                        child: NavPageButton(
+                          text: 'Go back',
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icons.arrow_back,
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Submit',
-                            onPressed: () async {
-                              setState(() => _isLoading = true);
-                              try {
-                                final review = AirportReviewModel(
-                                  reviewer: "67375a13151c33aa85429a29",
-                                  airline: airline,
-                                  airport: airport,
-                                  accessibility: accessibility,
-                                  waitTimes: waitTimes,
-                                  helpfulness: helpfulness,
-                                  ambienceComfort: ambienceComfort,
-                                  foodBeverage: foodBeverage,
-                                  amenities: amenities,
-                                  comment: comment,
-                                );
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: NavPageButton(
+                          text: 'Submit',
+                          onPressed: () async {                            
+                            setState(() => _isLoading = true);
+                            try {
+                              final review = AirportReviewModel(
+                                reviewer: "67375a13151c33aa85429a29",
+                                airline: airline,
+                                airport: airport,
+                                classTravel: classTravel,
+                                accessibility: accessibility,
+                                waitTimes: waitTimes,
+                                helpfulness: helpfulness,
+                                ambienceComfort: ambienceComfort,
+                                foodBeverage: foodBeverage,
+                                amenities: amenities,
+                                comment: comment,
+                              );
 
-                                final result =
-                                    await _reviewController.saveReview(review);
-                                if (result) {
-                                  if (index != null && isDeparture != null) {
-                                    final updatedBoardingPass = ref
-                                        .read(boardingPassesProvider.notifier)
-                                        .markAirportAsReviewed(
-                                            index, isDeparture);
-                                    await _boardingPassController
-                                        .updateBoardingPass(
-                                            updatedBoardingPass);
-                                  }
+                              final result = await _reviewController.saveAirportReview(review);
+                              if (result) {
+                                if (index != null && isDeparture != null) {
+                                  final updatedBoardingPass = ref
+                                      .read(boardingPassesProvider.notifier)
+                                      .markAirportAsReviewed(index, isDeparture);
+                                  await _boardingPassController.updateBoardingPass(updatedBoardingPass);
+                                }
 
                                   ref
                                       .read(aviationInfoProvider.notifier)

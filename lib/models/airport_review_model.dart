@@ -2,7 +2,7 @@ class AirportReviewModel {
   final String reviewer;
   final String airline;
   final String airport;
-  // final String classTravel;
+  final String classTravel;
   final Map<String, dynamic> accessibility;
   final Map<String, dynamic> waitTimes;
   final Map<String, dynamic> helpfulness;
@@ -15,7 +15,7 @@ class AirportReviewModel {
     required this.reviewer,
     required this.airline,
     required this.airport,
-    // required this.classTravel,
+    required this.classTravel,
     required this.accessibility,
     required this.waitTimes,
     required this.helpfulness,
@@ -30,7 +30,7 @@ class AirportReviewModel {
       'reviewer': reviewer,
       'airline': airline,
       'airport': airport,
-      // "classTravel": classTravel,
+      'classTravel': classTravel,
       'accessibility': accessibility,
       'waitTimes': waitTimes,
       'helpfulness': helpfulness,
@@ -46,7 +46,7 @@ class AirportReviewModel {
       reviewer: json['reviewer'],
       airline: json['airline'],
       airport: json['airport'],
-      // classTravel: json['classTravel'],
+      classTravel: json['classTravel'],
       accessibility: json['accessibility'],
       waitTimes: json['waitTimes'],
       helpfulness: json['helpfulness'],
@@ -57,4 +57,3 @@ class AirportReviewModel {
     );
   }
 }
-

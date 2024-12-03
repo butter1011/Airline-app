@@ -1,4 +1,5 @@
 import 'package:airline_app/controller/get_airline_score_controller.dart';
+import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -15,7 +16,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 
 import 'package:airline_app/controller/get_reviews_airline_controller.dart';
 
@@ -34,6 +35,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   bool isLeaderboardLoading = true;
   final airlineController = GetAirlineAirportController();
   final airlineScoreController = GetAirlineScoreController();
+  final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
 
@@ -87,10 +89,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       reviewsController.getReviews(),
       airlineController.getAirlineAirport(),
       airlineScoreController.getAirlineScore(),
+      airportScoreController.getAirportScore(),
     ]);
 
     if (futures[0]['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setData(futures[0]['data']);
+      ref.read(reviewsAirlineProvider.notifier).setReviewData(futures[0]['data']);
     }
     if (futures[1]['success']) {
       ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
@@ -99,6 +102,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       ref
           .read(airlineAirportProvider.notifier)
           .setAirlineScoreData(futures[2]['data']['data']);
+    }
+    if (futures[3]['success']) {
+      print("=============================${futures[3]['data']['data']}");
+      ref
+          .read(airlineAirportProvider.notifier)
+          .setAirportScoreData(futures[3]['data']['data']);
     }
 
     ref
@@ -421,18 +430,10 @@ class _AirportListSection extends StatelessWidget {
                   Map<String, dynamic> singleAirport = entry.value;
                   if (index < expandedItems) {
                     return AirportList(
-                      bookMarkId: singleAirport['_id'],
-                      name: singleAirport['name'],
-                      isAirline: singleAirport['isAirline'],
-                      totalReviews: singleAirport['totalReviews'],
-                      logoImage: singleAirport['logoImage'],
-                      perksBio: singleAirport['perksBio'],
-                      trendingBio: singleAirport['trendingBio'],
-                      backgroundImage: singleAirport['backgroundImage'],
-                      descriptionBio: singleAirport['descriptionBio'],
-                      isIncreasing: singleAirport['isIncreasing'],
-                      overallScore: singleAirport['overall'],
-                      index: index,
+                      airportData: {
+                        ...singleAirport,
+                        'index': index,
+                      },
                     );
                   }
                   return const SizedBox.shrink();
@@ -441,7 +442,7 @@ class _AirportListSection extends StatelessWidget {
               SizedBox(height: 19),
               if (expandedItems < leaderBoardList.length)
                 Center(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: onExpand,
                     child: IntrinsicWidth(
                       child: Row(

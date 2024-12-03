@@ -1,10 +1,10 @@
 import 'package:airline_app/provider/chatbot_notifier.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -17,9 +17,22 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+  final chatProvider = StateNotifierProvider<ChatNotifier, List<ChatMessage>>(
+    (ref) => ChatNotifier(type: ChatbotType.general),
+  );
 
   String _formatTime(DateTime timestamp) {
     return DateFormat('h:mm a').format(timestamp);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(chatProvider.notifier).initializeMessages();
+      _scrollToBottom();
+    });
   }
 
   @override
@@ -30,22 +43,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
         ),
+        toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+        backgroundColor: Colors.white,
         centerTitle: true,
-        bottom: PreferredSize(
-            preferredSize: Size.fromHeight(4),
-            child: Container(height: 4, color: AppStyles.littleBlackColor)),
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
+        title: Text(
             AppLocalizations.of(context).translate('Sam-AI Flight Planner'),
-            style: AppStyles.textStyle_16_600,
-            overflow: TextOverflow.ellipsis,
-          ),
+            style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(color: Colors.black, height: 4.0),
         ),
       ),
       body: Column(
@@ -53,10 +64,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
+              reverse: true,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: messages.length,
+              itemCount: messages.length + (_isLoading ? 1 : 0),
               itemBuilder: (context, index) {
-                final message = messages[index];
+                if (index == 0 && _isLoading) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: LoadingBallWidget(),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                final messageIndex = _isLoading ? index - 1 : index;
+                final message = messages[messages.length - 1 - messageIndex];
                 return _buildMessageWidget(message);
               },
             ),
@@ -161,56 +187,52 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildInputArea() {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
+      height: 60,
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
         color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.black12),
-        ),
+        border: Border.all(width: 2, color: Colors.black),
+        boxShadow: const [
+          BoxShadow(color: Colors.black26, offset: Offset(2, 2))
+        ],
       ),
       child: Row(
         children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.black26),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                        hintText: 'Message',
-                        hintStyle: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 14,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.send, color: Color(0xFF4CAF50)),
-                    onPressed: () {
-                      if (_controller.text.isNotEmpty) {
-                        ref
-                            .read(chatProvider.notifier)
-                            .processUserMessage(_controller.text);
-                        _controller.clear();
-                        _scrollToBottom();
-                      }
-                    },
-                  ),
-                ],
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                hintStyle: AppStyles.textStyle_14_400
+                    .copyWith(color: Color(0xff38433E)),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                border: InputBorder.none,
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () async {
+              if (_controller.text.isNotEmpty) {
+                setState(() {
+                  _isLoading = true;
+                });
+
+                _scrollToBottom();
+                await ref
+                    .read(chatProvider.notifier)
+                    .processUserMessage(_controller.text);
+
+                _controller.clear();
+                setState(() {
+                  _isLoading = false;
+                });
+
+              }
+            },
+          ),
         ],
       ),
     );
@@ -220,7 +242,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
+          0,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
