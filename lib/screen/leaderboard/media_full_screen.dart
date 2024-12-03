@@ -15,18 +15,14 @@ class MediaFullScreen extends StatefulWidget {
 }
 
 class _MediaFullScreenState extends State<MediaFullScreen> {
-  final List<String> imgList = [
-    'assets/images/Singapore.png',
-    'assets/images/SriLankan.png',
-    'assets/images/Fiji.png',
-  ];
-
   @override
   Widget build(BuildContext context) {
     CarouselSliderController buttonCarouselController =
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final List<String> imgList = args?['Images'];
+    print('🧶🧶🧶🧶$args');
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,8 +87,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                       decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundImage:
-                            AssetImage('assets/images/${args!['Avatar']}'),
+                        backgroundImage: AssetImage('${args!['Avatar']}'),
                       ),
                     ),
                     SizedBox(

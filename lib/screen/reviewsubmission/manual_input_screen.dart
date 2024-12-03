@@ -8,46 +8,53 @@ class ManualInputScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_sharp),
-          onPressed: () => Navigator.pop(context), // Navigate back when pressed
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: MediaQuery.of(context).size.height * 0.08,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_sharp),
+            onPressed: () =>
+                Navigator.pop(context), // Navigate back when pressed
+          ),
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.of(context).translate('Input Manually'),
+            style: AppStyles.textStyle_16_600,
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(4.0),
+            child: Container(color: Colors.black, height: 4.0),
+          ),
         ),
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.of(context).translate('Input Manually'),
-          style: AppStyles.textStyle_16_600,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(color: Colors.black, height: 4.0),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: ListView(
-          children: [
-            _InputCard(
-              imagePath: 'assets/icons/input_airport.png',
-              title: 'Airport Input',
-              onClick: () =>
-                  Navigator.pushNamed(context, AppRoutes.airportinput),
-            ),
-            const SizedBox(height: 23),
-            _buildOrDivider(),
-            _InputCard(
-              imagePath: 'assets/icons/input_flight.png',
-              title: AppLocalizations.of(context).translate('Flight Input'),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ListView(
+            children: [
+              _InputCard(
+                imagePath: 'assets/icons/input_airport.png',
+                title: 'Airport Input',
+                onClick: () =>
+                    Navigator.pushNamed(context, AppRoutes.airportinput),
+              ),
+              const SizedBox(height: 23),
+              _buildOrDivider(),
+              _InputCard(
+                imagePath: 'assets/icons/input_flight.png',
+                title: AppLocalizations.of(context).translate('Flight Input'),
 
-              onClick: () => Navigator.pushNamed(
-                  context,
-                  AppRoutes
-                      .flightinput), // Add an empty function as onClick is required
-            ),
-          ],
+                onClick: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes
+                        .flightinput), // Add an empty function as onClick is required
+              ),
+            ],
+          ),
         ),
       ),
     );

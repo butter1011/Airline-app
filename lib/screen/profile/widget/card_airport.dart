@@ -59,7 +59,9 @@ class CLeaderboardScreen extends ConsumerWidget {
         else
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: userReviews.map((singleReview) {
+            children: userReviews.asMap().entries.map((entry) {
+              final index = entry.key;
+              final singleReview = entry.value;
               if (singleReview != null) {
                 final reviewer = singleReview['reviewer'];
                 final airline = singleReview['airline'];
@@ -70,12 +72,28 @@ class CLeaderboardScreen extends ConsumerWidget {
                     airline != null &&
                     from != null &&
                     to != null) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 7.0, horizontal: 24.0),
-                    child: FeedbackCard(
-                      singleFeedback: singleReview,
-                    ),
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: FeedbackCard(
+                          singleFeedback: singleReview,
+                        ),
+                      ),
+                      if (index != userReviews.length - 1)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 18, horizontal: 24.0),
+                          child: Column(
+                            children: [
+                              Divider(
+                                height: 2,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   );
                 }
               }

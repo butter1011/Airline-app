@@ -22,13 +22,13 @@ class BasicBlackButton extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(),
         color: myColor,
-        borderRadius: BorderRadius.circular(27),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            offset: Offset(2, 2),
-          )
-        ],
+        borderRadius: BorderRadius.circular(30),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black,
+        //     offset: Offset(2, 2),
+        //   )
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),

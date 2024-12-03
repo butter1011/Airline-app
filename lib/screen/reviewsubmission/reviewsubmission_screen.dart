@@ -164,78 +164,84 @@ class _ReviewsubmissionScreenState
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 52.2,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_sharp),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.of(context).translate('Reviews'),
-          style: AppStyles.textStyle_16_600,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(
-            color: Colors.black,
-            height: 4.0,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 52.2,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_sharp),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-      ),
-      body: isLoading
-          ? const Center(child: LoadingWidget())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: boardingPasses.isEmpty
-                  ? _buildEmptyState()
-                  : ListView(
-                      children: [
-                        _buildTypeSelector(),
-                        const SizedBox(height: 12),
-                        ...boardingPasses.map(_buildCardWidget),
-                      ],
-                    ),
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.of(context).translate('Reviews'),
+            style: AppStyles.textStyle_16_600,
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(4.0),
+            child: Container(
+              color: Colors.black,
+              height: 4.0,
             ),
-      bottomNavigationBar: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 2,
-            color: Colors.black,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Column(
-              children: [
-                NavButton(
-                  text: AppLocalizations.of(context).translate('Synchronize'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ScannerScreen(),
+        ),
+        body: isLoading
+            ? const Center(child: LoadingWidget())
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: boardingPasses.isEmpty
+                    ? _buildEmptyState()
+                    : ListView(
+                        children: [
+                          _buildTypeSelector(),
+                          const SizedBox(height: 12),
+                          ...boardingPasses.map(_buildCardWidget),
+                        ],
                       ),
-                    );
-                  },
-                  color: Colors.white,
-                ),
-                const SizedBox(height: 12),
-                NavButton(
-                  text:
-                      AppLocalizations.of(context).translate('Input manually'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.manualinput);
-                  },
-                  color: AppStyles.mainColor,
-                )
-              ],
+              ),
+        bottomNavigationBar: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 2,
+              color: Colors.black,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Column(
+                children: [
+                  NavButton(
+                    text: AppLocalizations.of(context).translate('Synchronize'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ScannerScreen(),
+                        ),
+                      );
+                    },
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
+                  NavButton(
+                    text: AppLocalizations.of(context)
+                        .translate('Input manually'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.manualinput);
+                    },
+                    color: AppStyles.mainColor,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

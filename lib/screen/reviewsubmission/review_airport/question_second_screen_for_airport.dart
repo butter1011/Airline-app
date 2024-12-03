@@ -19,20 +19,32 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
         .numberOfSelectedAspects();
     // print("❤$numberOfSelectedAspects");
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(
-          subTitle: "What could be improved?",
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildFeedbackOptions(selections, numberOfSelectedAspects),
-            _buildNavigationButtons(context),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
+        return false;
+      },
+      child: WillPopScope(
+        onWillPop: () async {
+          Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+            flexibleSpace: BuildQuestionHeader(
+              subTitle: "What could be improved?",
+            ),
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                _buildFeedbackOptions(selections, numberOfSelectedAspects),
+                _buildNavigationButtons(context),
+              ],
+            ),
+          ),
         ),
       ),
     );
