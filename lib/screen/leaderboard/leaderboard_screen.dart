@@ -392,8 +392,6 @@ class _AirportListSection extends StatelessWidget {
 
                   Map<String, dynamic> singleAirport = entry.value;
                   if (index < expandedItems) {
-                    print(
-                        "This is single airport 🧡============>$singleAirport");
                     return AirportList(
                       airportData: {
                         ...singleAirport,

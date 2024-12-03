@@ -96,7 +96,6 @@ class _ReviewScoreState extends State<ReviewScore> {
   String? _selectedItem;
   final List<String> _items = [
     'Highest Score',
-    'Mid Score',
     'Lowest Score',
   ];
 
