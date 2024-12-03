@@ -1,5 +1,4 @@
 import 'package:airline_app/screen/chatbot/ai_chatbot.dart';
-import 'package:airline_app/screen/chatbot/chatbot_screen.dart';
 import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_filter_screen.dart';
