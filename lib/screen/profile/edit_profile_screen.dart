@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:airline_app/utils/global_variable.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -26,6 +27,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   String? _selectedAirline;
   bool isLoading = true;
   final _getAirlineData = GetAirlineAirportController();
+  XFile? _selectedImage;
 
   @override
   void dispose() {
@@ -50,6 +52,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
+  void pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final UserData = ref.watch(userDataProvider);
@@ -63,12 +76,65 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              decoration: AppStyles.circleDecoration,
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/avatar_1.png"),
-                radius: 36,
-              ),
+            Stack(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: Offset(3, 3),
+                        blurRadius: 4,
+                      )
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(File(_selectedImage!.path))
+                        : UserData?['userData']['avatarUrl'] != null
+                            ? NetworkImage(UserData?['userData']['avatarUrl'])
+                            : AssetImage("assets/images/avatar_1.png")
+                                as ImageProvider,
+                    radius: 48,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          offset: Offset(2, 2),
+                          blurRadius: 3,
+                        )
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(18),
+                        onTap: pickImage,
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: 24,
@@ -293,6 +359,33 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _editProfileFunction() async {
     final UserData = ref.watch(userDataProvider);
+
+    // Upload image if selected
+    String? avatarUrl;
+    if (_selectedImage != null) {
+      final url = Uri.parse('$apiUrl/api/v1/editUser/avatar');
+      var request = http.MultipartRequest('POST', url);
+
+      // Add the image file to the request
+      var bytes = await _selectedImage!.readAsBytes();
+      var file = http.MultipartFile.fromBytes(
+        'avatar',
+        bytes,
+        filename: 'avatar.jpg',
+      );
+      request.files.add(file);
+
+      // Add user ID to reque st
+      request.fields['userId'] = UserData?['userData']['_id'];
+
+      var response = await request.send();
+      // var responseData = await response.stream.bytesToString();
+      // // var jsonResponse = json.decode(responseData);
+
+      // if (response.statusCode == 200) {
+      //   avatarUrl = jsonResponse['avatarUrl'];
+      // }
+    }
     final userInformationData =
         await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
             headers: <String, String>{
@@ -302,7 +395,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               'name': _nameController.text,
               'bio': _bioController.text,
               '_id': UserData?['userData']['_id'],
-              'favoriteAirline': _selectedAirline
+              'favoriteAirline': _selectedAirline,
+              if (avatarUrl != null) 'avatarUrl': avatarUrl,
             }));
 
     if (userInformationData.statusCode == 200) {
@@ -311,9 +405,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       Navigator.pushNamed(context, AppRoutes.profilescreen);
       showCustomSnackbar(context);
-      // You might want to store the user ID or navigate to a new screen
     } else {
-      // Handle authentication error
       print('Changing the userProfile failed: ${userInformationData.body}');
     }
   }
@@ -375,7 +467,7 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
         DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
-            hint: Text('Select ${widget.hintText}',
+            hint: Text('Select your favorite airline',
                 style: AppStyles.textStyle_15_400
                     .copyWith(color: Color(0xFF38433E))),
             items: widget.airlineNames
@@ -429,7 +521,7 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    hintText: "Select ${widget.hintText}",
+                    hintText: "Select your favorite airline",
                     hintStyle: AppStyles.textStyle_15_400
                         .copyWith(color: Color(0xFF38433E)),
                     border: OutlineInputBorder(

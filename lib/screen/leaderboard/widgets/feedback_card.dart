@@ -202,8 +202,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                   .updateReview(
                                       jsonDecode(response.body)['data']);
                             });
-                            print(
-                                '🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞🥞${jsonDecode(response.body)['data']}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(
