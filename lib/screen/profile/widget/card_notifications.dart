@@ -124,6 +124,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                             // Delete token from SharedPreferences
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.remove('token');
+                            await prefs.remove('userData');
 
                             // Close the modal bottom sheet
                             Navigator.pop(context);

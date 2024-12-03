@@ -138,7 +138,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
-                  SystemNavigator.pop(); // This will exit the app
+                  SystemNavigator.pop(animated: true);
+                  _goToHomeScreen();
                 },
                 child: Text('Yes'),
               ),
@@ -148,9 +149,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         false;
   }
 
+  void _goToHomeScreen() {
+    SystemNavigator.pop();
+    SystemChannels.platform.invokeMethod('SystemNavigator.home');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final reviews = ref.watch(reviewsAirlineProvider);
     final List<Map<String, dynamic>> leaderBoardList =
         ref.watch(airlineAirportProvider).filteredList;
 
