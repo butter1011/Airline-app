@@ -44,6 +44,11 @@ class _LoginState extends ConsumerState<Login> {
 
     if (token != null) {
       // Token exists, fetch necessary data and navigate to LeaderboardScreen
+      final userData = prefs.getString('userData');
+      if (userData != null) {
+        ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
+        print('🧵🧵🧵${ref.watch(userDataProvider)}');
+      }
       await _fetchDataAndNavigate();
     } else {
       // No token, initialize Otpless
@@ -130,9 +135,10 @@ class _LoginState extends ConsumerState<Login> {
         final responseData = jsonDecode(response.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
-        // Save token to SharedPreferences
+        // Save token and userData to SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', userData.idToken);
+        await prefs.setString('userData', json.encode(responseData));
 
         final airlineController = GetAirlineAirportController();
         final result = await airlineController.getAirlineAirport();
