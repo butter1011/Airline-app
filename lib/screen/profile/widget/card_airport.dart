@@ -1,7 +1,7 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_review_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 

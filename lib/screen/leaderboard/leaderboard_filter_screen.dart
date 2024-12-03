@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FilterScreen extends ConsumerStatefulWidget {
-  const FilterScreen({super.key});
+class LeaderboardFilterScreen extends ConsumerStatefulWidget {
+  const LeaderboardFilterScreen({super.key});
 
   @override
-  ConsumerState<FilterScreen> createState() => _FilterScreenState();
+  ConsumerState<LeaderboardFilterScreen> createState() => _LeaderboardFilterScreenState();
 }
 
-class _FilterScreenState extends ConsumerState<FilterScreen> {
+class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScreen> {
   // Declare continents and selectedStates as instance variables
   final List<String> airType = [
     "All",

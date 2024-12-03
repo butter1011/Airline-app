@@ -67,6 +67,7 @@ class _QuestionThirdScreenForAirportState
     final isDeparture = airportData.isDeparture;
     final airport = airportData.airport;
     final airline = airportData.airline;
+    final classTravel = airportData.selectedClassOfTravel;
     final accessibility = reviewData[0]["subCategory"];
     final waitTimes = reviewData[1]["subCategory"];
     final helpfulness = reviewData[2]["subCategory"];
@@ -124,6 +125,7 @@ class _QuestionThirdScreenForAirportState
                                 reviewer: "67375a13151c33aa85429a29",
                                 airline: airline,
                                 airport: airport,
+                                classTravel: classTravel,
                                 accessibility: accessibility,
                                 waitTimes: waitTimes,
                                 helpfulness: helpfulness,
@@ -133,7 +135,7 @@ class _QuestionThirdScreenForAirportState
                                 comment: comment,
                               );
 
-                              final result = await _reviewController.saveReview(review);
+                              final result = await _reviewController.saveAirportReview(review);
                               if (result) {
                                 if (index != null && isDeparture != null) {
                                   final updatedBoardingPass = ref
