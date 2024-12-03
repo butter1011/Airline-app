@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/chatbot/ai_chatbot.dart';
+import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
-import 'package:airline_app/screen/leaderboard/filter_screen.dart';
+import 'package:airline_app/screen/leaderboard/leaderboard_filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
 import 'package:airline_app/screen/logIn/skip_screen.dart';
@@ -32,7 +33,6 @@ import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart
 import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -99,11 +99,12 @@ class MyApp extends ConsumerWidget {
             const ReviewsubmissionScreen(),
         AppRoutes.syncedscreen: (context) => SyncedScreen(),
         AppRoutes.feedscreen: (context) => FeedScreen(),
+        AppRoutes.feedfilterscreen: (context) => FeedFilterScreen(),
         AppRoutes.leaderboardscreen: (context) => const LeaderboardScreen(),
         AppRoutes.detailairport: (context) => const DetailAirport(),
         AppRoutes.mediafullscreen: (context) => const MediaFullScreen(),
         AppRoutes.profilescreen: (context) => const ProfileScreen(),
-        AppRoutes.filterscreen: (context) => const FilterScreen(),
+        AppRoutes.filterscreen: (context) => const LeaderboardFilterScreen(),
         // AppRoutes.chatbotscreen: (context) => const ChatbotScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
