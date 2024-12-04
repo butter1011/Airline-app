@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
@@ -77,6 +78,27 @@ class _QuestionThirdScreenForAirlineState
     final foodBeverage = reviewData[4]["subCategory"];
     final entertainmentWifi = reviewData[5]["subCategory"];
 
+    final airlinData = ref.watch(aviationInfoProvider);
+    final fromairport = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.from);
+
+    final toairport = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.to);
+
+    final airlinename = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlinData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlinData.airline);
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final dateRanged = airlinData.dateRange;
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlinData.airline);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.questionsecondscreenforairline);
@@ -90,7 +112,14 @@ class _QuestionThirdScreenForAirlineState
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
                 flexibleSpace: BuildQuestionHeader(
+                  backgorundImage: backgroundImage,
                   subTitle: "Share your experience.",
+                  logoImage: logoImage,
+                  classes: selectedClassOfTravel,
+                  airlineName: airlinename,
+                  from: fromairport,
+                  to: toairport,
+                  dateRange: dateRanged,
                 ),
               ),
               body: SafeArea(
@@ -150,8 +179,8 @@ class _QuestionThirdScreenForAirlineState
                                 print(
                                     "This is review ===========>   ${review.toJson()}");
 
-                              final result =
-                                  await _reviewController.saveAirlineReview(review);
+                                final result = await _reviewController
+                                    .saveAirlineReview(review);
 
                                 if (result['success']) {
                                   // Add the new review to the provider

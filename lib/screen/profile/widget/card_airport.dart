@@ -27,7 +27,6 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
-    print('🌭🌭$userReviews');
 
     return Column(
       children: [

@@ -5,20 +5,28 @@ import 'package:sealed_countries/sealed_countries.dart';
 class AirlineAirportState {
   /// List of airline data
   final List<Map<String, dynamic>> airlineData;
+
   /// List of airport data
   final List<Map<String, dynamic>> airportData;
+
   /// List of airline score data
   final List<Map<String, dynamic>> airlineScoreData;
+
   /// List of airport score data
   final List<Map<String, dynamic>> airportScoreData;
+
   /// List of filtered data based on search criteria
   final List<Map<String, dynamic>> filteredList;
+
   /// Cache for airport data lookup by IATA code
   final Map<String, Map<String, dynamic>> airportCache;
+
   /// Cache for airline data lookup by IATA code
   final Map<String, Map<String, dynamic>> airlineCache;
+
   /// Cache for sorted lists to improve performance
   final Map<String, List<Map<String, dynamic>>> sortedListCache;
+
   /// Cache for continent data lookup by country code
   final Map<String, Map<String, String>> continentCache;
 
@@ -257,6 +265,54 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return result;
   }
 
+  String getAirlineName(String airlineId) {
+    final airline = state.airlineData.firstWhere(
+      (airline) => airline['_id'] == airlineId,
+      orElse: () => {'name': 'Unknown Airline'},
+    );
+    return airline['name'];
+  }
+
+  String getAirlineLogoImage(String airlineId) {
+    final airline = state.airlineData.firstWhere(
+      (airline) => airline['_id'] == airlineId,
+      orElse: () => {'logoImage': ''},
+    );
+    return airline['logoImage'];
+  }
+
+  String getAirlineBackgroundImage(String airlineId) {
+    final airline = state.airlineData.firstWhere(
+      (airline) => airline['_id'] == airlineId,
+      orElse: () => {'backgroundImage': ''},
+    );
+    return airline['backgroundImage'];
+  }
+
+  String getAirportName(String airportId) {
+    final airport = state.airportData.firstWhere(
+      (airport) => airport['_id'] == airportId,
+      orElse: () => {'name': 'Unknown Airport'},
+    );
+    return airport['name'];
+  }
+
+  String getAirportLogoImage(String airportId) {
+    final airport = state.airportData.firstWhere(
+      (airport) => airport['_id'] == airportId,
+      orElse: () => {'logoImage': ''},
+    );
+    return airport['logoImage'];
+  }
+
+  String getAirportBackgroundImage(String airportId) {
+    final airport = state.airportData.firstWhere(
+      (airport) => airport['_id'] == airportId,
+      orElse: () => {'backgroundImage': ''},
+    );
+    return airport['backgroundImage'];
+  }
+
   /// Filters and sorts data based on multiple criteria
   /// [filterType] - Type of filter to apply (All, Airline, Airport, etc.)
   /// [searchQuery] - Optional search query to filter results
@@ -274,7 +330,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
           continentCache: {
             ...state.continentCache,
             countryCode: {
-              'continent': WorldCountry.fromCodeShort(countryCode).continent.name
+              'continent':
+                  WorldCountry.fromCodeShort(countryCode).continent.name
             }
           },
         );
@@ -285,7 +342,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     }
 
     List<Map<String, dynamic>> filteredList = [];
-    final cacheKey = '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
+    final cacheKey =
+        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
 
     if (state.sortedListCache.containsKey(cacheKey)) {
       state = state.copyWith(filteredList: state.sortedListCache[cacheKey]!);
@@ -304,10 +362,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
         break;
       case 'Cleanliness':
-        filteredList.addAll(getAirlineDataSortedByCleanliness().where(checkContinent));
+        filteredList
+            .addAll(getAirlineDataSortedByCleanliness().where(checkContinent));
         break;
       case 'Onboard':
-        filteredList.addAll(getAirlineDataSortedByOnboardSevice().where(checkContinent));
+        filteredList.addAll(
+            getAirlineDataSortedByOnboardSevice().where(checkContinent));
         break;
       default:
         filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
