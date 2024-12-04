@@ -84,16 +84,19 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   Widget build(BuildContext context) {
     final userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
+    print('🧶${args}');
+
     final String name = args['name'];
     final bool isAirline = args['isAirline'];
     final String descriptionBio = args['descriptionBio'];
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
-    final String bookMarkId = args['bookMarkId'];
+    final String bookMarkId = args['_id'];
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
+
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
@@ -285,14 +288,20 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           ),
                           if (index != airlineReviewLists.length - 1)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Column(
                                 children: [
+                                  SizedBox(
+                                    height: 16,
+                                  ),
                                   Divider(
-                                    height: 2,
+                                    thickness: 2,
                                     color: Colors.black,
                                   ),
+                                  SizedBox(
+                                    height: 24,
+                                  )
                                 ],
                               ),
                             ),

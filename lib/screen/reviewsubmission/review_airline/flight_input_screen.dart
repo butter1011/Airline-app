@@ -72,9 +72,9 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                   CustomDropdownButton(
                     labelText: "From",
                     hintText: "departure Airport",
-                    onChanged: (value) => ref
-                        .read(aviationInfoProvider.notifier)
-                        .updateFrom(value),
+                    onChanged: (value) => {
+                      ref.read(aviationInfoProvider.notifier).updateFrom(value),
+                    },
                     airlineNames: airportData,
                   ),
                   const SizedBox(height: 18),

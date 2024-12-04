@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -16,6 +18,29 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     final int numberOfSelectedAspects = ref
         .watch(reviewFeedBackProviderForAirline.notifier)
         .numberOfSelectedAspects();
+    final airlinData = ref.watch(aviationInfoProvider);
+    final from = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.from);
+
+    final to = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.to);
+
+    final airline = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlinData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlinData.airline);
+
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final dateRanged = airlinData.dateRange;
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlinData.airline);
+    print('🎄🎄🎄$backgroundImage');
 
     return WillPopScope(
       onWillPop: () async {
@@ -27,7 +52,14 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeader(
+            backgorundImage: backgroundImage,
             subTitle: "Tell us what you liked about your journey.",
+            logoImage: logoImage,
+            classes: selectedClassOfTravel,
+            airlineName: airline,
+            from: from,
+            to: to,
+            dateRange: dateRanged,
           ),
         ),
         body: SafeArea(
@@ -130,19 +162,32 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
 }
 
 class BuildQuestionHeader extends StatelessWidget {
-  const BuildQuestionHeader({super.key, required this.subTitle});
+  const BuildQuestionHeader(
+      {super.key,
+      required this.subTitle,
+      required this.logoImage,
+      required this.airlineName,
+      required this.dateRange,
+      required this.classes,
+      required this.from,
+      required this.backgorundImage,
+      required this.to});
   final String subTitle;
-
+  final String logoImage;
+  final String backgorundImage;
+  final String airlineName;
+  final List dateRange;
+  final String classes;
+  final String from;
+  final String to;
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Japan.png"),
-              fit: BoxFit.cover,
-            ),
+        Positioned.fill(
+          child: Image.network(
+            backgorundImage,
+            fit: BoxFit.cover,
           ),
         ),
         Container(
@@ -158,16 +203,23 @@ class BuildQuestionHeader extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/vector_japan.png"),
-                  SizedBox(width: 8),
+                  Container(
+                    height: 40,
+                    decoration: AppStyles.circleDecoration,
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(logoImage),
+                    ),
+                  ),
+                  SizedBox(width: 4),
                   Column(
                     children: [
                       Text(
-                        'JAPAN     ',
+                        airlineName,
                         style: AppStyles.oswaldTextStyle,
                       ),
                       Text(
-                        ' AIRLINES',
+                        'AIRLINES',
                         style: AppStyles.oswaldTextStyle,
                       )
                     ],
@@ -189,14 +241,14 @@ class BuildQuestionHeader extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Japan Airways, 18/10/24, Premium Economy',
+                '$airlineName, ${dateRange[0]}, $classes',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(
                 height: 4,
               ),
               Text(
-                'Tokyo > Bucharest',
+                '$from > $to',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               Spacer(), // This will push the following container to the bottom

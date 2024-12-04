@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
@@ -18,32 +20,45 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirport.notifier)
         .numberOfSelectedAspects();
     // print("❤$numberOfSelectedAspects");
+    final airlinData = ref.watch(aviationInfoProvider);
+
+    final airportname = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.airport);
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportLogoImage(airlinData.airport);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportBackgroundImage(airlinData.airport);
+
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final dateRanged = airlinData.dateRange;
 
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
         return false;
       },
-      child: WillPopScope(
-        onWillPop: () async {
-          Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
-          return false;
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-            flexibleSpace: BuildQuestionHeader(
-              subTitle: "What could be improved?",
-            ),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          flexibleSpace: BuildQuestionHeader(
+            airportName: airportname,
+            subTitle: "What could be improved?",
+            logoImage: logoImage,
+            backgroundImage: backgroundImage,
+            dateRange: dateRanged,
+            selecetedOfCalssLevel: selectedClassOfTravel,
           ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                _buildFeedbackOptions(selections, numberOfSelectedAspects),
-                _buildNavigationButtons(context),
-              ],
-            ),
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildFeedbackOptions(selections, numberOfSelectedAspects),
+              _buildNavigationButtons(context),
+            ],
           ),
         ),
       ),
@@ -67,7 +82,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select up to 4 positive aspects',
+              'Select up to 4 negative aspects',
               style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),
