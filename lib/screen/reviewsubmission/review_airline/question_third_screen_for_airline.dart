@@ -33,21 +33,36 @@ class _QuestionThirdScreenForAirlineState
   final List<File> _image = [];
   final AirlineReviewController _reviewController = AirlineReviewController();
   final TextEditingController _commentController = TextEditingController();
+  bool _isPickingImage = false;
 
   String comment = "";
   bool _isLoading = false;
   bool isSuccess = false;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
+    if (_isPickingImage) return;
 
-    if (pickedFile != null) {
+    setState(() {
+      _isPickingImage = true;
+    });
+
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image.add(File(pickedFile.path));
+          print("--------");
+          print(_image);
+        });
+      }
+    } finally {
       setState(() {
-        _image.add(File(pickedFile.path));
+        _isPickingImage = false;
       });
     }
   }
@@ -90,14 +105,9 @@ class _QuestionThirdScreenForAirlineState
         .watch(airlineAirportProvider.notifier)
         .getAirlineName(airlinData.airline);
 
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlinData.airline);
+    final logoImage = ref.watch(airlineAirportProvider.notifier).getAirlineLogoImage(airlinData.airline);
+    final backgroundImage = ref.watch(airlineAirportProvider.notifier).getAirlineBackgroundImage(airlinData.airline);
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlinData.airline);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.questionsecondscreenforairline);
@@ -118,7 +128,6 @@ class _QuestionThirdScreenForAirlineState
                   airlineName: airlinename,
                   from: fromairport,
                   to: toairport,
-                  dateRange: dateRanged,
                 ),
               ),
               body: SafeArea(

@@ -54,7 +54,6 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
             subTitle: "Tell us what you liked about your journey.",
             logoImage: logoImage,
             backgroundImage: backgroundImage,
-            dateRange: dateRanged,
             selecetedOfCalssLevel: selectedClassOfTravel,
           )),
       body: Padding(

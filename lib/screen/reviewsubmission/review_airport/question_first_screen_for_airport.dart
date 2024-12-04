@@ -32,7 +32,6 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
 
     return WillPopScope(
       onWillPop: () async {
@@ -48,7 +47,6 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
             subTitle: "Tell us what you liked about your journey.",
             logoImage: logoImage,
             backgroundImage: backgroundImage,
-            dateRange: dateRanged,
             selecetedOfCalssLevel: selectedClassOfTravel,
           ),
         ),
@@ -156,14 +154,12 @@ class BuildQuestionHeader extends StatelessWidget {
     super.key,
     required this.subTitle,
     required this.airportName,
-    required this.dateRange,
     required this.logoImage,
     required this.backgroundImage,
     required this.selecetedOfCalssLevel,
   });
   final String subTitle;
   final String airportName;
-  final List dateRange;
   final String logoImage;
   final String backgroundImage;
   final String selecetedOfCalssLevel;
@@ -229,7 +225,7 @@ class BuildQuestionHeader extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                '$airportName Airways, ${dateRange[0]}, $selecetedOfCalssLevel',
+                '$airportName Airways, $selecetedOfCalssLevel',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(

@@ -58,7 +58,6 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
             airlineName: airline,
             from: from,
             to: to,
-            dateRange: dateRanged,
           ),
         ),
         body: SafeArea(

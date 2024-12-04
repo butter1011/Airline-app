@@ -47,7 +47,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
         .watch(airlineAirportProvider.notifier)
         .getAirlineLogoImage(airlinData.airline);
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineBackgroundImage(airlinData.airline);
@@ -64,7 +63,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
           airlineName: airline,
           from: from,
           to: to,
-          dateRange: dateRanged,
         ), // Assuming this method exists
       ),
       body: Padding(

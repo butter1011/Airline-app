@@ -56,7 +56,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
-  void pickImage() async {
+  Future<void> _pickImage() async {
     try {
       final ImagePicker _picker = ImagePicker();
       final XFile? image =
@@ -164,7 +164,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(18),
-                            onTap: pickImage,
+                            onTap: _pickImage,
                             child: Icon(
                               Icons.camera_alt,
                               size: 20,

@@ -32,21 +32,34 @@ class _QuestionThirdScreenForAirportState
   final TextEditingController _commentController = TextEditingController();
   final BoardingPassController _boardingPassController =
       BoardingPassController();
+  bool _isPickingImage = false;
 
   String comment = "";
   bool _isLoading = false;
   bool isSuccess = false;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
+    if (_isPickingImage) return;
+    
+    setState(() {
+      _isPickingImage = true;
+    });
 
-    if (pickedFile != null) {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image.add(File(pickedFile.path));
+        });
+      }
+    } finally {
       setState(() {
-        _image.add(File(pickedFile.path));
+        _isPickingImage = false;
       });
     }
   }
@@ -105,7 +118,6 @@ class _QuestionThirdScreenForAirportState
                   subTitle: "Share your experience.",
                   logoImage: logoImage,
                   backgroundImage: backgroundImage,
-                  dateRange: dateRanged,
                   selecetedOfCalssLevel: selectedClassOfTravel,
                 ),
               ),

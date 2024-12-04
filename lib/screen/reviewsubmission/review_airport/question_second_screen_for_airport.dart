@@ -48,7 +48,6 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
             subTitle: "What could be improved?",
             logoImage: logoImage,
             backgroundImage: backgroundImage,
-            dateRange: dateRanged,
             selecetedOfCalssLevel: selectedClassOfTravel,
           ),
         ),
