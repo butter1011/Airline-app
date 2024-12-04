@@ -204,10 +204,13 @@ class BuildQuestionHeader extends StatelessWidget {
                 children: [
                   Container(
                     height: 40,
-                    decoration: AppStyles.circleDecoration,
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(logoImage),
+                      width: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: NetworkImage(logoImage),
+                          fit: BoxFit.cover,
+                        ),
                     ),
                   ),
                   SizedBox(width: 4),
