@@ -14,8 +14,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(reviewFeedBackProviderForAirline);
-
-    // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
     List<String> mainCategoryNames = [];
@@ -78,9 +76,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
             children: [
               _buildBackButton(context),
               SizedBox(height: 10),
-              _buildHeaderContainer(context, singleAspect, selectedItemNumter
-                  // selections.where((s) => s).length,
-                  ),
+              _buildHeaderContainer(context, singleAspect, selectedItemNumter),
               SizedBox(height: 16),
               _buildFeedbackOptions(
                   ref, singleIndex, subCategoryList, selections),
@@ -147,8 +143,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(
       WidgetRef ref, int singleIndex, subCategoryList, selections) {
-    // List isSelectedList = ref.watch(reviewFeedBackProviderForAirline);
-
     return Wrap(
       spacing: 16,
       runSpacing: 16,

@@ -3,31 +3,14 @@ import 'package:sealed_countries/sealed_countries.dart';
 
 /// State class to manage airline and airport data
 class AirlineAirportState {
-  /// List of airline data
   final List<Map<String, dynamic>> airlineData;
-
-  /// List of airport data
   final List<Map<String, dynamic>> airportData;
-
-  /// List of airline score data
   final List<Map<String, dynamic>> airlineScoreData;
-
-  /// List of airport score data
   final List<Map<String, dynamic>> airportScoreData;
-
-  /// List of filtered data based on search criteria
   final List<Map<String, dynamic>> filteredList;
-
-  /// Cache for airport data lookup by IATA code
   final Map<String, Map<String, dynamic>> airportCache;
-
-  /// Cache for airline data lookup by IATA code
   final Map<String, Map<String, dynamic>> airlineCache;
-
-  /// Cache for sorted lists to improve performance
   final Map<String, List<Map<String, dynamic>>> sortedListCache;
-
-  /// Cache for continent data lookup by country code
   final Map<String, Map<String, String>> continentCache;
 
   const AirlineAirportState({

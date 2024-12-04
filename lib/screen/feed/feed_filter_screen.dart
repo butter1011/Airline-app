@@ -1,6 +1,4 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -25,16 +23,8 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     "Business",
     "Premium economy",
     "Economy",
-    // "Presidential",
   ];
-  // final List<String> category = [
-  //   "All",
-  //   "First Class",
-  //   "Business",
-  //   "Premium economy",
-  //   "Economy",
-  //   "Presidential",
-  // ];
+
   final List<String> continent = [
     "All",
     "Africa",
@@ -44,11 +34,8 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     "Oceania"
   ];
 
-  // Track selection state for each continent button
   late List<bool> selectedairTypeStates;
-  // Use 'late' to indicate it will be initialized later
   late List<bool> selectedFlyerClassStates;
-  // late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
 
   bool typeIsExpanded = true;
@@ -65,12 +52,10 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize selectedStates based on the number of continents
     selectedairTypeStates =
         List.generate(airType.length, (index) => index == 0);
     selectedFlyerClassStates =
         List.generate(flyerClass.length, (index) => index == 0);
-    // selectedCategoryStates = List.filled(category.length, false);
     selectedContinentStates =
         List.generate(continent.length, (index) => index == 0);
   }
@@ -78,22 +63,16 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   void _toggleFilter(int index, List selectedStates) {
     setState(() {
       if (index == 0) {
-        // If "All" is clicked
         selectedStates[0] = !selectedStates[0];
-        // Deselect all others when "All" is selected
         if (selectedStates[0]) {
           for (int i = 1; i < selectedStates.length; i++) {
             selectedStates[i] = false;
           }
         }
       } else {
-        // If any other button is clicked, toggle its selection
         selectedStates[index] = !selectedStates[index];
-
-        // If any button other than "All" is selected, deselect "All"
         selectedStates[0] = false;
 
-        // Check if all buttons except "All" are selected
         bool allOthersSelected = true;
         for (int i = 1; i < selectedStates.length; i++) {
           if (!selectedStates[i]) {
@@ -102,7 +81,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           }
         }
 
-        // If all others are selected, select "All" and deselect others
         if (allOthersSelected) {
           selectedStates[0] = true;
           for (int i = 1; i < selectedStates.length; i++) {
@@ -119,38 +97,30 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
       }
     });
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
-          selectedAirType,   
+          selectedAirType,
           selectedFlyerClass,
           selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
         );
-    print("selectedAirType: $selectedAirType");
-    print("selectedFlyerClasses: $selectedFlyerClass");
-    print("selectedContinents: $selectedContinents");
   }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
     setState(() {
-      // Set all states to false first
       for (int i = 0; i < selectedStates.length; i++) {
         selectedStates[i] = false;
       }
-      // Set only the clicked button to true
       selectedStates[index] = true;
 
-      // Update selected values based on which list is being modified
       if (selectedStates == selectedairTypeStates) {
         selectedAirType = airType[index];
       } else if (selectedStates == selectedFlyerClassStates) {
         selectedFlyerClass = flyerClass[index];
       }
     });
-    print("This is selectedFlyerClass===============$selectedFlyerClass");
 
-    // Update the filtered list after selection
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
-          selectedAirType,      
+          selectedAirType,
           selectedFlyerClass == "All" ? null : selectedFlyerClass,
           selectedContinents.isEmpty || selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
@@ -224,10 +194,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
             const SizedBox(height: 17),
-            // _buildCategoryLeaderboards(),
-            // const SizedBox(height: 17),
-            // _buildRankLeaderboards(),
-            // const SizedBox(height: 10),
             _buildContinentLeaderboards(),
             const SizedBox(height: 85),
           ],
@@ -323,73 +289,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
       ],
     );
   }
-
-  // Widget _buildCategoryLeaderboards() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(AppLocalizations.of(context).translate('Categories'),
-  //               style: AppStyles.textStyle_18_600),
-  //           IconButton(
-  //               onPressed: () {
-  //                 setState(() {
-  //                   categoryIsExpanded = !categoryIsExpanded;
-  //                 });
-  //               },
-  //               icon: Icon(categoryIsExpanded
-  //                   ? Icons.expand_more
-  //                   : Icons.expand_less)),
-  //         ],
-  //       ),
-  //       Visibility(
-  //           visible: categoryIsExpanded,
-  //           child: Column(
-  //             children: [
-  //               const SizedBox(height: 17),
-  //               Wrap(
-  //                 spacing: 8,
-  //                 runSpacing: 8,
-  //                 children: List.generate(
-  //                     category.length,
-  //                     (index) => FilterButton(
-  //                           text: AppLocalizations.of(context)
-  //                               .translate('${category[index]}'),
-  //                           isSelected: selectedCategoryStates[index],
-  //                           onTap: () =>
-  //                               _toggleFilter(index, selectedCategoryStates),
-  //                         )),
-  //               ),
-  //             ],
-  //           ))
-  //     ],
-  //   );
-  // }
-
-  // Widget _buildRankLeaderboards() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(AppLocalizations.of(context).translate('Filter Rank'),
-  //               style: AppStyles.textStyle_18_600),
-  //           IconButton(
-  //               onPressed: () {
-  //                 setState(() {
-  //                   rankIsExpanded = !rankIsExpanded;
-  //                 });
-  //               },
-  //               icon: Icon(
-  //                   rankIsExpanded ? Icons.expand_more : Icons.expand_less)),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildContinentLeaderboards() {
     return Column(

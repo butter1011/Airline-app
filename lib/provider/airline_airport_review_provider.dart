@@ -208,7 +208,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   void getFilteredReviews(String filterType, String? flyerClass,
       [List<String>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
-      print("This is airport country code😐 ${item['countryCode']}");
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
       final String countryCode;
       if (item['countryCode'] == 'HK') {
@@ -217,7 +216,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         countryCode = item['countryCode'];
       }
 
-      print("This is countryCode ========================== $countryCode");
       if (!state.continentCache.containsKey(countryCode)) {
         final continent =
             WorldCountry.fromCodeShort(countryCode).continent.name;
@@ -242,8 +240,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
 
     List<Map<String, dynamic>> filteredReviews = [];
-    print(
-        "This is properties===================$filterType $flyerClass $selectedContinents");
 
     switch (filterType) {
       case 'All':
@@ -276,8 +272,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
     }
-    print("This is filteredReviews 🎈🎈 $filteredReviews");
-    print("This is flyerClass  🧨 $flyerClass");
     if (flyerClass != null && flyerClass != 'All') {
       final sortKey = flyerClass == "Business"
           ? 'businessClass'
@@ -303,7 +297,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         }
       }
     }
-    print("This is filteredReviews 🎈 $filteredReviews");
     state = state.copyWith(
       filteredReviews: filteredReviews,
       sortedListCache: {...state.sortedListCache, cacheKey: filteredReviews},

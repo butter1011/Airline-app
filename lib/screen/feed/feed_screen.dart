@@ -1,9 +1,7 @@
 import 'package:airline_app/controller/airline_review_controller.dart';
 import 'package:airline_app/controller/airport_review_controller.dart';
-import 'package:airline_app/controller/feedback_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
-import 'package:airline_app/controller/get_reviews_airline_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 
@@ -46,11 +44,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         .read(reviewsAirlineProvider.notifier)
         .getFilteredReviews(filterType, null, null);
     ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore();
-
-    print(
-        "This is onboardService============🧡${ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore().map((item) => item["cleanliness"])} ");
-    // print(
-    // "This is onboardService============🥉${ref.watch(reviewsAirlineProvider).filteredReviews.map((item) => item["cleanliness"])}");
   }
 
   @override
@@ -60,11 +53,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   }
 
   Future<void> _initPrefs() async {
-    print("initPrefs called🧨");
     final reviewAirlineController = AirlineReviewController();
     final airlineResult = await reviewAirlineController.getAirlineReviews();
     if (airlineResult['success']) {
-      print("Airline Reviews fetched successfully😍${airlineResult['data']}");
       ref
           .read(reviewsAirlineProvider.notifier)
           .setReviewData(airlineResult['data']);

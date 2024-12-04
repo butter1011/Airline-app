@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
@@ -176,8 +175,6 @@ class _QuestionThirdScreenForAirlineState
                                   entertainmentWifi: entertainmentWifi,
                                   comment: comment,
                                 );
-                                print(
-                                    "This is review ===========>   ${review.toJson()}");
 
                                 final result = await _reviewController
                                     .saveAirlineReview(review);

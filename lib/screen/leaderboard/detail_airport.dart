@@ -9,7 +9,6 @@ import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -84,8 +83,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   Widget build(BuildContext context) {
     final userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
-    print('🧶${args}');
-
     final String name = args['name'];
     final bool isAirline = args['isAirline'];
     final String descriptionBio = args['descriptionBio'];

@@ -40,7 +40,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineBackgroundImage(airlinData.airline);
-    print('🎄🎄🎄$backgroundImage');
 
     return WillPopScope(
       onWillPop: () async {

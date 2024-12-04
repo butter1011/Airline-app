@@ -19,7 +19,6 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
     final int numberOfSelectedAspects = ref
         .watch(reviewFeedBackProviderForAirport.notifier)
         .numberOfSelectedAspects();
-    // print("❤$numberOfSelectedAspects");
     final airlinData = ref.watch(aviationInfoProvider);
 
     final airportname = ref

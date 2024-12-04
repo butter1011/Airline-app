@@ -107,7 +107,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan Boarding Pass'),
@@ -172,9 +171,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                   await _boardingPassController.saveBoardingPass(newPass);
               if (result) {
                 cameraController.stop();
-                // ignore: use_build_context_synchronously
                 Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-                // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -186,7 +183,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                 );
               } else {
                 cameraController.stop();
-                // ignore: use_build_context_synchronously
                 Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
                 SnackBar(
                   content: Text(
@@ -196,12 +192,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                   backgroundColor: AppStyles.mainColor,
                 );
               }
-
-              // ref
-              //     .read(boardingPassesProvider.notifier)
-              //     .addBoardingPass(newPass);
-              // cameraController.stop();
-              // Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
             }
           }
         },
