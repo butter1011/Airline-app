@@ -1,23 +1,24 @@
+
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key, required this.currentIndex});
   final int currentIndex;
 
   @override
-  // ignore: library_private_types_in_public_api
-  _BottomNavBarState createState() => _BottomNavBarState();
+  ConsumerState<BottomNavBar> createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends ConsumerState<BottomNavBar> {
   late int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    // Initialize _selectedIndex with the currentIndex passed from the widget
     _selectedIndex = widget.currentIndex;
   }
 
@@ -36,7 +37,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.pushNamed(context, AppRoutes.feedscreen);
       case 4:
         Navigator.pushNamed(context, AppRoutes.profilescreen);
-
         break;
       default:
     }
@@ -44,6 +44,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataProvider);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -62,24 +64,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 0
                       ? AppStyles.littleBlackColor
-                      : Colors.white, // Background color for the container
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
-                      color: AppStyles
-                          .littleBlackColor, // Adjust opacity if needed
+                      color: AppStyles.littleBlackColor,
                       offset: const Offset(2, 2),
-                      // blurRadius: 4, // Add blur radius for a smoother shadow
                     ),
-                  ], // Rounded corners
+                  ],
                 ),
-
                 child: _selectedIndex == 0
                     ? Image.asset('assets/icons/leaderboard_white.png')
-                    : Image.asset(
-                        'assets/icons/leaderboard.png'), // Icon inside the container
+                    : Image.asset('assets/icons/leaderboard.png'),
               ),
               label: 'Leaderboard',
             ),
@@ -90,24 +87,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 1
                       ? AppStyles.littleBlackColor
-                      : Colors.white, // Background color for the container
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
-                      color: AppStyles
-                          .littleBlackColor, // Adjust opacity if needed
+                      color: AppStyles.littleBlackColor,
                       offset: const Offset(2, 2),
-                      // blurRadius: 4, // Add blur radius for a smoother shadow
                     ),
-                  ], // Rounded corners
+                  ],
                 ),
-
                 child: _selectedIndex == 1
                     ? Image.asset('assets/icons/ai_white.png')
-                    : Image.asset(
-                        'assets/icons/ai.png'), // Icon inside the container
+                    : Image.asset('assets/icons/ai.png'),
               ),
               label: 'Ai Chat',
             ),
@@ -116,23 +108,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 width: 59,
                 height: 59,
                 decoration: BoxDecoration(
-                  color:
-                      AppStyles.mainColor, // Background color for the container
+                  color: AppStyles.mainColor,
                   borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
-                      color: AppStyles
-                          .littleBlackColor, // Adjust opacity if needed
+                      color: AppStyles.littleBlackColor,
                       offset: const Offset(2, 2),
-                      // blurRadius: 4, // Add blur radius for a smoother shadow
                     ),
-                  ], // Rounded corners
+                  ],
                 ),
-
-                child: Image.asset(
-                    'assets/icons/plus.png'), // Icon inside the container
+                child: Image.asset('assets/icons/plus.png'),
               ),
               label: 'Review',
             ),
@@ -143,24 +129,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 3
                       ? AppStyles.littleBlackColor
-                      : Colors.white, // Background color for the container
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
-                      color: AppStyles
-                          .littleBlackColor, // Adjust opacity if needed
+                      color: AppStyles.littleBlackColor,
                       offset: const Offset(2, 2),
-                      // blurRadius: 4, // Add blur radius for a smoother shadow
                     ),
-                  ], // Rounded corners
+                  ],
                 ),
-
                 child: _selectedIndex == 3
                     ? Image.asset('assets/icons/message_white.png')
-                    : Image.asset(
-                        'assets/icons/message.png'), // Icon inside the container
+                    : Image.asset('assets/icons/message.png'),
               ),
               label: 'Home',
             ),
@@ -171,25 +152,26 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: _selectedIndex == 4
                       ? AppStyles.littleBlackColor
-                      : Colors.white, // Background color for the container
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
-                      color: AppStyles
-                          .littleBlackColor, // Adjust opacity if needed
+                      color: AppStyles.littleBlackColor,
                       offset: const Offset(2, 2),
-                      // blurRadius: 4, // Add blur radius for a smoother shadow
                     ),
-                  ], // Rounded corners
+                  ],
                 ),
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/avatar_1.png'),
-                ), // Icon inside the container
+                  radius: 12,
+                  backgroundImage: userData?['userData']['profilePhoto'] != null
+                      ? NetworkImage(userData?['userData']['profilePhoto'])
+                      : const AssetImage("assets/images/avatar_1.png")
+                          as ImageProvider,
+                ),
               ),
               label: 'Profile',
-            ),
+            ),     
           ],
           currentIndex: _selectedIndex,
           showUnselectedLabels: false,

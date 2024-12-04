@@ -6,11 +6,16 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  Widget build(BuildContext context) {
     final UserData = ref.watch(userDataProvider);
     // print('💦💦💦${UserData}');
     return WillPopScope(
@@ -28,7 +33,7 @@ class ProfileScreen extends ConsumerWidget {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         children: [
                           const SizedBox(
@@ -46,10 +51,22 @@ class ProfileScreen extends ConsumerWidget {
                                             color: Colors.black,
                                             offset: Offset(4, 4)),
                                       ]),
-                                  child: const CircleAvatar(
+                                  child: CircleAvatar(
                                     radius: 36,
-                                    backgroundImage: AssetImage(
-                                        'assets/images/avatar_1.png'),
+                                    backgroundImage: UserData?['userData']
+                                                ['profilePhoto'] !=
+                                            null
+                                        ? NetworkImage(
+                                            UserData?['userData']
+                                                ['profilePhoto'],
+                                            // Add key to force reload
+                                            headers: {
+                                              'Cache-Control': 'no-cache'
+                                            },
+                                          )
+                                        : const AssetImage(
+                                            "assets/images/avatar_1.png",
+                                          ) as ImageProvider,
                                   ),
                                 ),
                               ),
@@ -196,15 +213,15 @@ class ProfileScreen extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 30,
+                            height: 21,
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              ' ${UserData?['userData']['name']}',
-                              style: TextStyle(
+                              '${UserData?['userData']['name']}',
+                              style: const TextStyle(
                                 fontFamily: 'Clash Grotesk',
-                                fontSize: 28,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -213,7 +230,7 @@ class ProfileScreen extends ConsumerWidget {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               '${UserData?['userData']['bio']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Clash Grotesk',
                                 letterSpacing: 0.6,
                                 fontSize: 15,
@@ -231,7 +248,7 @@ class ProfileScreen extends ConsumerWidget {
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('My favorite Airline is'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
@@ -240,7 +257,7 @@ class ProfileScreen extends ConsumerWidget {
                                 ),
                                 Text(
                                   ' ${UserData?['userData']['favoriteAirlines']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
@@ -260,7 +277,7 @@ class ProfileScreen extends ConsumerWidget {
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('Points received:'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
@@ -268,11 +285,10 @@ class ProfileScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 Text(
-                                  '  500',
-                                  style: TextStyle(
+                                  ' 500',
+                                  style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,
-                                    height: 1,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -291,7 +307,7 @@ class ProfileScreen extends ConsumerWidget {
                       color: Colors.black,
                     ),
                     SizedBox(
-                      height: 24,
+                      height: 28,
                     ),
                     ProfileCardList(),
                   ],
