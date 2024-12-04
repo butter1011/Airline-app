@@ -339,14 +339,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
         if (isLoading)
           Container(
-            color: Colors.black.withOpacity(0.5),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Center(
-                child: LoadingWidget(),
-              ),
-            ),
-          ),
+              color: Colors.black.withOpacity(0.5),
+              child: const LoadingWidget()),
       ],
     );
   }
