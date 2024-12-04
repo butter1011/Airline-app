@@ -84,6 +84,16 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   Widget build(BuildContext context) {
     final userId = ref.watch(userDataProvider)?['userData']['_id'];
     var args = ModalRoute.of(context)!.settings.arguments as Map;
+    print('🧶${args}');
+    print('🧶${args['name']}');
+    print('🧶${args['isAirline']}');
+    print('🧶${args['trendingBio']}');
+    print('🧶${args['backgroundImage']}');
+    print('🧶${args['descriptionBio']}');
+    print('🧶${args['totalReviews']}');
+    print('🧶${args['overall']}');
+    print('🧶${args['perksBio']}');
+    print('🧶${args['bookMarkId']}');
     final String name = args['name'];
     final bool isAirline = args['isAirline'];
     final String descriptionBio = args['descriptionBio'];
@@ -94,6 +104,17 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
+
+    // print('🧶${descriptionBio}');
+    // print('🧶${isAirline}');
+    // print('🧶${perksBio}');
+    // print('🧶${backgroundImage}');
+    // print('🧶${bookMarkId}');
+    // print('🧶${overallScore}');
+    // print('🧶${totalReviews}');
+    // print('🧶${isIncreasing}');
+    // print('🧶${overallScore}');
+
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
@@ -252,112 +273,112 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    CategoryButtons(
-                      isAirline: isAirline,
-                      airportData: args,
-                    ),
+                    // CategoryButtons(
+                    //   isAirline: isAirline,
+                    //   airportData: args,
+                    // ),
                   ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: airlineReviewLists.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final singleReview = entry.value;
-                  if (singleReview != null) {
-                    final reviewer = singleReview['reviewer'];
-                    final airline = singleReview['airline'];
-                    final from = singleReview['from'];
-                    final to = singleReview['to'];
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: airlineReviewLists.asMap().entries.map((entry) {
+              //     final index = entry.key;
+              //     final singleReview = entry.value;
+              //     if (singleReview != null) {
+              //       final reviewer = singleReview['reviewer'];
+              //       final airline = singleReview['airline'];
+              //       final from = singleReview['from'];
+              //       final to = singleReview['to'];
 
-                    if (reviewer != null &&
-                        airline != null &&
-                        from != null &&
-                        to != null) {
-                      return Column(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 24.0),
-                            child: FeedbackCard(
-                              singleFeedback: singleReview,
-                            ),
-                          ),
-                          if (index != airlineReviewLists.length - 1)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 24.0),
-                              child: Column(
-                                children: [
-                                  Divider(
-                                    height: 2,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
-                      );
-                    }
-                  }
-                  return const SizedBox.shrink();
-                }).toList(),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.black.withOpacity(0.8),
-                      width: 2,
-                    ),
-                  ),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReviewsubmissionScreen(),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Container(
-                      height: 56,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppStyles.mainColor,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Leave a review",
-                                style: GoogleFonts.schibstedGrotesk(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Image.asset('assets/icons/edit.png')
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              //       if (reviewer != null &&
+              //           airline != null &&
+              //           from != null &&
+              //           to != null) {
+              //         return Column(
+              //           children: [
+              //             Padding(
+              //               padding:
+              //                   const EdgeInsets.symmetric(horizontal: 24.0),
+              //               child: FeedbackCard(
+              //                 singleFeedback: singleReview,
+              //               ),
+              //             ),
+              //             if (index != airlineReviewLists.length - 1)
+              //               Padding(
+              //                 padding: const EdgeInsets.symmetric(
+              //                     vertical: 18, horizontal: 24.0),
+              //                 child: Column(
+              //                   children: [
+              //                     Divider(
+              //                       height: 2,
+              //                       color: Colors.black,
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //           ],
+              //         );
+              //       }
+              //     }
+              //     return const SizedBox.shrink();
+              //   }).toList(),
+              // ),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border(
+              //       top: BorderSide(
+              //         color: Colors.black.withOpacity(0.8),
+              //         width: 2,
+              //       ),
+              //     ),
+              //   ),
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => const ReviewsubmissionScreen(),
+              //         ),
+              //       );
+              //     },
+              //     child: Padding(
+              //       padding: const EdgeInsets.symmetric(
+              //           vertical: 16, horizontal: 24),
+              //       child: Container(
+              //         height: 56,
+              //         decoration: BoxDecoration(
+              //           borderRadius: BorderRadius.circular(30),
+              //           color: AppStyles.mainColor,
+              //           border: Border.all(width: 2, color: Colors.black),
+              //           boxShadow: const [
+              //             BoxShadow(color: Colors.black, offset: Offset(2, 2))
+              //           ],
+              //         ),
+              //         child: Padding(
+              //           padding: const EdgeInsets.symmetric(horizontal: 12),
+              //           child: Center(
+              //             child: Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 Text(
+              //                   "Leave a review",
+              //                   style: GoogleFonts.schibstedGrotesk(
+              //                     fontSize: 15,
+              //                     fontWeight: FontWeight.w900,
+              //                     letterSpacing: -0.3,
+              //                   ),
+              //                 ),
+              //                 const SizedBox(width: 8),
+              //                 Image.asset('assets/icons/edit.png')
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // )
             ]),
           )
         ],
