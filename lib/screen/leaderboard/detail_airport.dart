@@ -97,16 +97,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
 
-    print('🧶${descriptionBio}');
-    print('🧶${isAirline}');
-    print('🧶${perksBio}');
-    print('🧶${backgroundImage}');
-    print('🧶${bookMarkId}');
-    print('🧶${overallScore}');
-    print('🧶${totalReviews}');
-    print('🧶${isIncreasing}');
-    print('🧶${overallScore}');
-
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
@@ -265,10 +255,10 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    // CategoryButtons(
-                    //   isAirline: isAirline,
-                    //   airportData: args,
-                    // ),
+                    CategoryButtons(
+                      isAirline: isAirline,
+                      airportData: args,
+                    ),
                   ],
                 ),
               ),
@@ -298,14 +288,20 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           ),
                           if (index != airlineReviewLists.length - 1)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Column(
                                 children: [
+                                  SizedBox(
+                                    height: 16,
+                                  ),
                                   Divider(
-                                    height: 2,
+                                    thickness: 2,
                                     color: Colors.black,
                                   ),
+                                  SizedBox(
+                                    height: 24,
+                                  )
                                 ],
                               ),
                             ),

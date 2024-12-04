@@ -236,7 +236,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -244,17 +244,61 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                         height: 24,
                       ),
                       Column(
-                          children: reviewList.isEmpty
-                              ? [
-                                  Text(
-                                    "No reviews available",
-                                    style: AppStyles.textStyle_14_600,
-                                  )
-                                ]
-                              : reviewList.map((singleFeedback) {
-                                  return FeedbackCard(
-                                      singleFeedback: singleFeedback);
-                                }).toList()),
+                        children: reviewList.isEmpty
+                            ? [
+                                Text(
+                                  "No reviews available",
+                                  style: AppStyles.textStyle_14_600,
+                                )
+                              ]
+                            : reviewList.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final singleReview = entry.value;
+                                if (singleReview != null) {
+                                  final reviewer = singleReview['reviewer'];
+                                  final airline = singleReview['airline'];
+                                  final from = singleReview['from'];
+                                  final to = singleReview['to'];
+
+                                  if (reviewer != null &&
+                                      airline != null &&
+                                      from != null &&
+                                      to != null) {
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 24.0),
+                                          child: FeedbackCard(
+                                            singleFeedback: singleReview,
+                                          ),
+                                        ),
+                                        if (index != reviewList.length - 1)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 24.0),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 9,
+                                                ),
+                                                Divider(
+                                                  thickness: 2,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  height: 24,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  }
+                                }
+                                return const SizedBox.shrink();
+                              }).toList(),
+                      ),
                       SizedBox(
                         height: 18,
                       ),
