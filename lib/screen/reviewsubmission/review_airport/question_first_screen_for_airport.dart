@@ -189,7 +189,7 @@ class BuildQuestionHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
@@ -200,15 +200,16 @@ class BuildQuestionHeader extends StatelessWidget {
                       backgroundImage: NetworkImage(logoImage),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Column(
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         airportName,
                         style: AppStyles.oswaldTextStyle,
                       ),
                       Text(
-                        ' AIRPORT',
+                        ' Airport',
                         style: AppStyles.oswaldTextStyle,
                       )
                     ],
