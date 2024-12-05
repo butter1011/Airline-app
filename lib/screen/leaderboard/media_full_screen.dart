@@ -22,7 +22,6 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final List<String> imgList = args?['Images'];
-    print('🧶🧶🧶🧶$args');
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

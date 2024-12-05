@@ -1,6 +1,3 @@
-import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -20,7 +17,6 @@ class FeedbackOptionForAirline extends StatelessWidget {
       required this.label,
       required this.selectedNumberOfSubcategoryForLike,
       required this.numberOfSelectedAspects});
-  // final List<String> mainCategoryNames = mainCategoryAndSubcategoryForAirline.keys.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +28,6 @@ class FeedbackOptionForAirline extends StatelessWidget {
     final labelName = mainCategoryNames[label];
     return GestureDetector(
       onTap: () {
-        // print("🪂${numForIdentifyOfParent}");
-
         if (numForIdentifyOfParent == 1) {
           if (numberOfSelectedAspects > 3) {
             _showAlertDialog(context);

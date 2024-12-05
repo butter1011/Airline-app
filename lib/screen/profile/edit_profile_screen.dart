@@ -57,7 +57,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
-  void pickImage() async {
+  Future<void> _pickImage() async {
     try {
       final ImagePicker _picker = ImagePicker();
       final XFile? image =
@@ -165,7 +165,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(18),
-                            onTap: pickImage,
+                            onTap: _pickImage,
                             child: Icon(
                               Icons.camera_alt,
                               size: 20,
@@ -340,14 +340,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
         if (isLoading)
           Container(
-            color: Colors.black.withOpacity(0.5),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Center(
-                child: LoadingWidget(),
-              ),
-            ),
-          ),
+              color: Colors.black.withOpacity(0.5),
+              child: const LoadingWidget()),
       ],
     );
   }

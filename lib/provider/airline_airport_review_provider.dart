@@ -251,8 +251,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
 
     List<Map<String, dynamic>> filteredReviews = [];
-    print(
-        "This is properties===================$filterType $flyerClass $selectedContinents");
 
     switch (filterType) {
       case 'All':

@@ -36,11 +36,9 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         .getAirlineLogoImage(airlinData.airline);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineBackgroundImage(airlinData.airline);
-    print('🎄🎄🎄$backgroundImage');
 
     return WillPopScope(
       onWillPop: () async {
@@ -59,7 +57,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
             airlineName: airline,
             from: from,
             to: to,
-            dateRange: dateRanged,
           ),
         ),
         body: SafeArea(
@@ -167,7 +164,6 @@ class BuildQuestionHeader extends StatelessWidget {
       required this.subTitle,
       required this.logoImage,
       required this.airlineName,
-      required this.dateRange,
       required this.classes,
       required this.from,
       required this.backgorundImage,
@@ -176,7 +172,6 @@ class BuildQuestionHeader extends StatelessWidget {
   final String logoImage;
   final String backgorundImage;
   final String airlineName;
-  final List dateRange;
   final String classes;
   final String from;
   final String to;
@@ -184,12 +179,13 @@ class BuildQuestionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: Image.network(
-            backgorundImage,
-            fit: BoxFit.cover,
+        if (backgorundImage.isNotEmpty)
+          Positioned.fill(
+            child: Image.network(
+              backgorundImage,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
         Container(
           color:
               Color(0xff181818).withOpacity(0.75), // Black overlay with opacity
@@ -203,12 +199,14 @@ class BuildQuestionHeader extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 40,
-                    decoration: AppStyles.circleDecoration,
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(logoImage),
+                  if (logoImage.isNotEmpty)
+                    Container(
+                      height: 40,
+                      decoration: AppStyles.circleDecoration,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(logoImage),
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -242,7 +240,7 @@ class BuildQuestionHeader extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                '$airlineName, ${dateRange[0]}, $classes',
+                '$airlineName, $classes',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(

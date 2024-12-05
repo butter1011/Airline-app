@@ -23,18 +23,10 @@ class BasicBlackButton extends StatelessWidget {
         border: Border.all(),
         color: myColor,
         borderRadius: BorderRadius.circular(30),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.black,
-        //     offset: Offset(2, 2),
-        //   )
-        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),
         child:
-            // Center(
-            //   child:
             Center(
           child: Text(
             btntext,

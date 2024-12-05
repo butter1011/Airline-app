@@ -1,5 +1,4 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
-import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -322,74 +321,6 @@ class _LeaderboardFilterScreenState
       ],
     );
   }
-
-  // Widget _buildCategoryLeaderboards() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(AppLocalizations.of(context).translate('Categories'),
-  //               style: AppStyles.textStyle_18_600),
-  //           IconButton(
-  //               onPressed: () {
-  //                 setState(() {
-  //                   categoryIsExpanded = !categoryIsExpanded;
-  //                 });
-  //               },
-  //               icon: Icon(categoryIsExpanded
-  //                   ? Icons.expand_more
-  //                   : Icons.expand_less)),
-  //         ],
-  //       ),
-  //       Visibility(
-  //           visible: categoryIsExpanded,
-  //           child: Column(
-  //             children: [
-  //               const SizedBox(height: 17),
-  //               Wrap(
-  //                 spacing: 8,
-  //                 runSpacing: 8,
-  //                 children: List.generate(
-  //                     category.length,
-  //                     (index) => FilterButton(
-  //                           text: AppLocalizations.of(context)
-  //                               .translate('${category[index]}'),
-  //                           isSelected: selectedCategoryStates[index],
-  //                           onTap: () =>
-  //                               _toggleFilter(index, selectedCategoryStates),
-  //                         )),
-  //               ),
-  //             ],
-  //           ))
-  //     ],
-  //   );
-  // }
-
-  // Widget _buildRankLeaderboards() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(AppLocalizations.of(context).translate('Filter Rank'),
-  //               style: AppStyles.textStyle_18_600),
-  //           IconButton(
-  //               onPressed: () {
-  //                 setState(() {
-  //                   rankIsExpanded = !rankIsExpanded;
-  //                 });
-  //               },
-  //               icon: Icon(
-  //                   rankIsExpanded ? Icons.expand_more : Icons.expand_less)),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _buildContinentLeaderboards() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

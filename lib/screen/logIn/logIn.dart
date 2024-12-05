@@ -48,7 +48,6 @@ class _LoginState extends ConsumerState<Login> {
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
-        // print('🧵🧵🧵${ref.watch(userDataProvider)}');
       }
       await _fetchDataAndNavigate();
     } else {
@@ -167,7 +166,6 @@ class _LoginState extends ConsumerState<Login> {
         }
       } else {
         Navigator.pop(context); // Remove loading dialog
-        print('Authentication failed: ${response.body}');
       }
     } else {
       _showErrorSnackBar('Login failed. Please try again.');

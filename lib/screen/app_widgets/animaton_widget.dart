@@ -40,7 +40,6 @@ class _AnimationSState extends State<AnimationS> {
   ];
   @override
   Widget build(BuildContext context) {
-    print("Assetstype:=====>${Assets.classicTerrible}");
 
     return Scaffold(
       body: Center(

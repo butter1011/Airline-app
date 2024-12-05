@@ -3,16 +3,14 @@ import 'dart:ui';
 import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
-import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_success_bottom_sheet.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -35,21 +33,34 @@ class _QuestionThirdScreenForAirportState
   final TextEditingController _commentController = TextEditingController();
   final BoardingPassController _boardingPassController =
       BoardingPassController();
+  bool _isPickingImage = false;
 
   String comment = "";
   bool _isLoading = false;
   bool isSuccess = false;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
+    if (_isPickingImage) return;
+    
+    setState(() {
+      _isPickingImage = true;
+    });
 
-    if (pickedFile != null) {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image.add(File(pickedFile.path));
+        });
+      }
+    } finally {
       setState(() {
-        _image.add(File(pickedFile.path));
+        _isPickingImage = false;
       });
     }
   }
@@ -108,7 +119,6 @@ class _QuestionThirdScreenForAirportState
                   subTitle: "Share your experience.",
                   logoImage: logoImage,
                   backgroundImage: backgroundImage,
-                  dateRange: dateRanged,
                   selecetedOfCalssLevel: selectedClassOfTravel,
                 ),
               ),
@@ -148,7 +158,8 @@ class _QuestionThirdScreenForAirportState
                               setState(() => _isLoading = true);
                               try {
                                 final review = AirportReviewModel(
-                                  reviewer: "67375a13151c33aa85429a29",
+                                  reviewer: ref.watch(userDataProvider)?['userData']
+                                          ['_id'],
                                   airline: airline,
                                   airport: airport,
                                   classTravel: classTravel,
@@ -163,6 +174,7 @@ class _QuestionThirdScreenForAirportState
 
                                 final result = await _reviewController
                                     .saveAirportReview(review);
+                                print("$result");
                                 if (result) {
                                   if (index != null && isDeparture != null) {
                                     final updatedBoardingPass = ref

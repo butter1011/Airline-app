@@ -43,7 +43,6 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -54,7 +53,6 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
             subTitle: "What could be improved?",
             logoImage: logoImage,
             backgroundImage: backgroundImage,
-            dateRange: dateRanged,
             selecetedOfCalssLevel: selectedClassOfTravel,
           )),
       body: Padding(

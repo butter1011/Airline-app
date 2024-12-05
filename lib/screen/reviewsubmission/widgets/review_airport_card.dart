@@ -6,7 +6,6 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:country_codes/country_codes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:country_flags/country_flags.dart';
 
 class ReviewAirportCard extends ConsumerWidget {
   const ReviewAirportCard({

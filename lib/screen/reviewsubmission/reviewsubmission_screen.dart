@@ -1,7 +1,5 @@
 import 'package:airline_app/controller/boarding_pass_controller.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
@@ -26,7 +24,6 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
-  final _getAirlineAirportData = GetAirlineAirportController();
   final _boardingPassController = BoardingPassController();
   bool isLoading = true;
   String selectedType = "All";
