@@ -9,7 +9,6 @@ import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -90,10 +89,11 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
-    final String bookMarkId = args['bookMarkId'];
+    final String bookMarkId = args['_id'];
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
+
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
@@ -285,14 +285,20 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           ),
                           if (index != airlineReviewLists.length - 1)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Column(
                                 children: [
+                                  SizedBox(
+                                    height: 16,
+                                  ),
                                   Divider(
-                                    height: 2,
+                                    thickness: 2,
                                     color: Colors.black,
                                   ),
+                                  SizedBox(
+                                    height: 24,
+                                  )
                                 ],
                               ),
                             ),

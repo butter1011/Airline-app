@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:async';
+import 'dart:ui';
 import 'dart:io';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
@@ -8,9 +11,11 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -25,7 +30,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   List<dynamic> airlineData = [];
   List<dynamic> airportData = [];
   String? _selectedAirline;
-  bool isLoading = true;
+  bool isLoading = false;
   final _getAirlineData = GetAirlineAirportController();
   XFile? _selectedImage;
 
@@ -52,15 +57,48 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
-  void pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage() async {
+    try {
+      final ImagePicker _picker = ImagePicker();
+      final XFile? image =
+          await _picker.pickImage(source: ImageSource.gallery).timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException('Image picker timed out');
+        },
+      );
 
-    if (image != null) {
-      setState(() {
-        _selectedImage = image;
-      });
+      if (image != null) {
+        // Clear existing image cache before setting new image
+        final imageCache = ImageCache();
+        imageCache.clear();
+        imageCache.clearLiveImages();
+
+        setState(() {
+          _selectedImage = image;
+        });
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'already_active') {
+        // Handle the case where image picker is already active
+        print('Image picker is already active');
+        return;
+      }
+      // Handle other platform exceptions
+      print('Failed to pick image: ${e.message}');
+    } catch (e) {
+      // Handle other exceptions
+      print('Error picking image: $e');
     }
+  }
+
+  void reloadProfileImage() {
+    setState(() {
+      // Clear image cache to force reload
+      final imageCache = PaintingBinding.instance.imageCache;
+      imageCache.clear();
+      imageCache.clearLiveImages();
+    });
   }
 
   @override
@@ -68,230 +106,243 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final UserData = ref.watch(userDataProvider);
     _nameController.text = '${UserData?['userData']['name']}';
     _bioController.text = '${UserData?['userData']['bio']}';
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Stack(
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: _buildAppBar(context),
+          body: SingleChildScrollView(
+            child: Column(
               children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        offset: Offset(3, 3),
-                        blurRadius: 4,
-                      )
+                SizedBox(
+                  height: 20,
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: Offset(3, 3),
+                            blurRadius: 4,
+                          )
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: _selectedImage != null
+                            ? FileImage(File(_selectedImage!.path))
+                            : UserData?['userData']['profilePhoto'] != null
+                                ? NetworkImage(
+                                    UserData?['userData']['profilePhoto'])
+                                : AssetImage("assets/images/avatar_1.png")
+                                    as ImageProvider,
+                        radius: 48,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.black, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              offset: Offset(2, 2),
+                              blurRadius: 3,
+                            )
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(18),
+                            onTap: _pickImage,
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: 20,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  "Change Photo",
+                  style: AppStyles.textStyle_15_600,
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Name & Surname",
+                        style: AppStyles.textStyle_14_600,
+                      ),
                     ],
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: _selectedImage != null
-                        ? FileImage(File(_selectedImage!.path))
-                        : UserData?['userData']['avatarUrl'] != null
-                            ? NetworkImage(UserData?['userData']['avatarUrl'])
-                            : AssetImage("assets/images/avatar_1.png")
-                                as ImageProvider,
-                    radius: 48,
-                  ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
+                SizedBox(
+                  height: 6,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
                   child: Container(
-                    width: 36,
-                    height: 36,
+                    height: 40, // Increased height for better visibility
                     decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(20), // Adjusted for new height
                       color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black, width: 2),
+                      border: Border.all(width: 2, color: Colors.black),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
                           offset: Offset(2, 2),
-                          blurRadius: 3,
                         )
                       ],
                     ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(18),
-                        onTap: pickImage,
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 20,
-                          color: Colors.black87,
+                    child: Center(
+                      // Added Center widget
+                      child: TextField(
+                        controller: _nameController,
+                        textAlignVertical:
+                            TextAlignVertical.center, // Centers text vertically
+                        style: AppStyles
+                            .textStyle_15_500, // Adjust font size as needed
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          border: InputBorder.none,
+                          isCollapsed: true, // Removes the default padding
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            Text(
-              "Change Photo",
-              style: AppStyles.textStyle_15_600,
-            ),
-            SizedBox(
-              height: 22,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Name & Surname",
-                    style: AppStyles.textStyle_14_600,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-              ),
-              child: Container(
-                height: 40, // Increased height for better visibility
-                decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(20), // Adjusted for new height
-                  color: Colors.white,
-                  border: Border.all(width: 2, color: Colors.black),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      offset: Offset(2, 2),
-                    )
-                  ],
+                SizedBox(
+                  height: 20,
                 ),
-                child: Center(
-                  // Added Center widget
-                  child: TextField(
-                    controller: _nameController,
-                    textAlignVertical:
-                        TextAlignVertical.center, // Centers text vertically
-                    style:
-                        TextStyle(fontSize: 16), // Adjust font size as needed
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      border: InputBorder.none,
-                      isCollapsed: true, // Removes the default padding
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Bio",
+                        style: AppStyles.textStyle_14_600,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
+                  child: Container(
+                    height: 122,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(27),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            offset: Offset(2, 2),
+                          )
+                        ]),
+                    child: TextField(
+                      style: AppStyles.textStyle_14_500,
+                      controller: _bioController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12)),
+                      maxLines: null,
                     ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 22,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Bio",
-                    style: AppStyles.textStyle_14_600,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-              ),
-              child: Container(
-                height: 122,
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(27),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(2, 2),
-                      )
-                    ]),
-                child: TextField(
-                  controller: _bioController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12)),
-                  maxLines: null,
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 24,
-            ),
-
-            SizedBox(
-              height: 8,
-            ),
-            // FavoriteAirlineDropdown(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: EditCustomDropdownButton(
-                labelText: "Your Favorite Airline",
-                hintText: "${UserData?['userData']['favoriteairlines']}",
-                onChanged: (value) => setState(() {
-                  _selectedAirline = value;
-                }),
-                airlineNames: airlineData,
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 4, // Set the height to match the thickness you want
-            color: AppStyles.littleBlackColor, // Use your desired color
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: InkWell(
-              onTap: () {
-                _editProfileFunction();
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.87,
-                height: 56,
-                decoration: BoxDecoration(
-                    color: AppStyles.mainColor,
-                    border:
-                        Border.all(width: 2, color: AppStyles.littleBlackColor),
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: Offset(2, 2))
-                    ]),
-                child: Center(
-                  child: Text(
-                    "Save Changes",
-                    style: AppStyles.textStyle_15_600,
+                // FavoriteAirlineDropdown(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: EditCustomDropdownButton(
+                    labelText: "Your Favorite Airline",
+                    hintText: "${UserData?['userData']['favoriteairlines']}",
+                    onChanged: (value) => setState(() {
+                      _selectedAirline = value;
+                    }),
+                    airlineNames: airlineData,
                   ),
                 ),
-              ),
+              ],
             ),
-          )
-        ],
-      ),
+          ),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 4, // Set the height to match the thickness you want
+                color: AppStyles.littleBlackColor, // Use your desired color
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: InkWell(
+                  onTap: () {
+                    _editProfileFunction();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.87,
+                    height: 56,
+                    decoration: BoxDecoration(
+                        color: AppStyles.mainColor,
+                        border: Border.all(
+                            width: 2, color: AppStyles.littleBlackColor),
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                              color: AppStyles.littleBlackColor,
+                              offset: Offset(2, 2))
+                        ]),
+                    child: Center(
+                      child: Text(
+                        "Save Changes",
+                        style: AppStyles.textStyle_15_600,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        if (isLoading)
+          Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const LoadingWidget()),
+      ],
     );
   }
 
@@ -358,57 +409,71 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void _editProfileFunction() async {
-    final UserData = ref.watch(userDataProvider);
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
 
-    // Upload image if selected
-    String? avatarUrl;
-    if (_selectedImage != null) {
-      final url = Uri.parse('$apiUrl/api/v1/editUser/avatar');
-      var request = http.MultipartRequest('POST', url);
+    reloadProfileImage();
+    final userData = ref.watch(userDataProvider);
 
-      // Add the image file to the request
-      var bytes = await _selectedImage!.readAsBytes();
-      var file = http.MultipartFile.fromBytes(
-        'avatar',
-        bytes,
-        filename: 'avatar.jpg',
+    try {
+      if (_selectedImage != null) {
+        final url = Uri.parse('$apiUrl/api/v1/editUser/avatar');
+        final request = http.MultipartRequest('POST', url);
+
+        final file = File(_selectedImage!.path);
+        final filename = file.path.split('/').last;
+
+        request.files.add(
+          http.MultipartFile(
+            'avatar',
+            file.readAsBytes().asStream(),
+            file.lengthSync(),
+            filename: filename,
+          ),
+        );
+
+        request.fields['userId'] = userData?['userData']['_id'];
+
+        await request.send();
+      }
+
+      final userInformationResponse = await http.post(
+        Uri.parse('$apiUrl/api/v1/editUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'name': _nameController.text,
+          'bio': _bioController.text,
+          '_id': userData?['userData']['_id'],
+          'favoriteAirline': _selectedAirline,
+        }),
       );
-      request.files.add(file);
 
-      // Add user ID to reque st
-      request.fields['userId'] = UserData?['userData']['_id'];
+      if (userInformationResponse.statusCode == 200) {
+        final responseData = jsonDecode(userInformationResponse.body);
+        ref.read(userDataProvider.notifier).setUserData(responseData);
+        final prefs = await SharedPreferences.getInstance();
 
-      var response = await request.send();
-      // var responseData = await response.stream.bytesToString();
-      // // var jsonResponse = json.decode(responseData);
+        await prefs.setString('userData', json.encode(responseData));
+        setState(() {
+          isLoading = false; // Hide loading indicator
+        });
 
-      // if (response.statusCode == 200) {
-      //   avatarUrl = jsonResponse['avatarUrl'];
-      // }
-    }
-
-    final userInformationData =
-        await http.post(Uri.parse('$apiUrl/api/v1/editUser'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: json.encode({
-              'name': _nameController.text,
-              'bio': _bioController.text,
-              '_id': UserData?['userData']['_id'],
-              'favoriteAirline': _selectedAirline,
-              if (avatarUrl != null) 'avatarUrl': avatarUrl,
-            }));
-
-    if (userInformationData.statusCode == 200) {
-      final responseChangeData = jsonDecode(userInformationData.body);
-      print('🎎🎎$responseChangeData');
-      ref.read(userDataProvider.notifier).setUserData(responseChangeData);
-
-      Navigator.pushNamed(context, AppRoutes.profilescreen);
-      showCustomSnackbar(context);
-    } else {
-      print('Changing the userProfile failed: ${userInformationData.body}');
+        Navigator.pushNamed(context, AppRoutes.profilescreen);
+        showCustomSnackbar(context);
+      } else {
+        setState(() {
+          isLoading = false; // Hide loading indicator on error
+        });
+        print('Failed to update user profile: ${userInformationResponse.body}');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Hide loading indicator on error
+      });
+      print('Error updating profile: $e');
     }
   }
 

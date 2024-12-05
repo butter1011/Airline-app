@@ -27,8 +27,7 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
-    print('🌭🌭$userReviews');
-
+    print('💦💦💦$userReviews');
     return Column(
       children: [
         Padding(
@@ -82,14 +81,15 @@ class CLeaderboardScreen extends ConsumerWidget {
                       ),
                       if (index != userReviews.length - 1)
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 18, horizontal: 24.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Column(
                             children: [
+                              SizedBox(height: 9),
                               Divider(
-                                height: 2,
+                                thickness: 2,
                                 color: Colors.black,
                               ),
+                              SizedBox(height: 24),
                             ],
                           ),
                         ),

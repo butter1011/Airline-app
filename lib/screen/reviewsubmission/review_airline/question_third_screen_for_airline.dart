@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:airline_app/controller/airline_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
@@ -19,6 +19,8 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:airline_app/utils/global_variable.dart';
 
 class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
   const QuestionThirdScreenForAirline({super.key});
@@ -33,21 +35,36 @@ class _QuestionThirdScreenForAirlineState
   final List<File> _image = [];
   final AirlineReviewController _reviewController = AirlineReviewController();
   final TextEditingController _commentController = TextEditingController();
+  bool _isPickingImage = false;
 
   String comment = "";
   bool _isLoading = false;
   bool isSuccess = false;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
+    if (_isPickingImage) return;
 
-    if (pickedFile != null) {
+    setState(() {
+      _isPickingImage = true;
+    });
+
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _image.add(File(pickedFile.path));
+          print("--------");
+          print(_image);
+        });
+      }
+    } finally {
       setState(() {
-        _image.add(File(pickedFile.path));
+        _isPickingImage = false;
       });
     }
   }
@@ -64,7 +81,6 @@ class _QuestionThirdScreenForAirlineState
     final flightData = ref.watch(aviationInfoProvider);
     final reviewData = ref.watch(reviewFeedBackProviderForAirline);
     final userData = ref.watch(userDataProvider);
-    final reviewer = userData?['userData']['_id'] ?? '';
     final index = flightData.index;
     final from = flightData.from;
     final to = flightData.to;
@@ -76,6 +92,27 @@ class _QuestionThirdScreenForAirlineState
     final onboardService = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
     final entertainmentWifi = reviewData[5]["subCategory"];
+
+    final airlineData = ref.watch(aviationInfoProvider);
+    final fromAirport = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlineData.from);
+
+    final toAirport = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlineData.to);
+
+    final airlineName = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlineData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlineData.airline);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlineData.airline);
+    final selectedClassOfTravel = airlineData.selectedClassOfTravel;
 
     return WillPopScope(
       onWillPop: () async {
@@ -90,7 +127,13 @@ class _QuestionThirdScreenForAirlineState
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
                 flexibleSpace: BuildQuestionHeader(
+                  backgorundImage: backgroundImage,
                   subTitle: "Share your experience.",
+                  logoImage: logoImage,
+                  classes: selectedClassOfTravel,
+                  airlineName: airlineName,
+                  from: fromAirport,
+                  to: toAirport,
                 ),
               ),
               body: SafeArea(
@@ -125,89 +168,22 @@ class _QuestionThirdScreenForAirlineState
                         Expanded(
                           child: NavPageButton(
                             text: 'Submit',
-                            onPressed: () async {
-                              setState(() {
-                                _isLoading = true;
-                              });
-
-                              try {
-                                final review = AirlineReviewModel(
-                                  reviewer:
-                                      ref.watch(userDataProvider)?['userData']
-                                          ['_id'],
-                                  from: from,
-                                  to: to,
-                                  classTravel: classTravel,
-                                  airline: airline,
-                                  departureArrival: departureArrival,
-                                  comfort: comfort,
-                                  cleanliness: cleanliness,
-                                  onboardService: onboardService,
-                                  foodBeverage: foodBeverage,
-                                  entertainmentWifi: entertainmentWifi,
-                                  comment: comment,
-                                );
-                                print(
-                                    "This is review ===========>   ${review.toJson()}");
-
-                              final result =
-                                  await _reviewController.saveAirlineReview(review);
-
-                                if (result['success']) {
-                                  // Add the new review to the provider
-                                  ref
-                                      .read(reviewsAirlineProvider.notifier)
-                                      .addReview(result['data']['data']);
-
-                                  if (index != null) {
-                                    final updatedBoardingPass = ref
-                                        .read(boardingPassesProvider.notifier)
-                                        .markFlightAsReviewed(index);
-
-                                    await boardingPassController
-                                        .updateBoardingPass(
-                                            updatedBoardingPass);
-                                  }
-
-                                  ref
-                                      .read(aviationInfoProvider.notifier)
-                                      .resetState();
-                                  ref
-                                      .read(reviewFeedBackProviderForAirline
-                                          .notifier)
-                                      .resetState();
-
-                                  setState(() => _isLoading = false);
-
-                                  if (!mounted) return;
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.leaderboardscreen);
-                                  await showReviewSuccessBottomSheet(
-                                      // ignore: use_build_context_synchronously
-                                      context,
-                                      () => setState(() => isSuccess = true),
-                                      "Review airport");
-                                } else {
-                                  setState(() => _isLoading = false);
-                                  if (!mounted) return;
-                                  // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Failed to submit review')),
-                                  );
-                                }
-                              } catch (e) {
-                                setState(() => _isLoading = false);
-                                if (!mounted) return;
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Error: ${e.toString()}')),
-                                );
-                              }
-                            },
+                            onPressed: () => _handleSubmission(
+                              context: context,
+                              userData: userData,
+                              from: from,
+                              to: to,
+                              classTravel: classTravel,
+                              airline: airline,
+                              departureArrival: departureArrival,
+                              comfort: comfort,
+                              cleanliness: cleanliness,
+                              onboardService: onboardService,
+                              foodBeverage: foodBeverage,
+                              entertainmentWifi: entertainmentWifi,
+                              index: index,
+                              boardingPassController: boardingPassController,
+                            ),
                             icon: Icons.arrow_forward,
                           ),
                         ),
@@ -222,6 +198,137 @@ class _QuestionThirdScreenForAirlineState
                 child: const LoadingWidget()),
         ],
       ),
+    );
+  }
+
+  Future<void> _handleSubmission({
+    required BuildContext context,
+    required Map<String, dynamic>? userData,
+    required String from,
+    required String to,
+    required String classTravel,
+    required String airline,
+    required Map<String, dynamic> departureArrival,
+    required Map<String, dynamic> comfort,
+    required Map<String, dynamic> cleanliness,
+    required Map<String, dynamic> onboardService,
+    required Map<String, dynamic> foodBeverage,
+    required Map<String, dynamic> entertainmentWifi,
+    required int? index,
+    required BoardingPassController boardingPassController,
+  }) async {
+    setState(() => _isLoading = true);
+
+    try {
+      final review = AirlineReviewModel(
+        reviewer: userData?['userData']['_id'],
+        from: from,
+        to: to,
+        classTravel: classTravel,
+        airline: airline,
+        departureArrival: departureArrival,
+        comfort: comfort,
+        cleanliness: cleanliness,
+        onboardService: onboardService,
+        foodBeverage: foodBeverage,
+        entertainmentWifi: entertainmentWifi,
+        comment: comment,
+      );
+
+      final result = await _reviewController.saveAirlineReview(review);
+
+      if (_image.isNotEmpty && result['data']?['data']?['_id'] != null) {
+        print("uploading the image...");
+        await _uploadImages(result['data']['data']['_id']);
+      }
+
+      if (result['success']) {
+        await _handleSuccessfulSubmission(
+          context: context,
+          result: result,
+          index: index,
+          boardingPassController: boardingPassController,
+        );
+      } else {
+        _handleFailedSubmission(context);
+      }
+    } catch (e) {
+      _handleSubmissionError(context, e);
+    }
+  }
+
+  Future<void> _uploadImages(String reviewId) async {
+    final url = Uri.parse('$apiUrl/api/v1/airline-review/upload-images');
+
+    for (var image in _image) {
+      try {
+        final request = http.MultipartRequest('POST', url);
+        final filename = image.path.split('/').last;
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'files',
+            image.path,
+            filename: filename,
+          ),
+        );
+
+        request.fields['id'] = reviewId;
+
+        final response = await request.send();
+        if (response.statusCode != 200) {
+          throw Exception('Failed to upload image');
+        }
+      } catch (e) {
+        print('Error uploading image: $e');
+        continue;
+      }
+    }
+  }
+
+  Future<void> _handleSuccessfulSubmission({
+    required BuildContext context,
+    required Map<String, dynamic> result,
+    required int? index,
+    required BoardingPassController boardingPassController,
+  }) async {
+    ref.read(reviewsAirlineProvider.notifier).addReview(result['data']['data']);
+
+    if (index != null) {
+      final updatedBoardingPass =
+          ref.read(boardingPassesProvider.notifier).markFlightAsReviewed(index);
+
+      await boardingPassController.updateBoardingPass(updatedBoardingPass);
+    }
+
+    ref.read(aviationInfoProvider.notifier).resetState();
+    ref.read(reviewFeedBackProviderForAirline.notifier).resetState();
+
+    setState(() => _isLoading = false);
+
+    if (!mounted) return;
+
+    Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+    await showReviewSuccessBottomSheet(
+      context,
+      () => setState(() => isSuccess = true),
+      "Review airport",
+    );
+  }
+
+  void _handleFailedSubmission(BuildContext context) {
+    setState(() => _isLoading = false);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Failed to submit review')),
+    );
+  }
+
+  void _handleSubmissionError(BuildContext context, Object error) {
+    setState(() => _isLoading = false);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${error.toString()}')),
     );
   }
 

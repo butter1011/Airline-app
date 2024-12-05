@@ -104,7 +104,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           .setAirlineScoreData(futures[2]['data']['data']);
     }
     if (futures[3]['success']) {
-      print("=============================${futures[3]['data']['data']}");
       ref
           .read(airlineAirportProvider.notifier)
           .setAirportScoreData(futures[3]['data']['data']);

@@ -96,12 +96,7 @@ class _CardChartState extends ConsumerState<CardChart> {
 
     if (userInformationData.statusCode == 200) {
       final responseChangeData = jsonDecode(userInformationData.body);
-
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
-
-      // Navigator.pushNamed(context, AppRoutes().profilescreen);
-
-      // You might want to store the user ID or navigate to a new screen
     } else {
       // Handle authentication error
       print('Changing the userProfile failed: ${userInformationData.body}');

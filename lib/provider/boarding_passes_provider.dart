@@ -13,13 +13,8 @@ class BoardingPassesNotifier extends StateNotifier<List<BoardingPass>> {
     state = boardingPasses;
   }
 
-  // void addBoardingPass(BoardingPass pass) {
-  //   state = [...state, pass];
-  // }
-
   BoardingPass markFlightAsReviewed(int index) {
     final updatedPass = state[index].copyWith(isFlightReviewed: true);
-    print("🏅🏅🏅Updated pass: ${updatedPass.toJson()}");
     state = [
       ...state.sublist(0, index),
       updatedPass,

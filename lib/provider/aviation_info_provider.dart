@@ -10,7 +10,7 @@ class AviationInfoState {
   final List<dynamic> dateRange;
   final int? index; // Add this field
   final bool? isDeparture;
-  AviationInfoState( {
+  AviationInfoState({
     this.from = '',
     this.to = '',
     this.airline = '',
@@ -101,6 +101,7 @@ class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
   void updateIndex(int value) {
     state = state.copyWith(index: value);
   }
+
   void updateIsDeparture(bool value) {
     state = state.copyWith(isDeparture: value);
   }

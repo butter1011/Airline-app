@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -27,6 +29,26 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirline.notifier)
         .selectedNumberOfSubcategoryForDislike(singleIndex);
 
+    final airlinData = ref.watch(aviationInfoProvider);
+    final from = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.from);
+
+    final to = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.to);
+
+    final airline = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlinData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlinData.airline);
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlinData.airline);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -34,6 +56,12 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeader(
           subTitle: "What could be improved?",
+          backgorundImage: backgroundImage,
+          logoImage: logoImage,
+          classes: selectedClassOfTravel,
+          airlineName: airline,
+          from: from,
+          to: to,
         ), // Assuming this method exists
       ),
       body: Padding(

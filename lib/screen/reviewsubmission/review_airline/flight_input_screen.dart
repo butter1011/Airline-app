@@ -18,27 +18,7 @@ class FlightInputScreen extends ConsumerStatefulWidget {
 }
 
 class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
-  // final _getAirlineData = GetAirlineAirportController();
-  // List<dynamic> airlineData = [];
-  // List<dynamic> airportData = [];
   bool isLoading = true;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getAirlineData.getAirlineAirport().then((value) {
-  //     print('🚝 $value');
-  //     setState(() {
-  //       airlineData = (value["data"]["data"] as List)
-  //           .where((element) => element['isAirline'] == true)
-  //           .toList();
-  //       airportData = (value["data"]["data"] as List)
-  //           .where((element) => element['isAirline'] == false)
-  //           .toList();
-  //     });
-  //     isLoading = false;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +52,9 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                   CustomDropdownButton(
                     labelText: "From",
                     hintText: "departure Airport",
-                    onChanged: (value) => ref
-                        .read(aviationInfoProvider.notifier)
-                        .updateFrom(value),
+                    onChanged: (value) => {
+                      ref.read(aviationInfoProvider.notifier).updateFrom(value),
+                    },
                     airlineNames: airportData,
                   ),
                   const SizedBox(height: 18),
@@ -280,7 +260,6 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: InkWell(
             onTap: () {
-              // print("🥈$isValid");
               if (isValid) {
                 Navigator.pushNamed(
                     context, AppRoutes.questionfirstscreenforairline);

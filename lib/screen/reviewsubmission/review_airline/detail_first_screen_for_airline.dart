@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
@@ -12,8 +14,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(reviewFeedBackProviderForAirline);
-
-    // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
     List<String> mainCategoryNames = [];
@@ -30,13 +30,39 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirline.notifier)
         .selectedNumberOfSubcategoryForLike(singleIndex);
 
+    final airlinData = ref.watch(aviationInfoProvider);
+    final from = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.from);
+
+    final to = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.to);
+
+    final airline = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlinData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlinData.airline);
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlinData.airline);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeader(
+          backgorundImage: backgroundImage,
           subTitle: "Tell us what you liked about your journey.",
+          logoImage: logoImage,
+          classes: selectedClassOfTravel,
+          airlineName: airline,
+          from: from,
+          to: to,
         ), // Assuming this method exists
       ),
       body: Padding(
@@ -48,9 +74,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
             children: [
               _buildBackButton(context),
               SizedBox(height: 10),
-              _buildHeaderContainer(context, singleAspect, selectedItemNumter
-                  // selections.where((s) => s).length,
-                  ),
+              _buildHeaderContainer(context, singleAspect, selectedItemNumter),
               SizedBox(height: 16),
               _buildFeedbackOptions(
                   ref, singleIndex, subCategoryList, selections),
@@ -117,8 +141,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(
       WidgetRef ref, int singleIndex, subCategoryList, selections) {
-    // List isSelectedList = ref.watch(reviewFeedBackProviderForAirline);
-
     return Wrap(
       spacing: 16,
       runSpacing: 16,

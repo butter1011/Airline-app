@@ -1,4 +1,5 @@
-
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
 
@@ -29,15 +30,31 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirport.notifier)
         .selectedNumberOfSubcategoryForDislike(singleIndex);
 
+    final airlinData = ref.watch(aviationInfoProvider);
+
+    final airportname = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.airport);
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportLogoImage(airlinData.airport);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportBackgroundImage(airlinData.airport);
+
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(
-          subTitle: "What could be improved?",
-        ), // Assuming this method exists
-      ),
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          flexibleSpace: BuildQuestionHeader(
+            airportName: airportname,
+            subTitle: "What could be improved?",
+            logoImage: logoImage,
+            backgroundImage: backgroundImage,
+            selecetedOfCalssLevel: selectedClassOfTravel,
+          )),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 24,

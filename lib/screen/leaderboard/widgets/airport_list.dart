@@ -1,5 +1,3 @@
-// airport_list
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +57,6 @@ class AirportList extends StatelessWidget {
                   const SizedBox(
                     width: 8,
                   ),
-                  // Spacer(), // This will take up all available space between the elements
-                  // SizedBox(width: 300), // This adds a fixed width of 300 pixels
 
                   const SizedBox(
                     width: 8,

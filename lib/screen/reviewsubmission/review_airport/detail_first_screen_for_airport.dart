@@ -1,5 +1,8 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
+
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +14,6 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(reviewFeedBackProviderForAirport);
-
-    // print("😍😍😍=======> $selections");
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
     List<String> mainCategoryNames = [];
@@ -25,21 +26,40 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
 
-    final selectedItemNumter = ref
+    final selectedNumberOfSubcategoryForDislike = ref
         .watch(reviewFeedBackProviderForAirport.notifier)
-        .selectedNumberOfSubcategoryForLike(singleIndex);
+        .selectedNumberOfSubcategoryForDislike(singleIndex);
 
+    final airlinData = ref.watch(aviationInfoProvider);
+
+    final airportname = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.airport);
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportLogoImage(airlinData.airport);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportBackgroundImage(airlinData.airport);
+
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final dateRanged = airlinData.dateRange;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(
-          subTitle: "Tell us what you liked about your journey.",
-        ), // Assuming this method exists
-      ),
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          flexibleSpace: BuildQuestionHeader(
+            airportName: airportname,
+            subTitle: "Tell us what you liked about your journey.",
+            logoImage: logoImage,
+            backgroundImage: backgroundImage,
+            selecetedOfCalssLevel: selectedClassOfTravel,
+          )),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+        ),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -47,7 +67,8 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
             children: [
               _buildBackButton(context),
               SizedBox(height: 10),
-              _buildHeaderContainer(context, singleAspect, selectedItemNumter
+              _buildHeaderContainer(
+                  context, singleAspect, selectedNumberOfSubcategoryForDislike
                   // selections.where((s) => s).length,
                   ),
               SizedBox(height: 16),
@@ -65,8 +86,8 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeaderContainer(
-      BuildContext context, String singleAspect, int selectedItemNumter) {
+  Widget _buildHeaderContainer(BuildContext context, String singleAspect,
+      int selectedNumberOfSubcategoryForDislike) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       height: MediaQuery.of(context).size.height * 0.08,
@@ -102,7 +123,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
               decoration: AppStyles.badgeDecoration,
               child: Center(
                 child: Text(
-                  selectedItemNumter.toString(),
+                  selectedNumberOfSubcategoryForDislike.toString(),
                   style: AppStyles.textStyle_13_600,
                   textAlign: TextAlign.center,
                 ),
@@ -116,6 +137,8 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
 
   Widget _buildFeedbackOptions(
       WidgetRef ref, int singleIndex, subCategoryList, selections) {
+    // List isSelectedList = ref.watch(reviewFeedBackProviderForAirline);
+
     return Wrap(
       spacing: 16,
       runSpacing: 16,
@@ -125,23 +148,24 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         List itemValues = items.values.toList();
         String key = itemkeys[index];
         dynamic value = itemValues[index];
+
         return GestureDetector(
           onTap: () {
-            value == false
-                ? print("Value is false, no action performed.")
+            value == true
+                ? print("Value is true, no action performed.")
                 : ref
                     .read(reviewFeedBackProviderForAirport.notifier)
                     .selectLike(singleIndex, key);
           },
           child: Opacity(
-            opacity: value == false ? 0.5 : 1,
+            opacity: value == true ? 0.5 : 1,
             child: IntrinsicWidth(
               child: Container(
                 height: 40,
                 decoration: AppStyles.cardDecoration.copyWith(
                   borderRadius: BorderRadius.circular(16),
                   color:
-                      items[key] == true ? AppStyles.mainColor : Colors.white,
+                      items[key] == false ? AppStyles.mainColor : Colors.white,
                 ),
                 child: Center(
                   child: Padding(

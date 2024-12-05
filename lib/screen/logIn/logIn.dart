@@ -48,7 +48,6 @@ class _LoginState extends ConsumerState<Login> {
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
-        print('🧵🧵🧵${ref.watch(userDataProvider)}');
       }
       await _fetchDataAndNavigate();
     } else {
@@ -71,7 +70,9 @@ class _LoginState extends ConsumerState<Login> {
     final reviewsController = GetReviewsAirlineController();
     final reviewsResult = await reviewsController.getReviews();
     if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setReviewData(reviewsResult['data']);
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(reviewsResult['data']);
     }
 
     Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
@@ -119,6 +120,7 @@ class _LoginState extends ConsumerState<Login> {
           }),
         );
       } else {
+        print('🧵🧵🧵${userData.identityValue}');
         response = await http.post(
           Uri.parse('$apiUrl/api/v1/user'),
           headers: <String, String>{
@@ -164,7 +166,6 @@ class _LoginState extends ConsumerState<Login> {
         }
       } else {
         Navigator.pop(context); // Remove loading dialog
-        print('Authentication failed: ${response.body}');
       }
     } else {
       _showErrorSnackBar('Login failed. Please try again.');

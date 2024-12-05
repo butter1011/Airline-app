@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
@@ -17,7 +19,26 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
     final int numberOfSelectedAspects = ref
         .watch(reviewFeedBackProviderForAirline.notifier)
         .numberOfSelectedAspects();
-    // print("❤$numberOfSelectedAspects");
+    final airlinData = ref.watch(aviationInfoProvider);
+    final from = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.from);
+
+    final to = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.to);
+
+    final airline = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlinData.airline);
+
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlinData.airline);
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlinData.airline);
 
     return WillPopScope(
       onWillPop: () async {
@@ -29,7 +50,13 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeader(
+            backgorundImage: backgroundImage,
             subTitle: "What could be improved?",
+            logoImage: logoImage,
+            classes: selectedClassOfTravel,
+            airlineName: airline,
+            from: from,
+            to: to,
           ),
         ),
         body: SafeArea(
@@ -61,7 +88,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select up to 4 positive aspects',
+              'Select up to 4 negative aspects',
               style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),

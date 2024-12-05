@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 class BoardingPassController {
   Future<bool> saveBoardingPass(BoardingPass boardingPass) async {
     try {
-      print("👀👀👀👀👀👀");
       final response = await http.post(
         Uri.parse('$apiUrl/api/v1/boarding-pass'),
         headers: <String, String>{
@@ -51,7 +50,6 @@ class BoardingPassController {
 
   Future<bool> updateBoardingPass(BoardingPass boardingPass) async {
     try {
-      print("👀👀👀👀👀👀${boardingPass.toJson()}");
       final response = await http.post(
         Uri.parse('$apiUrl/api/v1/boarding-pass/update'),
         headers: <String, String>{

@@ -1,7 +1,5 @@
 import 'package:airline_app/screen/profile/utils/about_app.dart';
-
 import 'package:airline_app/utils/app_styles.dart';
-
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 

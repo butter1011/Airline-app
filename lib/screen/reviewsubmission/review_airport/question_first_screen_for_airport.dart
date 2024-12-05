@@ -1,3 +1,5 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -16,7 +18,20 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
     final int numberOfSelectedAspects = ref
         .watch(reviewFeedBackProviderForAirport.notifier)
         .numberOfSelectedAspects();
-    // print("❤$numberOfSelectedAspects");
+
+    final airlinData = ref.watch(aviationInfoProvider);
+
+    final airportname = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlinData.airport);
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportLogoImage(airlinData.airport);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportBackgroundImage(airlinData.airport);
+
+    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
 
     return WillPopScope(
       onWillPop: () async {
@@ -28,7 +43,11 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeader(
+            airportName: airportname,
             subTitle: "Tell us what you liked about your journey.",
+            logoImage: logoImage,
+            backgroundImage: backgroundImage,
+            selecetedOfCalssLevel: selectedClassOfTravel,
           ),
         ),
         body: SafeArea(
@@ -131,19 +150,28 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
 }
 
 class BuildQuestionHeader extends StatelessWidget {
-  const BuildQuestionHeader({super.key, required this.subTitle});
+  const BuildQuestionHeader({
+    super.key,
+    required this.subTitle,
+    required this.airportName,
+    required this.logoImage,
+    required this.backgroundImage,
+    required this.selecetedOfCalssLevel,
+  });
   final String subTitle;
+  final String airportName;
+  final String logoImage;
+  final String backgroundImage;
+  final String selecetedOfCalssLevel;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Japan.png"),
-              fit: BoxFit.cover,
-            ),
+        Positioned.fill(
+          child: Image.network(
+            backgroundImage,
+            fit: BoxFit.cover,
           ),
         ),
         Container(
@@ -156,19 +184,27 @@ class BuildQuestionHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/vector_japan.png"),
-                  SizedBox(width: 8),
-                  Column(
+                  Container(
+                    height: 40,
+                    decoration: AppStyles.circleDecoration,
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(logoImage),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'JAPAN     ',
+                        airportName,
                         style: AppStyles.oswaldTextStyle,
                       ),
                       Text(
-                        ' AIRPORT',
+                        ' Airport',
                         style: AppStyles.oswaldTextStyle,
                       )
                     ],
@@ -190,15 +226,11 @@ class BuildQuestionHeader extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Japan Airways, 18/10/24, Premium Economy',
+                '$airportName Airways, $selecetedOfCalssLevel',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(
                 height: 4,
-              ),
-              Text(
-                'Tokyo > Bucharest',
-                style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               Spacer(), // This will push the following container to the bottom
               Container(

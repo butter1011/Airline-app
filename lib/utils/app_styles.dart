@@ -107,7 +107,7 @@ class AppStyles {
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
       color: Colors.white,
-      fontSize: 15,
+      fontSize: 18,
     ),
   );
 
