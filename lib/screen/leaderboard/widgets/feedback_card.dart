@@ -26,7 +26,6 @@ class FeedbackCard extends ConsumerStatefulWidget {
 }
 
 class _FeedbackCardState extends ConsumerState<FeedbackCard> {
-  int? selectedEmojiIndex;
   final CarouselSliderController buttonCarouselController =
       CarouselSliderController();
 
@@ -43,8 +42,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    selectedEmojiIndex =
-        widget.singleFeedback['rating']?["6747afbef453f821c279c7df"] ?? 0;
+    int? selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
 
     final List<String> images = List<String>.from([
       'assets/images/review_abudhabi_1.png',
@@ -200,7 +198,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               IconButton(
                 onPressed: () async {
-                  // await BottomSheetHelper.showScoreBottomSheet(context);
+                  await BottomSheetHelper.showScoreBottomSheet(context);
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),
@@ -216,6 +214,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       if (index != null) {
                         setState(() {
                           selectedEmojiIndex = index + 1;
+                          print('🎨🎨$selectedEmojiIndex');
                         });
 
                         try {

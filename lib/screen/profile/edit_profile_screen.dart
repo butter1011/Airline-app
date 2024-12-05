@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -459,7 +460,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       if (userInformationResponse.statusCode == 200) {
         final responseData = jsonDecode(userInformationResponse.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
+        final prefs = await SharedPreferences.getInstance();
 
+        await prefs.setString('userData', json.encode(responseData));
         setState(() {
           isLoading = false; // Hide loading indicator
         });
