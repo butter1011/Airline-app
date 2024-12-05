@@ -36,7 +36,6 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
         .watch(airlineAirportProvider.notifier)
         .getAirlineLogoImage(airlinData.airline);
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineBackgroundImage(airlinData.airline);
