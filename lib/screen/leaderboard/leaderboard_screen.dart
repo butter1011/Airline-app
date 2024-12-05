@@ -93,7 +93,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     ]);
 
     if (futures[0]['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setReviewData(futures[0]['data']);
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(futures[0]['data']);
     }
     if (futures[1]['success']) {
       ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
@@ -124,6 +126,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             ref
                 .read(airlineAirportProvider.notifier)
                 .setData(Map<String, dynamic>.from(data));
+            // Add setState to trigger UI refresh
+            ref
+                .read(airlineAirportProvider.notifier)
+                .getFilteredList(filterType, _searchQuery, null);
+            
+            setState(() {});
           }
         },
         onError: (_) {},
@@ -164,9 +172,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> leaderBoardList =
-        ref.watch(airlineAirportProvider).filteredList;
-
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
 
@@ -324,7 +329,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                   ),
                                 ),
                                 _AirportListSection(
-                                  leaderBoardList: leaderBoardList,
+                                  leaderBoardList: ref
+                                      .watch(airlineAirportProvider)
+                                      .filteredList,
                                   expandedItems: expandedItems,
                                   onExpand: () {
                                     setState(() {
