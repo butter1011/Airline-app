@@ -49,11 +49,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['id'] ?? ''));
-    final List<String> images = List<String>.from([
-      'assets/images/review_abudhabi_1.png',
-      'assets/images/review_ethiopian_2.png',
-      'assets/images/review_turkish_1.png'
-    ]); // Ensure it's a List<String>
+    final List<String> images = widget.singleFeedback['images'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -67,7 +63,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                 decoration: AppStyles.circleDecoration,
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/images/avatar_1.png'),
+                  backgroundImage: (widget.singleFeedback['reviewer']
+                                  ['profilePhoto'] !=
+                              '' &&
+                          widget.singleFeedback['reviewer']['profilePhoto'] !=
+                              null)
+                      ? NetworkImage(
+                          '${widget.singleFeedback['reviewer']['profilePhoto']}')
+                      : const AssetImage("assets/images/avatar_1.png")
+                          as ImageProvider,
                 ),
               ),
               SizedBox(width: 8),
@@ -126,72 +130,116 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ],
                 ),
           SizedBox(height: 11),
-          Stack(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                      arguments: {
-                        'Images': images,
-                        'Name': widget.singleFeedback['reviewer']['name'],
-                        'Avatar': 'assets/images/avatar_6.png',
-                        'Date':
-                            'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                        'Usedairport': widget.singleFeedback['airline']['name'],
-                        'Content': widget.singleFeedback['comment'] != null &&
-                                widget.singleFeedback['comment'] != ''
-                            ? widget.singleFeedback['comment']
-                            : '',
-                      });
-                },
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    height: 189,
-                    enableInfiniteScroll: false,
-                    scrollPhysics: NeverScrollableScrollPhysics(),
-                  ),
-                  carouselController: buttonCarouselController,
-                  items: images.map((singleImage) {
-                    return Builder(builder: (BuildContext context) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Container(
-                          height: 189,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('$singleImage'),
-                              fit: BoxFit.cover,
+          if (images.isNotEmpty)
+            Stack(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                        arguments: {
+                          'Images': images,
+                          'Name': widget.singleFeedback['reviewer']['name'],
+                          'Avatar': widget.singleFeedback['reviewer']
+                              ['profilePhoto'],
+                          'Date':
+                              'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                          'Usedairport': widget.singleFeedback['airline']
+                              ['name'],
+                          'Content': widget.singleFeedback['comment'] != null &&
+                                  widget.singleFeedback['comment'] != ''
+                              ? widget.singleFeedback['comment']
+                              : '',
+                          'rating': ((widget.singleFeedback["rating"]
+                                      as Map<String, dynamic>?) ??
+                                  {})
+                              .length
+                              .toString(),
+                        });
+                  },
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      height: 189,
+                      enableInfiniteScroll: false,
+                      scrollPhysics: NeverScrollableScrollPhysics(),
+                    ),
+                    carouselController: buttonCarouselController,
+                    items: images.map((singleImage) {
+                      return Builder(builder: (BuildContext context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                            height: 189,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('$singleImage'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      });
+                    }).toList(),
+                  ),
+                ),
+                Positioned(
+                  top: 79,
+                  right: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const NextButton(),
+                  ),
+                ),
+                Positioned(
+                  top: 79,
+                  left: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const PreviousButton(),
+                  ),
+                ),
+              ],
+            )
+          else
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                    arguments: {
+                      'Images': ['assets/images/default.png'],
+                      'Name': widget.singleFeedback['reviewer']['name'],
+                      'Avatar': widget.singleFeedback['reviewer']
+                          ['profilePhoto'],
+                      'Date':
+                          'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                      'Usedairport': widget.singleFeedback['airline']['name'],
+                      'Content': widget.singleFeedback['comment'] != null &&
+                              widget.singleFeedback['comment'] != ''
+                          ? widget.singleFeedback['comment']
+                          : '',
+                      'rating': ((widget.singleFeedback["rating"]
+                                  as Map<String, dynamic>?) ??
+                              {})
+                          .length
+                          .toString(),
                     });
-                  }).toList(),
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Container(
+                  height: 189,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/default.png"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-              Positioned(
-                top: 79,
-                right: 16,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const NextButton(),
-                ),
-              ),
-              Positioned(
-                top: 79,
-                left: 16,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const PreviousButton(),
-                ),
-              ),
-            ],
-          ),
+            ),
           const SizedBox(height: 11),
           if (widget.singleFeedback['comment'] != null &&
               widget.singleFeedback['comment'] != '')

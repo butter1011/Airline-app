@@ -58,7 +58,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     setState(() {
       isLoading = true;
     });
-    print("initPrefs called🧨");
 
     final reviewAirlineController = AirlineReviewController();
     final airlineResult = await reviewAirlineController.getAirlineReviews();

@@ -17,6 +17,8 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:airline_app/utils/global_variable.dart';
 
 class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
   const QuestionThirdScreenForAirport({super.key});
@@ -39,9 +41,38 @@ class _QuestionThirdScreenForAirportState
   bool _isLoading = false;
   bool isSuccess = false;
 
+  Future<void> _uploadImages(String reviewId) async {
+    final url = Uri.parse('$apiUrl/api/v1/airport-review/upload-images');
+
+    for (var image in _image) {
+      try {
+        final request = http.MultipartRequest('POST', url);
+        final filename = image.path.split('/').last;
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'files',
+            image.path,
+            filename: filename,
+          ),
+        );
+
+        request.fields['id'] = reviewId;
+
+        final response = await request.send();
+        if (response.statusCode != 200) {
+          throw Exception('Failed to upload image');
+        }
+      } catch (e) {
+        print('Error uploading image: $e');
+        continue;
+      }
+    }
+  }
+
   Future<void> _pickImage() async {
     if (_isPickingImage) return;
-    
+
     setState(() {
       _isPickingImage = true;
     });
@@ -158,7 +189,8 @@ class _QuestionThirdScreenForAirportState
                               setState(() => _isLoading = true);
                               try {
                                 final review = AirportReviewModel(
-                                  reviewer: ref.watch(userDataProvider)?['userData']
+                                  reviewer:
+                                      ref.watch(userDataProvider)?['userData']
                                           ['_id'],
                                   airline: airline,
                                   airport: airport,
@@ -174,8 +206,15 @@ class _QuestionThirdScreenForAirportState
 
                                 final result = await _reviewController
                                     .saveAirportReview(review);
-                                print("$result");
-                                if (result) {
+
+                                if (_image.isNotEmpty &&
+                                    result['data']?['data']?['_id'] != null) {
+                                  print("uploading the image...");
+                                  await _uploadImages(
+                                      result['data']['data']['_id']);
+                                }
+
+                                if (result != null) {
                                   if (index != null && isDeparture != null) {
                                     final updatedBoardingPass = ref
                                         .read(boardingPassesProvider.notifier)
@@ -197,10 +236,8 @@ class _QuestionThirdScreenForAirportState
                                   setState(() => _isLoading = false);
 
                                   if (!mounted) return;
-                                  // ignore: use_build_context_synchronously
                                   Navigator.pushNamed(
                                       context, AppRoutes.leaderboardscreen);
-                                  // ignore: use_build_context_synchronously
                                   await showReviewSuccessBottomSheet(context,
                                       () {
                                     setState(() => isSuccess = true);
@@ -208,7 +245,6 @@ class _QuestionThirdScreenForAirportState
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;
-                                  // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content:
@@ -218,7 +254,6 @@ class _QuestionThirdScreenForAirportState
                               } catch (e) {
                                 setState(() => _isLoading = false);
                                 if (!mounted) return;
-                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text('Error: ${e.toString()}')),
