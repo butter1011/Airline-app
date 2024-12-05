@@ -4,6 +4,7 @@ import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -26,6 +27,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   late bool selectedAirport = false;
   late bool selectedCleanliness = false;
   late bool selectedOnboard = false;
+  bool isLoading = false;
   String filterType = 'All';
   Map<String, bool> buttonStates = {
     "All": true,
@@ -53,6 +55,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   }
 
   Future<void> _initPrefs() async {
+    setState(() {
+      isLoading = true;
+    });
+    print("initPrefs called🧨");
+
     final reviewAirlineController = AirlineReviewController();
     final airlineResult = await reviewAirlineController.getAirlineReviews();
     if (airlineResult['success']) {
@@ -85,6 +92,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     ref
         .read(reviewsAirlineProvider.notifier)
         .getFilteredReviews("All", null, null);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -222,82 +232,90 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             const SizedBox(height: 14),
             Container(height: 4, color: AppStyles.littleBlackColor),
             Expanded(
-                child: SingleChildScrollView(
-                    child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Column(
-                        children: reviewList.isEmpty
-                            ? [
-                                Text(
-                                  "No reviews available",
-                                  style: AppStyles.textStyle_14_600,
-                                )
-                              ]
-                            : reviewList.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                final singleReview = entry.value;
-                                if (singleReview != null) {
-                                  final reviewer = singleReview['reviewer'];
-                                  final airline = singleReview['airline'];
-                                  final from = singleReview['from'];
-                                  final to = singleReview['to'];
+                child: isLoading
+                    ? const LoadingWidget()
+                    : SingleChildScrollView(
+                        child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                Column(
+                                  children: reviewList.isEmpty
+                                      ? [
+                                          Text(
+                                            "No reviews available",
+                                            style: AppStyles.textStyle_14_600,
+                                          )
+                                        ]
+                                      : reviewList.asMap().entries.map((entry) {
+                                          final index = entry.key;
+                                          final singleReview = entry.value;
+                                          if (singleReview != null) {
+                                            final reviewer =
+                                                singleReview['reviewer'];
+                                            final airline =
+                                                singleReview['airline'];
+                                            final from = singleReview['from'];
+                                            final to = singleReview['to'];
 
-                                  if (reviewer != null &&
-                                      airline != null &&
-                                      from != null &&
-                                      to != null) {
-                                    return Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 24.0),
-                                          child: FeedbackCard(
-                                            singleFeedback: singleReview,
-                                          ),
-                                        ),
-                                        if (index != reviewList.length - 1)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 24.0),
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 9,
-                                                ),
-                                                Divider(
-                                                  thickness: 2,
-                                                  color: Colors.black,
-                                                ),
-                                                SizedBox(
-                                                  height: 24,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                      ],
-                                    );
-                                  }
-                                }
-                                return const SizedBox.shrink();
-                              }).toList(),
-                      ),
-                      SizedBox(
-                        height: 18,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )))
+                                            if (reviewer != null &&
+                                                airline != null &&
+                                                from != null &&
+                                                to != null) {
+                                              return Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 24.0),
+                                                    child: FeedbackCard(
+                                                      singleFeedback:
+                                                          singleReview,
+                                                    ),
+                                                  ),
+                                                  if (index !=
+                                                      reviewList.length - 1)
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 24.0),
+                                                      child: Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 9,
+                                                          ),
+                                                          Divider(
+                                                            thickness: 2,
+                                                            color: Colors.black,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 24,
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                ],
+                                              );
+                                            }
+                                          }
+                                          return const SizedBox.shrink();
+                                        }).toList(),
+                                ),
+                                SizedBox(
+                                  height: 18,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )))
           ],
         ),
       ),

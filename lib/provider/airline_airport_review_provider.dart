@@ -42,9 +42,20 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
 
   void setReviewData(Map<String, dynamic> value) {
     final newData = value["data"] as List;
-    state = state.copyWith(
-      reviews: [...state.reviews, ...newData.cast<Map<String, dynamic>>()],
-    );
+    final newItems = newData
+        .where((newItem) {
+          if (newItem is! Map<String, dynamic>) return false;
+          return !state.reviews
+              .any((existingItem) => existingItem['_id'] == newItem['_id']);
+        })
+        .cast<Map<String, dynamic>>()
+        .toList();
+
+    if (newItems.isNotEmpty) {
+      state = state.copyWith(
+        reviews: [...state.reviews, ...newItems],
+      );
+    }
   }
 
   void setAirlineScoreData(List<dynamic> value) {
@@ -272,6 +283,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
     }
+
     if (flyerClass != null && flyerClass != 'All') {
       final sortKey = flyerClass == "Business"
           ? 'businessClass'
@@ -297,6 +309,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         }
       }
     }
+
     state = state.copyWith(
       filteredReviews: filteredReviews,
       sortedListCache: {...state.sortedListCache, cacheKey: filteredReviews},

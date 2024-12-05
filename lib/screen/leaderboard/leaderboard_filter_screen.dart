@@ -8,10 +8,12 @@ class LeaderboardFilterScreen extends ConsumerStatefulWidget {
   const LeaderboardFilterScreen({super.key});
 
   @override
-  ConsumerState<LeaderboardFilterScreen> createState() => _LeaderboardFilterScreenState();
+  ConsumerState<LeaderboardFilterScreen> createState() =>
+      _LeaderboardFilterScreenState();
 }
 
-class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScreen> {
+class _LeaderboardFilterScreenState
+    extends ConsumerState<LeaderboardFilterScreen> {
   // Declare continents and selectedStates as instance variables
   final List<String> airType = [
     "All",
@@ -107,8 +109,7 @@ class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScree
             selectedStates[i] = false;
           }
         }
-      }    
-     
+      }
 
       selectedContinents = [];
       for (int i = 0; i < selectedContinentStates.length; i++) {
@@ -126,6 +127,7 @@ class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScree
               : selectedContinents,
         );
   }
+
   void _toggleOnlyOneFilter(int index, List selectedStates) {
     setState(() {
       // Set all states to false first
@@ -153,6 +155,7 @@ class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScree
               : selectedContinents,
         );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -265,8 +268,8 @@ class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScree
                             text: AppLocalizations.of(context)
                                 .translate(airType[index]),
                             isSelected: selectedairTypeStates[index],
-                            onTap: () =>
-                                _toggleOnlyOneFilter(index, selectedairTypeStates),
+                            onTap: () => _toggleOnlyOneFilter(
+                                index, selectedairTypeStates),
                           )),
                 ),
               ],
@@ -308,8 +311,8 @@ class _LeaderboardFilterScreenState extends ConsumerState<LeaderboardFilterScree
                           text: AppLocalizations.of(context)
                               .translate('${flyerClass[index]}'),
                           isSelected: selectedFlyerClassStates[index],
-                          onTap: () =>
-                              _toggleOnlyOneFilter(index, selectedFlyerClassStates),
+                          onTap: () => _toggleOnlyOneFilter(
+                              index, selectedFlyerClassStates),
                         )),
               ),
             ],
@@ -440,4 +443,3 @@ class FilterButton extends StatelessWidget {
         ));
   }
 }
-

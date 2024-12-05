@@ -70,7 +70,9 @@ class _LoginState extends ConsumerState<Login> {
     final reviewsController = GetReviewsAirlineController();
     final reviewsResult = await reviewsController.getReviews();
     if (reviewsResult['success']) {
-      ref.read(reviewsAirlineProvider.notifier).setReviewData(reviewsResult['data']);
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(reviewsResult['data']);
     }
 
     Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
@@ -118,6 +120,7 @@ class _LoginState extends ConsumerState<Login> {
           }),
         );
       } else {
+        print('🧵🧵🧵${userData.identityValue}');
         response = await http.post(
           Uri.parse('$apiUrl/api/v1/user'),
           headers: <String, String>{

@@ -16,6 +16,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
+final selectedEmojiProvider =
+    StateProvider.family<int, String>((ref, feedbackId) => 0);
+
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
   final Map<String, dynamic> singleFeedback;
@@ -42,9 +45,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    selectedEmojiIndex =
-        widget.singleFeedback['rating']?["6747afbef453f821c279c7df"] ?? 0;
-
+    // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
+    final selectedEmojiIndex =
+        ref.watch(selectedEmojiProvider(widget.singleFeedback['id'] ?? ''));
     final List<String> images = List<String>.from([
       'assets/images/review_abudhabi_1.png',
       'assets/images/review_ethiopian_2.png',
@@ -199,7 +202,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               IconButton(
                 onPressed: () async {
-                  // await BottomSheetHelper.showScoreBottomSheet(context);
+                  await BottomSheetHelper.showScoreBottomSheet(context);
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),
@@ -214,7 +217,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                       if (index != null) {
                         setState(() {
-                          selectedEmojiIndex = index + 1;
+                          ref
+                              .read(selectedEmojiProvider(
+                                      widget.singleFeedback['id'] ?? '')
+                                  .notifier)
+                              .state = index + 1;
+                          print('🎨🎨$selectedEmojiIndex');
                         });
 
                         try {
@@ -234,6 +242,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           );
 
                           if (response.statusCode == 200) {
+                            print('🎎🎎${response.body}');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)
@@ -264,8 +273,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                      (widget.singleFeedback["rating"] ?? []).length.toString(),
-                      style: AppStyles.textStyle_14_600),
+                    ((widget.singleFeedback["rating"]
+                                as Map<String, dynamic>?) ??
+                            {})
+                        .length
+                        .toString(),
+                    style: AppStyles.textStyle_14_600,
+                  ),
                 ],
               ),
             ],

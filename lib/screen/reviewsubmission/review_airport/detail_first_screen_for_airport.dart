@@ -155,7 +155,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
                 ? print("Value is true, no action performed.")
                 : ref
                     .read(reviewFeedBackProviderForAirport.notifier)
-                    .selectDislike(singleIndex, key);
+                    .selectLike(singleIndex, key);
           },
           child: Opacity(
             opacity: value == true ? 0.5 : 1,
