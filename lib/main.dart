@@ -94,8 +94,8 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
         pageTransitionsTheme: PageTransitionsTheme(
           builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: CustomPageTransitionBuilder(),
+            TargetPlatform.iOS: CustomPageTransitionBuilder(),
           },
         ),
       ),
@@ -151,6 +151,28 @@ class MyApp extends ConsumerWidget {
         AppRoutes.calendersyncscreen: (context) => CalenderSyncScreen(),
       },
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class CustomPageTransitionBuilder extends PageTransitionsBuilder {
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOut,
+      )),
+      child: child,
     );
   }
 }
