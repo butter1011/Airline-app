@@ -19,6 +19,8 @@ import 'package:airline_app/provider/user_data_provider.dart';
 
 final selectedEmojiProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
+final selectedEmojiNumberProvider =
+    StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
@@ -40,6 +42,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
+    print('🛩🏅⭕🏅⭕${widget.singleFeedback['images']}');
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -48,7 +51,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
     // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
     final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(widget.singleFeedback['id'] ?? ''));
+        ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<String> images = widget.singleFeedback['images'] ?? [];
 
     return SizedBox(
@@ -265,13 +268,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           await EmojiBox.showCustomDialog(context, button);
 
                       if (index != null) {
+                        print('📞👀${widget.singleFeedback['_id']}');
                         setState(() {
                           ref
                               .read(selectedEmojiProvider(
-                                      widget.singleFeedback['id'] ?? '')
+                                      widget.singleFeedback['_id'] ?? '')
                                   .notifier)
                               .state = index + 1;
-                          print('🎨🎨$selectedEmojiIndex');
+                          print(
+                              '🎨🎨${ref.read(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state = index + 1}');
                         });
 
                         try {
@@ -284,20 +289,34 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               'Accept': 'application/json',
                             },
                             body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['id'],
+                              'feedbackId': widget.singleFeedback['_id'],
                               'user_id': userId,
-                              'reactionType': selectedEmojiIndex,
+                              'reactionType': ref
+                                  .watch(selectedEmojiProvider(
+                                          widget.singleFeedback['_id'] ?? '')
+                                      .notifier)
+                                  .state,
                             }),
                           );
 
                           if (response.statusCode == 200) {
-                            print('🎎🎎${response.body}');
+                            print('💖🥉❤✔💎');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)
                                   .updateReview(
                                       jsonDecode(response.body)['data']);
+                              ref
+                                  .read(selectedEmojiNumberProvider(
+                                          widget.singleFeedback['_id'] ?? '')
+                                      .notifier)
+                                  .state = jsonDecode(response.body)['data']
+                                      ['rating']
+                                  .length;
                             });
+
+                            print(
+                                '${jsonDecode(response.body)['data']['rating'].length}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -314,7 +333,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     },
                     icon: selectedEmojiIndex != 0
                         ? SvgPicture.asset(
-                            'assets/icons/emoji_$selectedEmojiIndex.svg',
+                            'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
                             width: 24,
                             height: 24,
                           )
@@ -322,11 +341,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    ((widget.singleFeedback["rating"]
-                                as Map<String, dynamic>?) ??
-                            {})
-                        .length
-                        .toString(),
+                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
                     style: AppStyles.textStyle_14_600,
                   ),
                 ],
