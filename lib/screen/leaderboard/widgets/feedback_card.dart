@@ -6,6 +6,7 @@ import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -340,10 +341,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  Text(
-                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
-                    style: AppStyles.textStyle_14_600,
-                  ),
+                  AnimatedFlipCounter(
+                      value: ref
+                          .watch(selectedEmojiNumberProvider(
+                                  widget.singleFeedback['_id'] ?? '')
+                              .notifier)
+                          .state
+                      // '${}',
+                      // style: AppStyles.textStyle_14_600,
+                      ),
                 ],
               ),
             ],
