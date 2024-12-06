@@ -42,7 +42,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('🛩🏅⭕🏅⭕${widget.singleFeedback['images']}');
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -268,15 +267,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           await EmojiBox.showCustomDialog(context, button);
 
                       if (index != null) {
-                        print('📞👀${widget.singleFeedback['_id']}');
                         setState(() {
                           ref
                               .read(selectedEmojiProvider(
                                       widget.singleFeedback['_id'] ?? '')
                                   .notifier)
                               .state = index + 1;
-                          print(
-                              '🎨🎨${ref.read(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state = index + 1}');
                         });
 
                         try {
@@ -300,7 +296,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           );
 
                           if (response.statusCode == 200) {
-                            print('💖🥉❤✔💎');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)
@@ -314,9 +309,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                       ['rating']
                                   .length;
                             });
-
-                            print(
-                                '${jsonDecode(response.body)['data']['rating'].length}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(
