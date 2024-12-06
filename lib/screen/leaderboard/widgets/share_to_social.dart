@@ -1,6 +1,7 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:social_share/social_share.dart';
 
 class BottomSheetHelper {
   static Future<void> showScoreBottomSheet(BuildContext context) {
@@ -61,28 +62,37 @@ class SingleFriendCard extends StatelessWidget {
   final String avatar;
   final String name;
 
+  void _socialShare() {
+    SocialShare.shareTelegram("hello");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: AppStyles.circleDecoration.copyWith(
-                image: DecorationImage(
-                    image: AssetImage(
-              avatar,
-            ))),
-          ),
-          SizedBox(height: 12),
-          Text(
-            name, // Assuming there's a name field
-            style: AppStyles.textStyle_13_600,
-          ),
-        ],
+      child: InkWell(
+        onTap: () {
+          _socialShare();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: AppStyles.circleDecoration.copyWith(
+                  image: DecorationImage(
+                      image: AssetImage(
+                avatar,
+              ))),
+            ),
+            SizedBox(height: 12),
+            Text(
+              name, // Assuming there's a name field
+              style: AppStyles.textStyle_13_600,
+            ),
+          ],
+        ),
       ),
     );
   }
