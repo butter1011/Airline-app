@@ -28,49 +28,60 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
         children: [
           Stack(
             children: [
-              CarouselSlider(
-                options: CarouselOptions(
-                  viewportFraction: 1,
+              if (imgList.length == 1)
+                Container(
                   height: 594.0,
-                ),
-                items: imgList.map((image) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                        // Set width to infinity
-                        // margin: EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(image),
-                            fit: BoxFit.cover,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(imgList[0]),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              else
+                CarouselSlider(
+                  options: CarouselOptions(
+                    viewportFraction: 1,
+                    height: 594.0,
+                  ),
+                  items: imgList.map((image) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(image),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-                carouselController: buttonCarouselController,
-              ),
-              Positioned(
-                top: 281,
-                right: 24,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const NextButton(),
+                        );
+                      },
+                    );
+                  }).toList(),
+                  carouselController: buttonCarouselController,
                 ),
-              ),
-              Positioned(
-                top: 281,
-                left: 24,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const PreviousButton(),
+              if (imgList.length > 1) ...[
+                Positioned(
+                  top: 281,
+                  right: 24,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const NextButton(),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 281,
+                  left: 24,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const PreviousButton(),
+                  ),
+                ),
+              ],
             ],
           ),
           Padding(
@@ -86,7 +97,11 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                       decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundImage: AssetImage('${args!['Avatar']}'),
+                        backgroundImage:
+                            (args!['Avatar'] != '' && args!['Avatar'] != null)
+                                ? NetworkImage('${args!['Avatar']}')
+                                : const AssetImage("assets/images/avatar_1.png")
+                                    as ImageProvider,
                       ),
                     ),
                     SizedBox(
@@ -168,7 +183,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                           width: 8,
                         ),
                         Text(
-                          "9998",
+                          args['rating'],
                           style: AppStyles.textStyle_14_600,
                         )
                       ],

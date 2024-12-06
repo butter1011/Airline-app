@@ -208,7 +208,6 @@ class BuildQuestionHeader extends StatelessWidget {
                         backgroundImage: NetworkImage(logoImage),
                       ),
                     ),
-                  ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

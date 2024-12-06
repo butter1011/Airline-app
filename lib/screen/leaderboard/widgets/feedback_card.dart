@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -17,6 +18,8 @@ import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
 final selectedEmojiProvider =
+    StateProvider.family<int, String>((ref, feedbackId) => 0);
+final selectedEmojiNumberProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
@@ -39,6 +42,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
+    print('🛩🏅⭕🏅⭕${widget.singleFeedback['images']}');
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -47,12 +51,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
     // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
     final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(widget.singleFeedback['id'] ?? ''));
-    final List<String> images = List<String>.from([
-      'assets/images/review_abudhabi_1.png',
-      'assets/images/review_ethiopian_2.png',
-      'assets/images/review_turkish_1.png'
-    ]); // Ensure it's a List<String>
+        ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
+    final List<String> images = widget.singleFeedback['images'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -66,7 +66,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                 decoration: AppStyles.circleDecoration,
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/images/avatar_1.png'),
+                  backgroundImage: (widget.singleFeedback['reviewer']
+                                  ['profilePhoto'] !=
+                              '' &&
+                          widget.singleFeedback['reviewer']['profilePhoto'] !=
+                              null)
+                      ? NetworkImage(
+                          '${widget.singleFeedback['reviewer']['profilePhoto']}')
+                      : const AssetImage("assets/images/avatar_1.png")
+                          as ImageProvider,
                 ),
               ),
               SizedBox(width: 8),
@@ -125,72 +133,116 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ],
                 ),
           SizedBox(height: 11),
-          Stack(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                      arguments: {
-                        'Images': images,
-                        'Name': widget.singleFeedback['reviewer']['name'],
-                        'Avatar': 'assets/images/avatar_6.png',
-                        'Date':
-                            'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                        'Usedairport': widget.singleFeedback['airline']['name'],
-                        'Content': widget.singleFeedback['comment'] != null &&
-                                widget.singleFeedback['comment'] != ''
-                            ? widget.singleFeedback['comment']
-                            : '',
-                      });
-                },
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    height: 189,
-                    enableInfiniteScroll: false,
-                    scrollPhysics: NeverScrollableScrollPhysics(),
-                  ),
-                  carouselController: buttonCarouselController,
-                  items: images.map((singleImage) {
-                    return Builder(builder: (BuildContext context) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Container(
-                          height: 189,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('$singleImage'),
-                              fit: BoxFit.cover,
+          if (images.isNotEmpty)
+            Stack(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                        arguments: {
+                          'Images': images,
+                          'Name': widget.singleFeedback['reviewer']['name'],
+                          'Avatar': widget.singleFeedback['reviewer']
+                              ['profilePhoto'],
+                          'Date':
+                              'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                          'Usedairport': widget.singleFeedback['airline']
+                              ['name'],
+                          'Content': widget.singleFeedback['comment'] != null &&
+                                  widget.singleFeedback['comment'] != ''
+                              ? widget.singleFeedback['comment']
+                              : '',
+                          'rating': ((widget.singleFeedback["rating"]
+                                      as Map<String, dynamic>?) ??
+                                  {})
+                              .length
+                              .toString(),
+                        });
+                  },
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      height: 189,
+                      enableInfiniteScroll: false,
+                      scrollPhysics: NeverScrollableScrollPhysics(),
+                    ),
+                    carouselController: buttonCarouselController,
+                    items: images.map((singleImage) {
+                      return Builder(builder: (BuildContext context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                            height: 189,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('$singleImage'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      });
+                    }).toList(),
+                  ),
+                ),
+                Positioned(
+                  top: 79,
+                  right: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const NextButton(),
+                  ),
+                ),
+                Positioned(
+                  top: 79,
+                  left: 16,
+                  child: InkWell(
+                    onTap: () => buttonCarouselController.previousPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear),
+                    child: const PreviousButton(),
+                  ),
+                ),
+              ],
+            )
+          else
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                    arguments: {
+                      'Images': ['assets/images/default.png'],
+                      'Name': widget.singleFeedback['reviewer']['name'],
+                      'Avatar': widget.singleFeedback['reviewer']
+                          ['profilePhoto'],
+                      'Date':
+                          'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                      'Usedairport': widget.singleFeedback['airline']['name'],
+                      'Content': widget.singleFeedback['comment'] != null &&
+                              widget.singleFeedback['comment'] != ''
+                          ? widget.singleFeedback['comment']
+                          : '',
+                      'rating': ((widget.singleFeedback["rating"]
+                                  as Map<String, dynamic>?) ??
+                              {})
+                          .length
+                          .toString(),
                     });
-                  }).toList(),
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Container(
+                  height: 189,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/default.png"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-              Positioned(
-                top: 79,
-                right: 16,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const NextButton(),
-                ),
-              ),
-              Positioned(
-                top: 79,
-                left: 16,
-                child: InkWell(
-                  onTap: () => buttonCarouselController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.linear),
-                  child: const PreviousButton(),
-                ),
-              ),
-            ],
-          ),
+            ),
           const SizedBox(height: 11),
           if (widget.singleFeedback['comment'] != null &&
               widget.singleFeedback['comment'] != '')
@@ -216,13 +268,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           await EmojiBox.showCustomDialog(context, button);
 
                       if (index != null) {
+                        print('📞👀${widget.singleFeedback['_id']}');
                         setState(() {
                           ref
                               .read(selectedEmojiProvider(
-                                      widget.singleFeedback['id'] ?? '')
+                                      widget.singleFeedback['_id'] ?? '')
                                   .notifier)
                               .state = index + 1;
-                          print('🎨🎨$selectedEmojiIndex');
+                          print(
+                              '🎨🎨${ref.read(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state = index + 1}');
                         });
 
                         try {
@@ -235,20 +289,34 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               'Accept': 'application/json',
                             },
                             body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['id'],
+                              'feedbackId': widget.singleFeedback['_id'],
                               'user_id': userId,
-                              'reactionType': selectedEmojiIndex,
+                              'reactionType': ref
+                                  .watch(selectedEmojiProvider(
+                                          widget.singleFeedback['_id'] ?? '')
+                                      .notifier)
+                                  .state,
                             }),
                           );
 
                           if (response.statusCode == 200) {
-                            print('🎎🎎${response.body}');
+                            print('💖🥉❤✔💎');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)
                                   .updateReview(
                                       jsonDecode(response.body)['data']);
+                              ref
+                                  .read(selectedEmojiNumberProvider(
+                                          widget.singleFeedback['_id'] ?? '')
+                                      .notifier)
+                                  .state = jsonDecode(response.body)['data']
+                                      ['rating']
+                                  .length;
                             });
+
+                            print(
+                                '${jsonDecode(response.body)['data']['rating'].length}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -265,7 +333,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     },
                     icon: selectedEmojiIndex != 0
                         ? SvgPicture.asset(
-                            'assets/icons/emoji_$selectedEmojiIndex.svg',
+                            'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
                             width: 24,
                             height: 24,
                           )
@@ -273,11 +341,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    ((widget.singleFeedback["rating"]
-                                as Map<String, dynamic>?) ??
-                            {})
-                        .length
-                        .toString(),
+                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
                     style: AppStyles.textStyle_14_600,
                   ),
                 ],
