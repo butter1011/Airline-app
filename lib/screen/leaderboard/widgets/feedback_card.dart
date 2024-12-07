@@ -51,7 +51,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
-    final List<String> images = widget.singleFeedback['images'] ?? [];
+    final List<dynamic> images = widget.singleFeedback['images'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -174,7 +174,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             height: 189,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('$singleImage'),
+                                image: NetworkImage('$singleImage'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -211,7 +211,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.mediafullscreen,
                     arguments: {
-                      'Images': ['assets/images/default.png'],
+                      'Images': images,
                       'Name': widget.singleFeedback['reviewer']['name'],
                       'Avatar': widget.singleFeedback['reviewer']
                           ['profilePhoto'],
@@ -309,6 +309,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                       ['rating']
                                   .length;
                             });
+
+
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(

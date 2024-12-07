@@ -21,19 +21,20 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final List<String> imgList = args?['Images'];
+    final List<dynamic> imgList = args?['Images'];
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              if (imgList.length == 1)
+              if (imgList.isEmpty)
                 Container(
                   height: 594.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(imgList[0]),
+                      image: AssetImage('assets/images/default.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -50,7 +51,7 @@ class _MediaFullScreenState extends State<MediaFullScreen> {
                         return Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(image),
+                              image: NetworkImage(image),
                               fit: BoxFit.cover,
                             ),
                           ),
