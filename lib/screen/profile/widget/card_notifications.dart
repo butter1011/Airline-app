@@ -33,17 +33,6 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
     });
   }
 
-  void _changeLanguageFun(String language, String lSym) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _selectedLanguage = language;
-      _selectedLanguageSym = lSym;
-    });
-    await prefs.setString('selectedLanguage', language);
-    await prefs.setString('selectedLanguageSym', lSym);
-    _changeLanguage(context);
-  }
-
   Future<void> _showSignOutConfirmation(BuildContext context) async {
     return showModalBottomSheet(
       context: context,
@@ -390,7 +379,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: () => _changeLanguageFun('English', 'en'),
+                onTap: () => _changeLanguage(context, 'English', 'en'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
@@ -400,7 +389,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                     btntext: AppLocalizations.of(context).translate("English")),
               ),
               InkWell(
-                onTap: () => _changeLanguageFun('Chinese', 'zh'),
+                onTap: () => _changeLanguage(context, 'Chinese', 'zh'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
@@ -410,7 +399,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                     btntext: AppLocalizations.of(context).translate("Chinese")),
               ),
               InkWell(
-                onTap: () => _changeLanguageFun('Russian', 'ru'),
+                onTap: () => _changeLanguage(context, 'Russian', 'ru'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
@@ -458,7 +447,8 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
     );
   }
 
-  Future<void> _changeLanguage(BuildContext context) {
+  Future<void> _changeLanguage(
+      BuildContext context, String language, String lSym) {
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -537,13 +527,21 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                         ),
                         InkWell(
                           onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            setState(() {
+                              _selectedLanguage = language;
+                              _selectedLanguageSym = lSym;
+                            });
+                            await prefs.setString('selectedLanguage', language);
+                            await prefs.setString('selectedLanguageSym', lSym);
+
                             ref.read(localeProvider.notifier).state =
                                 Locale('$_selectedLanguageSym', '');
                             ref
                                 .read(selectedLanguageProvider.notifier)
                                 .changeLanguage(_selectedLanguage);
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
+
                             await prefs.setString(
                                 'selectedLanguage', _selectedLanguage);
                             await prefs.setString(

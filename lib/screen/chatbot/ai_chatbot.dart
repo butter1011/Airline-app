@@ -221,15 +221,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 });
 
                 _scrollToBottom();
-                await ref
-                    .read(chatProvider.notifier)
-                    .processUserMessage(_controller.text);
-
+                final _text = _controller.text;
                 _controller.clear();
+                await ref.read(chatProvider.notifier).processUserMessage(_text);
+
                 setState(() {
                   _isLoading = false;
                 });
-
               }
             },
           ),
