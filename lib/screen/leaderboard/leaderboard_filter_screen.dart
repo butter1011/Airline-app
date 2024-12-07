@@ -194,21 +194,21 @@ class _LeaderboardFilterScreenState
                 textAlign: TextAlign.center,
                 style: AppStyles.textStyle_16_600,
               ),
-        actions: [
-          openedSearchTextField
-              ? Text("")
-              : Padding(
-                  padding: const EdgeInsets.only(right: 29),
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        openedSearchTextField = !openedSearchTextField;
-                      });
-                    },
-                    icon: Icon(Icons.search, size: 24),
-                  ),
-                )
-        ],
+        // actions: [
+        //   openedSearchTextField
+        //       ? Text("")
+        //       : Padding(
+        //           padding: const EdgeInsets.only(right: 29),
+        //           child: IconButton(
+        //             onPressed: () {
+        //               setState(() {
+        //                 openedSearchTextField = !openedSearchTextField;
+        //               });
+        //             },
+        //             icon: Icon(Icons.search, size: 24),
+        //           ),
+        //         )
+        // ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
           child: Container(color: Colors.black, height: 4.0),
@@ -321,6 +321,7 @@ class _LeaderboardFilterScreenState
       ],
     );
   }
+
   Widget _buildContinentLeaderboards() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
