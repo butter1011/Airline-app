@@ -2,6 +2,7 @@ import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 
 import 'package:airline_app/provider/boarding_passes_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +158,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               }
 
               final newPass = BoardingPass(
-                name: "67464377db2e9fc2dd022f69",
+                name: ref.read(userDataProvider)?['userData']['_id'],
                 departureAirportCode: departureAirportCode,
                 departureTime: departureTime,
                 arrivalAirportCode: arrivalAirportCode,
