@@ -42,7 +42,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
-
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -85,7 +84,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     style: AppStyles.textStyle_14_600,
                   ),
                   Text(
-                    'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                    'Rated ${widget.singleFeedback['score'].toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                     style: AppStyles.textStyle_14_400_grey,
                   )
                 ],
@@ -309,8 +308,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                       ['rating']
                                   .length;
                             });
-
-
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(

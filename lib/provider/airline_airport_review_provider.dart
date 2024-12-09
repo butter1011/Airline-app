@@ -106,7 +106,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
 
   List<Map<String, dynamic>> getTopFiveReviews() {
     var sortedReviews =
-        state.reviews.where((review) => review['rating'] != null).toList()
+        state.reviews.toList()
           ..sort((a, b) {
             var ratingA = a['rating'];
             var ratingB = b['rating'];
