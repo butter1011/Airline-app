@@ -124,22 +124,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final ratingList = ref.watch(reviewsAirlineProvider).reviews;
     final UserId = ref.watch(userDataProvider)?['userData']['_id'];
     for (var ratingreview in ratingList) {
+      ref
+          .read(selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
+          .state = ratingreview['rating'].length;
       if (ratingreview['reviewer']['_id'] == UserId) {
-        ref
-            .read(
-                selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
-            .state = ratingreview['rating'].length;
-
         ref
             .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
             .state = ratingreview['rating']['$UserId'];
       }
-      // print('🧶🎨🖼🎨${ratingreview['rating'].length}');
-      // print('🧶🎨🖼🎨${ratingreview['reviewer']['_id']}---------$UserId');
-      print(
-          '🧶🎨🖼🎨${ref.watch(selectedEmojiProvider(ratingreview['_id'] ?? ''))}');
     }
-    // print('🧶🎨🖼🎨${ratingList}');
   }
 
   Future<void> connectWebSocket() async {

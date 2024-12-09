@@ -47,7 +47,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
+
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<String> images = widget.singleFeedback['images'] ?? [];
@@ -138,6 +138,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.mediafullscreen,
                         arguments: {
+                          'userId': userId,
+                          'feedbackId': widget.singleFeedback['_id'],
                           'Images': images,
                           'Name': widget.singleFeedback['reviewer']['name'],
                           'Avatar': widget.singleFeedback['reviewer']
@@ -210,6 +212,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.mediafullscreen,
                     arguments: {
+                      'userId': userId,
+                      'feedbackId': widget.singleFeedback['_id'],
                       'Images': ['assets/images/default.png'],
                       'Name': widget.singleFeedback['reviewer']['name'],
                       'Avatar': widget.singleFeedback['reviewer']
