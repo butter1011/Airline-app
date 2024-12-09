@@ -94,7 +94,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
-    print('😅😍🥰🥰🥰🥰$args');
+
     final airlineReviewLists = ref
         .watch(reviewsAirlineProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
@@ -103,7 +103,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {
       _clickedBookmark = true;
     }
-    print('😅😍$airlineReviewLists');
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -382,7 +382,6 @@ class CategoryButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('😭😨😰😱$airportData');
     final isExpanded = ref.watch(buttonExpandNotifierProvider);
     Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
       return Expanded(

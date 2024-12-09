@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
@@ -17,10 +18,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
-final selectedEmojiProvider =
-    StateProvider.family<int, String>((ref, feedbackId) => 0);
-final selectedEmojiNumberProvider =
-    StateProvider.family<int, String>((ref, feedbackId) => 0);
+// final selectedEmojiProvider =
+//     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard({super.key, required this.singleFeedback});
@@ -299,7 +298,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           );
 
                           if (response.statusCode == 200) {
-                            print('💖🥉❤✔💎');
+                            print(
+                                '💖🥉❤✔💎${jsonDecode(response.body)['data']}');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)

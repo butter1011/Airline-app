@@ -49,13 +49,9 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
       }
 
       final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-      // final airlineInfo = ref.watch(airlineAirportProvider).filteredList;
+
       final List<Map<String, dynamic>> leaderBoardList =
           ref.watch(airlineAirportProvider).filteredList;
-      // [
-      //   ...airlineInfo.airlineData.map((e) => Map<String, dynamic>.from(e)),
-      //   ...airlineInfo.airportData.map((e) => Map<String, dynamic>.from(e)),
-      // ];
 
       if (userId != null) {
         final bookmarks = _userBookmarkList[userId];
