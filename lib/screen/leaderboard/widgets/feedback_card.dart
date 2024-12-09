@@ -42,13 +42,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
+
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    // selectedEmojiIndex = widget.singleFeedback['rating']?[userId] ?? 0;
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];

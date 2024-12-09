@@ -6,7 +6,6 @@ import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 
-import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -92,6 +91,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     ref
         .read(reviewsAirlineProvider.notifier)
         .getFilteredReviews("All", null, null);
+
     setState(() {
       isLoading = false;
     });
@@ -252,13 +252,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                 singleReview['reviewer'];
                                             final airline =
                                                 singleReview['airline'];
-                                            final from = singleReview['from'];
-                                            final to = singleReview['to'];
 
                                             if (reviewer != null &&
-                                                airline != null &&
-                                                from != null &&
-                                                to != null) {
+                                                airline != null) {
                                               return Column(
                                                 children: [
                                                   Padding(
