@@ -42,7 +42,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('🛩🏅⭕🏅⭕${widget.singleFeedback['images']}');
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null

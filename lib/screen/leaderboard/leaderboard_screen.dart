@@ -130,7 +130,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             ref
                 .read(airlineAirportProvider.notifier)
                 .getFilteredList(filterType, _searchQuery, null);
-            
+
             setState(() {});
           }
         },
@@ -174,6 +174,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
+    print('🎍🎄🎑${ref.watch(airlineAirportProvider).filteredList}');
 
     return WillPopScope(
       onWillPop: _onWillPop,
