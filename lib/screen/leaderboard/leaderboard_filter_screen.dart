@@ -25,16 +25,7 @@ class _LeaderboardFilterScreenState
     "Business",
     "Premium economy",
     "Economy",
-    // "Presidential",
   ];
-  // final List<String> category = [
-  //   "All",
-  //   "First Class",
-  //   "Business",
-  //   "Premium economy",
-  //   "Economy",
-  //   "Presidential",
-  // ];
   final List<String> continent = [
     "All",
     "Africa",
@@ -44,11 +35,8 @@ class _LeaderboardFilterScreenState
     "Oceania"
   ];
 
-  // Track selection state for each continent button
   late List<bool> selectedairTypeStates;
-  // Use 'late' to indicate it will be initialized later
   late List<bool> selectedFlyerClassStates;
-  // late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
 
   bool typeIsExpanded = true;
@@ -65,12 +53,10 @@ class _LeaderboardFilterScreenState
   @override
   void initState() {
     super.initState();
-    // Initialize selectedStates based on the number of continents
     selectedairTypeStates =
         List.generate(airType.length, (index) => index == 0);
     selectedFlyerClassStates =
         List.generate(flyerClass.length, (index) => index == 0);
-    // selectedCategoryStates = List.filled(category.length, false);
     selectedContinentStates =
         List.generate(continent.length, (index) => index == 0);
   }
@@ -78,22 +64,16 @@ class _LeaderboardFilterScreenState
   void _toggleFilter(int index, List selectedStates) {
     setState(() {
       if (index == 0) {
-        // If "All" is clicked
         selectedStates[0] = !selectedStates[0];
-        // Deselect all others when "All" is selected
         if (selectedStates[0]) {
           for (int i = 1; i < selectedStates.length; i++) {
             selectedStates[i] = false;
           }
         }
       } else {
-        // If any other button is clicked, toggle its selection
         selectedStates[index] = !selectedStates[index];
-
-        // If any button other than "All" is selected, deselect "All"
         selectedStates[0] = false;
 
-        // Check if all buttons except "All" are selected
         bool allOthersSelected = true;
         for (int i = 1; i < selectedStates.length; i++) {
           if (!selectedStates[i]) {
@@ -102,7 +82,6 @@ class _LeaderboardFilterScreenState
           }
         }
 
-        // If all others are selected, select "All" and deselect others
         if (allOthersSelected) {
           selectedStates[0] = true;
           for (int i = 1; i < selectedStates.length; i++) {
@@ -222,10 +201,6 @@ class _LeaderboardFilterScreenState
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
             const SizedBox(height: 17),
-            // _buildCategoryLeaderboards(),
-            // const SizedBox(height: 17),
-            // _buildRankLeaderboards(),
-            // const SizedBox(height: 10),
             _buildContinentLeaderboards(),
             const SizedBox(height: 85),
           ],

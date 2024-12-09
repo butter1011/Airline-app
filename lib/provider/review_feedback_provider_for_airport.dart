@@ -1,13 +1,13 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final reviewFeedBackProviderForAirport =
-    StateNotifierProvider<ReviewFeedBackForAirportNotifier, List<Map<String, dynamic>>>(
-        (ref) {
+final reviewFeedBackProviderForAirport = StateNotifierProvider<
+    ReviewFeedBackForAirportNotifier, List<Map<String, dynamic>>>((ref) {
   return ReviewFeedBackForAirportNotifier();
 });
 
-class ReviewFeedBackForAirportNotifier extends StateNotifier<List<Map<String, dynamic>>> {
+class ReviewFeedBackForAirportNotifier
+    extends StateNotifier<List<Map<String, dynamic>>> {
   ReviewFeedBackForAirportNotifier()
       : super(mainCategoryAndSubcategoryForAirport
             .map((category) => {
@@ -78,18 +78,21 @@ class ReviewFeedBackForAirportNotifier extends StateNotifier<List<Map<String, dy
     return selection;
   }
 
-  int numberOfSelectedAspects() {
-    int count = 0;
+  (int, int) numberOfSelectedAspects() {
+    int likeCount = 0;
+    int dislikeCount = 0;
 
     // Iterate through each category in the state
     for (var category in state) {
-      // Check if any item in the category has a value of true
       if (category['subCategory'].values.any((value) => value == true)) {
-        count++; // Increment count if at least one item is selected
+        likeCount++;
+      }
+      if (category['subCategory'].values.any((value) => value == false)) {
+        dislikeCount++;
       }
     }
 
-    return count;
+    return (likeCount, dislikeCount);
   }
 
   void resetState() {

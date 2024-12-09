@@ -7,6 +7,7 @@ import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +48,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
 
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
-    final List<String> images = widget.singleFeedback['images'] ?? [];
+    final List<dynamic> images = widget.singleFeedback['images'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -84,7 +84,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     style: AppStyles.textStyle_14_600,
                   ),
                   Text(
-                    'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                    'Rated ${widget.singleFeedback['score'].toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                     style: AppStyles.textStyle_14_400_grey,
                   )
                 ],
@@ -175,7 +175,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             height: 189,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('$singleImage'),
+                                image: NetworkImage('$singleImage'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -214,7 +214,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     arguments: {
                       'userId': userId,
                       'feedbackId': widget.singleFeedback['_id'],
-                      'Images': ['assets/images/default.png'],
+                      'Images': images,
                       'Name': widget.singleFeedback['reviewer']['name'],
                       'Avatar': widget.singleFeedback['reviewer']
                           ['profilePhoto'],
@@ -270,15 +270,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           await EmojiBox.showCustomDialog(context, button);
 
                       if (index != null) {
-                        print('📞👀${widget.singleFeedback['_id']}');
                         setState(() {
                           ref
                               .read(selectedEmojiProvider(
                                       widget.singleFeedback['_id'] ?? '')
                                   .notifier)
                               .state = index + 1;
-                          print(
-                              '🎨🎨${ref.read(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state = index + 1}');
                         });
 
                         try {
@@ -302,8 +299,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           );
 
                           if (response.statusCode == 200) {
-                            print(
-                                '💖🥉❤✔💎${jsonDecode(response.body)['data']}');
                             setState(() {
                               ref
                                   .read(reviewsAirlineProvider.notifier)
@@ -317,9 +312,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                       ['rating']
                                   .length;
                             });
-
-                            print(
-                                '${jsonDecode(response.body)['data']['rating'].length}');
                           } else {
                             // Show error message if API call fails
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -343,10 +335,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  Text(
-                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
-                    style: AppStyles.textStyle_14_600,
-                  ),
+                  AnimatedFlipCounter(
+                      value: ref
+                          .watch(selectedEmojiNumberProvider(
+                                  widget.singleFeedback['_id'] ?? '')
+                              .notifier)
+                          .state
+                      // '${}',
+                      // style: AppStyles.textStyle_14_600,
+                      ),
                 ],
               ),
             ],

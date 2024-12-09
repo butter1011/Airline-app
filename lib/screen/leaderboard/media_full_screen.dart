@@ -30,6 +30,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         CarouselSliderController();
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
     final List<String> imgList = args?['Images'] ?? [];
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
@@ -39,12 +40,12 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         children: [
           Stack(
             children: [
-              if (imgList.length == 1)
+              if (imgList.isEmpty)
                 Container(
                   height: 594.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(imgList[0]),
+                      image: AssetImage('assets/images/default.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -61,7 +62,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                         return Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(image),
+                              image: NetworkImage(image),
                               fit: BoxFit.cover,
                             ),
                           ),

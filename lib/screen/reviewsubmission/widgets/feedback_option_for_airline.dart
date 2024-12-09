@@ -8,7 +8,8 @@ class FeedbackOptionForAirline extends StatelessWidget {
   final String iconUrl;
   final int label;
   final int selectedNumberOfSubcategoryForLike;
-  final int numberOfSelectedAspects;
+  final int numberOfFirstSelectedAspects;
+  final int numberOfSecondSelectedAspects;
 
   const FeedbackOptionForAirline(
       {super.key,
@@ -16,7 +17,8 @@ class FeedbackOptionForAirline extends StatelessWidget {
       required this.iconUrl,
       required this.label,
       required this.selectedNumberOfSubcategoryForLike,
-      required this.numberOfSelectedAspects});
+      required this.numberOfFirstSelectedAspects,
+      required this.numberOfSecondSelectedAspects});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,14 @@ class FeedbackOptionForAirline extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (numForIdentifyOfParent == 1) {
-          if (numberOfSelectedAspects > 3) {
+          if (numberOfFirstSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
             Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairline,
                 arguments: {'singleAspect': label});
           }
         } else if (numForIdentifyOfParent == 2) {
-          if (numberOfSelectedAspects > 3) {
+          if (numberOfSecondSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
             Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairline,
@@ -117,7 +119,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
             ],
           ),
           content: Text(
-            "You can select up to 4 positive aspects.",
+            "You can select up to 4 aspects.",
             style: TextStyle(fontSize: 16),
           ),
           actions: <Widget>[

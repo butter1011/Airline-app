@@ -58,8 +58,6 @@ class _QuestionThirdScreenForAirlineState
       if (pickedFile != null) {
         setState(() {
           _image.add(File(pickedFile.path));
-          print("--------");
-          print(_image);
         });
       }
     } finally {

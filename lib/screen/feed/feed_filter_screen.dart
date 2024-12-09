@@ -98,6 +98,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     });
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
           selectedAirType,
+          null,
           selectedFlyerClass,
           selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
@@ -106,6 +107,9 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
+    print(selectedStates);
+    print("------------------------------------");
+    print(index);
     setState(() {
       for (int i = 0; i < selectedStates.length; i++) {
         selectedStates[i] = false;
@@ -121,6 +125,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
           selectedAirType,
+          null,
           selectedFlyerClass == "All" ? null : selectedFlyerClass,
           selectedContinents.isEmpty || selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]

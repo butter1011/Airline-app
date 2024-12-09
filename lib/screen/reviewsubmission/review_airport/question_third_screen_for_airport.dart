@@ -4,6 +4,7 @@ import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -224,6 +225,10 @@ class _QuestionThirdScreenForAirportState
                                         .updateBoardingPass(
                                             updatedBoardingPass);
                                   }
+
+                                  ref
+                                      .read(reviewsAirlineProvider.notifier)
+                                      .addReview(result['data']['data']);
 
                                   ref
                                       .read(aviationInfoProvider.notifier)

@@ -120,7 +120,6 @@ class _LoginState extends ConsumerState<Login> {
           }),
         );
       } else {
-        print('🧵🧵🧵${userData.identityValue}');
         response = await http.post(
           Uri.parse('$apiUrl/api/v1/user'),
           headers: <String, String>{

@@ -43,7 +43,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -158,14 +158,14 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
                     .selectLike(singleIndex, key);
           },
           child: Opacity(
-            opacity: value == true ? 0.5 : 1,
+            opacity: value == false ? 0.5 : 1,
             child: IntrinsicWidth(
               child: Container(
                 height: 40,
                 decoration: AppStyles.cardDecoration.copyWith(
                   borderRadius: BorderRadius.circular(16),
                   color:
-                      items[key] == false ? AppStyles.mainColor : Colors.white,
+                      items[key] == true ? AppStyles.mainColor : Colors.white,
                 ),
                 child: Center(
                   child: Padding(

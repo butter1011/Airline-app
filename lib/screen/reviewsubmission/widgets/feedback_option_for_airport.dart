@@ -8,7 +8,8 @@ class FeedbackOptionForAirport extends StatelessWidget {
   final String iconUrl;
   final int label;
   final int selectedNumberOfSubcategoryForLike;
-  final int numberOfSelectedAspects;
+  final int numberOfFirstSelectedAspects;
+  final int numberOfSecondSelectedAspects;
 
   const FeedbackOptionForAirport(
       {super.key,
@@ -16,8 +17,8 @@ class FeedbackOptionForAirport extends StatelessWidget {
       required this.iconUrl,
       required this.label,
       required this.selectedNumberOfSubcategoryForLike,
-      required this.numberOfSelectedAspects});
-
+      required this.numberOfFirstSelectedAspects,
+      required this.numberOfSecondSelectedAspects});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,14 @@ class FeedbackOptionForAirport extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (numForIdentifyOfParent == 1) {
-          if (numberOfSelectedAspects > 3) {
+          if (numberOfFirstSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
             Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairport,
                 arguments: {'singleAspect': label});
           }
         } else if (numForIdentifyOfParent == 2) {
-          if (numberOfSelectedAspects > 3) {
+          if (numberOfSecondSelectedAspects > 3) {
             _showAlertDialog(context);
           } else {
             Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
