@@ -20,6 +20,7 @@ class _BookMarkScreenState extends State<BookMarkScreen> {
     var args = ModalRoute.of(context)!.settings.arguments as Map;
     final List<Map<String, dynamic>> leaderBoardList =
         args['continentAirlineList'];
+
     setState(() {
       continentName = args['continent'];
       countryNumber = args['countryNumber'];

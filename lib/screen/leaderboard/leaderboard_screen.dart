@@ -1,5 +1,6 @@
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -19,6 +20,11 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 
 import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+
+final selectedEmojiNumberProvider =
+    StateProvider.family<int, String>((ref, feedbackId) => 0);
+final selectedEmojiProvider =
+    StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -114,6 +120,19 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     ref
         .read(airlineAirportProvider.notifier)
         .getFilteredList("All", null, null);
+
+    final ratingList = ref.watch(reviewsAirlineProvider).reviews;
+    final UserId = ref.watch(userDataProvider)?['userData']['_id'];
+    for (var ratingreview in ratingList) {
+      ref
+          .read(selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
+          .state = ratingreview['rating'].length;
+      if (ratingreview['reviewer']['_id'] == UserId) {
+        ref
+            .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
+            .state = ratingreview['rating']['$UserId'];
+      }
+    }
   }
 
   Future<void> connectWebSocket() async {
@@ -130,7 +149,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             ref
                 .read(airlineAirportProvider.notifier)
                 .getFilteredList(filterType, _searchQuery, null);
-            
+
             setState(() {});
           }
         },

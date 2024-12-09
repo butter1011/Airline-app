@@ -48,12 +48,10 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
         });
       }
 
-      final userId = ref.read(userDataProvider)?['userData']?['_id'];
-      final airlineInfo = ref.read(airlineAirportProvider);
-      final List<Map<String, dynamic>> leaderBoardList = [
-        ...airlineInfo.airlineData.map((e) => Map<String, dynamic>.from(e)),
-        ...airlineInfo.airportData.map((e) => Map<String, dynamic>.from(e)),
-      ];
+      final userId = ref.watch(userDataProvider)?['userData']?['_id'];
+
+      final List<Map<String, dynamic>> leaderBoardList =
+          ref.watch(airlineAirportProvider).filteredList;
 
       if (userId != null) {
         final bookmarks = _userBookmarkList[userId];
@@ -97,6 +95,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
             children: [
               InkWell(
                 onTap: () {
+                  print('🎈🎈🎈${entry.value}');
                   Navigator.pushNamed(context, AppRoutes.bookmarkprofilescreen,
                       arguments: {
                         'continentAirlineList': entry.value,

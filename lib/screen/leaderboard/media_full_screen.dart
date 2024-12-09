@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
-import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
+
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:airline_app/utils/global_variable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +32,8 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     final List<String> imgList = args?['Images'] ?? [];
-    int? selectedEmojiIndex;
+    final selectedEmojiIndex =
+        ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,18 +195,23 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                             args?['feedbackId'] ?? '')
                                         .notifier)
                                     .state = index + 1;
+                                print(
+                                    '🎨🎨${ref.read(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state = index + 1}');
                               });
 
                               try {
+                                // Update reaction in backend
+
                                 final response = await http.post(
-                                  Uri.parse('/api/v1/airline-review/update'),
+                                  Uri.parse(
+                                      '$apiUrl/api/v1/airline-review/update'),
                                   headers: {
                                     'Content-Type': 'application/json',
                                     'Accept': 'application/json',
                                   },
                                   body: jsonEncode({
                                     'feedbackId': args?['feedbackId'],
-                                    'user_id': args?['user_id'],
+                                    'user_id': args?['userId'],
                                     'reactionType': ref
                                         .watch(selectedEmojiProvider(
                                                 args?['feedbackId'] ?? '')
@@ -213,6 +221,8 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                 );
 
                                 if (response.statusCode == 200) {
+                                  print(
+                                      '💖🥉❤✔💎${jsonDecode(response.body)['data']}');
                                   setState(() {
                                     ref
                                         .read(reviewsAirlineProvider.notifier)
@@ -227,20 +237,24 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                                 ['rating']
                                             .length;
                                   });
+
+                                  print(
+                                      '${jsonDecode(response.body)['data']['rating'].length}');
                                 } else {
+                                  // Show error message if API call fails
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                         content:
                                             Text('Failed to update reaction')),
                                   );
                                 }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                       content: Text('Something went wrong')),
                                 );
                               }
-                            }
+                            } // Update selected emoji after dialog closes
                           },
                           icon: selectedEmojiIndex != 0
                               ? SvgPicture.asset(
@@ -248,9 +262,9 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                   width: 24,
                                   height: 24,
                                 )
-                              : const Icon(Icons.thumb_up_outlined),
+                              : Icon(Icons.thumb_up_outlined),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           '${ref.watch(selectedEmojiNumberProvider(args?['feedbackId'] ?? '').notifier).state}',
                           style: AppStyles.textStyle_14_600,

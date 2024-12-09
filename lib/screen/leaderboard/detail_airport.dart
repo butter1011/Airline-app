@@ -55,7 +55,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   }
 
   Future<void> _sharedBookMarkSaved(String bookMarkId) async {
-    final userId = ref.read(userDataProvider)?['userData']['_id'];
+    final userId = ref.watch(userDataProvider)?['userData']['_id'];
 
     if (userId != null) {
       setState(() {
@@ -90,6 +90,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final String trendingBio = args['trendingBio'];
     final String backgroundImage = args['backgroundImage'];
     final String bookMarkId = args['_id'];
+
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
@@ -382,7 +383,6 @@ class CategoryButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isExpanded = ref.watch(buttonExpandNotifierProvider);
-
     Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
       return Expanded(
         child: CategoryRatingOptions(
