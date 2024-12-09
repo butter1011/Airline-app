@@ -1,3 +1,4 @@
+import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
@@ -91,11 +92,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   Future<void> fetchLeaderboardData() async {
     final reviewsController = GetReviewsAirlineController();
+    final airportController = AirportReviewController();
     final futures = await Future.wait([
       reviewsController.getReviews(),
       airlineController.getAirlineAirport(),
       airlineScoreController.getAirlineScore(),
       airportScoreController.getAirportScore(),
+      airportController.getAirportReviews(),
     ]);
 
     if (futures[0]['success']) {
@@ -116,6 +119,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           .read(airlineAirportProvider.notifier)
           .setAirportScoreData(futures[3]['data']['data']);
     }
+    if (futures[4]['success']) {
+      ref
+          .read(reviewsAirlineProvider.notifier)
+          .setReviewData(futures[4]['data']);
+    }
 
     ref
         .read(airlineAirportProvider.notifier)
@@ -126,11 +134,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     for (var ratingreview in ratingList) {
       ref
           .read(selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
-          .state = ratingreview['rating'].length;
-      if (ratingreview['reviewer']['_id'] == UserId) {
+          .state = ratingreview['rating']?.length ?? 0;
+      if (ratingreview['reviewer']?['_id'] == UserId &&
+          ratingreview['rating'] != null) {
         ref
             .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
-            .state = ratingreview['rating']['$UserId'];
+            .state = ratingreview['rating'][UserId] ?? 0;
       }
     }
   }

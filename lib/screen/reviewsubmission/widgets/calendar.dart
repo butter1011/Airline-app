@@ -16,7 +16,7 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
   late String _startDate;
   late String _endDate;
   final DateRangePickerController _controller = DateRangePickerController();
-  late List<String> dateRange;
+  late List<dynamic> dateRange;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
       _endDate = DateFormat('dd, MMMM yyyy')
           .format(args.value.endDate ?? args.value.startDate);
 
-      List<String> dateRange = [_startDate, _endDate];
+      List<dynamic> dateRange = [_startDate, _endDate];
       ref.read(aviationInfoProvider.notifier).updateDateRange(dateRange);
     });
   }

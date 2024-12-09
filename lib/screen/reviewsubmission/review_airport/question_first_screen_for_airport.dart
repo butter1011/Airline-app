@@ -53,7 +53,8 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects, numberOfSecondSelectedAspects),
+              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects,
+                  numberOfSecondSelectedAspects),
               _buildNavigationButtons(context),
             ],
           ),
@@ -62,11 +63,12 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects, int numberOfSecondSelectedAspects) {
+  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects,
+      int numberOfSecondSelectedAspects) {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirport;
 
-    List<String> mainCategoryNames = [];
+    List<dynamic> mainCategoryNames = [];
 
     for (var category in mainCategoryAndSubcategoryForAirport) {
       mainCategoryNames.add(category['mainCategory'] as String);
@@ -98,7 +100,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
                   numberOfFirstSelectedAspects: numberOfFirstSelectedAspects,
-                 numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
+                  numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
                   selectedNumberOfSubcategoryForLike: selections[index]
                           ['subCategory']
                       .values
@@ -188,14 +190,15 @@ class BuildQuestionHeader extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 40,
-                    decoration: AppStyles.circleDecoration,
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(logoImage),
+                  if (logoImage.isNotEmpty)
+                    Container(
+                      height: 40,
+                      decoration: AppStyles.circleDecoration,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(logoImage),
+                      ),
                     ),
-                  ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

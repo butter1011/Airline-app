@@ -16,7 +16,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
     final selections = ref.watch(reviewFeedBackProviderForAirport);
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
     final int singleIndex = args?['singleAspect'] ?? '';
-    List<String> mainCategoryNames = [];
+    List<dynamic> mainCategoryNames = [];
     for (var category in mainCategoryAndSubcategoryForAirport) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }

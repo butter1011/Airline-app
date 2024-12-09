@@ -69,7 +69,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirport;
 
-    List<String> mainCategoryNames = [];
+    List<dynamic> mainCategoryNames = [];
 
     for (var category in mainCategoryAndSubcategoryForAirport) {
       mainCategoryNames.add(category['mainCategory'] as String);

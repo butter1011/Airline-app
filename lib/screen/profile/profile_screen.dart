@@ -58,10 +58,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         ? NetworkImage(
                                             UserData?['userData']
                                                 ['profilePhoto'],
-                                            // Add key to force reload
-                                            headers: {
-                                              'Cache-Control': 'no-cache'
-                                            },
                                           )
                                         : const AssetImage(
                                             "assets/images/avatar_1.png",

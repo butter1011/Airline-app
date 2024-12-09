@@ -13,19 +13,19 @@ class FeedFilterScreen extends ConsumerStatefulWidget {
 
 class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   // Declare continents and selectedStates as instance variables
-  final List<String> airType = [
+  final List<dynamic> airType = [
     "All",
     "Airport",
     "Airline",
   ];
-  final List<String> flyerClass = [
+  final List<dynamic> flyerClass = [
     "All",
     "Business",
     "Premium economy",
     "Economy",
   ];
 
-  final List<String> continent = [
+  final List<dynamic> continent = [
     "All",
     "Africa",
     "Asia",
@@ -47,7 +47,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
   String selectedAirType = "";
   String selectedFlyerClass = "";
-  List<String> selectedContinents = [];
+  List<dynamic> selectedContinents = [];
 
   @override
   void initState() {

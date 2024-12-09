@@ -23,7 +23,7 @@ class DetailAirport extends ConsumerStatefulWidget {
 
 class _DetailAirportState extends ConsumerState<DetailAirport> {
   bool _clickedBookmark = false;
-  Map<String, List<String>> _bookmarkItems = {};
+  Map<String, List<dynamic>> _bookmarkItems = {};
   late SharedPreferences _prefs;
 
   @override
@@ -41,9 +41,9 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final String? bookmarksJson = _prefs.getString('bookmarks');
     if (bookmarksJson != null) {
       setState(() {
-        _bookmarkItems = Map<String, List<String>>.from(
+        _bookmarkItems = Map<String, List<dynamic>>.from(
           jsonDecode(bookmarksJson).map(
-            (key, value) => MapEntry(key, List<String>.from(value)),
+            (key, value) => MapEntry(key, List<dynamic>.from(value)),
           ),
         );
       });

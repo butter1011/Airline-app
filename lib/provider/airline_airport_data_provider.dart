@@ -303,7 +303,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   /// [selectedContinents] - Optional list of continents to filter by
   void getFilteredList(
       String filterType, String? searchQuery, String? flyerClass,
-      [List<String>? selectedContinents]) {
+      [List<dynamic>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
 

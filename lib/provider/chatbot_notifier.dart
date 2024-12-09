@@ -21,7 +21,7 @@ class AirlineCard {
   final String name;
   final String imageUrl;
   final String rating;
-  final List<String> tags;
+  final List<dynamic> tags;
 
   AirlineCard({
     required this.name,

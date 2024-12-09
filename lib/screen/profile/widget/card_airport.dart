@@ -111,7 +111,7 @@ class ReviewScore extends StatefulWidget {
 
 class _ReviewScoreState extends State<ReviewScore> {
   String? _selectedItem;
-  final List<String> _items = [
+  final List<dynamic> _items = [
     'Highest Score',
     'Lowest Score',
   ];
@@ -149,12 +149,12 @@ class _ReviewScoreState extends State<ReviewScore> {
               });
             }
           },
-          items: _items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
+          items: _items.map<DropdownMenuItem<String>>((dynamic value) {
+            return DropdownMenuItem<String>(        
               value: value,
-              child: Container(
+              child: Container(         
                 padding: EdgeInsets.symmetric(vertical: 8.0),
-                decoration: BoxDecoration(
+                decoration: BoxDecoration(                                                                              
                   borderRadius: BorderRadius.circular(24),
                   color: Colors.transparent,
                 ),
@@ -169,7 +169,6 @@ class _ReviewScoreState extends State<ReviewScore> {
             );
           }).toList(),
         ),
-      ),
-    );
+      ),    );
   }
 }

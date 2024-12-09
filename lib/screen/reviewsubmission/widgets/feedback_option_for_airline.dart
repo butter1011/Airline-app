@@ -22,7 +22,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> mainCategoryNames = [];
+    List<dynamic> mainCategoryNames = [];
 
     for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);

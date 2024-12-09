@@ -31,7 +31,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
-    final List<String> imgList = args?['Images'] ?? [];
+    final List<dynamic> imgList = args?['Images'] ?? [];
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
     return Scaffold(

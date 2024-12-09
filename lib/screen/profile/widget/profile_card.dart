@@ -22,7 +22,7 @@ class ProfileCardList extends ConsumerWidget {
     final selectedIndex =
         ref.watch(selectedIndexProvider); // Watch the provider directly
 
-    final List<String> iconPaths = [
+    final List<dynamic> iconPaths = [
       "assets/icons/text.png",
       "assets/icons/pin.png",
       "assets/icons/trophy.png",

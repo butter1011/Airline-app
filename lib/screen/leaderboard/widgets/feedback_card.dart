@@ -7,7 +7,6 @@ import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
-import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +83,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     style: AppStyles.textStyle_14_600,
                   ),
                   Text(
-                    'Rated ${widget.singleFeedback['score'].toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                    'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                     style: AppStyles.textStyle_14_400_grey,
                   )
                 ],
@@ -159,31 +158,33 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               .toString(),
                         });
                   },
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      viewportFraction: 1,
-                      height: 189,
-                      enableInfiniteScroll: false,
-                      scrollPhysics: NeverScrollableScrollPhysics(),
-                    ),
-                    carouselController: buttonCarouselController,
-                    items: images.map((singleImage) {
-                      return Builder(builder: (BuildContext context) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Container(
+                  child: images != null
+                      ? CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 1,
                             height: 189,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage('$singleImage'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            enableInfiniteScroll: false,
+                            scrollPhysics: NeverScrollableScrollPhysics(),
                           ),
-                        );
-                      });
-                    }).toList(),
-                  ),
+                          carouselController: buttonCarouselController,
+                          items: images.map((singleImage) {
+                            return Builder(builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                  height: 189,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage('$singleImage'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                          }).toList(),
+                        )
+                      : Container(),
                 ),
                 Positioned(
                   top: 79,
@@ -335,15 +336,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         : Icon(Icons.thumb_up_outlined),
                   ),
                   SizedBox(width: 8),
-                  AnimatedFlipCounter(
-                      value: ref
-                          .watch(selectedEmojiNumberProvider(
-                                  widget.singleFeedback['_id'] ?? '')
-                              .notifier)
-                          .state
-                      // '${}',
-                      // style: AppStyles.textStyle_14_600,
-                      ),
+                  Text(
+                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
+                  ),
                 ],
               ),
             ],
