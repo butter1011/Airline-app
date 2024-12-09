@@ -9,6 +9,7 @@ import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/feed/widgets/feed_filter_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -168,16 +169,15 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
                   Text(
-                    'Filter by category',
-                    style: TextStyle(
-                        fontFamily: 'Clash Grotesk',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15),
+                    AppLocalizations.of(context)
+                        .translate('Filter by category'),
+                    style: AppStyles.textStyle_15_500
+                        .copyWith(color: Colors.black),
                   ),
                 ],
               ),
@@ -199,31 +199,22 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     onTap: () => toggleButton("Airline"),
                   ),
                   SizedBox(width: 8),
-                  FeedFilterButton(
+                  MainButton(
                     text: "Airport",
-                    onSelectionChanged: (value) {
-                      setState(() {
-                        selectedAirport = value;
-                      });
-                    },
+                    isSelected: buttonStates["Airport"]!,
+                    onTap: () => toggleButton("Airport"),
                   ),
                   SizedBox(width: 8),
-                  FeedFilterButton(
+                  MainButton(
                     text: "Cleanliness",
-                    onSelectionChanged: (value) {
-                      setState(() {
-                        selectedCleanliness = value;
-                      });
-                    },
+                    isSelected: buttonStates["Cleanliness"]!,
+                    onTap: () => toggleButton("Cleanliness"),
                   ),
                   SizedBox(width: 8),
-                  FeedFilterButton(
+                  MainButton(
                     text: "Onboard",
-                    onSelectionChanged: (value) {
-                      setState(() {
-                        selectedOnboard = value;
-                      });
-                    },
+                    isSelected: buttonStates["Onboard"]!,
+                    onTap: () => toggleButton("Onboard"),
                   ),
                 ],
               ),

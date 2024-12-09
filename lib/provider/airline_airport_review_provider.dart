@@ -216,24 +216,21 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
       ..sort((a, b) => b['onboardService'].compareTo(a['onboardService']));
   }
 
-  void getFilteredReviews(String filterType, String? flyerClass,
+  void getFilteredReviews(
+      String filterType, String? searchQuery, String? flyerClass,
       [List<String>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
-      final String countryCode;
-      if (item['countryCode'] == 'HK') {
-        countryCode = 'CN';
-      } else {
-        countryCode = item['countryCode'];
-      }
 
+      final countryCode = item['countryCode'];
       if (!state.continentCache.containsKey(countryCode)) {
-        final continent =
-            WorldCountry.fromCodeShort(countryCode).continent.name;
         state = state.copyWith(
           continentCache: {
             ...state.continentCache,
-            countryCode: {'continent': continent}
+            countryCode: {
+              'continent':
+                  WorldCountry.fromCodeShort(countryCode).continent.name
+            }
           },
         );
       }
