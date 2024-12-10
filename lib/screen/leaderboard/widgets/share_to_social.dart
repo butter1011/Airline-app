@@ -1,7 +1,6 @@
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:social_share/social_share.dart';
 
 class BottomSheetHelper {
   static Future<void> showScoreBottomSheet(BuildContext context) {
@@ -62,9 +61,9 @@ class SingleFriendCard extends StatelessWidget {
   final String avatar;
   final String name;
 
-  void _socialShare() {
-    SocialShare.shareTelegram("hello");
-  }
+  // void _socialShare() {
+  //   SocialShare.shareTelegram("hello");
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,7 @@ class SingleFriendCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
       child: InkWell(
         onTap: () {
-          _socialShare();
+          // _socialShare();
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
