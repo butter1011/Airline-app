@@ -270,9 +270,7 @@ class _QuestionThirdScreenForAirlineState
             filename: filename,
           ),
         );
-
         request.fields['id'] = reviewId;
-
         final response = await request.send();
         if (response.statusCode != 200) {
           throw Exception('Failed to upload image');
@@ -290,6 +288,7 @@ class _QuestionThirdScreenForAirlineState
     required int? index,
     required BoardingPassController boardingPassController,
   }) async {
+    print("result: ${result['data']}");
     ref.read(reviewsAirlineProvider.notifier).addReview(result['data']['data']);
 
     if (index != null) {

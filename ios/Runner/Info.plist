@@ -21,35 +21,34 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
-<array>
-    <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>otpless.bzpl0offchgcjrm8a4sj</string>
-        </array>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLName</key>
-        <string>otpless</string>
-    </dict>
-</array>
-<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>whatsapp</string>
-    <string>otpless</string>
-    <string>gootpless</string>
-    <string>com.otpless.ios.app.otpless</string>
-    <string>googlegmail</string>
-</array>
-
-
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>otpless.bzpl0offchgcjrm8a4sj</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>otpless</string>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>otpless</string>
+		<string>gootpless</string>
+		<string>com.otpless.ios.app.otpless</string>
+		<string>googlegmail</string>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSCameraUsageDescription</key>
-<string>This app needs camera access to scan QR codes</string>
-
-<key>NSPhotoLibraryUsageDescription</key>
-<string>This app needs photos access to get QR code from photo library</string>
+	<string>This app needs camera access to scan QR codes and capture photos of aviations</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs photos access to get QR code and save review images from photo library</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requests access to the microphone to record audio comments while capturing video reviews of aviation experiences</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
