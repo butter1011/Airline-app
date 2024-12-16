@@ -216,6 +216,9 @@ class _QuestionThirdScreenForAirportState
                                 }
 
                                 if (result != null) {
+                                   await _reviewController.increaseUserPoints(
+                                      ref.watch(userDataProvider)?['userData']
+                                          ['_id'], 500);
                                   if (index != null && isDeparture != null) {
                                     final updatedBoardingPass = ref
                                         .read(boardingPassesProvider.notifier)

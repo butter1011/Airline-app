@@ -241,6 +241,8 @@ class _QuestionThirdScreenForAirlineState
       }
 
       if (result['success']) {
+        await _reviewController.increaseUserPoints(
+            userData?['userData']['_id'], 500);
         await _handleSuccessfulSubmission(
           context: context,
           result: result,
