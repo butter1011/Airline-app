@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final UserData = ref.watch(userDataProvider);
+    final userData = ref.watch(userDataProvider);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -52,11 +52,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                       ]),
                                   child: CircleAvatar(
                                     radius: 36,
-                                    backgroundImage: UserData?['userData']
+                                    backgroundImage: userData?['userData']
                                                 ['profilePhoto'] !=
                                             null
                                         ? NetworkImage(
-                                            UserData?['userData']
+                                            userData?['userData']
                                                 ['profilePhoto'],
                                           )
                                         : const AssetImage(
@@ -100,7 +100,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 Text(
                                                   AppLocalizations.of(context)
                                                       .translate(
-                                                          '${UserData?['userData']['selectedbadges']}'),
+                                                          '${userData?['userData']['selectedbadges']}'),
                                                   style: TextStyle(
                                                       fontFamily:
                                                           'Clash Grotesk',
@@ -145,7 +145,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     width: 4,
                                                   ),
                                                   Text(
-                                                    '${UserData?['userData']['badgeNumber']}',
+                                                    '${userData?['userData']['badgeNumber']}',
                                                     style: TextStyle(
                                                         fontFamily:
                                                             'Clash Grotesk',
@@ -190,7 +190,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             ),
                                             Center(
                                               child: Text(
-                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${UserData?['userData']['flyertype']}',
+                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
                                                 style: TextStyle(
                                                     fontFamily: 'Clash Grotesk',
                                                     fontSize: 16,
@@ -213,7 +213,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              '${UserData?['userData']['name']}',
+                              '${userData?['userData']['name']}',
                               style: const TextStyle(
                                 fontFamily: 'Clash Grotesk',
                                 fontSize: 24,
@@ -224,7 +224,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              '${UserData?['userData']['bio']}',
+                              '${userData?['userData']['bio']}',
                               style: const TextStyle(
                                 fontFamily: 'Clash Grotesk',
                                 letterSpacing: 0.6,
@@ -251,7 +251,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                                 Text(
-                                  ' ${UserData?['userData']['favoriteAirlines']}',
+                                  ' ${userData?['userData']['favoriteAirlines']}',
                                   style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,
@@ -280,7 +280,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                                 Text(
-                                  ' 500',
+                                  "  ${userData?['userData']["points"]}",
                                   style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,

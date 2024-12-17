@@ -215,10 +215,16 @@ class _QuestionThirdScreenForAirportState
                                       result['data']['data']['_id']);
                                 }
 
-                                if (result != null) {
-                                   await _reviewController.increaseUserPoints(
-                                      ref.watch(userDataProvider)?['userData']
-                                          ['_id'], 500);
+                                if (result['success']) {
+                                  final updatedUserData =
+                                      await _reviewController
+                                          .increaseUserPoints(
+                                              ref.watch(userDataProvider)?[
+                                                  'userData']['_id'],
+                                              500);
+                                  ref
+                                      .read(userDataProvider.notifier)
+                                      .setUserData(updatedUserData["data"]);
                                   if (index != null && isDeparture != null) {
                                     final updatedBoardingPass = ref
                                         .read(boardingPassesProvider.notifier)
