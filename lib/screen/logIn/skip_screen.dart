@@ -11,9 +11,16 @@ class SkipScreen extends StatefulWidget {
 
 class _SkipScreenState extends State<SkipScreen> {
   int selectedIndex = 0;
+  late final screenSize;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    screenSize = MediaQuery.of(context).size;
+  }
+
   @override
   Widget build(BuildContext context) {
-   
     final List bottomSheetList = [
       _firstBottomSheet(),
       _secondBottomSheet(),
@@ -35,97 +42,116 @@ class _SkipScreenState extends State<SkipScreen> {
         body: Center(
           child: Column(
             children: [
-              // Wrap Stack in SizedBox to give it a fixed height
               SizedBox(
-                height: MediaQuery.of(context).size.height *
-                    0.63, // Set an appropriate height
+                height: screenSize.height,
+                width: screenSize.width,
                 child: Stack(
                   children: [
-                    // Background Image
+                    Container(
+                      width: screenSize.width,
+                      height: screenSize.height,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              'assets/images/popup_${selectedIndex + 1}.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     Positioned(
-                      top: -96, // Adjust this value to move the image higher
                       left: 0,
                       right: 0,
+                      bottom: 0,
                       child: Container(
-                        width: 575,
-                        height: 575,
+                        height: screenSize.height * 0.37,
+                        width: double.infinity,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/skip_plane.png'),
-                            fit: BoxFit.cover,
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(24))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 4,
+                                width: 32,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff97A09C),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 27,
+                              ),
+                              Text(
+                                titleList[selectedIndex],
+                                style: AppStyles.textStyle_24_600,
+                              ),
+                              SizedBox(
+                                height: 42,
+                              ),
+                              Text(
+                                contentList[selectedIndex],
+                                style: AppStyles.textStyle_15_400.copyWith(
+                                  color: Color(0xff38433E),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 21,
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "1",
+                                      style: AppStyles.textStyle_24_600
+                                          .copyWith(
+                                            color: selectedIndex==0?Colors.black:AppStyles.mainColor,
+                                              fontWeight: FontWeight.w900),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Image.asset("assets/images/baggage.png"),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      "2",
+                                      style: AppStyles.textStyle_24_600
+                                          .copyWith(
+                                            color: selectedIndex == 1
+                                                  ? Colors.black
+                                                  : AppStyles.mainColor,
+                                              fontWeight: FontWeight.w900),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Image.asset("assets/images/flight.png"),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      "3",
+                                      style: AppStyles.textStyle_24_600
+                                          .copyWith(
+                                            color: selectedIndex == 2
+                                                  ? Colors.black
+                                                  : AppStyles.mainColor,
+                                              fontWeight: FontWeight.w900),
+                                    ),
+                                  ]),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    // You can add more widgets here if needed
                   ],
                 ),
-              ),
-              Expanded(
-                child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(24))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 4,
-                            width: 32,
-                            decoration: BoxDecoration(
-                              color: Color(0xff97A09C),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 27,
-                          ),
-                          Text(
-                            titleList[selectedIndex],
-                            style: AppStyles.textStyle_24_600,
-                          ),
-                          SizedBox(
-                            height: 42,
-                          ),
-                          Text(
-                            contentList[selectedIndex],
-                            style: AppStyles.textStyle_15_400.copyWith(
-                              color: Color(0xff38433E),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 21,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              3,
-                              (index) {
-                                return Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 6),
-                                  width: 9,
-                                  height: 9,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border:
-                                        Border.all(color: Color(0xff2c2c2c)),
-                                    color: selectedIndex == index
-                                        ? Color(0xff2cfff6)
-                                        : Colors.white,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    )),
               ),
             ],
           ),
@@ -163,7 +189,7 @@ class _SkipScreenState extends State<SkipScreen> {
                 ),
                 Expanded(
                     child: _NavigationButton(
-                        onTap: () {            
+                        onTap: () {
                           setState(() {
                             selectedIndex = (selectedIndex + 1) % 3;
                           });
@@ -212,7 +238,6 @@ class _SkipScreenState extends State<SkipScreen> {
                           setState(() {
                             selectedIndex = (selectedIndex + 1) % 3;
                           });
-             
                         },
                         buttonName: "Next",
                         color: Colors.white))
