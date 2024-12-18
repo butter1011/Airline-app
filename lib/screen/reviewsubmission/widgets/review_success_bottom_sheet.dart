@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
 import 'package:gif/gif.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> showReviewSuccessBottomSheet(BuildContext context,
     VoidCallback onSuccess, String reviewButtonText) async {
@@ -21,7 +23,7 @@ Future<void> showReviewSuccessBottomSheet(BuildContext context,
   );
 }
 
-class _ReviewSuccessContent extends StatefulWidget {
+class _ReviewSuccessContent extends ConsumerStatefulWidget {
   final VoidCallback onSuccess;
   final String reviewButtonText;
 
@@ -32,10 +34,11 @@ class _ReviewSuccessContent extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_ReviewSuccessContent> createState() => _ReviewSuccessContentState();
+  ConsumerState<_ReviewSuccessContent> createState() =>
+      _ReviewSuccessContentState();
 }
 
-class _ReviewSuccessContentState extends State<_ReviewSuccessContent>
+class _ReviewSuccessContentState extends ConsumerState<_ReviewSuccessContent>
     with TickerProviderStateMixin {
   late final GifController controller;
   bool _showGif = true;
@@ -64,24 +67,29 @@ class _ReviewSuccessContentState extends State<_ReviewSuccessContent>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+    final userData = ref.watch(userDataProvider);
+    final points = userData?["userData"]["points"];
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (_showGif)
-            SizedBox(
-              height: 350,
-              width: 350,
-              child: Gif(
-                controller: controller,
-                image: const AssetImage("assets/images/success.gif"),
-                fit: BoxFit.contain,
-                onFetchCompleted: () {
-                  controller.reset();
-                  controller.forward();
-                },
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: SizedBox(
+                height: 350,
+                width: 350,
+                child: Gif(
+                  controller: controller,
+                  image: const AssetImage("assets/images/success.gif"),
+                  fit: BoxFit.contain,
+                  onFetchCompleted: () {
+                    controller.reset();
+                    controller.forward();
+                  },
+                ),
               ),
             ),
           const SizedBox(height: 60),
@@ -106,7 +114,7 @@ class _ReviewSuccessContentState extends State<_ReviewSuccessContent>
                       ),
                       const SizedBox(height: 21),
                       Text(
-                        "You've earned 100 points",
+                        "You've earned $points points",
                         style: AppStyles.textStyle_24_600
                             .copyWith(fontWeight: FontWeight.w500),
                       ),

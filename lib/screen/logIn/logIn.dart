@@ -54,7 +54,6 @@ class _LoginState extends ConsumerState<Login> {
       // No token, initialize Otpless
       await _initializeOtpless();
     }
-
     setState(() {
       isLoading = false;
     });
