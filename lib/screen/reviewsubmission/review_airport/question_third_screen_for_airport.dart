@@ -132,7 +132,7 @@ class _QuestionThirdScreenForAirportState
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
+  
 
     return WillPopScope(
       onWillPop: () async {
@@ -251,11 +251,11 @@ class _QuestionThirdScreenForAirportState
 
                                   if (!mounted) return;
                                   Navigator.pushNamed(
-                                      context, AppRoutes.leaderboardscreen);
-                                  await showReviewSuccessBottomSheet(context,
-                                      () {
-                                    setState(() => isSuccess = true);
-                                  }, "Review airline");
+                                      context, AppRoutes.completereviews);
+                                  // await showReviewSuccessBottomSheet(context,
+                                  //     () {
+                                  //   setState(() => isSuccess = true);
+                                  // }, "Review airline");
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;

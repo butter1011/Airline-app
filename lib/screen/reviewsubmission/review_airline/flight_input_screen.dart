@@ -262,7 +262,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
             onTap: () {
               if (isValid) {
                 Navigator.pushNamed(
-                    context, AppRoutes.questionfirstscreenforairline);
+                    context, AppRoutes.overviewairlinereviewscreen);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

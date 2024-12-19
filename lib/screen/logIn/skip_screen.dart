@@ -11,16 +11,9 @@ class SkipScreen extends StatefulWidget {
 
 class _SkipScreenState extends State<SkipScreen> {
   int selectedIndex = 0;
-  late final screenSize;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    screenSize = MediaQuery.of(context).size;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     final List bottomSheetList = [
       _firstBottomSheet(),
       _secondBottomSheet(),
@@ -109,7 +102,9 @@ class _SkipScreenState extends State<SkipScreen> {
                                       "1",
                                       style: AppStyles.textStyle_24_600
                                           .copyWith(
-                                            color: selectedIndex==0?Colors.black:AppStyles.mainColor,
+                                              color: selectedIndex == 0
+                                                  ? Colors.black
+                                                  : AppStyles.mainColor,
                                               fontWeight: FontWeight.w900),
                                     ),
                                     SizedBox(
@@ -123,7 +118,7 @@ class _SkipScreenState extends State<SkipScreen> {
                                       "2",
                                       style: AppStyles.textStyle_24_600
                                           .copyWith(
-                                            color: selectedIndex == 1
+                                              color: selectedIndex == 1
                                                   ? Colors.black
                                                   : AppStyles.mainColor,
                                               fontWeight: FontWeight.w900),
@@ -139,7 +134,7 @@ class _SkipScreenState extends State<SkipScreen> {
                                       "3",
                                       style: AppStyles.textStyle_24_600
                                           .copyWith(
-                                            color: selectedIndex == 2
+                                              color: selectedIndex == 2
                                                   ? Colors.black
                                                   : AppStyles.mainColor,
                                               fontWeight: FontWeight.w900),
