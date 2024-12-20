@@ -247,7 +247,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   height: 189,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/default.png"),
+                      image: AssetImage('assets/images/default.png'),
                       fit: BoxFit.cover,
                     ),
                   ),

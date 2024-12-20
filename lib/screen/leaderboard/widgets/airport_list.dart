@@ -83,23 +83,32 @@ class AirportList extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        airportData['name'],
-                        style: AppStyles.textStyle_14_600,
-                      ),
-                      Text(
-                        airportData['isAirline'] ? 'Airline' : 'Airport',
-                        style: AppStyles.textStyle_14_600.copyWith(
-                            fontSize: 13, fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                  SizedBox(
+                    width: 120,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          airportData['name'],
+                          style: AppStyles.textStyle_14_600,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          airportData['isAirline'] ? 'Airline' : 'Airport',
+                          style: AppStyles.textStyle_14_600.copyWith(
+                              fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'Score ${airportData['overall'].toStringAsFixed(1)}',
+                          style: AppStyles.textStyle_14_600.copyWith(
+                              fontSize: 13, fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   SizedBox(
-                    width: 100, // Fixed width for the graph
+                    width: 80, // Fixed width for the graph
                     height: 40,
                     child: LineChart(
                       LineChartData(
@@ -111,23 +120,25 @@ class AirportList extends StatelessWidget {
                             spots: spots,
                             isCurved: true,
                             color: airportData['isIncreasing']
-                                ? Colors.green
-                                : Colors.red,
+                                ? Color(0xFF3FEA9C)
+                                : Color(0xFFFF4961),
                             barWidth: 2,
                             dotData: FlDotData(show: false),
                             belowBarData: BarAreaData(
                               show: true,
                               color: (airportData['isIncreasing']
-                                      ? Colors.green
-                                      : Colors.red)
+                                      ? Color(0xFF3FEA9C)
+                                      : Color(0xFFFF4961))
                                   .withOpacity(0.1),
                             ),
+                            showingIndicators: [],
                           ),
                         ],
+                        lineTouchData: LineTouchData(enabled: false),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const Spacer(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
