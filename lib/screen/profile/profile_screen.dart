@@ -22,6 +22,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         return false;
       },
+      
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNavBar(currentIndex: 4),
@@ -45,6 +46,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   Navigator.pushNamed(
                                       context, AppRoutes.eidtprofilescreen);
                                 },
+
+                                  onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+
                                 child: Container(
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -78,8 +85,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   Row(
                                     children: [
                                       InkWell(
-                                        onDoubleTap: () => Navigator.pushNamed(
-                                            context, AppRoutes.eidtprofilescreen),
+                                        onDoubleTap: () => ref.read(selectedIndexProvider.notifier).state=2,
+                                              onLongPress: () {
+    ref.read(selectedIndexProvider.notifier).state=2;
+  },
                                         child: Container(
                                           // width: 140,
                                           height: 32,
@@ -171,42 +180,52 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  Container(
-                                    width: 227,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(width: 2),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(27),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/Lead Icon.png',
-                                              height: 20,
-                                              width: 20,
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Clash Grotesk',
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                  InkWell(
+                                    onDoubleTap: () {
+                                      Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+                                    },
+                                      onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+                                    child: Container(
+                                      width: 227,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 2),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(27),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black,
+                                            offset: Offset(2, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icons/Lead Icon.png',
+                                                height: 20,
+                                                width: 20,
                                               ),
-                                            ),
-                                          ],
+                                              Center(
+                                                child: Text(
+                                                  '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
+                                                  style: TextStyle(
+                                                      fontFamily: 'Clash Grotesk',
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -221,6 +240,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           InkWell(
                                         onDoubleTap: () => Navigator.pushNamed(
                                             context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -236,6 +259,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           InkWell(
                              onDoubleTap: () => Navigator.pushNamed(
                                             context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -255,6 +282,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           InkWell(
                              onDoubleTap: () => Navigator.pushNamed(
                                             context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Row(
