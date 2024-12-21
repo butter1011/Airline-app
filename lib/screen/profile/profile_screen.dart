@@ -41,6 +41,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Row(
                             children: [
                               InkWell(
+                                onDoubleTap: () {
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.eidtprofilescreen);
+                                },
                                 child: Container(
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -73,43 +77,47 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Container(
-                                        // width: 140,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(27),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                  'assets/icons/text.png',
-                                                  color: Colors.white,
-                                                  width: 16,
-                                                  height: 16,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate(
-                                                          '${userData?['userData']['selectedbadges']}'),
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'Clash Grotesk',
-                                                      fontSize: 16,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ],
+                                      InkWell(
+                                        onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                                        child: Container(
+                                          // width: 140,
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            color: Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(27),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0),
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icons/text.png',
+                                                    color: Colors.white,
+                                                    width: 16,
+                                                    height: 16,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            '${userData?['userData']['selectedbadges']}'),
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Clash Grotesk',
+                                                        fontSize: 16,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -210,56 +218,68 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           const SizedBox(
                             height: 21,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${userData?['userData']['name']}',
-                              style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
+                          InkWell(
+                                        onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${userData?['userData']['name']}',
+                                style: const TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${userData?['userData']['bio']}',
-                              style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
-                                letterSpacing: 0.6,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
+                          InkWell(
+                             onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${userData?['userData']['bio']}',
+                                style: const TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  letterSpacing: 0.6,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(
                             height: 14,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('My favorite Airline is'),
-                                  style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
+                          InkWell(
+                             onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('My favorite Airline is'),
+                                    style: const TextStyle(
+                                      fontFamily: 'Clash Grotesk',
+                                      letterSpacing: 0.3,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  ' ${userData?['userData']['favoriteAirlines']}',
-                                  style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
+                                  Text(
+                                    ' ${userData?['userData']['favoriteAirlines']}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Clash Grotesk',
+                                      letterSpacing: 0.3,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(
