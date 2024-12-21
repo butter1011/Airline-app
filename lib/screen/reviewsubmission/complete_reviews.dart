@@ -1,15 +1,19 @@
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CompleteReviews extends StatelessWidget {
+class CompleteReviews extends ConsumerWidget {
   const CompleteReviews({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userData = ref.watch(userDataProvider);
+    final points = userData?["userData"]["points"];
     final screenSize = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
@@ -104,7 +108,7 @@ class CompleteReviews extends StatelessWidget {
                     ),
                     const SizedBox(height: 21),
                     Text(
-                      "You've earned points points",
+                      "You've earned $points points",
                       style: AppStyles.textStyle_24_600
                           .copyWith(fontWeight: FontWeight.w500),
                     ),

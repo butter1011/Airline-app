@@ -26,6 +26,23 @@ class _LeaderboardFilterScreenState
     "Premium economy",
     "Economy",
   ];
+
+  final List airlineCategory = [
+    "Departure & Arrival Experience",
+    "Comfort",
+    "Cleanliness",
+    "Onboard Service",
+    "Food & Beverage",
+    "Entertainment & WiFi"
+  ];
+  final List airportCategory = [
+    "Accessibility",
+    "Wait Times",
+    "Helpfulness",
+    "Ambience",
+    "Food & Beverage",
+    "Amenities and Facilities"
+  ];
   final List<dynamic> continent = [
     "All",
     "Africa",
@@ -35,30 +52,44 @@ class _LeaderboardFilterScreenState
     "Oceania"
   ];
 
-  late List<bool> selectedairTypeStates;
+  late List<bool> selectedAirTypeStates;
   late List<bool> selectedFlyerClassStates;
   late List<bool> selectedContinentStates;
+  late List<bool> selectedCategoryStates;
+  List<String> currentCategories = [];
 
   bool typeIsExpanded = true;
   bool flyerClassIsExpanded = true;
   bool categoryIsExpanded = true;
-  bool rankIsExpanded = true;
   bool continentIsExpanded = true;
   bool openedSearchTextField = false;
 
-  String selectedAirType = "";
+  String selectedAirType = "All";
   String selectedFlyerClass = "";
+  String selectedCategory = "";
   List<dynamic> selectedContinents = [];
 
   @override
   void initState() {
     super.initState();
-    selectedairTypeStates =
+    selectedAirTypeStates =
         List.generate(airType.length, (index) => index == 0);
     selectedFlyerClassStates =
         List.generate(flyerClass.length, (index) => index == 0);
     selectedContinentStates =
         List.generate(continent.length, (index) => index == 0);
+    updateCurrentCategories();
+  }
+
+  void updateCurrentCategories() {
+    if (selectedAirType == "Airport") {
+      currentCategories = List<String>.from(airportCategory);
+    } else if (selectedAirType == "Airline") {
+      currentCategories = List<String>.from(airlineCategory);
+    }
+    selectedCategoryStates =
+        List.generate(currentCategories.length, (index) => false);
+        
   }
 
   void _toggleFilter(int index, List selectedStates) {
@@ -101,6 +132,7 @@ class _LeaderboardFilterScreenState
           selectedAirType,
           null,
           selectedFlyerClass,
+          selectedCategory,
           selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
@@ -117,10 +149,13 @@ class _LeaderboardFilterScreenState
       selectedStates[index] = true;
 
       // Update selected values based on which list is being modified
-      if (selectedStates == selectedairTypeStates) {
+      if (selectedStates == selectedAirTypeStates) {
         selectedAirType = airType[index];
+        updateCurrentCategories();
       } else if (selectedStates == selectedFlyerClassStates) {
         selectedFlyerClass = flyerClass[index];
+      } else if (selectedStates == selectedCategoryStates) {
+        selectedCategory = currentCategories[index];
       }
     });
 
@@ -129,6 +164,7 @@ class _LeaderboardFilterScreenState
           selectedAirType,
           null,
           selectedFlyerClass == "All" ? null : selectedFlyerClass,
+          selectedCategory,
           selectedContinents.isEmpty || selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
@@ -146,48 +182,11 @@ class _LeaderboardFilterScreenState
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: openedSearchTextField
-            ? TextField(
-                decoration: InputDecoration(
-                  hintStyle: AppStyles.textStyle_14_400
-                      .copyWith(color: Color(0xff38433E)),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color:
-                        Color(0xff38433E), // Set the color of the search icon
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        openedSearchTextField = false;
-                      });
-                    },
-                    icon: Image.asset('assets/icons/icon_cancel.png'),
-                  ),
-                ),
-              )
-            : Text(
-                AppLocalizations.of(context).translate('Filters'),
-                textAlign: TextAlign.center,
-                style: AppStyles.textStyle_16_600,
-              ),
-        // actions: [
-        //   openedSearchTextField
-        //       ? Text("")
-        //       : Padding(
-        //           padding: const EdgeInsets.only(right: 29),
-        //           child: IconButton(
-        //             onPressed: () {
-        //               setState(() {
-        //                 openedSearchTextField = !openedSearchTextField;
-        //               });
-        //             },
-        //             icon: Icon(Icons.search, size: 24),
-        //           ),
-        //         )
-        // ],
+        title: Text(
+          AppLocalizations.of(context).translate('Filters'),
+          textAlign: TextAlign.center,
+          style: AppStyles.textStyle_16_600,
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
           child: Container(color: Colors.black, height: 4.0),
@@ -200,6 +199,8 @@ class _LeaderboardFilterScreenState
             _buildTypeCategory(),
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
+            const SizedBox(height: 17),
+            _buildCategoryLeaderboards(),
             const SizedBox(height: 17),
             _buildContinentLeaderboards(),
             const SizedBox(height: 85),
@@ -242,9 +243,9 @@ class _LeaderboardFilterScreenState
                       (index) => FilterButton(
                             text: AppLocalizations.of(context)
                                 .translate(airType[index]),
-                            isSelected: selectedairTypeStates[index],
+                            isSelected: selectedAirTypeStates[index],
                             onTap: () => _toggleOnlyOneFilter(
-                                index, selectedairTypeStates),
+                                index, selectedAirTypeStates),
                           )),
                 ),
               ],
@@ -290,6 +291,58 @@ class _LeaderboardFilterScreenState
                               index, selectedFlyerClassStates),
                         )),
               ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryLeaderboards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context).translate('Categories'),
+                style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    categoryIsExpanded = !categoryIsExpanded;
+                  });
+                },
+                icon: Icon(categoryIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
+          ],
+        ),
+        Visibility(
+          visible: categoryIsExpanded,
+          child: Column(
+            children: [
+              selectedAirType == "All"
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "To access this feature, please select an airline or airport.",
+                        style: AppStyles.textStyle_15_600,
+                      ),
+                    )
+                  : Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(
+                          currentCategories.length,
+                          (index) => FilterButton(
+                                text: AppLocalizations.of(context)
+                                    .translate(currentCategories[index]),
+                                isSelected: selectedCategoryStates[index],
+                                onTap: () => _toggleOnlyOneFilter(
+                                    index, selectedCategoryStates),
+                              )),
+                    ),
             ],
           ),
         ),

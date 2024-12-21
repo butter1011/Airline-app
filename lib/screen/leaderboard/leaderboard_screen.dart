@@ -64,7 +64,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     });
     ref
         .read(airlineAirportProvider.notifier)
-        .getFilteredList(filterType, null, null);
+        .getFilteredList(filterType, null, null, null);
   }
 
   @override
@@ -127,7 +127,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
     ref
         .read(airlineAirportProvider.notifier)
-        .getFilteredList("All", null, null);
+        .getFilteredList("All", null, null, null);
 
     final ratingList = ref.watch(reviewsAirlineProvider).reviews;
     final UserId = ref.watch(userDataProvider)?['userData']['_id'];
@@ -157,7 +157,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             // Add setState to trigger UI refresh
             ref
                 .read(airlineAirportProvider.notifier)
-                .getFilteredList(filterType, _searchQuery, null);
+                .getFilteredList(filterType, _searchQuery, null, null);
 
             setState(() {});
           }
@@ -243,7 +243,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           });
                           ref
                               .read(airlineAirportProvider.notifier)
-                              .getFilteredList(filterType, _searchQuery, null);
+                              .getFilteredList(
+                                  filterType, _searchQuery, null, null);
                         },
                         decoration: InputDecoration(
                           hintText: 'Search',

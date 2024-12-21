@@ -302,7 +302,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   /// [flyerClass] - Optional class type to sort results
   /// [selectedContinents] - Optional list of continents to filter by
   void getFilteredList(
-      String filterType, String? searchQuery, String? flyerClass,
+      String filterType, String? searchQuery, String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
@@ -326,7 +326,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
     List<Map<String, dynamic>> filteredList = [];
     final cacheKey =
-        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
+        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedCategory ?? ''}_${selectedContinents?.join('_') ?? ''}';
 
     if (state.sortedListCache.containsKey(cacheKey)) {
       state = state.copyWith(filteredList: state.sortedListCache[cacheKey]!);
@@ -366,7 +366,23 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
       filteredList.sort((a, b) => b[sortKey].compareTo(a[sortKey]));
     }
-
+      if (selectedCategory != null && selectedCategory.isNotEmpty) {
+        final sortKey = switch (selectedCategory) {
+          "Departure & Arrival Experience" => 'departureArrival',
+          "Comfort" => 'comfort',
+          "Cleanliness" => 'cleanliness',
+          "Onboard Service" => 'onboardService',
+          "Food & Beverage" => 'foodBeverage',
+          "Entertainment & WiFi" => 'entertainmentWifi',
+          "Accessibility" => 'accessibility',
+          "Wait Times" => 'waitTimes',
+          "Helpfulness" => 'helpfulness',
+          "Ambience" => 'ambienceComfort',
+          "Amenities and Facilities" => 'amenities',
+          _ => 'departureArrival'
+        };
+        filteredList.sort((a, b) => (b[sortKey] ?? 0.0).compareTo(a[sortKey] ?? 0.0));       
+      }
     if (searchQuery != null && searchQuery.isNotEmpty) {
       final query = searchQuery.toLowerCase();
       filteredList = filteredList.where((item) {
