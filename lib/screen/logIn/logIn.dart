@@ -181,6 +181,7 @@ class _LoginState extends ConsumerState<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
       body: isLoading
@@ -190,21 +191,19 @@ class _LoginState extends ConsumerState<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/plane.png',
-                    width: 575,
-                    height: 575,
+                    'assets/images/login.png',
+                    width: screenSize.width,
+                    height: screenSize.height * 0.74,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(
-                    height: 82,
-                  ),
+                  Spacer(),
                   GestureDetector(
                     onTap: () {
                       _loginWithWhatsApp();
                     },
                     child: Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: 26, horizontal: 48),
+                          EdgeInsets.only(bottom: 100, right: 48, left: 48),
                       child: Row(children: <Widget>[
                         Expanded(
                             child: Divider(

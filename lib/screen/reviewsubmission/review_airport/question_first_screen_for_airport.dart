@@ -19,19 +19,19 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
         .watch(reviewFeedBackProviderForAirport.notifier)
         .numberOfSelectedAspects();
 
-    final airlinData = ref.watch(aviationInfoProvider);
+    final airlineData = ref.watch(aviationInfoProvider);
 
     final airportname = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.airport);
+        .getAirportName(airlineData.airport);
     final logoImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportLogoImage(airlinData.airport);
+        .getAirportLogoImage(airlineData.airport);
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportBackgroundImage(airlinData.airport);
+        .getAirportBackgroundImage(airlineData.airport);
 
-    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final selectedClassOfTravel = airlineData.selectedClassOfTravel;
 
     return WillPopScope(
       onWillPop: () async {
@@ -172,8 +172,8 @@ class BuildQuestionHeader extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: Image.network(
-            backgroundImage,
+          child:  Image.asset(
+            "assets/images/airport.png",
             fit: BoxFit.cover,
           ),
         ),
