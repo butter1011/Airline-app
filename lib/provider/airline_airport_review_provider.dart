@@ -105,18 +105,17 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   }
 
   List<Map<String, dynamic>> getTopFiveReviews() {
-    var sortedReviews =
-        state.reviews.toList()
-          ..sort((a, b) {
-            var ratingA = a['rating'];
-            var ratingB = b['rating'];
-            if (ratingA is num && ratingB is num) {
-              return ratingB.compareTo(ratingA);
-            } else if (ratingA is String && ratingB is String) {
-              return double.parse(ratingB).compareTo(double.parse(ratingA));
-            }
-            return 0;
-          });
+    var sortedReviews = state.reviews.toList()
+      ..sort((a, b) {
+        var ratingA = a['rating'];
+        var ratingB = b['rating'];
+        if (ratingA is num && ratingB is num) {
+          return ratingB.compareTo(ratingA);
+        } else if (ratingA is String && ratingB is String) {
+          return double.parse(ratingB).compareTo(double.parse(ratingA));
+        }
+        return 0;
+      });
 
     return sortedReviews.take(5).toList();
   }
@@ -202,22 +201,22 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     return result;
   }
 
-  List<Map<String, dynamic>> getAirlineReviewsSortedByCleanliness() {
+  List<Map<String, dynamic>> getAirlineReviewsSorted(airlineSortKey) {
     final airlineReviews = getAirlineReviewsWithScore();
 
     return List.from(airlineReviews)
-      ..sort((a, b) => b['cleanliness'].compareTo(a['cleanliness']));
+      ..sort((a, b) => b[airlineSortKey].compareTo(a[airlineSortKey]));
   }
 
-  List<Map<String, dynamic>> getAirlineReviewsSortedByOnboardService() {
-    final airlineReviews = getAirlineReviewsWithScore();
+  List<Map<String, dynamic>> getAirportReviewsSorted(airportSortKey) {
+    final airportReviews = getAirportReviewsWithScore();
 
-    return List.from(airlineReviews)
-      ..sort((a, b) => b['onboardService'].compareTo(a['onboardService']));
+    return List.from(airportReviews)
+      ..sort((a, b) => b[airportSortKey].compareTo(a[airportSortKey]));
   }
 
-  void getFilteredReviews(
-      String filterType, String? searchQuery, String? flyerClass,
+  void getFilteredReviews(String filterType, String? searchQuery,
+      String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
@@ -265,14 +264,42 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
             getAirportReviewsWithScore().where(checkContinent).toList();
         break;
       case 'Cleanliness':
-        filteredReviews = getAirlineReviewsSortedByCleanliness()
+        filteredReviews = getAirlineReviewsSorted("cleanliness")
             .where(checkContinent)
             .toList();
         break;
       case 'Onboard':
-        filteredReviews = getAirlineReviewsSortedByOnboardService()
+        filteredReviews = getAirlineReviewsSorted("onboardService")
             .where(checkContinent)
             .toList();
+        break;
+      case 'Food & Beverage':
+        filteredReviews.addAll(
+            getAirlineReviewsSorted("foodBeverage").where(checkContinent));
+        break;
+      case 'Entertainment & WiFi':
+        filteredReviews.addAll(
+            getAirlineReviewsSorted("entertainmentWifi").where(checkContinent));
+        break;
+      case 'Accessibility':
+        filteredReviews.addAll(
+            getAirportReviewsSorted("accessibility").where(checkContinent));
+        break;
+      case 'Wait Times':
+        filteredReviews
+            .addAll(getAirportReviewsSorted("waitTimes").where(checkContinent));
+        break;
+      case 'Helpfulness':
+        filteredReviews.addAll(
+            getAirportReviewsSorted("helpfulness").where(checkContinent));
+        break;
+      case 'Ambience':
+        filteredReviews.addAll(
+            getAirportReviewsSorted("ambienceComfort").where(checkContinent));
+        break;
+      case 'Amenities':
+        filteredReviews
+            .addAll(getAirportReviewsSorted("amenities").where(checkContinent));
         break;
       default:
         filteredReviews = [
@@ -306,7 +333,39 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         }
       }
     }
+    if (selectedCategory != null && selectedCategory.isNotEmpty) {
+      final sortKey = switch (selectedCategory) {
+        "Departure & Arrival Experience" => 'departureArrival',
+        "Comfort" => 'comfort',
+        "Cleanliness" => 'cleanliness',
+        "Onboard Service" => 'onboardService',
+        "Food & Beverage" => 'foodBeverage',
+        "Entertainment & WiFi" => 'entertainmentWifi',
+        "Accessibility" => 'accessibility',
+        "Wait Times" => 'waitTimes',
+        "Helpfulness" => 'helpfulness',
+        "Ambience" => 'ambienceComfort',
+        "Amenities and Facilities" => 'amenities',
+        _ => 'departureArrival'
+      };
+      filteredReviews = filteredReviews.where((item) {
+        if (item.containsKey("from")) {
+          return item['airline'][sortKey] != null;
+        } else {
+          return item['airport'][sortKey] != null;
+        }
+      }).toList();
 
+      if (filteredReviews.isNotEmpty) {
+        if (filteredReviews[0].containsKey("from")) {
+          filteredReviews.sort((a, b) => (b['airline'][sortKey] ?? 0)
+              .compareTo(a['airline'][sortKey] ?? 0));
+        } else {
+          filteredReviews.sort((a, b) => (b['airport'][sortKey] ?? 0)
+              .compareTo(a['airport'][sortKey] ?? 0));
+        }
+      }
+    }
     state = state.copyWith(
       filteredReviews: filteredReviews,
       sortedListCache: {...state.sortedListCache, cacheKey: filteredReviews},
