@@ -1,24 +1,29 @@
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:airline_app/screen/profile/map_expand_screen.dart';
 import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
 import 'package:airline_app/utils/app_styles.dart';
-
-class MapScreen extends StatefulWidget {
+import 'package:geocoding/geocoding.dart';
+class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   late MapController _mapController;
   Position? _currentPosition;
   bool _isLoading = true;
   LatLng? _startPosition;
+
+  List<Marker> _airportMarkers = [];
 
   @override
   void initState() {
@@ -27,8 +32,78 @@ class _MapScreenState extends State<MapScreen> {
     // Delay the location check until after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLocationPermission();
+      _loadAirportMarkers();
     });
   }
+Future<LatLng?> getLatLngFromLocation(String location) async {
+  try {
+    List<Location> locations = await locationFromAddress(location);
+    if (locations.isNotEmpty) {
+      return LatLng(locations.first.latitude, locations.first.longitude);
+    }
+  } catch (e) {
+    debugPrint('Error getting coordinates for $location: $e');
+  }
+  return null;
+}
+
+  Future<void> _loadAirportMarkers() async {
+    final airportData = ref.watch(airlineAirportProvider).airportData;
+    ref
+        .read(airlineAirportProvider.notifier)
+        .getFilteredList('Airport', null, null);
+final airportReviewData =ref
+                                      .watch(airlineAirportProvider)
+                                      .filteredList;
+    print('airportReviewData🧨🧶🧶🧵🧶🧶🎇$airportReviewData');
+    List<Marker> markers = [];
+    
+    for (var airport in airportReviewData) {
+      final location = airport['location'];
+      //  print('🎄🎄$location');
+      final name = airport['name'] ;
+      final score = airport['overall'] ;
+      
+      final coordinates = await getLatLngFromLocation(location);
+      print('🧶🎨🎨🖼$coordinates');
+      if (coordinates != null) {
+        markers.add(
+          Marker(
+            point: coordinates,
+            width: 200,
+            height: 200,
+            child: Column(
+              children: [
+                Icon(Icons.local_airport, color: Colors.blue, size: 50),
+                Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                        'Score: $score',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+    
+       setState(() {
+      _airportMarkers = markers;
+    });}
 
   Future<void> _checkLocationPermission() async {
     bool serviceEnabled;
@@ -154,6 +229,10 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         ],
                       ),
+   MarkerLayer(
+      markers: _airportMarkers,
+    ),
+
                     if (_startPosition != null)
                       MarkerLayer(
                         markers: [
