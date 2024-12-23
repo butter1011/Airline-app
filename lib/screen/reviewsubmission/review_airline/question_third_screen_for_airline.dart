@@ -241,6 +241,11 @@ class _QuestionThirdScreenForAirlineState
       }
 
       if (result['success']) {
+        final updatedUserData = await _reviewController.increaseUserPoints(
+            userData?['userData']['_id'], 500);
+        ref
+            .read(userDataProvider.notifier)
+            .setUserData(updatedUserData["data"]);
         await _handleSuccessfulSubmission(
           context: context,
           result: result,
@@ -305,12 +310,14 @@ class _QuestionThirdScreenForAirlineState
 
     if (!mounted) return;
 
-    Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-    await showReviewSuccessBottomSheet(
-      context,
-      () => setState(() => isSuccess = true),
-      "Review airport",
-    );
+    Navigator.pushNamed(context, AppRoutes.completereviews);
+    // await showReviewSuccessBottomSheet(
+    //   context,
+    //   () => setState(() => isSuccess = true),
+    //   "Review airport",
+    // );
+
+    
   }
 
   void _handleFailedSubmission(BuildContext context) {

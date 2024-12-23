@@ -77,6 +77,8 @@ dependencies:
   gif: ^2.3.0
   dio: ^5.7.0
   animated_flip_counter: ^0.3.4
+  fl_chart: ^0.69.2
+  geocoding: ^3.0.0
 
 
 dev_dependencies:

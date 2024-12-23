@@ -145,8 +145,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           colors: [
                             // No color at the top
                             Colors.black.withOpacity(0.8),
-                            Colors
-                                .transparent, // Gradient color from 30px downwards
+                            Colors.transparent,
                           ],
                           stops: const [
                             0.1,
@@ -372,7 +371,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     );
   }
 }
-
 class CategoryButtons extends ConsumerWidget {
   final bool isAirline;
   final Map airportData;

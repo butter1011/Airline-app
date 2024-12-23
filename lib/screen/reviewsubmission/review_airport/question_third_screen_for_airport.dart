@@ -132,7 +132,7 @@ class _QuestionThirdScreenForAirportState
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final dateRanged = airlinData.dateRange;
+  
 
     return WillPopScope(
       onWillPop: () async {
@@ -215,7 +215,16 @@ class _QuestionThirdScreenForAirportState
                                       result['data']['data']['_id']);
                                 }
 
-                                if (result != null) {
+                                if (result['success']) {
+                                  final updatedUserData =
+                                      await _reviewController
+                                          .increaseUserPoints(
+                                              ref.watch(userDataProvider)?[
+                                                  'userData']['_id'],
+                                              500);
+                                  ref
+                                      .read(userDataProvider.notifier)
+                                      .setUserData(updatedUserData["data"]);
                                   if (index != null && isDeparture != null) {
                                     final updatedBoardingPass = ref
                                         .read(boardingPassesProvider.notifier)
@@ -242,11 +251,11 @@ class _QuestionThirdScreenForAirportState
 
                                   if (!mounted) return;
                                   Navigator.pushNamed(
-                                      context, AppRoutes.leaderboardscreen);
-                                  await showReviewSuccessBottomSheet(context,
-                                      () {
-                                    setState(() => isSuccess = true);
-                                  }, "Review airline");
+                                      context, AppRoutes.completereviews);
+                                  // await showReviewSuccessBottomSheet(context,
+                                  //     () {
+                                  //   setState(() => isSuccess = true);
+                                  // }, "Review airline");
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;
