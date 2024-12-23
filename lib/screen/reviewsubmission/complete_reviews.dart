@@ -1,15 +1,19 @@
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CompleteReviews extends StatelessWidget {
+class CompleteReviews extends ConsumerWidget {
   const CompleteReviews({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userData = ref.watch(userDataProvider);
+    final points = userData?["userData"]["points"];
     final screenSize = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
@@ -84,60 +88,71 @@ class CompleteReviews extends StatelessWidget {
             ]),
           ),
         ]),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          height: screenSize.height * 0.37,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 27, bottom: 16, left: 24, right: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text("Your Score is 9",
-                          style: AppStyles.textStyle_32_600),
-                    ),
-                    const SizedBox(height: 21),
-                    Text(
-                      "You've earned points points",
-                      style: AppStyles.textStyle_24_600
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "Your feedback helps make every journey better!",
-                      style: AppStyles.textStyle_14_400,
-                    ),
-                    const SizedBox(height: 18),
-                    const Row(
-                      children: [
-                        ReviewScoreIcon(iconUrl: 'assets/icons/review_cup.png'),
-                        SizedBox(width: 16),
-                        ReviewScoreIcon(
-                            iconUrl: 'assets/icons/review_notification.png'),
-                      ],
-                    )
-                  ],
-                ),
+        bottomNavigationBar: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              const Divider(thickness: 2, color: Colors.black),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: NavButton(
-                    text: "Review Airport",
-                    onPressed: () => Navigator.pushNamed(
-                        context, AppRoutes.reviewsubmissionscreen),
-                    color: Colors.white),
-              )
-            ],
-          ),
-        ),
-      ),
+              height: screenSize.height * 0.37,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 27, bottom: 16, left: 24, right: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Text("Your Score is 9",
+                              style: AppStyles.textStyle_32_600),
+                        ),
+                        const SizedBox(height: 21),
+                        Text(
+                          "You've earned 500 points",
+                          style: AppStyles.textStyle_24_600
+                              .copyWith(fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          "Your feedback helps make every journey better!",
+                          style: AppStyles.textStyle_14_400,
+                        ),
+                        const SizedBox(height: 18),
+                        const Row(
+                          children: [
+                            ReviewScoreIcon(iconUrl: 'assets/icons/review_cup.png'),
+                            SizedBox(width: 16),
+                            ReviewScoreIcon(
+                                iconUrl: 'assets/icons/review_notification.png'),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  const Divider(thickness: 2, color: Colors.black),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    child: NavButton(
+                        text: "Review Airport",
+                        onPressed: () => Navigator.pushNamed(
+                            context, AppRoutes.reviewsubmissionscreen),
+                        color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pushNamed(context, AppRoutes.leaderboardscreen),
+              ),
+            ),
+          ],
+        ),      ),
     );
   }
 }
