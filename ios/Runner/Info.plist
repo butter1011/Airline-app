@@ -49,6 +49,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes and capture photos of aviations</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when in the background to track your position on the map and provide location-based services</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background to track your position on the map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
