@@ -76,10 +76,14 @@ class AirportList extends StatelessWidget {
                 children: [
                   Container(
                     height: 40,
+                    width: 40,
                     decoration: AppStyles.circleDecoration,
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(airportData['logoImage']),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        airportData['logoImage'],
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
