@@ -94,7 +94,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      toolbarHeight: MediaQuery.of(context).size.height * 0.08,
       backgroundColor: Colors.white,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
