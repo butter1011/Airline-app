@@ -39,6 +39,6 @@ class AppRoutes {
   static const calendersyncscreen = "/calendersyncscreen";
   static const aboutapp = "/aboutapp";
   static const termsofservice = "/termsofservice";
-  static const example = "/example";
+  static const example = "/examplewora college";
   static const helpFaqs = "/helpFaqs";
 }

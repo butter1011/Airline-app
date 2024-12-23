@@ -1,5 +1,6 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'dart:convert';
+import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,9 @@ import 'package:airline_app/screen/profile/map_expand_screen.dart';
 import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
 import 'package:airline_app/utils/app_styles.dart';
+import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart';
+
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
 
@@ -22,6 +25,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Position? _currentPosition;
   bool _isLoading = true;
   LatLng? _startPosition;
+  List<Map<String, dynamic>>? airportData=[];
+  
+
+
 
   List<Marker> _airportMarkers = [];
 
@@ -255,10 +262,88 @@ final airportReviewData =ref
     }
   }
 
+
+Future<LatLng> getAirportLatLng(String airportName) async {
+  try {
+    // Get location from airport name
+    List<Location> locations = await locationFromAddress(airportName);
+    
+    // Convert to LatLng format
+    LatLng airportLocation = LatLng(
+      locations.first.latitude,
+      locations.first.longitude,
+    );
+    
+    return airportLocation;
+  } catch (e) {
+    print('Error getting location for $airportName: $e');
+    return const LatLng(0, 0); // Default fallback coordinates
+  }
+}
+void updateAirportLocations() async {
+  if (airportData != null) {
+    for (var airport in airportData!) {
+      LatLng location = await getAirportLatLng(airport['name']);
+      setState(() {
+        airport['location'] = location;
+      });
+    }
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     final PageController pgcontroller = PageController(viewportFraction: 0.9);
+   airportData=ref.watch(airlineAirportProvider).airportData;
 
+    // print('🎃🎊🎃$airportData');
+  final List<Map<String, dynamic>> airportLocations = [
+    
+    {
+      'name': 'Singapore Changi Airport',
+      'location': LatLng(36.5494, -120.7798),
+      'code': 'SIN',
+      'score': '10/10',
+      'country': 'Singapore',
+      'terminals': 4,
+      'yearBuilt': 1981,
+      'annualPassengers': '68.3M',
+      'description': 'Features the world\'s tallest indoor waterfall'
+    },
+    {
+      'name': 'Tokyo Haneda Airport',
+      'location': LatLng(38.5494, -121.7798),
+      'code': 'HND',
+      'score': '9.5/10',
+      'country': 'Japan',
+      'terminals': 3,
+      'yearBuilt': 1931,
+      'annualPassengers': '87.1M',
+      'description': 'Primary hub for Japan Airlines and ANA'
+    },
+    {
+      'name': 'Hong Kong International Airport',
+      'location': LatLng(38.5494, -102.7798),
+      'code': 'HKG',
+      'score': '9/10',
+      'country': 'Hong Kong',
+      'terminals': 2,
+      'yearBuilt': 1998,
+      'annualPassengers': '71.5M',
+      'description': 'Major aviation hub for East Asia'
+    },
+    {
+      'name': 'Bangkok Suvarnabhumi Airport',
+      'location': LatLng(35.6900, -100.7501),
+      'code': 'BKK',
+      'score': '8.5/10',
+      'country': 'Thailand',
+      'terminals': 2,
+      'yearBuilt': 2006,
+      'annualPassengers': '63.4M',
+      'description': 'Main hub for Thai Airways International'
+    }
+  ];
     return Container(
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -304,16 +389,35 @@ final airportReviewData =ref
 
                     if (_startPosition != null)
                       MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: _startPosition!,
-                            width: 40,
-                            height: 40,
-                            child: Icon(Icons.location_pin,
-                                color: Colors.green.shade700, size: 60),
-                          ),
-                        ],
-                      ),
+  markers: airportLocations.map((airport) => Marker(
+    point: airport['location'],
+    width: 200,
+    height: 200,
+    child: Column(
+      children: [
+        Icon(Icons.local_airport, 
+          color: Colors.red.shade700, 
+          size: 30
+        ),
+        Container(
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            airport['name'],
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    ),
+  )).toList(),
+),
+
                   ],
                 ),
               ),

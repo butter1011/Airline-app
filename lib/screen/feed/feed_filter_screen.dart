@@ -24,7 +24,22 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     "Premium economy",
     "Economy",
   ];
-
+  final List airlineCategory = [
+    "Departure & Arrival Experience",
+    "Comfort",
+    "Cleanliness",
+    "Onboard Service",
+    "Food & Beverage",
+    "Entertainment & WiFi"
+  ];
+  final List airportCategory = [
+    "Accessibility",
+    "Wait Times",
+    "Helpfulness",
+    "Ambience",
+    "Food & Beverage",
+    "Amenities and Facilities"
+  ];
   final List<dynamic> continent = [
     "All",
     "Africa",
@@ -37,16 +52,18 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   late List<bool> selectedairTypeStates;
   late List<bool> selectedFlyerClassStates;
   late List<bool> selectedContinentStates;
+  late List<bool> selectedCategoryStates;
+  List<String> currentCategories = [];
 
   bool typeIsExpanded = true;
   bool flyerClassIsExpanded = true;
   bool categoryIsExpanded = true;
-  bool rankIsExpanded = true;
   bool continentIsExpanded = true;
   bool openedSearchTextField = false;
 
-  String selectedAirType = "";
+  String selectedAirType = "All";
   String selectedFlyerClass = "";
+  String selectedCategory = "";
   List<dynamic> selectedContinents = [];
 
   @override
@@ -58,6 +75,16 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         List.generate(flyerClass.length, (index) => index == 0);
     selectedContinentStates =
         List.generate(continent.length, (index) => index == 0);
+  }
+
+  void updateCurrentCategories() {
+    if (selectedAirType == "Airport") {
+      currentCategories = List<String>.from(airportCategory);
+    } else if (selectedAirType == "Airline") {
+      currentCategories = List<String>.from(airlineCategory);
+    }
+    selectedCategoryStates =
+        List.generate(currentCategories.length, (index) => false);
   }
 
   void _toggleFilter(int index, List selectedStates) {
@@ -100,6 +127,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           selectedAirType,
           null,
           selectedFlyerClass,
+          selectedCategory,
           selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
@@ -107,9 +135,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
-    print(selectedStates);
-    print("------------------------------------");
-    print(index);
     setState(() {
       for (int i = 0; i < selectedStates.length; i++) {
         selectedStates[i] = false;
@@ -118,8 +143,11 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
       if (selectedStates == selectedairTypeStates) {
         selectedAirType = airType[index];
+              updateCurrentCategories();
       } else if (selectedStates == selectedFlyerClassStates) {
         selectedFlyerClass = flyerClass[index];
+      } else if (selectedStates == selectedCategoryStates) {
+        selectedCategory = currentCategories[index];
       }
     });
 
@@ -127,6 +155,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           selectedAirType,
           null,
           selectedFlyerClass == "All" ? null : selectedFlyerClass,
+          selectedCategory,
           selectedContinents.isEmpty || selectedContinents[0] == "All"
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
@@ -171,21 +200,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
                 textAlign: TextAlign.center,
                 style: AppStyles.textStyle_16_600,
               ),
-        // actions: [
-        //   openedSearchTextField
-        //       ? Text("")
-        //       : Padding(
-        //           padding: const EdgeInsets.only(right: 29),
-        //           child: IconButton(
-        //             onPressed: () {
-        //               setState(() {
-        //                 openedSearchTextField = !openedSearchTextField;
-        //               });
-        //             },
-        //             icon: Icon(Icons.search, size: 24),
-        //           ),
-        //         )
-        // ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
           child: Container(color: Colors.black, height: 4.0),
@@ -198,6 +212,8 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
             _buildTypeCategory(),
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
+            const SizedBox(height: 17),
+            _buildCategoryLeaderboards(),
             const SizedBox(height: 17),
             _buildContinentLeaderboards(),
             const SizedBox(height: 85),
@@ -288,6 +304,58 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
                               index, selectedFlyerClassStates),
                         )),
               ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryLeaderboards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context).translate('Categories'),
+                style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    categoryIsExpanded = !categoryIsExpanded;
+                  });
+                },
+                icon: Icon(categoryIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
+          ],
+        ),
+        Visibility(
+          visible: categoryIsExpanded,
+          child: Column(
+            children: [
+              selectedAirType == "All"
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "To access this feature, please select an airline or airport.",
+                        style: AppStyles.textStyle_15_600,
+                      ),
+                    )
+                  : Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(
+                          currentCategories.length,
+                          (index) => FilterButton(
+                                text: AppLocalizations.of(context)
+                                    .translate(currentCategories[index]),
+                                isSelected: selectedCategoryStates[index],
+                                onTap: () => _toggleOnlyOneFilter(
+                                    index, selectedCategoryStates),
+                              )),
+                    ),
             ],
           ),
         ),

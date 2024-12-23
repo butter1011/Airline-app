@@ -30,7 +30,6 @@ class _OverviewAirlineReviewScreenState
     final selectedClassOfTravel =
         ref.watch(aviationInfoProvider).selectedClassOfTravel;
     final date = ref.watch(aviationInfoProvider).dateRange[0];
-    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -50,7 +49,7 @@ class _OverviewAirlineReviewScreenState
                             children: [
                               Container(
                                 width: constraints.maxWidth,
-                                height: constraints.maxHeight * 0.5,                           
+                                height: constraints.maxHeight * 0.5,
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     image:
@@ -58,26 +57,24 @@ class _OverviewAirlineReviewScreenState
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                child:  Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            airlineName,
-                                            style: AppStyles.oswaldTextStyle
-                                                .copyWith(color: Colors.black, fontSize:24),
-                                          ),
-                                          Text(
-                                            ' Airlines',
-                                            style: AppStyles.oswaldTextStyle
-                                                .copyWith(color: Colors.black,
-                                                    fontSize: 24),
-                                          )
-                                        ],
-                                      ),
-                              
-                              ),                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      airlineName,
+                                      style: AppStyles.oswaldTextStyle.copyWith(
+                                          color: Colors.black, fontSize: 24),
+                                    ),
+                                    Text(
+                                      ' Airlines',
+                                      style: AppStyles.oswaldTextStyle.copyWith(
+                                          color: Colors.black, fontSize: 24),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight * 0.4,
                                   decoration: const BoxDecoration(
@@ -187,9 +184,9 @@ class _OverviewAirlineReviewScreenState
 
   Widget _bottomSheet() {
     return LayoutBuilder(builder: (context, constraints) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: constraints.maxHeight * 0.02),
-        child: Column(
+      return
+    
+        Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
@@ -203,7 +200,6 @@ class _OverviewAirlineReviewScreenState
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                
                     children: [
                       Container(
                         width: constraints.maxWidth * 0.13,
@@ -231,10 +227,9 @@ class _OverviewAirlineReviewScreenState
               height: 2,
               color: Colors.black,
             ),
-         
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: constraints.maxWidth * 0.06,
+              padding: EdgeInsets.symmetric(
+                  horizontal: constraints.maxWidth * 0.06,
                   vertical: constraints.maxHeight * 0.02),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -259,7 +254,7 @@ class _OverviewAirlineReviewScreenState
               ),
             )
           ],
-        ),
+      
       );
     });
   }
