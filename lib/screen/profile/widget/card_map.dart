@@ -1,5 +1,5 @@
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'dart:convert';
-
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -30,6 +30,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
 
 
+  List<Marker> _airportMarkers = [];
+
+  TextEditingController _searchController = TextEditingController();
+List<Map<String, dynamic>> _searchResults = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -37,8 +43,143 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     // Delay the location check until after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLocationPermission();
+      _loadAirportMarkers();
     });
   }
+
+  void _handleSearch(String query) {
+  if (query.isEmpty) {
+    setState(() {
+      _searchResults = [];
+    });
+    return;
+  }
+
+  final airportReviewData = ref.watch(airlineAirportProvider).filteredList;
+  final results = airportReviewData.where((airport) {
+    final name = airport['name'].toString().toLowerCase();
+    final location = airport['location'].toString().toLowerCase();
+    return name.contains(query.toLowerCase()) || 
+           location.contains(query.toLowerCase());
+  }).toList();
+
+  setState(() {
+    _searchResults = results;
+  });
+}
+
+Future<LatLng?> getLatLngFromLocation(String location) async {
+  try {
+    List<Location> locations = await locationFromAddress(location);
+    if (locations.isNotEmpty) {
+      return LatLng(locations.first.latitude, locations.first.longitude);
+    }
+  } catch (e) {
+    debugPrint('Error getting coordinates for $location: $e');
+  }
+  return null;
+}
+
+  Future<void> _loadAirportMarkers() async {
+    final airportData = ref.watch(airlineAirportProvider).airportData;
+    ref
+        .read(airlineAirportProvider.notifier)
+        .getFilteredList('Airport', null, null);
+final airportReviewData =ref
+                                      .watch(airlineAirportProvider)
+                                      .filteredList;
+
+    List<Marker> markers = [];
+    
+    for (var airport in airportReviewData) {
+      final location = airport['location'];
+
+      final name = airport['name'] ;
+      final score = airport['overall'] ;
+      
+      final coordinates = await getLatLngFromLocation(location);
+      
+      if (coordinates != null) {
+        markers.add(
+  Marker(
+  point: coordinates,
+  width: 200,
+  height: 200,
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.local_airport,
+                color: Colors.blue.shade700,
+                size: 40,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              constraints: const BoxConstraints(maxWidth: 150),
+              child: Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.green.shade100,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Score: $score',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green.shade700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+)
+
+        );
+      }
+    }
+    
+       setState(() {
+      _airportMarkers = markers;
+    });}
 
   Future<void> _checkLocationPermission() async {
     bool serviceEnabled;
@@ -242,7 +383,11 @@ void updateAirportLocations() async {
                           ),
                         ],
                       ),
-                    if (_currentPosition != null)
+   MarkerLayer(
+      markers: _airportMarkers,
+    ),
+
+                    if (_startPosition != null)
                       MarkerLayer(
   markers: airportLocations.map((airport) => Marker(
     point: airport['location'],
@@ -295,6 +440,144 @@ void updateAirportLocations() async {
                   ),
                 ),
               ),
+
+
+              Positioned(
+  right: 8,
+  top: 60, // Position below the expand button
+  child: Column(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () {
+              final currentZoom = _mapController.camera.zoom;
+    _mapController.move(_mapController.camera.center, currentZoom + 1);            },
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  ),
+                ),
+                child: const Icon(Icons.add, color: Colors.blue),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                final currentZoom = _mapController.camera.zoom;
+    _mapController.move(_mapController.camera.center, currentZoom - 1);
+              },
+              child: Container(
+                width: 40,
+                height: 40,
+                child: const Icon(Icons.remove, color: Colors.blue),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+Positioned(
+  top: 8,
+  left: 8,
+  right: 60,
+  child: Container(
+    height: 50,
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.7),
+      borderRadius: BorderRadius.circular(25),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: const Offset(0, 1),
+        ),
+      ],
+    ),
+    child: TextField(
+      controller: _searchController,
+      onChanged: _handleSearch,
+      decoration: InputDecoration(
+        hintText: 'Search airports...',
+        prefixIcon: const Icon(Icons.search, color: Colors.blue),
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        suffixIcon: _searchController.text.isNotEmpty
+          ? IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                _searchController.clear();
+                _handleSearch('');
+              },
+            )
+          : null,
+      ),
+    ),
+  ),
+),
+
+if (_searchResults.isNotEmpty)
+  Positioned(
+    top: 60,
+    left: 8,
+    right: 60,
+    child: Container(
+      constraints: const BoxConstraints(maxHeight: 200),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _searchResults.length,
+        itemBuilder: (context, index) {
+          final airport = _searchResults[index];
+          return ListTile(
+            leading: const Icon(Icons.local_airport, color: Colors.blue),
+            title: Text(airport['name']),
+            subtitle: Text(airport['location']),
+            onTap: () async {
+              final coordinates = await getLatLngFromLocation(airport['location']);
+              if (coordinates != null) {
+                _mapController.move(coordinates, 12);
+                _searchController.clear();
+                _handleSearch('');
+              }
+            },
+          );
+        },
+      ),
+    ),
+  ),
+
+
+
               Positioned(
                 bottom: 10,
                 left: -8,
