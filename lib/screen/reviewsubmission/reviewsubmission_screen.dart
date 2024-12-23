@@ -213,19 +213,19 @@ class _ReviewsubmissionScreenState
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  NavButton(
-                    text: AppLocalizations.of(context).translate('Synchronize'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ScannerScreen(),
-                        ),
-                      );
-                    },
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 12),
+                  // NavButton(
+                  //   text: AppLocalizations.of(context).translate('Synchronize'),
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const ScannerScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   color: Colors.white,
+                  // ),
+                  // const SizedBox(height: 12),
                   NavButton(
                     text: AppLocalizations.of(context)
                         .translate('Input manually'),
