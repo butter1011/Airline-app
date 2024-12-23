@@ -20,6 +20,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/global_variable.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
   const QuestionThirdScreenForAirport({super.key});
@@ -43,29 +45,41 @@ class _QuestionThirdScreenForAirportState
   bool isSuccess = false;
 
   Future<void> _uploadImages(String reviewId) async {
-    final url = Uri.parse('$apiUrl/api/v1/airport-review/upload-images');
+    final url = Uri.parse('$apiUrl/api/v1/airport-review/upload-media');
 
-    for (var image in _image) {
+    for (var media in _image) {
       try {
         final request = http.MultipartRequest('POST', url);
-        final filename = image.path.split('/').last;
+        final filename = media.path.split('/').last;
+        final mimeType = lookupMimeType(media.path);
+
+        // Check if file is video or image
+        final isVideo = mimeType?.startsWith('video/') ?? false;
 
         request.files.add(
           await http.MultipartFile.fromPath(
             'files',
-            image.path,
+            media.path,
             filename: filename,
+            contentType: MediaType.parse(
+                mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
           ),
         );
 
         request.fields['id'] = reviewId;
+        request.fields['type'] = isVideo ? 'video' : 'image';
 
-        final response = await request.send();
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
         if (response.statusCode != 200) {
-          throw Exception('Failed to upload image');
+          throw Exception('Failed to upload media: ${response.body}');
         }
+
+        print(
+            'Successfully uploaded ${isVideo ? 'video' : 'image'}: $filename');
       } catch (e) {
-        print('Error uploading image: $e');
+        print('Error uploading media: $e');
         continue;
       }
     }
@@ -132,7 +146,6 @@ class _QuestionThirdScreenForAirportState
         .getAirportBackgroundImage(airlinData.airport);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-  
 
     return WillPopScope(
       onWillPop: () async {
@@ -291,6 +304,142 @@ class _QuestionThirdScreenForAirportState
     );
   }
 
+  Future<void> _pickMedia() async {
+    if (_isPickingImage) return;
+
+    setState(() {
+      _isPickingImage = true;
+    });
+
+    try {
+      final picker = ImagePicker();
+
+      // Show dialog to choose media type
+      final mediaType = await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Choose Media Type'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.image),
+                  title: Text('Image'),
+                  onTap: () => Navigator.pop(context, 'image'),
+                ),
+                ListTile(
+                  leading: Icon(Icons.video_library),
+                  title: Text('Video'),
+                  onTap: () => Navigator.pop(context, 'video'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      if (mediaType == null) return;
+
+      final XFile? pickedFile;
+      if (mediaType == 'image') {
+        pickedFile = await picker.pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 70,
+        );
+      } else {
+        pickedFile = await picker.pickVideo(
+          source: ImageSource.gallery,
+          maxDuration: const Duration(minutes: 1),
+        );
+      }
+
+      if (pickedFile != null) {
+        final file = File(pickedFile.path);
+        final fileSize = await file.length();
+        final maxSize =
+            mediaType == 'image' ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
+
+        if (fileSize > maxSize) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    'File too large. Maximum size is ${maxSize ~/ (1024 * 1024)}MB')),
+          );
+          return;
+        }
+
+        setState(() {
+          _image.add(file);
+        });
+      }
+    } catch (e) {
+      print('Error picking media: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking media: $e')),
+      );
+    } finally {
+      setState(() {
+        _isPickingImage = false;
+      });
+    }
+  }
+
+  Widget _buildImageTile(File file) {
+    final mimeType = lookupMimeType(file.path);
+    final isVideo = mimeType?.startsWith('video/') ?? false;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 50,
+          width: 50,
+          decoration: AppStyles.buttonDecoration.copyWith(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: isVideo
+              ? Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      child: const Icon(
+                        Icons.play_arrow,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                )
+              : Image.file(
+                  file,
+                  fit: BoxFit.cover,
+                ),
+        ),
+        Positioned(
+          right: -5,
+          top: -5,
+          child: GestureDetector(
+            onTap: () => setState(() => _image.remove(file)),
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.cancel_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildFeedbackOptions(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,45 +481,6 @@ class _QuestionThirdScreenForAirportState
     );
   }
 
-  Widget _buildImageTile(File file) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          height: 50,
-          width: 50,
-          decoration: AppStyles.buttonDecoration.copyWith(
-            borderRadius: BorderRadius.circular(8),
-            image: DecorationImage(
-              image: FileImage(file),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Positioned(
-          right: -5,
-          top: -5,
-          child: GestureDetector(
-            onTap: () => setState(() => _image.remove(file)),
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.cancel_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildMediaUploadOption(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -381,7 +491,7 @@ class _QuestionThirdScreenForAirportState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: _pickImage,
+            onTap: _pickMedia,
             child: Container(
               height: 48,
               width: 48,
