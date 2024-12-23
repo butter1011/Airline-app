@@ -160,7 +160,7 @@ class _ReviewsubmissionScreenState
   @override
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
-
+    final screenSize = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -168,7 +168,7 @@ class _ReviewsubmissionScreenState
       },
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 52.2,
+          toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_sharp),
