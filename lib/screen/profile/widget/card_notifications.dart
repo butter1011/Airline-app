@@ -207,35 +207,35 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.calendersyncscreen,
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('Calendar Sync'),
-                  style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontSize: 20,
-                      color: Color(0xFF181818),
-                      fontWeight: FontWeight.w600),
-                ),
-                Image.asset(
-                  'assets/icons/rightarrow.png',
-                  width: 40,
-                  height: 40,
-                )
-              ],
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
+        //   child: InkWell(
+        //     onTap: () {
+        //       Navigator.pushNamed(
+        //         context,
+        //         AppRoutes.calendersyncscreen,
+        //       );
+        //     },
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Text(
+        //           AppLocalizations.of(context).translate('Calendar Sync'),
+        //           style: TextStyle(
+        //               fontFamily: 'Clash Grotesk',
+        //               fontSize: 20,
+        //               color: Color(0xFF181818),
+        //               fontWeight: FontWeight.w600),
+        //         ),
+        //         Image.asset(
+        //           'assets/icons/rightarrow.png',
+        //           width: 40,
+        //           height: 40,
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
           child: InkWell(

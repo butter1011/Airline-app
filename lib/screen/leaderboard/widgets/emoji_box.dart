@@ -97,7 +97,7 @@ class EmojiBox {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(4.0),
+                          padding: const EdgeInsets.all(4.0), 
                           child: SvgPicture.asset(
                             'assets/icons/emoji_${index + 1}.svg',
                             width: 30,
