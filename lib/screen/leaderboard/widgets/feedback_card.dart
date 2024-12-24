@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
@@ -33,10 +33,47 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   int? selectedEmojiIndex;
   final CarouselSliderController buttonCarouselController =
       CarouselSliderController();
+  final Map<String, VideoPlayerController> _videoControllers = {};
 
   @override
   void initState() {
     super.initState();
+    // Initialize video controllers for all videos
+    for (var video in widget.singleFeedback['videos'] ?? []) {
+      _videoControllers[video] = VideoPlayerController.networkUrl(
+        Uri.parse(video),
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      )..initialize().then((_) {
+          _videoControllers[video]?.setLooping(true);
+        });
+    }
+  }
+
+  @override
+  void dispose() {
+    // Dispose all video controllers
+    _videoControllers.forEach((_, controller) {
+      controller.dispose();
+    });
+    super.dispose();
+  }
+
+  Widget _buildVideoPlayer(String videoUrl) {
+    final controller = _videoControllers[videoUrl];
+    if (controller == null) return Container();
+
+    if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller..play()),
+      );
+    }
+
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey,
+      ),
+    );
   }
 
   @override
@@ -50,6 +87,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
+    final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -138,7 +176,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ],
                 ),
           SizedBox(height: 11),
-          if (images.isNotEmpty)
+          if (images.isNotEmpty || videos.isNotEmpty)
             Stack(
               children: [
                 InkWell(
@@ -148,11 +186,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           'userId': userId,
                           'feedbackId': widget.singleFeedback['_id'],
                           'Images': images,
+                          'Videos': videos,
                           'Name': widget.singleFeedback['reviewer']['name'],
                           'Avatar': widget.singleFeedback['reviewer']
                               ['profilePhoto'],
                           'Date':
-                              'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                              'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                           'Usedairport': widget.singleFeedback['airline']
                               ['name'],
                           'Content': widget.singleFeedback['comment'] != null &&
@@ -166,33 +205,35 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               .toString(),
                         });
                   },
-                  child: images != null
-                      ? CarouselSlider(
-                          options: CarouselOptions(
-                            viewportFraction: 1,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      height: 189,
+                      enableInfiniteScroll: false,
+                      scrollPhysics: NeverScrollableScrollPhysics(),
+                    ),
+                    carouselController: buttonCarouselController,
+                    items: [...images, ...videos].map((mediaItem) {
+                      return Builder(builder: (BuildContext context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
                             height: 189,
-                            enableInfiniteScroll: false,
-                            scrollPhysics: NeverScrollableScrollPhysics(),
-                          ),
-                          carouselController: buttonCarouselController,
-                          items: images.map((singleImage) {
-                            return Builder(builder: (BuildContext context) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
-                                  height: 189,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage('$singleImage'),
-                                      fit: BoxFit.cover,
+                            child: videos.contains(mediaItem)
+                                ? _buildVideoPlayer(mediaItem)
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage('$mediaItem'),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            });
-                          }).toList(),
-                        )
-                      : Container(),
+                          ),
+                        );
+                      });
+                    }).toList(),
+                  ),
                 ),
                 Positioned(
                   top: 79,
@@ -224,11 +265,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       'userId': userId,
                       'feedbackId': widget.singleFeedback['_id'],
                       'Images': images,
+                      'Videos': videos,
                       'Name': widget.singleFeedback['reviewer']['name'],
                       'Avatar': widget.singleFeedback['reviewer']
                           ['profilePhoto'],
                       'Date':
-                          'Rated 9/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                          'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
                       'Usedairport': widget.singleFeedback['airline']['name'],
                       'Content': widget.singleFeedback['comment'] != null &&
                               widget.singleFeedback['comment'] != ''
