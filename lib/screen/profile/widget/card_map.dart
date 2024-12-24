@@ -589,8 +589,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         itemCount: airportReviews.length,
                         itemBuilder: (context, index) {
                           final review = airportReviews[index];
-                          print("--------------------------------------");
-                          print(review);
                           final airportName =
                               review['airport']['name'] as String;
                           final rating = review['score'].toStringAsFixed(1);

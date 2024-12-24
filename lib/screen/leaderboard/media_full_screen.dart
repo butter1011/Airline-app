@@ -72,6 +72,17 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   }).toList(),
                   carouselController: buttonCarouselController,
                 ),
+              Positioned(
+                top: 40,
+                left: 16,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_sharp,
+                      color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
               if (imgList.length > 1) ...[
                 Positioned(
                   top: 281,
@@ -221,8 +232,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                 );
 
                                 if (response.statusCode == 200) {
-                                  print(
-                                      '💖🥉❤✔💎${jsonDecode(response.body)['data']}');
                                   setState(() {
                                     ref
                                         .read(reviewsAirlineProvider.notifier)
@@ -237,9 +246,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                                                 ['rating']
                                             .length;
                                   });
-
-                                  print(
-                                      '${jsonDecode(response.body)['data']['rating'].length}');
                                 } else {
                                   // Show error message if API call fails
                                   ScaffoldMessenger.of(context).showSnackBar(
