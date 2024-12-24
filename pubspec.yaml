@@ -80,6 +80,13 @@ dependencies:
   fl_chart: ^0.69.2
   geocoding: ^3.0.0
   video_player: ^2.9.2
+  flutter_launcher_icons: ^0.14.2
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 dev_dependencies:
   flutter_test:
@@ -106,6 +113,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lang/
+    - assets/icon/
 
   # To add assets to your application, add an assets section, like this:
 
