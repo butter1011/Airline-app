@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:video_player/video_player.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
-
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -24,6 +24,86 @@ class MediaFullScreen extends ConsumerStatefulWidget {
 }
 
 class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
+  final Map<String, VideoPlayerController> _videoControllers = {};
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideos();
+  }
+
+  Future<void> _initVideos() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final List<dynamic> videos = args?['Videos'] ?? [];
+
+    for (var video in videos) {
+      try {
+        final controller = VideoPlayerController.networkUrl(
+          Uri.parse(video),
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+
+        await controller.initialize();
+        controller.setLooping(true);
+
+        setState(() {
+          _videoControllers[video] = controller;
+        });
+      } catch (e) {
+        print('Error initializing video $video: $e');
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _videoControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  Widget _buildVideoPlayer(String videoUrl) {
+    final controller = _videoControllers[videoUrl];
+    if (controller == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          VideoPlayer(controller),
+          IconButton(
+            icon: Icon(
+              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              size: 50.0,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                controller.value.isPlaying
+                    ? controller.pause()
+                    : controller.play();
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     CarouselSliderController buttonCarouselController =
@@ -32,8 +112,11 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     final List<dynamic> imgList = args?['Images'] ?? [];
+    final List<dynamic> videoList = args?['Videos'] ?? [];
+    final List<dynamic> mediaList = [...imgList, ...videoList];
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,17 +139,24 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                     viewportFraction: 1,
                     height: 594.0,
                   ),
-                  items: imgList.map((image) {
+                  items: mediaList.map((media) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(image),
-                              fit: BoxFit.cover,
+                        if (videoList.contains(media)) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: _buildVideoPlayer(media),
+                          );
+                        } else {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(media),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                     );
                   }).toList(),
