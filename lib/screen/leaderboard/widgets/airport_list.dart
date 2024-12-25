@@ -172,7 +172,7 @@ class AirportList extends StatelessWidget {
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: changeValue >= 0
+                          color: airportData['isIncreasing']
                               ? const Color(0xFF3FEA9C)
                               : const Color(0xFFFF4961),
                         ),
