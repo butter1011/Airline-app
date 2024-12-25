@@ -10,15 +10,17 @@ class AirportList extends StatelessWidget {
   });
 
   final Map<String, dynamic> airportData;
-
-  List<FlSpot> _getSpots() {
+  (List<FlSpot>, double) _getSpots() {
     final scoreHistory =
         List<Map<String, dynamic>>.from(airportData['scoreHistory'] ?? []);
     if (scoreHistory.isEmpty) {
-      return [
-        const FlSpot(0, 0),
-        const FlSpot(24, 0),
-      ];
+      return (
+        [
+          const FlSpot(0, 0),
+          const FlSpot(24, 0),
+        ],
+        0.0
+      );
     }
 
     final now = DateTime.now();
@@ -27,14 +29,19 @@ class AirportList extends StatelessWidget {
     if (scoreHistory.length == 1) {
       // If only one data point exists, create a flat line with same value
       final score = double.parse(scoreHistory.first['score'].toString());
-      return [
-        FlSpot(0, score),
-        FlSpot(24, score),
-      ];
+      return (
+        [
+          FlSpot(0, score),
+          FlSpot(24, score),
+        ],
+        0.0
+      );
     }
 
     final spots = <FlSpot>[];
     var lastScore = 0.0;
+    var firstScore = 0.0;
+    var isFirstScore = true;
 
     for (var i = 0; i <= 24; i++) {
       final targetTime = twentyFourHoursAgo.add(Duration(hours: i));
@@ -50,16 +57,20 @@ class AirportList extends StatelessWidget {
       );
 
       lastScore = double.parse(relevantScore['score'].toString());
+      if (isFirstScore) {
+        firstScore = lastScore;
+        isFirstScore = false;
+      }
       spots.add(FlSpot(i.toDouble(), lastScore));
     }
 
-    return spots;
+    final change = lastScore - firstScore;
+    return (spots, change);
   }
 
   @override
   Widget build(BuildContext context) {
-    final spots = _getSpots();
-
+    final (spots, changeValue) = _getSpots();
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, AppRoutes.detailairport,
@@ -147,7 +158,7 @@ class AirportList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Total Reviews',
+                        '24h changes',
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -155,11 +166,15 @@ class AirportList extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "+${airportData['totalReviews'].toString()}",
+                        changeValue >= 0
+                            ? "+${changeValue.toStringAsFixed(3)}"                                                                                              
+                            : changeValue.toStringAsFixed(3),
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xff38433e),
+                          color: changeValue >= 0
+                              ? const Color(0xFF3FEA9C)
+                              : const Color(0xFFFF4961),
                         ),
                       ),
                     ],
