@@ -1,26 +1,7 @@
-buildscript {
-    ext.kotlin_version = '1.8.0'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
-                maven {
-            url 'https://maven.fpregistry.io/releases'
-        }
-        maven {
-            url 'https://jitpack.io'
-        }
     }
 }
 
