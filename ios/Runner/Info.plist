@@ -32,11 +32,14 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>otpless.bzpl0offchgcjrm8a4sj</string>
+				<string>com.googleusercontent.apps.131730519366-nj61u0qbrl68m96e5k1l549hsjg21vef</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GIDClientID</key>
+	<string>131730519366-nj61u0qbrl68m96e5k1l549hsjg21vef.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
@@ -47,20 +50,19 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes and capture photos of aviations</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to location when in the background to track your position on the map and provide location-based services</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background to track your position on the map</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open to show your current position on the map</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app requests access to the microphone to record audio comments while capturing video reviews of aviation experiences</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photos access to get QR code and save review images from photo library</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+	<string>Need microphone access for video playback</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need camera access for video capture</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -78,5 +80,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>
