@@ -33,8 +33,17 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     "All": true,
     "Airline": false,
     "Airport": false,
+    "Flight Experience": false,
+    "Comfort": false,
     "Cleanliness": false,
     "Onboard": false,
+    "Food & Beverage": false,
+    "Entertainment & WiFi": false,
+    "Accessibility": false,
+    "Wait Times": false,
+    "Helpfulness": false,
+    "Ambience": false,
+    "Amenities": false,
   };
   void toggleButton(String buttonText) {
     setState(() {
@@ -44,7 +53,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     });
     ref
         .read(reviewsAirlineProvider.notifier)
-        .getFilteredReviews(filterType, null, null);
+        .getFilteredReviews(filterType, null, null, null);
     ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore();
   }
 
@@ -90,7 +99,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
 
     ref
         .read(reviewsAirlineProvider.notifier)
-        .getFilteredReviews("All", null, null);
+        .getFilteredReviews("All", null, null, null);
 
     setState(() {
       isLoading = false;
@@ -186,37 +195,16 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
-                  MainButton(
-                    text: "All",
-                    isSelected: buttonStates["All"]!,
-                    onTap: () => toggleButton("All"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Airline",
-                    isSelected: buttonStates["Airline"]!,
-                    onTap: () => toggleButton("Airline"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Airport",
-                    isSelected: buttonStates["Airport"]!,
-                    onTap: () => toggleButton("Airport"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Cleanliness",
-                    isSelected: buttonStates["Cleanliness"]!,
-                    onTap: () => toggleButton("Cleanliness"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Onboard",
-                    isSelected: buttonStates["Onboard"]!,
-                    onTap: () => toggleButton("Onboard"),
-                  ),
-                ],
+                children: buttonStates.keys.map((buttonText) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: MainButton(
+                      text: buttonText,
+                      isSelected: buttonStates[buttonText]!,
+                      onTap: () => toggleButton(buttonText),
+                    ),
+                  );
+                }).toList(), 
               ),
             ),
             const SizedBox(height: 14),

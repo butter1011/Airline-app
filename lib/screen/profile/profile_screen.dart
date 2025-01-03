@@ -16,12 +16,13 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final UserData = ref.watch(userDataProvider);
+    final userData = ref.watch(userDataProvider);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         return false;
       },
+      
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNavBar(currentIndex: 4),
@@ -41,6 +42,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Row(
                             children: [
                               InkWell(
+                                onDoubleTap: () {
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.eidtprofilescreen);
+                                },
+
+                                  onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+
                                 child: Container(
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -52,11 +63,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                       ]),
                                   child: CircleAvatar(
                                     radius: 36,
-                                    backgroundImage: UserData?['userData']
+                                    backgroundImage: userData?['userData']
                                                 ['profilePhoto'] !=
                                             null
                                         ? NetworkImage(
-                                            UserData?['userData']
+                                            userData?['userData']
                                                 ['profilePhoto'],
                                           )
                                         : const AssetImage(
@@ -73,43 +84,49 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Container(
-                                        // width: 140,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(27),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                  'assets/icons/text.png',
-                                                  color: Colors.white,
-                                                  width: 16,
-                                                  height: 16,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate(
-                                                          '${UserData?['userData']['selectedbadges']}'),
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'Clash Grotesk',
-                                                      fontSize: 16,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ],
+                                      InkWell(
+                                        onDoubleTap: () => ref.read(selectedIndexProvider.notifier).state=2,
+                                              onLongPress: () {
+    ref.read(selectedIndexProvider.notifier).state=2;
+  },
+                                        child: Container(
+                                          // width: 140,
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            color: Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(27),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0),
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icons/text.png',
+                                                    color: Colors.white,
+                                                    width: 16,
+                                                    height: 16,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            '${userData?['userData']['selectedbadges']}'),
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Clash Grotesk',
+                                                        fontSize: 16,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -145,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     width: 4,
                                                   ),
                                                   Text(
-                                                    '${UserData?['userData']['badgeNumber']}',
+                                                    '${userData?['userData']['badgeNumber']}',
                                                     style: TextStyle(
                                                         fontFamily:
                                                             'Clash Grotesk',
@@ -163,42 +180,52 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  Container(
-                                    width: 227,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(width: 2),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(27),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/Lead Icon.png',
-                                              height: 20,
-                                              width: 20,
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${UserData?['userData']['flyertype']}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Clash Grotesk',
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                  InkWell(
+                                    onDoubleTap: () {
+                                      Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+                                    },
+                                      onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+                                    child: Container(
+                                      width: 227,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(width: 2),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(27),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black,
+                                            offset: Offset(2, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icons/Lead Icon.png',
+                                                height: 20,
+                                                width: 20,
                                               ),
-                                            ),
-                                          ],
+                                              Center(
+                                                child: Text(
+                                                  '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
+                                                  style: TextStyle(
+                                                      fontFamily: 'Clash Grotesk',
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -210,56 +237,80 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           const SizedBox(
                             height: 21,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${UserData?['userData']['name']}',
-                              style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
+                          InkWell(
+                                        onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${userData?['userData']['name']}',
+                                style: const TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${UserData?['userData']['bio']}',
-                              style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
-                                letterSpacing: 0.6,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
+                          InkWell(
+                             onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${userData?['userData']['bio']}',
+                                style: const TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  letterSpacing: 0.6,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(
                             height: 14,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('My favorite Airline is'),
-                                  style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
+                          InkWell(
+                             onDoubleTap: () => Navigator.pushNamed(
+                                            context, AppRoutes.eidtprofilescreen),
+                                              onLongPress: () {
+    Navigator.pushNamed(
+        context, AppRoutes.eidtprofilescreen);
+  },
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('My favorite Airline is'),
+                                    style: const TextStyle(
+                                      fontFamily: 'Clash Grotesk',
+                                      letterSpacing: 0.3,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  ' ${UserData?['userData']['favoriteAirlines']}',
-                                  style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
+                                  Text(
+                                    ' ${userData?['userData']['favoriteAirlines']}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Clash Grotesk',
+                                      letterSpacing: 0.3,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -280,7 +331,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                                 Text(
-                                  ' 500',
+                                  "  ${userData?['userData']["points"]}",
                                   style: const TextStyle(
                                     fontFamily: 'Clash Grotesk',
                                     letterSpacing: 0.3,

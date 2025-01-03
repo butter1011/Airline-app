@@ -19,27 +19,27 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     final (numberOfFirstSelectedAspects, numberOfSecondSelectedAspects) = ref
         .watch(reviewFeedBackProviderForAirline.notifier)
         .numberOfSelectedAspects();
-    final airlinData = ref.watch(aviationInfoProvider);
+    final airlineData = ref.watch(aviationInfoProvider);
     final from = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.from);
+        .getAirportName(airlineData.from);
 
     final to = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.to);
+        .getAirportName(airlineData.to);
 
     final airline = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlinData.airline);
+        .getAirlineName(airlineData.airline);
 
     final logoImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlinData.airline);
+        .getAirlineLogoImage(airlineData.airline);
 
-    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
+    final selectedClassOfTravel = airlineData.selectedClassOfTravel;
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlinData.airline);
+        .getAirlineBackgroundImage(airlineData.airline);
 
     return WillPopScope(
       onWillPop: () async {
@@ -63,7 +63,8 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects, numberOfSecondSelectedAspects),
+              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects,
+                  numberOfSecondSelectedAspects),
               _buildNavigationButtons(context),
             ],
           ),
@@ -72,7 +73,8 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects, int numberOfSecondSelectedAspects) {
+  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects,
+      int numberOfSecondSelectedAspects) {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirline;
 
@@ -183,8 +185,8 @@ class BuildQuestionHeader extends StatelessWidget {
       children: [
         if (backgorundImage.isNotEmpty)
           Positioned.fill(
-            child: Image.network(
-              backgorundImage,
+            child: Image.asset(
+              "assets/images/airline.png",
               fit: BoxFit.cover,
             ),
           ),

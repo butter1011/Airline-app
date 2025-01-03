@@ -106,58 +106,57 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return state.airlineCache[airlineCode] ?? const <String, dynamic>{};
   }
 
-  /// Returns airlines sorted by cleanliness score
-  List<Map<String, dynamic>> getAirlineDataSortedByCleanliness() {
-    if (state.sortedListCache.containsKey('cleanliness')) {
-      return state.sortedListCache['cleanliness']!;
+  
+  List<Map<String, dynamic>> getAirlineDataSorted(String airlineSortKey) {
+    if (state.sortedListCache.containsKey(airlineSortKey)) {
+      return state.sortedListCache[airlineSortKey]!;
     }
 
     final airlineScoreData = state.airlineScoreData;
     final airlineData = state.airlineData;
     final scoreMap = {
       for (var score in airlineScoreData)
-        score['airlineId']: score['cleanliness']
+        score['airlineId']: score[airlineSortKey]
     };
 
     final result = airlineData.map((item) {
       return {
         ...item,
-        'cleanliness': scoreMap[item['_id']] ?? 5,
+        airlineSortKey: scoreMap[item['_id']] ?? 5,
       };
     }).toList();
 
-    result.sort((a, b) => b['cleanliness'].compareTo(a['cleanliness']));
+    result.sort((a, b) => b[airlineSortKey].compareTo(a[airlineSortKey]));
 
     state = state.copyWith(
-      sortedListCache: {...state.sortedListCache, 'cleanliness': result},
+      sortedListCache: {...state.sortedListCache, airlineSortKey: result},
     );
     return result;
   }
 
-  /// Returns airlines sorted by onboard service score
-  List<Map<String, dynamic>> getAirlineDataSortedByOnboardSevice() {
-    if (state.sortedListCache.containsKey('onboardService')) {
-      return state.sortedListCache['onboardService']!;
+   List<Map<String, dynamic>> getAirportDataSorted(String airportSortKey) {
+    if (state.sortedListCache.containsKey(airportSortKey)) {
+      return state.sortedListCache[airportSortKey]!;
     }
 
-    final airlineScoreData = state.airlineScoreData;
-    final airlineData = state.airlineData;
+    final airportScoreData = state.airportScoreData;
+    final airportData = state.airportData;
     final scoreMap = {
-      for (var score in airlineScoreData)
-        score['airlineId']: score['onboardService']
+      for (var score in airportScoreData)
+        score['airportId']: score[airportSortKey]
     };
 
-    final result = airlineData.map((item) {
+    final result = airportData.map((item) {
       return {
         ...item,
-        'onboardService': scoreMap[item['_id']] ?? 5,
+        airportSortKey: scoreMap[item['_id']] ?? 5,
       };
     }).toList();
 
-    result.sort((a, b) => b['onboardService'].compareTo(a['onboardService']));
+    result.sort((a, b) => b[airportSortKey].compareTo(a[airportSortKey]));
 
     state = state.copyWith(
-      sortedListCache: {...state.sortedListCache, 'onboardService': result},
+      sortedListCache: {...state.sortedListCache, airportSortKey: result},
     );
     return result;
   }
@@ -301,8 +300,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
   /// [searchQuery] - Optional search query to filter results
   /// [flyerClass] - Optional class type to sort results
   /// [selectedContinents] - Optional list of continents to filter by
-  void getFilteredList(
-      String filterType, String? searchQuery, String? flyerClass,
+  void getFilteredList(String filterType, String? searchQuery,
+      String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
@@ -326,7 +325,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
     List<Map<String, dynamic>> filteredList = [];
     final cacheKey =
-        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
+        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedCategory ?? ''}_${selectedContinents?.join('_') ?? ''}';
 
     if (state.sortedListCache.containsKey(cacheKey)) {
       state = state.copyWith(filteredList: state.sortedListCache[cacheKey]!);
@@ -344,13 +343,45 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       case 'Airport':
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
         break;
+      case 'Flight Experience':
+        filteredList
+            .addAll(getAirlineDataSorted("departureArrival").where(checkContinent));
+        break;
       case 'Cleanliness':
         filteredList
-            .addAll(getAirlineDataSortedByCleanliness().where(checkContinent));
+            .addAll(getAirlineDataSorted("cleanliness").where(checkContinent));
         break;
       case 'Onboard':
         filteredList.addAll(
-            getAirlineDataSortedByOnboardSevice().where(checkContinent));
+            getAirlineDataSorted("onboardService").where(checkContinent));
+        break;
+      case 'Food & Beverage':
+        filteredList.addAll(
+            getAirlineDataSorted("foodBeverage").where(checkContinent));
+        break;
+      case 'Entertainment & WiFi':
+        filteredList.addAll(
+            getAirlineDataSorted("entertainmentWifi").where(checkContinent));
+        break;
+      case 'Accessibility':
+        filteredList.addAll(
+            getAirportDataSorted("accessibility").where(checkContinent));
+        break;
+      case 'Wait Times':
+        filteredList.addAll(
+            getAirportDataSorted("waitTimes").where(checkContinent));
+        break;
+      case 'Helpfulness':
+        filteredList.addAll(
+            getAirportDataSorted("helpfulness").where(checkContinent));
+        break;
+      case 'Ambience':
+        filteredList.addAll(
+            getAirportDataSorted("ambienceComfort").where(checkContinent));
+        break;
+      case 'Amenities':
+        filteredList.addAll(
+            getAirportDataSorted("amenities").where(checkContinent));
         break;
       default:
         filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
@@ -363,10 +394,26 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
           : flyerClass == "Premium economy"
               ? 'pey'
               : 'economyClass';
-
       filteredList.sort((a, b) => b[sortKey].compareTo(a[sortKey]));
     }
-
+    if (selectedCategory != null && selectedCategory.isNotEmpty) {
+      final sortKey = switch (selectedCategory) {
+        "Departure & Arrival Experience" => 'departureArrival',
+        "Comfort" => 'comfort',
+        "Cleanliness" => 'cleanliness',
+        "Onboard Service" => 'onboardService',
+        "Food & Beverage" => 'foodBeverage',
+        "Entertainment & WiFi" => 'entertainmentWifi',
+        "Accessibility" => 'accessibility',
+        "Wait Times" => 'waitTimes',
+        "Helpfulness" => 'helpfulness',
+        "Ambience" => 'ambienceComfort',
+        "Amenities and Facilities" => 'amenities',
+        _ => 'departureArrival'
+      };
+      filteredList
+          .sort((a, b) => (b[sortKey] ?? 0.0).compareTo(a[sortKey] ?? 0.0));
+    }
     if (searchQuery != null && searchQuery.isNotEmpty) {
       final query = searchQuery.toLowerCase();
       filteredList = filteredList.where((item) {

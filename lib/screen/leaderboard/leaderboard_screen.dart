@@ -52,8 +52,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     "All": true,
     "Airline": false,
     "Airport": false,
+    "Flight Experience": false,
+    "Comfort": false,
     "Cleanliness": false,
     "Onboard": false,
+    "Food & Beverage": false,
+    "Entertainment & WiFi": false,
+    "Accessibility": false,
+    "Wait Times": false,
+    "Helpfulness": false,
+    "Ambience": false,
+    "Amenities": false,
   };
 
   void toggleButton(String buttonText) {
@@ -64,7 +73,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     });
     ref
         .read(airlineAirportProvider.notifier)
-        .getFilteredList(filterType, null, null);
+        .getFilteredList(filterType, null, null, null);
   }
 
   @override
@@ -127,7 +136,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
     ref
         .read(airlineAirportProvider.notifier)
-        .getFilteredList("All", null, null);
+        .getFilteredList("All", null, null, null);
 
     final ratingList = ref.watch(reviewsAirlineProvider).reviews;
     final UserId = ref.watch(userDataProvider)?['userData']['_id'];
@@ -157,7 +166,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             // Add setState to trigger UI refresh
             ref
                 .read(airlineAirportProvider.notifier)
-                .getFilteredList(filterType, _searchQuery, null);
+                .getFilteredList(filterType, _searchQuery, null, null);
 
             setState(() {});
           }
@@ -243,7 +252,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           });
                           ref
                               .read(airlineAirportProvider.notifier)
-                              .getFilteredList(filterType, _searchQuery, null);
+                              .getFilteredList(
+                                  filterType, _searchQuery, null, null);
                         },
                         decoration: InputDecoration(
                           hintText: 'Search',
@@ -296,37 +306,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: [
-                  MainButton(
-                    text: "All",
-                    isSelected: buttonStates["All"]!,
-                    onTap: () => toggleButton("All"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Airline",
-                    isSelected: buttonStates["Airline"]!,
-                    onTap: () => toggleButton("Airline"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Airport",
-                    isSelected: buttonStates["Airport"]!,
-                    onTap: () => toggleButton("Airport"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Cleanliness",
-                    isSelected: buttonStates["Cleanliness"]!,
-                    onTap: () => toggleButton("Cleanliness"),
-                  ),
-                  SizedBox(width: 8),
-                  MainButton(
-                    text: "Onboard",
-                    isSelected: buttonStates["Onboard"]!,
-                    onTap: () => toggleButton("Onboard"),
-                  ),
-                ],
+                children: buttonStates.keys.map((buttonText) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: MainButton(
+                      text: buttonText,
+                      isSelected: buttonStates[buttonText]!,
+                      onTap: () => toggleButton(buttonText),
+                    ),
+                  );
+                }).toList(),              
               ),
             ),
             SizedBox(height: 14),

@@ -32,7 +32,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
       case 1:
         Navigator.pushNamed(context, AppRoutes.chatbotscreen);
       case 2:
-        Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        Navigator.pushNamed(context, AppRoutes.startreviews);
       case 3:
         Navigator.pushNamed(context, AppRoutes.feedscreen);
       case 4:

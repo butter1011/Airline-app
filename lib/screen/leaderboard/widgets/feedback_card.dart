@@ -75,18 +75,20 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                 ),
               ),
               SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.singleFeedback['reviewer']['name'] ?? '',
-                    style: AppStyles.textStyle_14_600,
-                  ),
-                  Text(
-                    'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                    style: AppStyles.textStyle_14_400_grey,
-                  )
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.singleFeedback['reviewer']['name'] ?? '',
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                    Text(
+                      'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                      style: AppStyles.textStyle_14_400_grey,
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -103,9 +105,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               Text('Flex with', style: AppStyles.textStyle_14_400_littleGrey),
               SizedBox(width: 6),
-              Text(
-                  '${widget.singleFeedback['airline']['name']}, ${widget.singleFeedback['classTravel']}',
-                  style: AppStyles.textStyle_14_600)
+              Expanded(
+                child: Text(
+                    '${widget.singleFeedback['airline']['name'].toString().split(' ')[0]}, ${widget.singleFeedback['classTravel']}',
+                    style: AppStyles.textStyle_14_600),
+              )
             ],
           ),
           SizedBox(height: 7),
@@ -115,9 +119,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     Text('Flex from',
                         style: AppStyles.textStyle_14_400_littleGrey),
                     SizedBox(width: 6),
-                    Text(
-                        '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
-                        style: AppStyles.textStyle_14_600),
+                    Expanded(
+                      child: Text(
+                          '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
+                          style: AppStyles.textStyle_14_600),
+                    ),
                   ],
                 )
               : Row(
@@ -125,8 +131,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     Text('Flex in',
                         style: AppStyles.textStyle_14_400_littleGrey),
                     SizedBox(width: 6),
-                    Text('${widget.singleFeedback['airport']['name']}',
-                        style: AppStyles.textStyle_14_600),
+                    Expanded(
+                      child: Text('${widget.singleFeedback['airport']['name']}',
+                          style: AppStyles.textStyle_14_600),
+                    ),
                   ],
                 ),
           SizedBox(height: 11),
@@ -239,7 +247,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   height: 189,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/default.png"),
+                      image: AssetImage('assets/images/default.png'),
                       fit: BoxFit.cover,
                     ),
                   ),

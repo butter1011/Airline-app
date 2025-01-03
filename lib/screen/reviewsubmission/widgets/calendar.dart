@@ -23,8 +23,8 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
     super.initState();
     final DateTime today = DateTime.now();
     // Set initial dates
-    _startDate = DateFormat('dd, MMMM yyyy').format(today);
-    _endDate = DateFormat('dd, MMMM yyyy').format(today.add(Duration(days: 3)));
+    _startDate = DateFormat('dd MMMM yyyy').format(today);
+    _endDate = DateFormat('dd MMMM yyyy').format(today.add(Duration(days: 3)));
     dateRange = [_startDate, _endDate];
     _controller.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
@@ -39,8 +39,8 @@ class _CalendarWidgetState extends ConsumerState<CalendarWidget> {
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       // Update start and end dates based on selection
-      _startDate = DateFormat('dd, MMMM yyyy').format(args.value.startDate);
-      _endDate = DateFormat('dd, MMMM yyyy')
+      _startDate = DateFormat('dd MMMM yyyy').format(args.value.startDate);
+      _endDate = DateFormat('dd MMMM yyyy')
           .format(args.value.endDate ?? args.value.startDate);
 
       List<dynamic> dateRange = [_startDate, _endDate];
