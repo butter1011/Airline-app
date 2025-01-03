@@ -29,7 +29,7 @@ class _OverviewAirlineReviewScreenState
         .getAirlineName(airlineData.airline);
     final selectedClassOfTravel =
         ref.watch(aviationInfoProvider).selectedClassOfTravel;
-    final date = ref.watch(aviationInfoProvider).dateRange[0];
+    // final date = ref.watch(aviationInfoProvider).dateRange[0];
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -155,7 +155,7 @@ class _OverviewAirlineReviewScreenState
                                         ),
                                         FittedBox(
                                           child: Text(
-                                            '$airlineName,  $date, $selectedClassOfTravel',
+                                            '$airlineName, $selectedClassOfTravel',
                                             style: AppStyles.textStyle_15_500,
                                           ),
                                         ),
