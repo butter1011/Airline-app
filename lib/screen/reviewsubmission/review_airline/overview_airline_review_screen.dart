@@ -29,7 +29,8 @@ class _OverviewAirlineReviewScreenState
         .getAirlineName(airlineData.airline);
     final selectedClassOfTravel =
         ref.watch(aviationInfoProvider).selectedClassOfTravel;
-    final date = ref.watch(aviationInfoProvider).dateRange[0];
+    final dateRange = ref.watch(aviationInfoProvider).dateRange;
+    final date = dateRange.isNotEmpty ? dateRange[0] : DateTime.now();
 
     return Scaffold(
         backgroundColor: Colors.white,
