@@ -29,7 +29,8 @@ class _OverviewAirlineReviewScreenState
         .getAirlineName(airlineData.airline);
     final selectedClassOfTravel =
         ref.watch(aviationInfoProvider).selectedClassOfTravel;
-    final date = ref.watch(aviationInfoProvider).dateRange[0];
+    final dateRange = ref.watch(aviationInfoProvider).dateRange;
+    final date = dateRange.isNotEmpty ? dateRange[0] : DateTime.now();
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -184,77 +185,72 @@ class _OverviewAirlineReviewScreenState
 
   Widget _bottomSheet() {
     return LayoutBuilder(builder: (context, constraints) {
-      return
-    
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                height: constraints.maxHeight * 0.1,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24))),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: constraints.maxWidth * 0.13,
-                        height: constraints.maxWidth * 0.13,
-                        decoration: AppStyles.circleDecoration
-                            .copyWith(color: AppStyles.mainColor),
-                        child: const Icon(
-                          Icons.arrow_upward,
-                          shadows: [
-                            Shadow(color: Colors.black, blurRadius: 3.0)
-                          ],
-                        ),
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              height: constraints.maxHeight * 0.1,
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(24))),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: constraints.maxWidth * 0.13,
+                      height: constraints.maxWidth * 0.13,
+                      decoration: AppStyles.circleDecoration
+                          .copyWith(color: AppStyles.mainColor),
+                      child: const Icon(
+                        Icons.arrow_upward,
+                        shadows: [Shadow(color: Colors.black, blurRadius: 3.0)],
                       ),
-                      SizedBox(width: constraints.maxWidth * 0.03),
-                      Flexible(
-                        child: Text(
-                          "Select up to 4 positive aspects",
-                          style: AppStyles.textStyle_14_600,
-                        ),
+                    ),
+                    SizedBox(width: constraints.maxWidth * 0.03),
+                    Flexible(
+                      child: Text(
+                        "Select up to 4 positive aspects",
+                        style: AppStyles.textStyle_14_600,
                       ),
-                    ],
-                  ),
-                )),
-            Container(
-              height: 2,
-              color: Colors.black,
+                    ),
+                  ],
+                ),
+              )),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: constraints.maxWidth * 0.06,
+                vertical: constraints.maxHeight * 0.02),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: _NavigationButton(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        buttonName: "Go back",
+                        color: Colors.white)),
+                SizedBox(width: constraints.maxWidth * 0.04),
+                Expanded(
+                    child: _NavigationButton(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.questionfirstscreenforairline);
+                        },
+                        buttonName: "Next",
+                        color: Colors.white))
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: constraints.maxWidth * 0.06,
-                  vertical: constraints.maxHeight * 0.02),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: _NavigationButton(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          buttonName: "Go back",
-                          color: Colors.white)),
-                  SizedBox(width: constraints.maxWidth * 0.04),
-                  Expanded(
-                      child: _NavigationButton(
-                          onTap: () {
-                            Navigator.pushNamed(context,
-                                AppRoutes.questionfirstscreenforairline);
-                          },
-                          buttonName: "Next",
-                          color: Colors.white))
-                ],
-              ),
-            )
-          ],
-      
+          )
+        ],
       );
     });
   }
