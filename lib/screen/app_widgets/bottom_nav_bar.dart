@@ -59,8 +59,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Container(
-                  width: 59,
-                  height: 59,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: _selectedIndex == 0
                         ? AppStyles.littleBlackColor
@@ -99,8 +99,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                  width: 59,
-                  height: 59,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: _selectedIndex == 1
                         ? AppStyles.littleBlackColor
@@ -136,8 +136,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                width: 59,
-                height: 59,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: AppStyles.mainColor,
                   borderRadius: BorderRadius.circular(30),
@@ -156,8 +156,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                  width: 59,
-                  height: 59,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: _selectedIndex == 3
                         ? AppStyles.littleBlackColor
@@ -193,8 +193,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                width: 59,
-                height: 59,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: _selectedIndex == 4
                       ? AppStyles.littleBlackColor
