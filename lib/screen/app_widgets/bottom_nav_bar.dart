@@ -1,9 +1,9 @@
-
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key, required this.currentIndex});
@@ -59,48 +59,79 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Container(
-                width: 59,
-                height: 59,
-                decoration: BoxDecoration(
-                  color: _selectedIndex == 0
-                      ? AppStyles.littleBlackColor
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppStyles.littleBlackColor,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: _selectedIndex == 0
-                    ? Image.asset('assets/icons/leaderboard_white.png')
-                    : Image.asset('assets/icons/leaderboard.png'),
-              ),
+                  width: 59,
+                  height: 59,
+                  decoration: BoxDecoration(
+                    color: _selectedIndex == 0
+                        ? AppStyles.littleBlackColor
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border:
+                        Border.all(width: 2, color: AppStyles.littleBlackColor),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppStyles.littleBlackColor,
+                        offset: const Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  child: _selectedIndex == 0
+                      ? Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/leaderboard_white.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                      : Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/leaderboard.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                  // ? Image.asset('assets/icons/leaderboard_white.png')
+                  // : Image.asset('assets/icons/leaderboard.png'),
+                  ),
               label: 'Leaderboard',
             ),
             BottomNavigationBarItem(
               icon: Container(
-                width: 59,
-                height: 59,
-                decoration: BoxDecoration(
-                  color: _selectedIndex == 1
-                      ? AppStyles.littleBlackColor
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppStyles.littleBlackColor,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: _selectedIndex == 1
-                    ? Image.asset('assets/icons/ai_white.png')
-                    : Image.asset('assets/icons/ai.png'),
-              ),
+                  width: 59,
+                  height: 59,
+                  decoration: BoxDecoration(
+                    color: _selectedIndex == 1
+                        ? AppStyles.littleBlackColor
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border:
+                        Border.all(width: 2, color: AppStyles.littleBlackColor),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppStyles.littleBlackColor,
+                        offset: const Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  child: _selectedIndex == 1
+                      ? Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/ai_white.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                      : Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/ai.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )),
               label: 'Ai Chat',
             ),
             BottomNavigationBarItem(
@@ -110,7 +141,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                 decoration: BoxDecoration(
                   color: AppStyles.mainColor,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border:
+                      Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
                       color: AppStyles.littleBlackColor,
@@ -124,25 +156,39 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: Container(
-                width: 59,
-                height: 59,
-                decoration: BoxDecoration(
-                  color: _selectedIndex == 3
-                      ? AppStyles.littleBlackColor
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppStyles.littleBlackColor,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: _selectedIndex == 3
-                    ? Image.asset('assets/icons/message_white.png')
-                    : Image.asset('assets/icons/message.png'),
-              ),
+                  width: 59,
+                  height: 59,
+                  decoration: BoxDecoration(
+                    color: _selectedIndex == 3
+                        ? AppStyles.littleBlackColor
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border:
+                        Border.all(width: 2, color: AppStyles.littleBlackColor),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppStyles.littleBlackColor,
+                        offset: const Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  child: _selectedIndex == 3
+                      ? Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/message_white.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                      : Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/message.svg',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                          ),
+                        )),
               label: 'Home',
             ),
             BottomNavigationBarItem(
@@ -154,7 +200,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                       ? AppStyles.littleBlackColor
                       : Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  border:
+                      Border.all(width: 2, color: AppStyles.littleBlackColor),
                   boxShadow: [
                     BoxShadow(
                       color: AppStyles.littleBlackColor,
@@ -171,7 +218,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                 ),
               ),
               label: 'Profile',
-            ),     
+            ),
           ],
           currentIndex: _selectedIndex,
           showUnselectedLabels: false,
