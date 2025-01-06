@@ -93,7 +93,8 @@ class CompleteReviews extends ConsumerWidget {
             Container(
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.9),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               height: screenSize.height * 0.37,
               child: Column(
@@ -121,10 +122,12 @@ class CompleteReviews extends ConsumerWidget {
                         const SizedBox(height: 18),
                         const Row(
                           children: [
-                            ReviewScoreIcon(iconUrl: 'assets/icons/review_cup.png'),
+                            ReviewScoreIcon(
+                                iconUrl: 'assets/icons/review_cup.png'),
                             SizedBox(width: 16),
                             ReviewScoreIcon(
-                                iconUrl: 'assets/icons/review_notification.png'),
+                                iconUrl:
+                                    'assets/icons/review_notification.png'),
                           ],
                         )
                       ],
@@ -132,8 +135,8 @@ class CompleteReviews extends ConsumerWidget {
                   ),
                   const Divider(thickness: 2, color: Colors.black),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     child: NavButton(
                         text: "Review Airport",
                         onPressed: () => Navigator.pushNamed(
@@ -148,11 +151,13 @@ class CompleteReviews extends ConsumerWidget {
               right: 10,
               child: IconButton(
                 icon: const Icon(Icons.close),
-                onPressed: () => Navigator.pushNamed(context, AppRoutes.leaderboardscreen),
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRoutes.leaderboardscreen),
               ),
             ),
           ],
-        ),      ),
+        ),
+      ),
     );
   }
 }
