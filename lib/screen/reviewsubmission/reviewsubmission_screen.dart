@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
@@ -15,6 +17,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ReviewsubmissionScreen extends ConsumerStatefulWidget {
   const ReviewsubmissionScreen({super.key});

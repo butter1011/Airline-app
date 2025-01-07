@@ -13,18 +13,16 @@ class AirportList extends StatelessWidget {
   (List<FlSpot>, double) _getSpots() {
     final scoreHistory =
         List<Map<String, dynamic>>.from(airportData['scoreHistory'] ?? []);
+    print("scoreHistory: $scoreHistory");
     if (scoreHistory.isEmpty) {
       return (
         [
           const FlSpot(0, 0),
-          const FlSpot(24, 0),
+          const FlSpot(1, 0),
         ],
         0.0
       );
     }
-
-    final now = DateTime.now();
-    final twentyFourHoursAgo = now.subtract(const Duration(hours: 24));
 
     if (scoreHistory.length == 1) {
       // If only one data point exists, create a flat line with same value
@@ -32,7 +30,7 @@ class AirportList extends StatelessWidget {
       return (
         [
           FlSpot(0, score),
-          FlSpot(24, score),
+          FlSpot(1, score),
         ],
         0.0
       );
@@ -43,25 +41,21 @@ class AirportList extends StatelessWidget {
     var firstScore = 0.0;
     var isFirstScore = true;
 
-    for (var i = 0; i <= 24; i++) {
-      final targetTime = twentyFourHoursAgo.add(Duration(hours: i));
-
-      // Find the closest score entry before or at this time
-      final relevantScore = scoreHistory.lastWhere(
-        (entry) {
-          final entryTime = DateTime.parse(entry['timestamp']);
-          return entryTime.isBefore(targetTime) ||
-              entryTime.isAtSameMomentAs(targetTime);
-        },
-        orElse: () => scoreHistory.first,
-      );
-
-      lastScore = double.parse(relevantScore['score'].toString());
+    // Convert all timestamps to x-axis points from 0 to 1
+    final totalPoints = scoreHistory.length;
+    for (var i = 0; i < totalPoints; i++) {
+      final entry = scoreHistory[i];
+      final score = double.parse(entry['score'].toString());
+      
       if (isFirstScore) {
-        firstScore = lastScore;
+        firstScore = score;
         isFirstScore = false;
       }
-      spots.add(FlSpot(i.toDouble(), lastScore));
+      lastScore = score;
+      
+      // Normalize x-axis from 0 to 1
+      final xValue = i / (totalPoints - 1);
+      spots.add(FlSpot(xValue, score));
     }
 
     final change = lastScore - firstScore;
@@ -167,14 +161,12 @@ class AirportList extends StatelessWidget {
                       ),
                       Text(
                         changeValue >= 0
-                            ? "+${changeValue.toStringAsFixed(3)}"                                                                                              
-                            : changeValue.toStringAsFixed(3),
+                            ? "+${changeValue.toStringAsFixed(1)}"                                                                                              
+                            : changeValue.toStringAsFixed(1),
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: airportData['isIncreasing']
-                              ? const Color(0xFF3FEA9C)
-                              : const Color(0xFFFF4961),
+                          color: Colors.black,
                         ),
                       ),
                     ],

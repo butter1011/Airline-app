@@ -18,7 +18,9 @@ class ScannerScreen extends ConsumerStatefulWidget {
 
 class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   final _boardingPassController = BoardingPassController();
-  MobileScannerController cameraController = MobileScannerController();
+  MobileScannerController cameraController = MobileScannerController(
+    formats: [BarcodeFormat.pdf417,],
+  );
   bool hasScanned = false;
 
   @override
@@ -121,10 +123,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       body: MobileScanner(
         controller: cameraController,
         onDetect: (capture) async {
+          print(
+              "Scanning=======================================================");
           if (!hasScanned && capture.barcodes.isNotEmpty) {
             hasScanned = true;
             final barcode = capture.barcodes.first;
             final String rawValue = barcode.rawValue ?? '';
+            print("Scanned data 🎁🎁🎁🎁🎁: $rawValue");
 
             if (rawValue.isNotEmpty) {
               final flightNumber = extractFlightNumber(rawValue);
