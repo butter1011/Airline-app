@@ -122,7 +122,6 @@ class MyApp extends ConsumerWidget {
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         AppRoutes.manualinput: (context) => ManualInputScreen(),
-        AppRoutes.googlecalendar: (context) => GoogleCalendar(),
 
         //Airlines routes
         AppRoutes.flightinput: (context) => FlightInputScreen(),

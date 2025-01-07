@@ -86,8 +86,6 @@ dependencies:
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
   video_player: ^2.9.2
   flutter_launcher_icons: ^0.14.2
-  googleapis: ^13.2.0
-  extension_google_sign_in_as_googleapis_auth: ^2.0.12
   flutter_svg: ^2.0.16
 
 flutter_launcher_icons:
