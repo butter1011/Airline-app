@@ -5,8 +5,9 @@ import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar/calendar_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
@@ -62,6 +63,67 @@ class _ReviewsubmissionScreenState
     setState(() {
       selectedType = type;
     });
+  }
+
+  void _showSyncOptions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border(
+                top: BorderSide(color: Colors.black, width: 2.0),
+                left: BorderSide(color: Colors.black, width: 2.0),
+                bottom: BorderSide(color: Colors.black, width: 4.0),
+                right: BorderSide(color: Colors.black, width: 4.0),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NavButton(
+                  text: 'Google Calendar',
+                  onPressed: () {
+                       Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CalendarEventsWidget(),
+                      ),
+                    );
+                  },
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 12),
+                NavButton(
+                  text: 'Wallet',
+                  onPressed: () {
+                    // Handle Wallet sync
+                    Navigator.pop(context);
+                  },
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 12),
+                NavButton(
+                  text: 'Scanning',
+                  onPressed: () {       
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ScannerScreen(),
+                      ),
+                    );
+                  },
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildEmptyState() {
@@ -219,112 +281,7 @@ class _ReviewsubmissionScreenState
                 children: [
                   NavButton(
                     text: AppLocalizations.of(context).translate('Synchronize'),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  NavButton(
-                                    text: AppLocalizations.of(context)
-                                        .translate('Sync from CSV File'),
-                                    onPressed: () async {
-                                      FilePickerResult? result =
-                                          await FilePicker.platform.pickFiles(
-                                        type: FileType.custom,
-                                        allowedExtensions: ['csv'],
-                                      );
-
-                                      if (result != null) {
-                                        File file =
-                                            File(result.files.single.path!);
-                                        String content =
-                                            await file.readAsString();
-                                        List<String> lines =
-                                            content.split('\n');
-                                        List<BoardingPass> boardingPasses = [];
-
-                                        for (String line in lines.skip(1)) {
-                                          if (line.trim().isEmpty) continue;
-                                          List<String> values = line.split(',');
-
-                                          BoardingPass boardingPass =
-                                              BoardingPass(
-                                            name: ref.read(userDataProvider)?[
-                                                'userData']['_id'],
-                                            departureAirportCode: values[7],
-                                            departureTime: values[4],
-                                            arrivalAirportCode: values[7],
-                                            arrivalTime: values[5],
-                                            airlineCode: values[1],
-                                            flightNumber: values[2],
-
-                                            // airline: values[1],
-                                            // flightNumber: values[2],
-                                            // departureDate: DateTime.parse(values[3]),
-                                            // departureTime: values[4],
-                                            // arrivalTime: values[5],
-                                            // origin: values[6],
-                                            // destination: values[7],
-                                            // gate: values[8],
-                                            // seat: values[9],
-                                            // passengerName: values[10],
-                                            // bookingReference: values[11],
-                                          );
-
-                                          boardingPasses.add(boardingPass);
-                                        }
-                                        print(
-                                            "This is boarding passes data 🎃🎃🎃: $boardingPasses");
-
-                                        // ref
-                                        //     .read(
-                                        //         boardingPassesProvider.notifier)
-                                        //     .setData(boardingPasses);
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    color: AppStyles.mainColor,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  NavButton(
-                                    text: AppLocalizations.of(context)
-                                        .translate('Sync from Google Calendar'),
-                                    onPressed: () {
-                                       Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => GoogleCalendar(),
-                                        ),
-                                      );
-                                    },
-                                    color: AppStyles.mainColor,
-                                  ),
-                                  // const SizedBox(height: 12),
-                                  // NavButton(
-                                  //   text: AppLocalizations.of(context)
-                                  //       .translate('Sync from Airline Website'),
-                                  //   onPressed: () {
-                                  //     Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //         builder: (context) => ScannerScreen(),
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  //   color: AppStyles.mainColor,
-                                  // ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                    onPressed: _showSyncOptions,
                     color: Colors.white,
                   ),
                   const SizedBox(height: 12),
@@ -341,48 +298,6 @@ class _ReviewsubmissionScreenState
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _CardWidget(BoardingPass singleBoardingPass) {
-    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Column(
-        children: [
-          if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(
-              singleBoardingPass: singleBoardingPass,
-              index: index,
-              isReviewed: singleBoardingPass.isFlightReviewed,
-            ),
-          if ((selectedType == "All" || selectedType == "Airports") &&
-              (selectedType != "Flights"))
-            Column(
-              children: [
-                if (selectedType == "All") SizedBox(height: 10),
-                ReviewAirportCard(
-                    index: index,
-                    status: singleBoardingPass.visitStatus,
-                    airlineCode: singleBoardingPass.airlineCode,
-                    airportCode: singleBoardingPass.departureAirportCode,
-                    time: singleBoardingPass.departureTime,
-                    isDeparture: true,
-                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
-                SizedBox(height: 10),
-                ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.arrivalAirportCode,
-                  time: singleBoardingPass.arrivalTime,
-                  isDeparture: false,
-                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                ),
-              ],
-            ),
-        ],
       ),
     );
   }
