@@ -371,6 +371,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     );
   }
 }
+
 class CategoryButtons extends ConsumerWidget {
   final bool isAirline;
   final Map airportData;

@@ -80,7 +80,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: [
         Locale('en', ''),
         Locale('zh', ''),
-        Locale('ru', ''),
+        Locale('es', ''),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -153,10 +153,8 @@ class MyApp extends ConsumerWidget {
             DetailSecondScreenForAirport(),
         AppRoutes.questionthirdscreenforairport: (context) =>
             QuestionThirdScreenForAirport(),
-        //////        
-         AppRoutes.completereviews: (context) =>
-            CompleteReviews(),
-    
+        //////
+        AppRoutes.completereviews: (context) => CompleteReviews(),
 
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),

@@ -188,46 +188,46 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 10,
-                left: -8,
-                right: 0,
-                child: SizedBox(
-                  height: 130,
-                  child: PageView.builder(
-                    controller: pgcontroller,
-                    itemCount: mabboxVisitConfirmedList.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        padding: const EdgeInsets.all(16),
-                        width: 278,
-                        decoration: AppStyles.cardDecoration,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BasicMapbutton(
-                              mywidth: 138,
-                              myheight: 28,
-                              iconpath: 'assets/icons/check.png',
-                              btntext: 'Visit Confirmed',
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Long AirPort Name goes here',
-                              style: AppStyles.textStyle_15_600,
-                            ),
-                            Text(
-                              'Your scored 9/10',
-                              style: AppStyles.textStyle_15_500,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   bottom: 10,
+              //   left: -8,
+              //   right: 0,
+              //   child: SizedBox(
+              //     height: 130,
+              //     child: PageView.builder(
+              //       controller: pgcontroller,
+              //       itemCount: mabboxVisitConfirmedList.length,
+              //       itemBuilder: (context, index) {
+              //         return Container(
+              //           margin: const EdgeInsets.symmetric(horizontal: 4),
+              //           padding: const EdgeInsets.all(16),
+              //           width: 278,
+              //           decoration: AppStyles.cardDecoration,
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               BasicMapbutton(
+              //                 mywidth: 138,
+              //                 myheight: 28,
+              //                 iconpath: 'assets/icons/check.png',
+              //                 btntext: 'Visit Confirmed',
+              //               ),
+              //               const SizedBox(height: 16),
+              //               Text(
+              //                 'Long AirPort Name goes here',
+              //                 style: AppStyles.textStyle_15_600,
+              //               ),
+              //               Text(
+              //                 'Your scored 9/10',
+              //                 style: AppStyles.textStyle_15_500,
+              //               ),
+              //             ],
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ),
             ]),
     ));
   }

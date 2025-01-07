@@ -488,46 +488,46 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ],
                 ),
               ),
-              Positioned(
-                top: 8,
-                left: 8,
-                right: 60,
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: _handleSearch,
-                    decoration: InputDecoration(
-                      hintText: 'Search airports...',
-                      prefixIcon: const Icon(Icons.search, color: Colors.blue),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                _searchController.clear();
-                                _handleSearch('');
-                              },
-                            )
-                          : null,
-                    ),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   top: 8,
+              //   left: 8,
+              //   right: 60,
+              //   child: Container(
+              //     height: 50,
+              //     decoration: BoxDecoration(
+              //       color: Colors.white.withOpacity(0.7),
+              //       borderRadius: BorderRadius.circular(25),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.black.withOpacity(0.1),
+              //           spreadRadius: 1,
+              //           blurRadius: 3,
+              //           offset: const Offset(0, 1),
+              //         ),
+              //       ],
+              //     ),
+              //     child: TextField(
+              //       controller: _searchController,
+              //       onChanged: _handleSearch,
+              //       decoration: InputDecoration(
+              //         hintText: 'Search airports...',
+              //         prefixIcon: const Icon(Icons.search, color: Colors.blue),
+              //         border: InputBorder.none,
+              //         contentPadding: const EdgeInsets.symmetric(
+              //             horizontal: 16, vertical: 12),
+              //         suffixIcon: _searchController.text.isNotEmpty
+              //             ? IconButton(
+              //                 icon: const Icon(Icons.clear),
+              //                 onPressed: () {
+              //                   _searchController.clear();
+              //                   _handleSearch('');
+              //                 },
+              //               )
+              //             : null,
+              //       ),
+              //     ),
+              // ),
+              // ),
               if (_searchResults.isNotEmpty)
                 Positioned(
                   top: 60,
@@ -577,35 +577,50 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 right: 0,
                 child: SizedBox(
                   height: 130,
-                  child: PageView.builder(
-                    controller: pgcontroller,
-                    itemCount: mabboxVisitConfirmedList.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        padding: const EdgeInsets.all(16),
-                        width: 278,
-                        decoration: AppStyles.cardDecoration,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BasicMapbutton(
-                              mywidth: 138,
-                              myheight: 28,
-                              iconpath: 'assets/icons/check.png',
-                              btntext: 'Visit Confirmed',
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final reviewState = ref.watch(reviewsAirlineProvider);
+                      final airportReviews = reviewState.reviews
+                          .where((review) => !review.containsKey("from"))
+                          .toList();
+
+                      return PageView.builder(
+                        controller: pgcontroller,
+                        itemCount: airportReviews.length,
+                        itemBuilder: (context, index) {
+                          final review = airportReviews[index];
+                          final airportName =
+                              review['airport']['name'] as String;
+                          final rating = review['score'].toStringAsFixed(1);
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            padding: const EdgeInsets.all(16),
+                            width: 278,
+                            decoration: AppStyles.cardDecoration,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                BasicMapbutton(
+                                  mywidth: 138,
+                                  myheight: 28,
+                                  iconpath: 'assets/icons/check.png',
+                                  btntext: 'Visit Confirmed',
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  airportName,
+                                  style: AppStyles.textStyle_15_600,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  'Your scored $rating/10',
+                                  style: AppStyles.textStyle_15_500,
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Long AirPort Name goes here',
-                              style: AppStyles.textStyle_15_600,
-                            ),
-                            Text(
-                              'Your scored 9/10',
-                              style: AppStyles.textStyle_15_500,
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       );
                     },
                   ),
