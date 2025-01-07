@@ -399,14 +399,14 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                     btntext: AppLocalizations.of(context).translate("Chinese")),
               ),
               InkWell(
-                onTap: () => _changeLanguage(context, 'Russian', 'ru'),
+                onTap: () => _changeLanguage(context, 'Spanish', 'es'),
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
-                    myColor: _selectedLanguage == 'Russian'
+                    myColor: _selectedLanguage == 'Spanish'
                         ? AppStyles.mainColor
                         : Colors.white,
-                    btntext: AppLocalizations.of(context).translate("Russian")),
+                    btntext: AppLocalizations.of(context).translate("Spanish")),
               ),
             ],
           ),
