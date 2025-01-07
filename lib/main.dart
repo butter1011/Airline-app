@@ -122,7 +122,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         AppRoutes.manualinput: (context) => ManualInputScreen(),
-        AppRoutes.googlecalendar: (context) => GoogleCalendar(),
+        // AppRoutes.googlecalendar: (context) => GoogleCalendar(),
 
         //Airlines routes
         AppRoutes.flightinput: (context) => FlightInputScreen(),
@@ -136,7 +136,7 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
-        AppRoutes.questionthirdscreenforairline: (context) =>
+        AppRoutes.questionthirdscreenforairline: (context) => 
             QuestionThirdScreenForAirline(),
 
         // Airports routes

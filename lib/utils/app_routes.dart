@@ -1,7 +1,7 @@
 class AppRoutes {
-  static const loginscreen = "/loginscreen";
+  static const loginscreen = "/";
   static const skipscreen = "/skipscreen";
-  static const leaderboardscreen = "/";
+  static const leaderboardscreen = "/leaderboardscreen";
   static const profilescreen = "/profilescreen";
   static const detailairport = "/detailairport";
   static const mediafullscreen = "/mediafullscreen";
@@ -41,6 +41,5 @@ class AppRoutes {
   static const termsofservice = "/termsofservice";
   static const example = "/examplewora college";
   static const helpFaqs = "/helpFaqs";
-  static const googlecalendar = "/";
-  
+  // static const googlecalendar = "/";
 }
