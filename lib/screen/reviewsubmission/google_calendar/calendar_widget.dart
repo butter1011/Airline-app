@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as calendar;
-import 'google_sign_in_help.dart';
+import 'google_sign_in_helper.dart';
 
 class CalendarEventsWidget extends StatefulWidget {
   const CalendarEventsWidget({super.key});
@@ -13,84 +13,117 @@ class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
   final GoogleSignInHelper _signInHelper = GoogleSignInHelper();
   List<calendar.Event> _events = [];
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchEvents();
-  }
+  String? _error;
 
   Future<void> _fetchEvents() async {
-    if (!mounted) return;    
     setState(() {
       _isLoading = true;
+      _error = null;
     });
 
     try {
       final calendarApi = await _signInHelper.getCalendarApi();
-      print("This is the calendarApi:🎁🎁 $calendarApi");
-      if (calendarApi != null) {
-        final now = DateTime.now();
-        final events = await calendarApi.events.list(
-          'primary',
-          timeMin: now.toUtc(),
-          timeMax: now.add(const Duration(days: 7)).toUtc(),
-          orderBy: 'startTime',
-          singleEvents: true,
-        );
 
-        if (!mounted) return;
-        setState(() {
-          _events = events.items ?? [];
-        });
+      if (calendarApi == null) {
+        throw Exception('Failed to initialize Calendar API');
       }
-    } catch (e) {
-      if (!mounted) return;
-      debugPrint('Error fetching events: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to fetch calendar events')),
+
+      final now = DateTime.now();
+      final events = await calendarApi.events.list(
+        'primary',
+        timeMin: now.toUtc(),
+        timeMax: now.add(const Duration(days: 7)).toUtc(),
+        orderBy: 'startTime',
+        singleEvents: true,
+        maxResults: 100,
       );
-    } finally {
-      if (!mounted) return;
+
       setState(() {
+        _events = events.items ?? [];
         _isLoading = false;
       });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $_error')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: _events.length,
-                  itemBuilder: (context, index) {
-                    final event = _events[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 8,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calendar Events'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _fetchEvents,
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _fetchEvents,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _error != null
+                ? Center(child: Text('Error: $_error'))
+                : _events.isEmpty
+                    ? const Center(child: Text('No upcoming events'))
+                    : ListView.builder(
+                        itemCount: _events.length,
+                        itemBuilder: (context, index) {
+                          final event = _events[index];
+                          return EventCard(event: event);
+                        },
                       ),
-                      child: ListTile(
-                        title: Text(event.summary ?? 'No title'),
-                        subtitle: Text(
-                          '${_formatDateTime(event.start?.dateTime)} - '
-                          '${_formatDateTime(event.end?.dateTime)}',
-                        ),
-                      ),
-                    );
-                  },
-                ),
+      ),
+    );
+  }
+}
+
+class EventCard extends StatelessWidget {
+  final calendar.Event event;
+
+  const EventCard({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              event.summary ?? 'No title',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Start: ${_formatDateTime(event.start?.dateTime ?? event.start?.date)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Text(
+              'End: ${_formatDateTime(event.end?.dateTime ?? event.end?.date)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   String _formatDateTime(DateTime? dateTime) {
     if (dateTime == null) return 'N/A';
-    return dateTime.toLocal().toString().split('.')[0];
+    return '${dateTime.toLocal().year}-'
+        '${dateTime.toLocal().month.toString().padLeft(2, '0')}-'
+        '${dateTime.toLocal().day.toString().padLeft(2, '0')} '
+        '${dateTime.toLocal().hour.toString().padLeft(2, '0')}:'
+        '${dateTime.toLocal().minute.toString().padLeft(2, '0')}';
   }
 }

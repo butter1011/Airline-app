@@ -6,33 +6,30 @@ class GoogleSignInHelper {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
-      'https://www.googleapis.com/auth/calendar',
+      'https://www.googleapis.com/auth/calendar', // Changed to full calendar access
       'https://www.googleapis.com/auth/calendar.events',
     ],
-    signInOption: SignInOption.standard,
   );
+
+  GoogleSignInAccount? currentUser;
 
   Future<calendar.CalendarApi?> getCalendarApi() async {
     try {
-      await _googleSignIn.signOut(); // Sign out first to clear any existing sessions
-      
-      // Sign in and get authentication
-      final GoogleSignInAccount? account = await _googleSignIn.signIn();
-      if (account == null) return null;
+      // Check if already signed in
+      currentUser =
+          _googleSignIn.currentUser ?? await _googleSignIn.signInSilently();
+      currentUser ??= await _googleSignIn.signIn();
 
-      // Ensure authentication is valid
-      await account.authentication;
+      if (currentUser == null) return null;
 
       // Get the authenticated HTTP client
       final httpClient = await _googleSignIn.authenticatedClient();
       if (httpClient == null) return null;
 
-      // Create and return the Calendar API instance
       return calendar.CalendarApi(httpClient);
     } catch (error) {
       print('Error signing in: $error');
-      await _googleSignIn.signOut(); // Clean up on error
-      return null;
+      rethrow; // Rethrow to handle in UI
     }
   }
 }
