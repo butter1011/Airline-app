@@ -41,4 +41,6 @@ class AppRoutes {
   static const termsofservice = "/termsofservice";
   static const example = "/examplewora college";
   static const helpFaqs = "/helpFaqs";
+  static const googlecalendar = "/";
+  
 }

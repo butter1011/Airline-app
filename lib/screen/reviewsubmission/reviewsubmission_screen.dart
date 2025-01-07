@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
@@ -13,6 +16,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ReviewsubmissionScreen extends ConsumerStatefulWidget {
   const ReviewsubmissionScreen({super.key});
@@ -213,19 +217,117 @@ class _ReviewsubmissionScreenState
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  // NavButton(
-                  //   text: AppLocalizations.of(context).translate('Synchronize'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const ScannerScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   color: Colors.white,
-                  // ),
-                  // const SizedBox(height: 12),
+                  NavButton(
+                    text: AppLocalizations.of(context).translate('Synchronize'),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  NavButton(
+                                    text: AppLocalizations.of(context)
+                                        .translate('Sync from CSV File'),
+                                    onPressed: () async {
+                                      FilePickerResult? result =
+                                          await FilePicker.platform.pickFiles(
+                                        type: FileType.custom,
+                                        allowedExtensions: ['csv'],
+                                      );
+
+                                      if (result != null) {
+                                        File file =
+                                            File(result.files.single.path!);
+                                        String content =
+                                            await file.readAsString();
+                                        List<String> lines =
+                                            content.split('\n');
+                                        List<BoardingPass> boardingPasses = [];
+
+                                        for (String line in lines.skip(1)) {
+                                          if (line.trim().isEmpty) continue;
+                                          List<String> values = line.split(',');
+
+                                          BoardingPass boardingPass =
+                                              BoardingPass(
+                                            name: ref.read(userDataProvider)?[
+                                                'userData']['_id'],
+                                            departureAirportCode: values[7],
+                                            departureTime: values[4],
+                                            arrivalAirportCode: values[7],
+                                            arrivalTime: values[5],
+                                            airlineCode: values[1],
+                                            flightNumber: values[2],
+
+                                            // airline: values[1],
+                                            // flightNumber: values[2],
+                                            // departureDate: DateTime.parse(values[3]),
+                                            // departureTime: values[4],
+                                            // arrivalTime: values[5],
+                                            // origin: values[6],
+                                            // destination: values[7],
+                                            // gate: values[8],
+                                            // seat: values[9],
+                                            // passengerName: values[10],
+                                            // bookingReference: values[11],
+                                          );
+
+                                          boardingPasses.add(boardingPass);
+                                        }
+                                        print(
+                                            "This is boarding passes data 🎃🎃🎃: $boardingPasses");
+
+                                        // ref
+                                        //     .read(
+                                        //         boardingPassesProvider.notifier)
+                                        //     .setData(boardingPasses);
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    color: AppStyles.mainColor,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  NavButton(
+                                    text: AppLocalizations.of(context)
+                                        .translate('Sync from Google Calendar'),
+                                    onPressed: () {
+                                       Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => GoogleCalendar(),
+                                        ),
+                                      );
+                                    },
+                                    color: AppStyles.mainColor,
+                                  ),
+                                  // const SizedBox(height: 12),
+                                  // NavButton(
+                                  //   text: AppLocalizations.of(context)
+                                  //       .translate('Sync from Airline Website'),
+                                  //   onPressed: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => ScannerScreen(),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  //   color: AppStyles.mainColor,
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
                   NavButton(
                     text: AppLocalizations.of(context)
                         .translate('Input manually'),

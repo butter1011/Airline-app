@@ -17,6 +17,7 @@ import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/complete_reviews.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_second_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/overview_airline_review_screen.dart';
@@ -121,6 +122,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         AppRoutes.manualinput: (context) => ManualInputScreen(),
+        AppRoutes.googlecalendar: (context) => GoogleCalendar(),
 
         //Airlines routes
         AppRoutes.flightinput: (context) => FlightInputScreen(),
