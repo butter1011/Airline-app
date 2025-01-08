@@ -71,7 +71,7 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               const SizedBox(height: 18),
               _buildTravelClassSelection(ref),
               const SizedBox(height: 18),
-              _buildAdditionalSyncOptions(ref),
+              // _buildAdditionalSyncOptions(ref),
               const SizedBox(height: 16),
             ],
           ),
@@ -253,7 +253,6 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               if (isValid) {
                 Navigator.pushNamed(
                     context, AppRoutes.overviewairportreviewscreen);
-             
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

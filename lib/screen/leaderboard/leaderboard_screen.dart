@@ -315,7 +315,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                       onTap: () => toggleButton(buttonText),
                     ),
                   );
-                }).toList(),              
+                }).toList(),
               ),
             ),
             SizedBox(height: 14),
@@ -365,50 +365,55 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 17),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: trendingreviews.map(
-                                      (singleFeedback) {
-                                        return SizedBox(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(right: 16),
-                                            child: SizedBox(
-                                              width: 299,
-                                              child: FeedbackCard(
-                                                  singleFeedback:
-                                                      singleFeedback),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ).toList(),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 18,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.feedscreen);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .translate('See all feedback'),
-                                        style: AppStyles.textStyle_15_600,
-                                      ),
-                                      Icon(Icons.arrow_forward)
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 24),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: trendingreviews.map(
+                                  (singleFeedback) {
+                                    return SizedBox(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(right: 16),
+                                        child: SizedBox(
+                                          width: 299,
+                                          child: FeedbackCard(
+                                              thumbnail_Height: 189,
+                                              singleFeedback: singleFeedback),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, AppRoutes.feedscreen);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('See all feedback'),
+                                  style: AppStyles.textStyle_15_600,
+                                ),
+                                Icon(Icons.arrow_forward)
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16,
                           ),
                         ],
                       ),

@@ -22,8 +22,12 @@ import 'package:airline_app/provider/user_data_provider.dart';
 //     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
-  const FeedbackCard({super.key, required this.singleFeedback});
+  const FeedbackCard(
+      {super.key,
+      required this.singleFeedback,
+      required this.thumbnail_Height});
   final Map<String, dynamic> singleFeedback;
+  final double thumbnail_Height;
 
   @override
   ConsumerState<FeedbackCard> createState() => _FeedbackCardState();
@@ -286,7 +290,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
-                  height: 189,
+                  height: widget.thumbnail_Height,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/default.png'),

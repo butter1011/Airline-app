@@ -81,7 +81,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               const SizedBox(height: 18),
               _buildTravelClassSelection(ref),
               const SizedBox(height: 18),
-              _buildAdditionalSyncOptions(ref),
+              // _buildAdditionalSyncOptions(ref),
               const SizedBox(height: 16),
             ],
           ),
