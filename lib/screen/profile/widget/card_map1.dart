@@ -12,7 +12,6 @@ import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart';
-import 'package:airline_app/provider/user_data_provider.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -78,45 +77,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _loadAirportMarkers() async {
-
-      final userData = ref.watch(userDataProvider);
-
- if (userData == null) {
-      return null;
-    }
-      final userId = userData['userData']['_id'];
-final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
-final userReviews = reviewsNotifier.getReviewsByUserId(userId);
-final List userAirports = userReviews
-    .map((singleReview) => singleReview['airport']['_id'])
-    .toSet()
-    .toList();
-
-
-       print('🎄🎄🎃🧧');
-print(userId);
- print('🎄🎄🎈');
-print(userAirports);
-
-
-
-
     final airportData = ref.watch(airlineAirportProvider).airportData;
     ref
         .read(airlineAirportProvider.notifier)
         .getFilteredList('Airport', null, null, null);
     final airportReviewData = ref.watch(airlineAirportProvider).filteredList;
-final filteredAirportReviewData = airportData
-    .where((airport) => userAirports.contains(airport['_id']))
-    .toList();
-print('🎄🎄');
-print(filteredAirportReviewData);
 
     List<Marker> markers = [];
 
-    for (var airport in filteredAirportReviewData) {
+    for (var airport in airportReviewData) {
       final location = airport['location'];
-     
 
       final name = airport['name'];
       final score = airport['overall'];

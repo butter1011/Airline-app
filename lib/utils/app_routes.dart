@@ -16,7 +16,7 @@ class AppRoutes {
   static const feedscreen = "/feedscreen";
   static const feedfilterscreen = "/feedfilterscreen";
   static const syncedscreen = "/syncedscreen";
-  static const manualinput = "/manualinput";                                
+  static const manualinput = "/manualinput";
   static const airportinput = "/airportinput";
   static const overviewairportreviewscreen = "/overviewairportreviewscreen";
   static const questionfirstscreenforairport = "/questionfirstscreenforairport";

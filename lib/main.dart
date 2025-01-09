@@ -135,7 +135,7 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
-        AppRoutes.questionthirdscreenforairline: (context) => 
+        AppRoutes.questionthirdscreenforairline: (context) =>
             QuestionThirdScreenForAirline(),
 
         // Airports routes

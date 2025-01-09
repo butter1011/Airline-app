@@ -71,7 +71,7 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               const SizedBox(height: 18),
               _buildTravelClassSelection(ref),
               const SizedBox(height: 18),
-              _buildAdditionalSyncOptions(ref),
+              // _buildAdditionalSyncOptions(ref),
               const SizedBox(height: 16),
             ],
           ),
@@ -204,33 +204,33 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ToggleBtn(
-              buttonText: "Boarding Passes",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Boarding Passes",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Boarding Passes"),
-            ),
-            ToggleBtn(
-              buttonText: "Geolocation",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Geolocation",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Geolocation"),
-            ),
-            ToggleBtn(
-              buttonText: "E-Tickets",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "E-Tickets",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("E-Tickets"),
-            )
+            // ToggleBtn(
+            //   buttonText: "Boarding Passes",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Boarding Passes",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Boarding Passes"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "Geolocation",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Geolocation",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Geolocation"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "E-Tickets",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "E-Tickets",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("E-Tickets"),
+            // )
           ],
         ),
       ],
@@ -253,7 +253,6 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               if (isValid) {
                 Navigator.pushNamed(
                     context, AppRoutes.overviewairportreviewscreen);
-             
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
