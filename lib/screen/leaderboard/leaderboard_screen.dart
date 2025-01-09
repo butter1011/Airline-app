@@ -165,11 +165,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             final review = jsonData['review'];
             final newFeedItem = LiveFeedItem(
               userName: review['reviewer']['name'] ?? 'Anonymous',
-              entityName: jsonData['data'][0]['name'] ?? 'Anonymous',
-              type: jsonData['data'][0]['isAirline'] ? 'airline' : 'airport',
+              entityName: review['airport'] == null
+                  ? review['airline']['name']
+                  : review['airport']['name'],
+              type: review['airport'] == null ? 'airline' : 'airport',
               rating: review['score'] ?? 0,
               comment: review['comment'] ?? '',
-              timeStamp:jsonData['date'] ?? DateTime.now(),
+              timeStamp: DateTime.parse(review['date']),
             );
 
             ref.read(liveFeedProvider.notifier).addFeedItem(newFeedItem);
@@ -391,6 +393,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                     builder: (context, ref, child) {
                                       final liveFeedItems =
                                           ref.watch(liveFeedProvider);
+
                                       return liveFeedItems.isEmpty
                                           ? Center(
                                               child: Column(
