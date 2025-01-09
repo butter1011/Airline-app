@@ -52,8 +52,7 @@ class _LoginState extends ConsumerState<Login> {
       await _fetchDataAndNavigate();
     } else {
       // No token, initialize Otpless
-      // await _initializeOtpless();
-      await testLogin();
+      await _initializeOtpless();
     }
     setState(() {
       isLoading = false;
@@ -78,154 +77,105 @@ class _LoginState extends ConsumerState<Login> {
     Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
   }
 
-  // Future<void> _initializeOtpless() async {
-  //   await _otplessFlutterPlugin.enableDebugLogging(true);
-  //   await _otplessFlutterPlugin.initHeadless(appId);
-  //   _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
-  // }
+  Future<void> _initializeOtpless() async {
+    await _otplessFlutterPlugin.enableDebugLogging(true);
+    await _otplessFlutterPlugin.initHeadless(appId);
+    _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
+  }
 
-  // void onHeadlessResult(dynamic result) async {
-  //   String jsonString = jsonEncode(result);
-  //   final response;
-
-  //   if (result != null && result['data'] != null) {
-  //     showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (BuildContext context) {
-  //         return Container(
-  //           color: Colors.black.withOpacity(0.5),
-  //           child: BackdropFilter(
-  //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-  //             child: const Center(
-  //               child: LoadingWidget(),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     );
-
-  //     UserData userData = UserData.fromJson(jsonString);
-
-  //     if (userData.channel == 'WHATSAPP') {
-  //       response = await http.post(
-  //         Uri.parse('$apiUrl/api/v1/user'),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: json.encode({
-  //           'name': userData.name,
-  //           'whatsappNumber': userData.identityValue,
-  //           'email': "",
-  //         }),
-  //       );
-  //     } else {
-  //       response = await http.post(
-  //         Uri.parse('$apiUrl/api/v1/user'),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: json.encode({
-  //           'name': userData.name,
-  //           'whatsappNumber': '',
-  //           'email': userData.identityValue,
-  //         }),
-  //       );
-  //     }
-
-  //     if (response.statusCode == 200) {
-  //       final responseData = jsonDecode(response.body);
-  //       ref.read(userDataProvider.notifier).setUserData(responseData);
-
-  //       // Save token and userData to SharedPreferences
-  //       final prefs = await SharedPreferences.getInstance();
-  //       await prefs.setString('token', userData.idToken);
-  //       await prefs.setString('userData', json.encode(responseData));
-
-  //       final airlineController = GetAirlineAirportController();
-  //       final result = await airlineController.getAirlineAirport();
-  //       if (result['success']) {
-  //         ref.read(airlineAirportProvider.notifier).setData(result['data']);
-  //       }
-
-  //       final reviewsController = GetReviewsAirlineController();
-  //       final reviewsResult = await reviewsController.getReviews();
-  //       if (reviewsResult['success']) {
-  //         ref
-  //             .read(reviewsAirlineProvider.notifier)
-  //             .setReviewData(reviewsResult['data']);
-  //       }
-
-  //       Navigator.pop(context); // Remove loading dialog
-
-  //       if (responseData['userState'] == 0) {
-  //         Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
-  //       } else {
-  //         Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
-  //       }
-  //     } else {
-  //       Navigator.pop(context); // Remove loading dialog
-  //     }
-  //   } else {
-  //     _showErrorSnackBar('Login failed. Please try again.');
-  //   }
-  // }
-
-  // Future<void> _loginWithWhatsApp() async {
-  //   try {
-  //     Map<String, dynamic> arg = {'appId': appId};
-  //     await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
-  //   } catch (e) {
-  //     _showErrorSnackBar('WhatsApp login failed. Please try again.');
-  //   }
-  // }
-
-  Future<void> testLogin() async {
+  void onHeadlessResult(dynamic result) async {
+    String jsonString = jsonEncode(result);
     final response;
-    response = await http.post(
-      Uri.parse('$apiUrl/api/v1/user'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode({
-        'name': 'Morris Hart',
-        'whatsappNumber': '',
-        'email': 'morrishart0220@gmail.com',
-      }),
-    );
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      ref.read(userDataProvider.notifier).setUserData(responseData);
+    if (result != null && result['data'] != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.black.withOpacity(0.5),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: const Center(
+                child: LoadingWidget(),
+              ),
+            ),
+          );
+        },
+      );
 
-      // Save token and userData to SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', 'morrishart0220@gmail.com');
-      await prefs.setString('userData', json.encode(responseData));
+      UserData userData = UserData.fromJson(jsonString);
 
-      final airlineController = GetAirlineAirportController();
-      final result = await airlineController.getAirlineAirport();
-      if (result['success']) {
-        ref.read(airlineAirportProvider.notifier).setData(result['data']);
-      }
-
-      final reviewsController = GetReviewsAirlineController();
-      final reviewsResult = await reviewsController.getReviews();
-      if (reviewsResult['success']) {
-        ref
-            .read(reviewsAirlineProvider.notifier)
-            .setReviewData(reviewsResult['data']);
-      }
-
-      Navigator.pop(context); // Remove loading dialog
-
-      if (responseData['userState'] == 0) {
-        Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+      if (userData.channel == 'WHATSAPP') {
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': userData.identityValue,
+            'email': "",
+          }),
+        );
       } else {
-        Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': '',
+            'email': userData.identityValue,
+          }),
+        );
+      }
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        ref.read(userDataProvider.notifier).setUserData(responseData);
+
+        // Save token and userData to SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', userData.idToken);
+        await prefs.setString('userData', json.encode(responseData));
+
+        final airlineController = GetAirlineAirportController();
+        final result = await airlineController.getAirlineAirport();
+        if (result['success']) {
+          ref.read(airlineAirportProvider.notifier).setData(result['data']);
+        }
+
+        final reviewsController = GetReviewsAirlineController();
+        final reviewsResult = await reviewsController.getReviews();
+        if (reviewsResult['success']) {
+          ref
+              .read(reviewsAirlineProvider.notifier)
+              .setReviewData(reviewsResult['data']);
+        }
+
+        Navigator.pop(context); // Remove loading dialog
+
+        if (responseData['userState'] == 0) {
+          Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+        }
+      } else {
+        Navigator.pop(context); // Remove loading dialog
       }
     } else {
-      Navigator.pop(context); // Remove loading dialog
+      _showErrorSnackBar('Login failed. Please try again.');
+    }
+  }
+
+  Future<void> _loginWithWhatsApp() async {
+    try {
+      Map<String, dynamic> arg = {'appId': appId};
+      await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
+    } catch (e) {
+      _showErrorSnackBar('WhatsApp login failed. Please try again.');
     }
   }
 
@@ -249,8 +199,7 @@ class _LoginState extends ConsumerState<Login> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
-                      // _loginWithWhatsApp();
-                      testLogin();
+                      _loginWithWhatsApp();
                     },
                     child: Padding(
                       padding:
