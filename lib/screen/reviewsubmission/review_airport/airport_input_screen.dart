@@ -204,33 +204,33 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ToggleBtn(
-              buttonText: "Boarding Passes",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Boarding Passes",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Boarding Passes"),
-            ),
-            ToggleBtn(
-              buttonText: "Geolocation",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Geolocation",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Geolocation"),
-            ),
-            ToggleBtn(
-              buttonText: "E-Tickets",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "E-Tickets",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("E-Tickets"),
-            )
+            // ToggleBtn(
+            //   buttonText: "Boarding Passes",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Boarding Passes",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Boarding Passes"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "Geolocation",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Geolocation",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Geolocation"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "E-Tickets",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "E-Tickets",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("E-Tickets"),
+            // )
           ],
         ),
       ],

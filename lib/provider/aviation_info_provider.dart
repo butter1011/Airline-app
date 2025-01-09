@@ -6,7 +6,7 @@ class AviationInfoState {
   final String airline;
   final String airport;
   final String selectedClassOfTravel;
-  final String? selectedSynchronize;
+  // final String? selectedSynchronize;
   final List<dynamic> dateRange;
   final int? index; // Add this field
   final bool? isDeparture;
@@ -16,7 +16,7 @@ class AviationInfoState {
     this.airline = '',
     this.airport = '',
     this.selectedClassOfTravel = '',
-    this.selectedSynchronize = '',
+    // this.selectedSynchronize = '',
     this.dateRange = const [],
     this.index, // Initialize as nullable
     this.isDeparture,
@@ -40,7 +40,7 @@ class AviationInfoState {
       airport: airport ?? this.airport,
       selectedClassOfTravel:
           selectedClassOfTravel ?? this.selectedClassOfTravel,
-      selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
+      // selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
       dateRange: dateRange ?? this.dateRange,
       index: index ?? this.index,
       isDeparture: isDeparture ?? this.isDeparture,
@@ -52,8 +52,8 @@ class AviationInfoState {
         to.isNotEmpty &&
         airline.isNotEmpty &&
         selectedClassOfTravel.isNotEmpty &&
-        selectedSynchronize != null &&
-        selectedSynchronize!.isNotEmpty &&
+        // selectedSynchronize != null &&
+        // selectedSynchronize!.isNotEmpty &&
         dateRange.isNotEmpty;
   }
 
@@ -61,8 +61,8 @@ class AviationInfoState {
     return airline.isNotEmpty &&
         airport.isNotEmpty &&
         selectedClassOfTravel.isNotEmpty &&
-        selectedSynchronize != null &&
-        selectedSynchronize!.isNotEmpty &&
+        // selectedSynchronize != null &&
+        // selectedSynchronize!.isNotEmpty &&
         dateRange.isNotEmpty;
   }
 }
