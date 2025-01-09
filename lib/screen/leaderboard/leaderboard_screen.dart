@@ -19,7 +19,7 @@ import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-
+import 'package:airline_app/provider/live_feed_review_provider.dart';
 import 'package:airline_app/controller/get_reviews_airline_controller.dart';
 
 final selectedEmojiNumberProvider =
@@ -45,6 +45,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
+
+  List<LiveFeedItem> liveFeedItems = [];
 
   String filterType = 'All';
   List<Map<String, dynamic>> leaderBoardList = [];
@@ -157,13 +159,25 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
       _channel.stream.listen(
-        (message) {
-          final data = json.decode(message);
-          if (data['type'] == 'airlineAirport') {
+        (data) {
+          final jsonData = jsonDecode(data);
+          if (jsonData['type'] == 'airlineAirport') {
+            final review = jsonData['review'];
+            final newFeedItem = LiveFeedItem(
+              userName: review['reviewer']['name'] ?? 'Anonymous',
+              entityName: jsonData['data'][0]['name'] ?? 'Anonymous',
+              type: jsonData['data'][0]['isAirline'] ? 'airline' : 'airport',
+              rating: review['score'] ?? 0,
+              comment: review['comment'] ?? '',
+              timeStamp:jsonData['date'] ?? DateTime.now(),
+            );
+
+            ref.read(liveFeedProvider.notifier).addFeedItem(newFeedItem);
+
             ref
                 .read(airlineAirportProvider.notifier)
-                .setData(Map<String, dynamic>.from(data));
-            // Add setState to trigger UI refresh
+                .setData(Map<String, dynamic>.from(jsonData));
+
             ref
                 .read(airlineAirportProvider.notifier)
                 .getFilteredList(filterType, _searchQuery, null, null);
@@ -315,7 +329,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                       onTap: () => toggleButton(buttonText),
                     ),
                   );
-                }).toList(),              
+                }).toList(),
               ),
             ),
             SizedBox(height: 14),
@@ -355,6 +369,254 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                       expandedItems += 5;
                                     });
                                   },
+                                ),
+                                SizedBox(height: 28),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('Live Feed'),
+                                  style: AppStyles.textStyle_16_600.copyWith(
+                                    color: Color(0xff38433E),
+                                  ),
+                                ),
+                                SizedBox(height: 17),
+                                Container(
+                                  height: 270,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[50],
+                                    borderRadius: BorderRadius.circular(12),
+                                    border:
+                                        Border.all(color: Colors.grey[200]!),
+                                  ),
+                                  child: Consumer(
+                                    builder: (context, ref, child) {
+                                      final liveFeedItems =
+                                          ref.watch(liveFeedProvider);
+                                      return liveFeedItems.isEmpty
+                                          ? Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.feed_outlined,
+                                                    size: 32,
+                                                    color: Colors.grey[400],
+                                                  ),
+                                                  SizedBox(height: 8),
+                                                  Text(
+                                                    'No live feed data available',
+                                                    style: AppStyles
+                                                        .textStyle_14_400
+                                                        .copyWith(
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : AnimatedList(
+                                              key: GlobalKey<
+                                                  AnimatedListState>(),
+                                              initialItemCount:
+                                                  liveFeedItems.length,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8),
+                                              itemBuilder:
+                                                  (context, index, animation) {
+                                                final item =
+                                                    liveFeedItems[index];
+                                                return SlideTransition(
+                                                  position: animation.drive(
+                                                    Tween<Offset>(
+                                                      begin: Offset(0.0,
+                                                          -1.0), // Slide from top
+                                                      end: Offset.zero,
+                                                    ).chain(CurveTween(
+                                                        curve: Curves.easeOut)),
+                                                  ),
+                                                  child: FadeTransition(
+                                                    opacity: animation.drive(
+                                                      Tween<double>(
+                                                              begin: 0.0,
+                                                              end: 1.0)
+                                                          .chain(CurveTween(
+                                                              curve: Curves
+                                                                  .easeOut)),
+                                                    ),
+                                                    child: Container(
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 4),
+                                                      padding:
+                                                          EdgeInsets.all(12),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.05),
+                                                            blurRadius: 4,
+                                                            offset:
+                                                                Offset(0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: item.type ==
+                                                                      'airline'
+                                                                  ? Colors
+                                                                      .blue[50]
+                                                                  : Colors
+                                                                      .green[50],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                            ),
+                                                            child: Text(
+                                                              item.type ==
+                                                                      'airline'
+                                                                  ? '✈️'
+                                                                  : '🛫',
+                                                              style: TextStyle(
+                                                                  fontSize: 16),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 12),
+                                                          Expanded(
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Text(
+                                                                            item.userName,
+                                                                            style:
+                                                                                AppStyles.textStyle_14_600.copyWith(
+                                                                              color: Colors.black87,
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(
+                                                                              ' rated ${item.entityName}',
+                                                                              style: AppStyles.textStyle_14_400.copyWith(
+                                                                                color: Colors.black54,
+                                                                              ),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      DateTime.now().difference(item.timeStamp).inMinutes <
+                                                                              60
+                                                                          ? '${DateTime.now().difference(item.timeStamp).inMinutes}m ago'
+                                                                          : DateTime.now().difference(item.timeStamp).inHours < 24
+                                                                              ? '${DateTime.now().difference(item.timeStamp).inHours}h ago'
+                                                                              : '${DateTime.now().difference(item.timeStamp).inDays}d ago',
+                                                                      style: AppStyles
+                                                                          .textStyle_12_600
+                                                                          .copyWith(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 4),
+                                                                Row(
+                                                                  children: [
+                                                                    Container(
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .symmetric(
+                                                                        horizontal:
+                                                                            8,
+                                                                        vertical:
+                                                                            2,
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .amber[100],
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(12),
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        '${item.rating}/10',
+                                                                        style: AppStyles
+                                                                            .textStyle_14_600
+                                                                            .copyWith(
+                                                                          color:
+                                                                              Colors.amber[900],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    if (item
+                                                                        .comment
+                                                                        .isNotEmpty) ...[
+                                                                      SizedBox(
+                                                                          width:
+                                                                              8),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Text(
+                                                                          '"${item.comment}"',
+                                                                          style: AppStyles
+                                                                              .textStyle_14_400
+                                                                              .copyWith(
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            fontStyle:
+                                                                                FontStyle.italic,
+                                                                          ),
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                    },
+                                  ),
                                 ),
                                 SizedBox(height: 28),
                                 Text(
