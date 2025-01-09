@@ -5,46 +5,67 @@ class ReviewButton extends StatelessWidget {
   final String iconUrl;
   final String label;
   final bool isSelected;
+  final bool isLocked;
   final VoidCallback onTap;
 
   ReviewButton({
     required this.iconUrl,
     required this.label,
     required this.isSelected,
+    required this.isLocked,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: AppStyles.cardDecoration.copyWith(
-          color: isSelected ? AppStyles.mainColor : Colors.white,
-        ),
-        padding: EdgeInsets.only(bottom: 10, top: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+      onTap: isLocked ? null : onTap,
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: AppStyles.cardDecoration.copyWith(
+              color: isSelected ? AppStyles.mainColor : Colors.white,
+            ),
+            padding: EdgeInsets.only(bottom: 10, top: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 48,
+                  width: 48,
+                  decoration: AppStyles.cardDecoration.copyWith(
+                    color: isSelected ? Colors.white : AppStyles.mainColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Image.asset(iconUrl, height: 40),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppStyles.textStyle_14_600.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isLocked)
             Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration.copyWith(
-                color: isSelected ? Colors.white : AppStyles.mainColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Image.asset(iconUrl, height: 40),
-            ),
-            SizedBox(height: 6),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: AppStyles.textStyle_14_600.copyWith(
-                color: Colors.black,
+              height: double.infinity,
+              width: double.infinity,
+              decoration: AppStyles.cardDecoration
+                  .copyWith(color: Colors.black.withOpacity(0.5)),
+              child: Center(
+                child: Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 40,
+                ),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
