@@ -27,8 +27,6 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
-    print('💦💦');
-    print(userReviews);
     return Column(
       children: [
         Padding(
