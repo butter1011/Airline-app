@@ -27,6 +27,7 @@ final selectedEmojiNumberProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
 final selectedEmojiProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
+bool _isWebSocketConnected = false;
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -156,6 +157,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Future<void> connectWebSocket() async {
+    if (_isWebSocketConnected) return;
+
     try {
       _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
       _channel.stream.listen(
@@ -182,10 +185,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             setState(() {});
           }
         },
-        onError: (_) {},
-        onDone: () {},
+        onError: (_) {
+          _isWebSocketConnected = false;
+        },
+        onDone: () {
+          _isWebSocketConnected = false;
+        },
       );
-    } catch (_) {}
+      _isWebSocketConnected = true;
+    } catch (_) {
+      _isWebSocketConnected = false;
+    }
   }
 
   Future<bool> _onWillPop() async {
