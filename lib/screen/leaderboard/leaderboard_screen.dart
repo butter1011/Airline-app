@@ -45,7 +45,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
-
+  double leftPadding = 24.0;
   String filterType = 'All';
   List<Map<String, dynamic>> leaderBoardList = [];
   Map<String, bool> buttonStates = {
@@ -368,27 +368,59 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: trendingreviews.map(
-                                  (singleFeedback) {
-                                    return SizedBox(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(right: 16),
-                                        child: SizedBox(
+                          NotificationListener<ScrollNotification>(
+                            onNotification: (scrollNotification) {
+                              if (scrollNotification
+                                  is ScrollUpdateNotification) {
+                                setState(() {
+                                  leftPadding =
+                                      scrollNotification.metrics.pixels > 0
+                                          ? 0
+                                          : 24.0;
+                                });
+                              }
+                              return true;
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: leftPadding),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: trendingreviews.map(
+                                    (singleFeedback) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 16),
+                                        child: Container(
                                           width: 299,
-                                          child: FeedbackCard(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // Adjust the border radius as needed
+                                            boxShadow: [
+                                              // BoxShadow(
+                                              //   color: Colors.black
+                                              //       .withOpacity(0.1),
+                                              //   spreadRadius: 2,
+                                              //   blurRadius: 4,
+                                              //   offset: Offset(0,
+                                              //       2), // changes position of shadow
+                                              // ),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // Adjust the border radius as needed
+                                            child: FeedbackCard(
                                               thumbnail_Height: 189,
-                                              singleFeedback: singleFeedback),
+                                              singleFeedback: singleFeedback,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ).toList(),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
                               ),
                             ),
                           ),
