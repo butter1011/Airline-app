@@ -27,6 +27,8 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+    print('💦💦');
+    print(userReviews);
     return Column(
       children: [
         Padding(
@@ -63,13 +65,8 @@ class CLeaderboardScreen extends ConsumerWidget {
               if (singleReview != null) {
                 final reviewer = singleReview['reviewer'];
                 final airline = singleReview['airline'];
-                final from = singleReview['from'];
-                final to = singleReview['to'];
 
-                if (reviewer != null &&
-                    airline != null &&
-                    from != null &&
-                    to != null) {
+                if (reviewer != null && airline != null) {
                   return Column(
                     children: [
                       Padding(
