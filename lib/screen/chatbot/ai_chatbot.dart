@@ -108,7 +108,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               decoration: AppStyles.circleDecoration,
               child: const CircleAvatar(
                 radius: 20,
-                backgroundImage: AssetImage('assets/icons/bot.png'),
+                backgroundImage: AssetImage('assets/icons/app_logo.png'),
               ),
             ),
             const SizedBox(width: 8),
