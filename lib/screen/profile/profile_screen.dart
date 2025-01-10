@@ -14,6 +14,14 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool showEditIcon = false;
+
+  void toggleEditIcon() {
+    setState(() {
+      showEditIcon = !showEditIcon;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userDataProvider);
@@ -41,14 +49,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Row(
                             children: [
                               InkWell(
-                                onDoubleTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.eidtprofilescreen);
-                                },
-                                onLongPress: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.eidtprofilescreen);
-                                },
+                                onTap: toggleEditIcon,
                                 child: Container(
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -82,18 +83,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   Row(
                                     children: [
                                       InkWell(
-                                        onDoubleTap: () => ref
+                                        onTap: () => ref
                                             .read(
                                                 selectedIndexProvider.notifier)
                                             .state = 2,
-                                        onLongPress: () {
-                                          ref
-                                              .read(selectedIndexProvider
-                                                  .notifier)
-                                              .state = 2;
-                                        },
                                         child: Container(
-                                          // width: 140,
                                           height: 32,
                                           decoration: BoxDecoration(
                                             border: Border.all(),
@@ -183,53 +177,42 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  InkWell(
-                                    onDoubleTap: () {
-                                      Navigator.pushNamed(
-                                          context, AppRoutes.eidtprofilescreen);
-                                    },
-                                    onLongPress: () {
-                                      Navigator.pushNamed(
-                                          context, AppRoutes.eidtprofilescreen);
-                                    },
-                                    child: Container(
-                                      width: 227,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(width: 2),
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(27),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black,
-                                            offset: Offset(2, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icons/Lead Icon.png',
-                                                height: 20,
-                                                width: 20,
+                                  Container(
+                                    width: 227,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 2),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(27),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icons/Lead Icon.png',
+                                              height: 20,
+                                              width: 20,
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
+                                                style: TextStyle(
+                                                    fontFamily: 'Clash Grotesk',
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
-                                              Center(
-                                                child: Text(
-                                                  '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'Clash Grotesk',
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -241,80 +224,56 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           const SizedBox(
                             height: 21,
                           ),
-                          InkWell(
-                            onDoubleTap: () => Navigator.pushNamed(
-                                context, AppRoutes.eidtprofilescreen),
-                            onLongPress: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.eidtprofilescreen);
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                '${userData?['userData']['name']}',
-                                style: const TextStyle(
-                                  fontFamily: 'Clash Grotesk',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '${userData?['userData']['name']}',
+                              style: const TextStyle(
+                                fontFamily: 'Clash Grotesk',
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          InkWell(
-                            onDoubleTap: () => Navigator.pushNamed(
-                                context, AppRoutes.eidtprofilescreen),
-                            onLongPress: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.eidtprofilescreen);
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                '${userData?['userData']['bio']}',
-                                style: const TextStyle(
-                                  fontFamily: 'Clash Grotesk',
-                                  letterSpacing: 0.6,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '${userData?['userData']['bio']}',
+                              style: const TextStyle(
+                                fontFamily: 'Clash Grotesk',
+                                letterSpacing: 0.6,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ),
                           const SizedBox(
                             height: 14,
                           ),
-                          InkWell(
-                            onDoubleTap: () => Navigator.pushNamed(
-                                context, AppRoutes.eidtprofilescreen),
-                            onLongPress: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.eidtprofilescreen);
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('My favorite Airline is'),
-                                    style: const TextStyle(
-                                      fontFamily: 'Clash Grotesk',
-                                      letterSpacing: 0.3,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('My favorite Airline is'),
+                                  style: const TextStyle(
+                                    fontFamily: 'Clash Grotesk',
+                                    letterSpacing: 0.3,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                  Text(
-                                    ' ${userData?['userData']['favoriteAirlines']}',
-                                    style: const TextStyle(
-                                      fontFamily: 'Clash Grotesk',
-                                      letterSpacing: 0.3,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                                Text(
+                                  ' ${userData?['userData']['favoriteAirlines']}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Clash Grotesk',
+                                    letterSpacing: 0.3,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(
@@ -365,6 +324,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ],
             ),
           ]),
+          if (showEditIcon)
+            Positioned(
+              top: 100,
+              left: 70,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.eidtprofilescreen);
+                  toggleEditIcon();
+                },
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
         ]),
       ),
     );

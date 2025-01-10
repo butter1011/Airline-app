@@ -40,10 +40,10 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               _buildInfoText(
                   "Add your flight schedule below or sync your calendar/email"),
               const SizedBox(height: 22),
-              _buildSectionTitle("Synchronize (Recommended):"),
-              const SizedBox(height: 13),
-              _buildSyncButtons(),
-              const SizedBox(height: 18),
+              // _buildSectionTitle("Synchronize (Recommended):"),
+              // const SizedBox(height: 13),
+              // _buildSyncButtons(),
+              // const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -17,7 +17,7 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-
+import 'package:share_plus/share_plus.dart';
 // final selectedEmojiProvider =
 //     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
@@ -60,6 +60,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       controller.dispose();
     });
     super.dispose();
+  }
+
+  void sharedFunction(String url) {
+    Share.share(url);
   }
 
   Widget _buildVideoPlayer(String videoUrl) {
@@ -311,7 +315,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               IconButton(
                 onPressed: () async {
-                  await BottomSheetHelper.showScoreBottomSheet(context);
+                  // await BottomSheetHelper.showScoreBottomSheet(context);
+                  sharedFunction("https://airlinereviewapp.com");
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),
