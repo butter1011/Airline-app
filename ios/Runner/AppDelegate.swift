@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-  import OtplessSDK
+import OtplessSDK
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -19,7 +19,5 @@ Otpless.sharedInstance.processOtplessDeeplink(url: url)
 }
 	super.application(app, open: url, options: options)
 	return true
-
 }
-
 }

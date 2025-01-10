@@ -117,8 +117,8 @@ PODS:
   - nanopb/encode (3.30910.0)
   - otpless_flutter (0.0.4):
     - Flutter
-    - OtplessSDK (= 2.1.6)
-  - OtplessSDK (2.1.6)
+    - OtplessSDK (= 2.1.8)
+  - OtplessSDK (2.1.8)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -213,7 +213,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   geocoding_ios: d7460f56e80e118d57678efe5c2cdc888739ff18
-  geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
+  geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
   google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleMLKit: eff9e23ec1d90ea4157a1ee2e32a4f610c5b3318
@@ -229,8 +229,8 @@ SPEC CHECKSUMS:
   MLKitVision: 45e79d68845a2de77e2dd4d7f07947f0ed157b0e
   mobile_scanner: fd0054c52ede661e80bf5a4dea477a2467356bee
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  otpless_flutter: 70bce0b6c7a160eeb198dc2970d01c49e243070a
-  OtplessSDK: 89eb52e540a291b5521f0170992571b5bb4cc24a
+  otpless_flutter: 58eeca6f0bce42925638179e82f52b33ef93a76d
+  OtplessSDK: 6da860f65ad20cf6adb91f74817e1299f5fc6adf
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
@@ -239,6 +239,6 @@ SPEC CHECKSUMS:
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 3d19f74c3998f37d2a06a7ef73f54a8d75dd7800
 
 COCOAPODS: 1.16.2
