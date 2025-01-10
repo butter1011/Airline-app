@@ -270,105 +270,105 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        await BottomSheetHelper.showScoreBottomSheet(context);
-                      },
-                      icon: Image.asset('assets/icons/share.png'),
-                      color: Colors.black,
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            final RenderBox button =
-                                context.findRenderObject() as RenderBox;
-                            final index = await EmojiBox.showCustomDialog(
-                                context, button);
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     IconButton(
+                //       onPressed: () async {
+                //         await BottomSheetHelper.showScoreBottomSheet(context);
+                //       },
+                //       icon: Image.asset('assets/icons/share.png'),
+                //       color: Colors.black,
+                //     ),
+                //     Row(
+                //       children: [
+                //         IconButton(
+                //           onPressed: () async {
+                //             final RenderBox button =
+                //                 context.findRenderObject() as RenderBox;
+                //             final index = await EmojiBox.showCustomDialog(
+                //                 context, button);
 
-                            if (index != null) {
-                              setState(() {
-                                ref
-                                    .read(selectedEmojiProvider(
-                                            args?['feedbackId'] ?? '')
-                                        .notifier)
-                                    .state = index + 1;
-                                print(
-                                    '🎨🎨${ref.read(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state = index + 1}');
-                              });
+                //             if (index != null) {
+                //               setState(() {
+                //                 ref
+                //                     .read(selectedEmojiProvider(
+                //                             args?['feedbackId'] ?? '')
+                //                         .notifier)
+                //                     .state = index + 1;
+                //                 print(
+                //                     '🎨🎨${ref.read(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state = index + 1}');
+                //               });
 
-                              try {
-                                // Update reaction in backend
+                //               try {
+                //                 // Update reaction in backend
 
-                                final response = await http.post(
-                                  Uri.parse(
-                                      '$apiUrl/api/v1/airline-review/update'),
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                  },
-                                  body: jsonEncode({
-                                    'feedbackId': args?['feedbackId'],
-                                    'user_id': args?['userId'],
-                                    'reactionType': ref
-                                        .watch(selectedEmojiProvider(
-                                                args?['feedbackId'] ?? '')
-                                            .notifier)
-                                        .state,
-                                  }),
-                                );
+                //                 final response = await http.post(
+                //                   Uri.parse(
+                //                       '$apiUrl/api/v1/airline-review/update'),
+                //                   headers: {
+                //                     'Content-Type': 'application/json',
+                //                     'Accept': 'application/json',
+                //                   },
+                //                   body: jsonEncode({
+                //                     'feedbackId': args?['feedbackId'],
+                //                     'user_id': args?['userId'],
+                //                     'reactionType': ref
+                //                         .watch(selectedEmojiProvider(
+                //                                 args?['feedbackId'] ?? '')
+                //                             .notifier)
+                //                         .state,
+                //                   }),
+                //                 );
 
-                                if (response.statusCode == 200) {
-                                  setState(() {
-                                    ref
-                                        .read(reviewsAirlineProvider.notifier)
-                                        .updateReview(
-                                            jsonDecode(response.body)['data']);
-                                    ref
-                                            .read(selectedEmojiNumberProvider(
-                                                    args?['feedbackId'] ?? '')
-                                                .notifier)
-                                            .state =
-                                        jsonDecode(response.body)['data']
-                                                ['rating']
-                                            .length;
-                                  });
-                                } else {
-                                  // Show error message if API call fails
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Failed to update reaction')),
-                                  );
-                                }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Something went wrong')),
-                                );
-                              }
-                            } // Update selected emoji after dialog closes
-                          },
-                          icon: selectedEmojiIndex != 0
-                              ? SvgPicture.asset(
-                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state}.svg',
-                                  width: 24,
-                                  height: 24,
-                                )
-                              : Icon(Icons.thumb_up_outlined),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          '${ref.watch(selectedEmojiNumberProvider(args?['feedbackId'] ?? '').notifier).state}',
-                          style: AppStyles.textStyle_14_600,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                //                 if (response.statusCode == 200) {
+                //                   setState(() {
+                //                     ref
+                //                         .read(reviewsAirlineProvider.notifier)
+                //                         .updateReview(
+                //                             jsonDecode(response.body)['data']);
+                //                     ref
+                //                             .read(selectedEmojiNumberProvider(
+                //                                     args?['feedbackId'] ?? '')
+                //                                 .notifier)
+                //                             .state =
+                //                         jsonDecode(response.body)['data']
+                //                                 ['rating']
+                //                             .length;
+                //                   });
+                //                 } else {
+                //                   // Show error message if API call fails
+                //                   ScaffoldMessenger.of(context).showSnackBar(
+                //                     SnackBar(
+                //                         content:
+                //                             Text('Failed to update reaction')),
+                //                   );
+                //                 }
+                //               } catch (e) {
+                //                 ScaffoldMessenger.of(context).showSnackBar(
+                //                   SnackBar(
+                //                       content: Text('Something went wrong')),
+                //                 );
+                //               }
+                //             } // Update selected emoji after dialog closes
+                //           },
+                //           icon: selectedEmojiIndex != 0
+                //               ? SvgPicture.asset(
+                //                   'assets/icons/emoji_${ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state}.svg',
+                //                   width: 24,
+                //                   height: 24,
+                //                 )
+                //               : Icon(Icons.thumb_up_outlined),
+                //         ),
+                //         SizedBox(width: 8),
+                //         Text(
+                //           '${ref.watch(selectedEmojiNumberProvider(args?['feedbackId'] ?? '').notifier).state}',
+                //           style: AppStyles.textStyle_14_600,
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
