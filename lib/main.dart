@@ -17,6 +17,7 @@ import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/complete_reviews.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_second_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/overview_airline_review_screen.dart';
@@ -79,7 +80,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: [
         Locale('en', ''),
         Locale('zh', ''),
-        Locale('ru', ''),
+        Locale('es', ''),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -151,10 +152,8 @@ class MyApp extends ConsumerWidget {
             DetailSecondScreenForAirport(),
         AppRoutes.questionthirdscreenforairport: (context) =>
             QuestionThirdScreenForAirport(),
-        //////        
-         AppRoutes.completereviews: (context) =>
-            CompleteReviews(),
-    
+        //////
+        AppRoutes.completereviews: (context) => CompleteReviews(),
 
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),

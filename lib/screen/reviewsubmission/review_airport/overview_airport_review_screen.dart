@@ -153,7 +153,7 @@ class _OverviewAirportReviewScreenState
                                         ),
                                         FittedBox(
                                           child: Text(
-                                            '$airlineName,  $date, $selectedClassOfTravel',
+                                            '$airlineName, $selectedClassOfTravel',
                                             style: AppStyles.textStyle_15_500,
                                           ),
                                         ),

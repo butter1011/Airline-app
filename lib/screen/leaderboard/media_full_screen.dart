@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:video_player/video_player.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
-
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -24,6 +24,86 @@ class MediaFullScreen extends ConsumerStatefulWidget {
 }
 
 class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
+  final Map<String, VideoPlayerController> _videoControllers = {};
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideos();
+  }
+
+  Future<void> _initVideos() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final List<dynamic> videos = args?['Videos'] ?? [];
+
+    for (var video in videos) {
+      try {
+        final controller = VideoPlayerController.networkUrl(
+          Uri.parse(video),
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+
+        await controller.initialize();
+        controller.setLooping(true);
+
+        setState(() {
+          _videoControllers[video] = controller;
+        });
+      } catch (e) {
+        print('Error initializing video $video: $e');
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _videoControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  Widget _buildVideoPlayer(String videoUrl) {
+    final controller = _videoControllers[videoUrl];
+    if (controller == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          VideoPlayer(controller),
+          IconButton(
+            icon: Icon(
+              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              size: 50.0,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                controller.value.isPlaying
+                    ? controller.pause()
+                    : controller.play();
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     CarouselSliderController buttonCarouselController =
@@ -32,8 +112,11 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     final List<dynamic> imgList = args?['Images'] ?? [];
+    final List<dynamic> videoList = args?['Videos'] ?? [];
+    final List<dynamic> mediaList = [...imgList, ...videoList];
     final selectedEmojiIndex =
         ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,22 +139,40 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                     viewportFraction: 1,
                     height: 594.0,
                   ),
-                  items: imgList.map((image) {
+                  items: mediaList.map((media) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(image),
-                              fit: BoxFit.cover,
+                        if (videoList.contains(media)) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: _buildVideoPlayer(media),
+                          );
+                        } else {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(media),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                     );
                   }).toList(),
                   carouselController: buttonCarouselController,
                 ),
+              Positioned(
+                top: 40,
+                left: 16,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_sharp,
+                      color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
               if (imgList.length > 1) ...[
                 Positioned(
                   top: 281,
@@ -169,110 +270,105 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        await BottomSheetHelper.showScoreBottomSheet(context);
-                      },
-                      icon: Image.asset('assets/icons/share.png'),
-                      color: Colors.black,
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            final RenderBox button =
-                                context.findRenderObject() as RenderBox;
-                            final index = await EmojiBox.showCustomDialog(
-                                context, button);
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     IconButton(
+                //       onPressed: () async {
+                //         await BottomSheetHelper.showScoreBottomSheet(context);
+                //       },
+                //       icon: Image.asset('assets/icons/share.png'),
+                //       color: Colors.black,
+                //     ),
+                //     Row(
+                //       children: [
+                //         IconButton(
+                //           onPressed: () async {
+                //             final RenderBox button =
+                //                 context.findRenderObject() as RenderBox;
+                //             final index = await EmojiBox.showCustomDialog(
+                //                 context, button);
 
-                            if (index != null) {
-                              setState(() {
-                                ref
-                                    .read(selectedEmojiProvider(
-                                            args?['feedbackId'] ?? '')
-                                        .notifier)
-                                    .state = index + 1;
-                                print(
-                                    '🎨🎨${ref.read(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state = index + 1}');
-                              });
+                //             if (index != null) {
+                //               setState(() {
+                //                 ref
+                //                     .read(selectedEmojiProvider(
+                //                             args?['feedbackId'] ?? '')
+                //                         .notifier)
+                //                     .state = index + 1;
+                //                 print(
+                //                     '🎨🎨${ref.read(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state = index + 1}');
+                //               });
 
-                              try {
-                                // Update reaction in backend
+                //               try {
+                //                 // Update reaction in backend
 
-                                final response = await http.post(
-                                  Uri.parse(
-                                      '$apiUrl/api/v1/airline-review/update'),
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                  },
-                                  body: jsonEncode({
-                                    'feedbackId': args?['feedbackId'],
-                                    'user_id': args?['userId'],
-                                    'reactionType': ref
-                                        .watch(selectedEmojiProvider(
-                                                args?['feedbackId'] ?? '')
-                                            .notifier)
-                                        .state,
-                                  }),
-                                );
+                //                 final response = await http.post(
+                //                   Uri.parse(
+                //                       '$apiUrl/api/v1/airline-review/update'),
+                //                   headers: {
+                //                     'Content-Type': 'application/json',
+                //                     'Accept': 'application/json',
+                //                   },
+                //                   body: jsonEncode({
+                //                     'feedbackId': args?['feedbackId'],
+                //                     'user_id': args?['userId'],
+                //                     'reactionType': ref
+                //                         .watch(selectedEmojiProvider(
+                //                                 args?['feedbackId'] ?? '')
+                //                             .notifier)
+                //                         .state,
+                //                   }),
+                //                 );
 
-                                if (response.statusCode == 200) {
-                                  print(
-                                      '💖🥉❤✔💎${jsonDecode(response.body)['data']}');
-                                  setState(() {
-                                    ref
-                                        .read(reviewsAirlineProvider.notifier)
-                                        .updateReview(
-                                            jsonDecode(response.body)['data']);
-                                    ref
-                                            .read(selectedEmojiNumberProvider(
-                                                    args?['feedbackId'] ?? '')
-                                                .notifier)
-                                            .state =
-                                        jsonDecode(response.body)['data']
-                                                ['rating']
-                                            .length;
-                                  });
-
-                                  print(
-                                      '${jsonDecode(response.body)['data']['rating'].length}');
-                                } else {
-                                  // Show error message if API call fails
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Failed to update reaction')),
-                                  );
-                                }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Something went wrong')),
-                                );
-                              }
-                            } // Update selected emoji after dialog closes
-                          },
-                          icon: selectedEmojiIndex != 0
-                              ? SvgPicture.asset(
-                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state}.svg',
-                                  width: 24,
-                                  height: 24,
-                                )
-                              : Icon(Icons.thumb_up_outlined),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          '${ref.watch(selectedEmojiNumberProvider(args?['feedbackId'] ?? '').notifier).state}',
-                          style: AppStyles.textStyle_14_600,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                //                 if (response.statusCode == 200) {
+                //                   setState(() {
+                //                     ref
+                //                         .read(reviewsAirlineProvider.notifier)
+                //                         .updateReview(
+                //                             jsonDecode(response.body)['data']);
+                //                     ref
+                //                             .read(selectedEmojiNumberProvider(
+                //                                     args?['feedbackId'] ?? '')
+                //                                 .notifier)
+                //                             .state =
+                //                         jsonDecode(response.body)['data']
+                //                                 ['rating']
+                //                             .length;
+                //                   });
+                //                 } else {
+                //                   // Show error message if API call fails
+                //                   ScaffoldMessenger.of(context).showSnackBar(
+                //                     SnackBar(
+                //                         content:
+                //                             Text('Failed to update reaction')),
+                //                   );
+                //                 }
+                //               } catch (e) {
+                //                 ScaffoldMessenger.of(context).showSnackBar(
+                //                   SnackBar(
+                //                       content: Text('Something went wrong')),
+                //                 );
+                //               }
+                //             } // Update selected emoji after dialog closes
+                //           },
+                //           icon: selectedEmojiIndex != 0
+                //               ? SvgPicture.asset(
+                //                   'assets/icons/emoji_${ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? '').notifier).state}.svg',
+                //                   width: 24,
+                //                   height: 24,
+                //                 )
+                //               : Icon(Icons.thumb_up_outlined),
+                //         ),
+                //         SizedBox(width: 8),
+                //         Text(
+                //           '${ref.watch(selectedEmojiNumberProvider(args?['feedbackId'] ?? '').notifier).state}',
+                //           style: AppStyles.textStyle_14_600,
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

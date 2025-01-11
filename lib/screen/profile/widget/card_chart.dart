@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -40,65 +39,71 @@ class _CardChartState extends ConsumerState<CardChart> {
   ];
 
   void _badgeFunction(int index) async {
-    final UserData = ref.watch(userDataProvider);
+    final userData = ref.watch(userDataProvider);
 
-    final userInformationData =
-        await http.post(Uri.parse('$apiUrl/api/v1/badgeEditUser'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode({
-              'selectedbadges': buttons[index]['label'],
-              '_id': UserData?['userData']['_id'],
-            }));
+    final userInformationData = await http.post(
+      Uri.parse('$apiUrl/api/v1/badgeEditUser'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'selectedbadges': buttons[index]['label'],
+        '_id': userData?['userData']['_id'],
+      }),
+    );
 
     if (userInformationData.statusCode == 200) {
-   
       final responseChangeData = jsonDecode(userInformationData.body);
       ref.read(userDataProvider.notifier).setUserData(responseChangeData);
     } else {
-      // Handle authentication error
-   
       print('Changing the userProfile failed: ${userInformationData.body}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final int points = ref.watch(userDataProvider)?["userData"]["points"];   
-    final List<Map<String, String>> filterButtonsBySelectedBadge =
-        buttons.where((button) {
-      if (points == 500) {
-        return button['label'] == 'No Review';
-      } else if (points >= 500 && points < 3000) {
-        return button['label'] == 'Needs Improvement' ||
-            button['label'] == 'No Review';
-      } else if (points >= 3000 && points < 5000) {
-        return button['label'] == 'Fair Reviewer' ||
-            button['label'] == 'Needs Improvement' ||
-            button['label'] == 'No Review';
-      } else if (points >= 5000 && points < 7000) {
-        return button['label'] == 'Good Reviewer' ||
-            button['label'] == 'Fair Reviewer' ||
-            button['label'] == 'Needs Improvement' ||
-            button['label'] == 'No Review';
-      } else if (points >= 7000 && points < 10000) {
-        return button['label'] == 'Excellent Reviewer' ||
-            button['label'] == 'Good Reviewer' ||
-            button['label'] == 'Fair Reviewer' ||
-            button['label'] == 'Needs Improvement' ||
-            button['label'] == 'No Review';
-      } else if (points >= 10000) {
-        return true;
-      } else {
-        return true;
-      }
-    }).toList(); 
+    final int points = ref.watch(userDataProvider)?["userData"]["points"];
     final selectedButtonIndex = ref.watch(selectedButtonProvider);
-    List<Map<String, String>> sortedButtons =
-        List.from(filterButtonsBySelectedBadge);
+
+    List<Map<String, String>> sortedButtons = List.from(buttons);
+    List<Map<String, String>> activeButtons = [];
+    List<Map<String, String>> lockedButtons = [];
+
+    for (var button in sortedButtons) {
+      final isLocked = !((points >= 500 &&
+              points < 3000 &&
+              (button['label'] == 'Needs Improvement' ||
+                  button['label'] == 'No Review')) ||
+          (points >= 3000 &&
+              points < 5000 &&
+              (button['label'] == 'Fair Reviewer' ||
+                  button['label'] == 'Needs Improvement' ||
+                  button['label'] == 'No Review')) ||
+          (points >= 5000 &&
+              points < 7000 &&
+              (button['label'] == 'Good Reviewer' ||
+                  button['label'] == 'Fair Reviewer' ||
+                  button['label'] == 'Needs Improvement' ||
+                  button['label'] == 'No Review')) ||
+          (points >= 7000 &&
+              points < 10000 &&
+              (button['label'] == 'Excellent Reviewer' ||
+                  button['label'] == 'Good Reviewer' ||
+                  button['label'] == 'Fair Reviewer' ||
+                  button['label'] == 'Needs Improvement' ||
+                  button['label'] == 'No Review')) ||
+          (points >= 10000));
+
+      if (isLocked) {
+        lockedButtons.add(button);
+      } else {
+        activeButtons.add(button);
+      }
+    }
+
+    sortedButtons = [...activeButtons, ...lockedButtons];
+
     if (selectedButtonIndex != null) {
-      // Find the actual index in sortedButtons that corresponds to the selected button
       int actualIndex = sortedButtons
           .indexWhere((button) => buttons[selectedButtonIndex] == button);
       if (actualIndex != -1) {
@@ -126,17 +131,22 @@ class _CardChartState extends ConsumerState<CardChart> {
               itemBuilder: (context, index) {
                 final button = sortedButtons[index];
                 final buttonIndex = buttons.indexOf(button);
+                final isLocked = lockedButtons.contains(button);
+
                 return ReviewButton(
                   iconUrl: button['iconUrl']!,
                   label: AppLocalizations.of(context)
                       .translate('${button['label']}')
                       .toString(),
                   isSelected: selectedButtonIndex == buttonIndex,
+                  isLocked: isLocked,
                   onTap: () {
-                    ref
-                        .read(selectedButtonProvider.notifier)
-                        .selectButton(buttonIndex);
-                    _badgeFunction(buttonIndex);
+                    if (!isLocked) {
+                      ref
+                          .read(selectedButtonProvider.notifier)
+                          .selectButton(buttonIndex);
+                      _badgeFunction(buttonIndex);
+                    }
                   },
                 );
               },

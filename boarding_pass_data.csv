@@ -1,0 +1,4 @@
+PassType,Airline,FlightNumber,DepartureDate,DepartureTime,ArrivalTime,Origin,Destination,Gate,Seat,PassengerName,BookingReference
+boardingPass,United Airlines,UA1234,2024-02-15,10:30 AM,1:45 PM,LAX,JFK,B12,12A,John Smith,ABC123
+boardingPass,Delta Airlines,DL5678,2024-02-16,2:15 PM,5:30 PM,SFO,ORD,C15,24F,Jane Doe,XYZ789
+boardingPass,American Airlines,AA9012,2024-02-17,7:45 AM,11:20 AM,DFW,MIA,D08,18C,Robert Johnson,DEF456

@@ -9,7 +9,7 @@ class NavButton extends StatefulWidget {
   final Color color;
 
   @override
-  _NavButtonState createState() => _NavButtonState();
+  State<NavButton> createState() => _NavButtonState();
 }
 
 class _NavButtonState extends State<NavButton> {

@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/scanner_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar/calendar_widget.dart';
+import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
@@ -13,6 +19,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ReviewsubmissionScreen extends ConsumerStatefulWidget {
   const ReviewsubmissionScreen({super.key});
@@ -59,7 +66,7 @@ class _ReviewsubmissionScreenState
       selectedType = type;
     });
   }
-
+  
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
@@ -114,49 +121,85 @@ class _ReviewsubmissionScreenState
       ],
     );
   }
+    void _showDataMissingSnackBar() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Some required data is missing in the database'),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
 
-  Widget _buildCardWidget(BoardingPass singleBoardingPass) {
-    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Column(
-        children: [
-          if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(
-              singleBoardingPass: singleBoardingPass,
-              index: index,
-              isReviewed: singleBoardingPass.isFlightReviewed,
-            ),
-          if ((selectedType == "All" || selectedType == "Airports") &&
-              (selectedType != "Flights"))
-            Column(
-              children: [
-                if (selectedType == "All") const SizedBox(height: 10),
-                ReviewAirportCard(
+    Widget _buildCardWidget(BoardingPass singleBoardingPass) {
+      final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
+  
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Column(
+          children: [
+            if (selectedType == "All" || selectedType == "Flights")
+              Builder(
+                builder: (context) {
+                  final flightCard = ReviewFlightCard(
+                    singleBoardingPass: singleBoardingPass,
                     index: index,
-                    status: singleBoardingPass.visitStatus,
-                    airlineCode: singleBoardingPass.airlineCode,
-                    airportCode: singleBoardingPass.departureAirportCode,
-                    time: singleBoardingPass.departureTime,
-                    isDeparture: true,
-                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
-                const SizedBox(height: 10),
-                ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.arrivalAirportCode,
-                  time: singleBoardingPass.arrivalTime,
-                  isDeparture: false,
-                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
-
+                    isReviewed: singleBoardingPass.isFlightReviewed,
+                  );
+                  if (flightCard is SizedBox) {
+                    _showDataMissingSnackBar();
+                  }
+                  return flightCard;
+                },
+              ),
+            if ((selectedType == "All" || selectedType == "Airports") &&
+                (selectedType != "Flights"))
+              Column(
+                children: [
+                  if (selectedType == "All") const SizedBox(height: 10),
+                  Builder(
+                    builder: (context) {
+                      final departureCard = ReviewAirportCard(
+                        index: index,
+                        status: singleBoardingPass.visitStatus,
+                        airlineCode: singleBoardingPass.airlineCode,
+                        airportCode: singleBoardingPass.departureAirportCode,
+                        time: singleBoardingPass.departureTime,
+                        isDeparture: true,
+                        isReviewed: singleBoardingPass.isDepartureAirportReviewed,
+                        classOfTravel: singleBoardingPass.classOfTravel,
+                      );
+                      if (departureCard is SizedBox) {
+                        _showDataMissingSnackBar();
+                      }
+                      return departureCard;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Builder(
+                    builder: (context) {
+                      final arrivalCard = ReviewAirportCard(
+                        index: index,
+                        status: singleBoardingPass.visitStatus,
+                        airlineCode: singleBoardingPass.airlineCode,
+                        airportCode: singleBoardingPass.arrivalAirportCode,
+                        time: singleBoardingPass.arrivalTime,
+                        isDeparture: false,
+                        isReviewed: singleBoardingPass.isArrivalAirportReviewed,
+                        classOfTravel: singleBoardingPass.classOfTravel,
+                      );
+                      if (arrivalCard is SizedBox) {
+                        _showDataMissingSnackBar();
+                      }
+                      return arrivalCard;
+                    },
+                  ),
+                ],
+              ),
+          ],
+        ),
+      );
+    }
   @override
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
@@ -213,19 +256,44 @@ class _ReviewsubmissionScreenState
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  // NavButton(
-                  //   text: AppLocalizations.of(context).translate('Synchronize'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const ScannerScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   color: Colors.white,
-                  // ),
-                  // const SizedBox(height: 12),
+                  NavButton(
+                    text: AppLocalizations.of(context)
+                        .translate('Sync from Your Wallet'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const WalletSyncScreen(),
+                        ),
+                      );
+                    },
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
+                  NavButton(
+                    text: AppLocalizations.of(context)
+                        .translate('Sync from Google Calendar'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => GoogleCalendarScreen(),
+                        ),
+                      );
+                    },
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
+                  NavButton(
+                    text: AppLocalizations.of(context).translate('Scan'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ScannerScreen(),
+                        ),
+                      );
+                    },
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 12),
                   NavButton(
                     text: AppLocalizations.of(context)
                         .translate('Input manually'),
@@ -239,48 +307,6 @@ class _ReviewsubmissionScreenState
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _CardWidget(BoardingPass singleBoardingPass) {
-    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Column(
-        children: [
-          if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(
-              singleBoardingPass: singleBoardingPass,
-              index: index,
-              isReviewed: singleBoardingPass.isFlightReviewed,
-            ),
-          if ((selectedType == "All" || selectedType == "Airports") &&
-              (selectedType != "Flights"))
-            Column(
-              children: [
-                if (selectedType == "All") SizedBox(height: 10),
-                ReviewAirportCard(
-                    index: index,
-                    status: singleBoardingPass.visitStatus,
-                    airlineCode: singleBoardingPass.airlineCode,
-                    airportCode: singleBoardingPass.departureAirportCode,
-                    time: singleBoardingPass.departureTime,
-                    isDeparture: true,
-                    isReviewed: singleBoardingPass.isDepartureAirportReviewed),
-                SizedBox(height: 10),
-                ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.arrivalAirportCode,
-                  time: singleBoardingPass.arrivalTime,
-                  isDeparture: false,
-                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                ),
-              ],
-            ),
-        ],
       ),
     );
   }

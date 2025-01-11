@@ -17,6 +17,7 @@ class ReviewAirportCard extends ConsumerWidget {
     required this.time,
     required this.isDeparture,
     required this.isReviewed,
+    required this.classOfTravel,
   });
 
   final int index;
@@ -26,6 +27,7 @@ class ReviewAirportCard extends ConsumerWidget {
   final String airportCode;
   final bool isDeparture;
   final bool isReviewed;
+  final String classOfTravel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,8 +35,15 @@ class ReviewAirportCard extends ConsumerWidget {
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airportData = airlineAirportNotifier.getAirportData(airportCode);
     final airlineData = airlineAirportNotifier.getAirlineData(airlineCode);
-    final CountryDetails country = CountryCodes.detailsFromAlpha2(airportData['countryCode']);
-   
+
+    if (airportData == null ||
+        airlineData == null ||
+        airportData['countryCode'] == null) {
+      return const SizedBox.shrink();
+    }
+
+    final CountryDetails country =
+        CountryCodes.detailsFromAlpha2(airportData['countryCode']);
 
     return Opacity(
       opacity: status == "Upcoming visit" || isReviewed ? 0.5 : 1,
@@ -44,14 +53,16 @@ class ReviewAirportCard extends ConsumerWidget {
             : () {
                 final String airlineId = airlineData['_id'];
                 final String airportId = airportData['_id'];
-                
+
                 aviationInfoNotifier
                   ..updateAirline(airlineId)
                   ..updateAirport(airportId)
                   ..updateIndex(index)
-                  ..updateIsDeparture(isDeparture);
+                  ..updateIsDeparture(isDeparture)
+                  ..updateClassOfTravel(classOfTravel);
 
-                Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
+                Navigator.pushNamed(
+                    context, AppRoutes.questionfirstscreenforairport);
               },
         child: Container(
           decoration: AppStyles.cardDecoration,
@@ -76,8 +87,9 @@ class ReviewAirportCard extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      airportData['name'],
-                      style: AppStyles.textStyle_16_600.copyWith(color: Colors.black),
+                      airportData['name'] ?? '',
+                      style: AppStyles.textStyle_16_600
+                          .copyWith(color: Colors.black),
                     ),
                     const Icon(Icons.arrow_forward)
                   ],

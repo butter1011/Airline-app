@@ -280,6 +280,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),
                             child: FeedbackCard(
+                              thumbnail_Height: 189,
                               singleFeedback: singleReview,
                             ),
                           ),
@@ -371,6 +372,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     );
   }
 }
+
 class CategoryButtons extends ConsumerWidget {
   final bool isAirline;
   final Map airportData;
