@@ -491,7 +491,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      "Change to ${_selectedLanguage}",
+                      "Change to ${language}",
                       style: AppStyles.textStyle_24_600
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
@@ -500,7 +500,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
                       AppLocalizations.of(context).translate(
-                          "Change to ${_selectedLanguage}? Are you sure you want to change to ${_selectedLanguage}?"),
+                          "Change to ${language}? Are you sure you want to change to ${language}?"),
                       style: AppStyles.textStyle_14_400,
                     ),
                   ),

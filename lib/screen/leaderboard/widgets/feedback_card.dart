@@ -17,13 +17,17 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-
+import 'package:share_plus/share_plus.dart';
 // final selectedEmojiProvider =
 //     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
-  const FeedbackCard({super.key, required this.singleFeedback});
+  const FeedbackCard(
+      {super.key,
+      required this.singleFeedback,
+      required this.thumbnail_Height});
   final Map<String, dynamic> singleFeedback;
+  final double thumbnail_Height;
 
   @override
   ConsumerState<FeedbackCard> createState() => _FeedbackCardState();
@@ -56,6 +60,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       controller.dispose();
     });
     super.dispose();
+  }
+
+  void sharedFunction(String url) {
+    Share.share(url);
   }
 
   Widget _buildVideoPlayer(String videoUrl) {
@@ -286,7 +294,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
-                  height: 189,
+                  height: widget.thumbnail_Height,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/default.png'),
@@ -307,7 +315,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               IconButton(
                 onPressed: () async {
-                  await BottomSheetHelper.showScoreBottomSheet(context);
+                  // await BottomSheetHelper.showScoreBottomSheet(context);
+                  sharedFunction("https://airlinereviewapp.com");
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),

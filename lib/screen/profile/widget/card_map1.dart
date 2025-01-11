@@ -12,7 +12,6 @@ import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart';
-import 'package:airline_app/provider/user_data_provider.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -30,7 +29,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   List<Marker> _airportMarkers = [];
 
-  // TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _searchResults = [];
 
   @override
   void initState() {
@@ -40,6 +40,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLocationPermission();
       _loadAirportMarkers();
+    });
+  }
+
+  void _handleSearch(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults = [];
+      });
+      return;
+    }
+
+    final airportReviewData = ref.watch(airlineAirportProvider).filteredList;
+    final results = airportReviewData.where((airport) {
+      final name = airport['name'].toString().toLowerCase();
+      final location = airport['location'].toString().toLowerCase();
+      return name.contains(query.toLowerCase()) ||
+          location.contains(query.toLowerCase());
+    }).toList();
+
+    setState(() {
+      _searchResults = results;
     });
   }
 
@@ -56,35 +77,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _loadAirportMarkers() async {
-    final userData = ref.watch(userDataProvider);
-
-    if (userData == null) {
-      return null;
-    }
-    final userId = userData['userData']['_id'];
-    final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
-    final userReviews = reviewsNotifier.getReviewsByUserId(userId);
-    final List userAirports = userReviews
-        .map((singleReview) => singleReview['airport']['_id'])
-        .toSet()
-        .toList();
-
-    print('🎄🎄🎃🧧');
-    print(userId);
-    print('🎄🎄🎈');
-    print(userAirports);
-
     final airportData = ref.watch(airlineAirportProvider).airportData;
-
-    final filteredAirportReviewData = airportData
-        .where((airport) => userAirports.contains(airport['_id']))
-        .toList();
-    print('🎄🎄');
-    print(filteredAirportReviewData);
+    ref
+        .read(airlineAirportProvider.notifier)
+        .getFilteredList('Airport', null, null, null);
+    final airportReviewData = ref.watch(airlineAirportProvider).filteredList;
 
     List<Marker> markers = [];
 
-    for (var airport in filteredAirportReviewData) {
+    for (var airport in airportReviewData) {
       final location = airport['location'];
 
       final name = airport['name'];
@@ -289,7 +290,52 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     airportData = ref.watch(airlineAirportProvider).airportData;
 
     // print('🎃🎊🎃$airportData');
-    final List<Map<String, dynamic>> airportLocations = [];
+    final List<Map<String, dynamic>> airportLocations = [
+      {
+        'name': 'Singapore Changi Airport',
+        'location': LatLng(36.5494, -120.7798),
+        'code': 'SIN',
+        'score': '10/10',
+        'country': 'Singapore',
+        'terminals': 4,
+        'yearBuilt': 1981,
+        'annualPassengers': '68.3M',
+        'description': 'Features the world\'s tallest indoor waterfall'
+      },
+      {
+        'name': 'Tokyo Haneda Airport',
+        'location': LatLng(38.5494, -121.7798),
+        'code': 'HND',
+        'score': '9.5/10',
+        'country': 'Japan',
+        'terminals': 3,
+        'yearBuilt': 1931,
+        'annualPassengers': '87.1M',
+        'description': 'Primary hub for Japan Airlines and ANA'
+      },
+      {
+        'name': 'Hong Kong International Airport',
+        'location': LatLng(38.5494, -102.7798),
+        'code': 'HKG',
+        'score': '9/10',
+        'country': 'Hong Kong',
+        'terminals': 2,
+        'yearBuilt': 1998,
+        'annualPassengers': '71.5M',
+        'description': 'Major aviation hub for East Asia'
+      },
+      {
+        'name': 'Bangkok Suvarnabhumi Airport',
+        'location': LatLng(35.6900, -100.7501),
+        'code': 'BKK',
+        'score': '8.5/10',
+        'country': 'Thailand',
+        'terminals': 2,
+        'yearBuilt': 2006,
+        'annualPassengers': '63.4M',
+        'description': 'Main hub for Thai Airways International'
+      }
+    ];
     return Container(
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -332,6 +378,37 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     MarkerLayer(
                       markers: _airportMarkers,
                     ),
+                    if (_startPosition != null)
+                      MarkerLayer(
+                        markers: airportLocations
+                            .map((airport) => Marker(
+                                  point: airport['location'],
+                                  width: 200,
+                                  height: 200,
+                                  child: Column(
+                                    children: [
+                                      Icon(Icons.local_airport,
+                                          color: Colors.red.shade700, size: 30),
+                                      Container(
+                                        padding: const EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.8),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          airport['name'],
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                      ),
                   ],
                 ),
               ),
@@ -411,6 +488,89 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ],
                 ),
               ),
+              // Positioned(
+              //   top: 8,
+              //   left: 8,
+              //   right: 60,
+              //   child: Container(
+              //     height: 50,
+              //     decoration: BoxDecoration(
+              //       color: Colors.white.withOpacity(0.7),
+              //       borderRadius: BorderRadius.circular(25),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.black.withOpacity(0.1),
+              //           spreadRadius: 1,
+              //           blurRadius: 3,
+              //           offset: const Offset(0, 1),
+              //         ),
+              //       ],
+              //     ),
+              //     child: TextField(
+              //       controller: _searchController,
+              //       onChanged: _handleSearch,
+              //       decoration: InputDecoration(
+              //         hintText: 'Search airports...',
+              //         prefixIcon: const Icon(Icons.search, color: Colors.blue),
+              //         border: InputBorder.none,
+              //         contentPadding: const EdgeInsets.symmetric(
+              //             horizontal: 16, vertical: 12),
+              //         suffixIcon: _searchController.text.isNotEmpty
+              //             ? IconButton(
+              //                 icon: const Icon(Icons.clear),
+              //                 onPressed: () {
+              //                   _searchController.clear();
+              //                   _handleSearch('');
+              //                 },
+              //               )
+              //             : null,
+              //       ),
+              //     ),
+              // ),
+              // ),
+              if (_searchResults.isNotEmpty)
+                Positioned(
+                  top: 60,
+                  left: 8,
+                  right: 60,
+                  child: Container(
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _searchResults.length,
+                      itemBuilder: (context, index) {
+                        final airport = _searchResults[index];
+                        return ListTile(
+                          leading: const Icon(Icons.local_airport,
+                              color: Colors.blue),
+                          title: Text(airport['name']),
+                          subtitle: Text(airport['location']),
+                          onTap: () async {
+                            final coordinates = await getLatLngFromLocation(
+                                airport['location']);
+                            if (coordinates != null) {
+                              _mapController.move(coordinates, 12);
+                              _searchController.clear();
+                              _handleSearch('');
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
               Positioned(
                 bottom: 10,
                 left: -8,

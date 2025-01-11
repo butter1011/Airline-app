@@ -280,6 +280,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),
                             child: FeedbackCard(
+                              thumbnail_Height: 189,
                               singleFeedback: singleReview,
                             ),
                           ),

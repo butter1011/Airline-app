@@ -13,7 +13,6 @@ class AirportList extends StatelessWidget {
   (List<FlSpot>, double) _getSpots() {
     final scoreHistory =
         List<Map<String, dynamic>>.from(airportData['scoreHistory'] ?? []);
-    print("scoreHistory: $scoreHistory");
     if (scoreHistory.isEmpty) {
       return (
         [

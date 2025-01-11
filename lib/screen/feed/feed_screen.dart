@@ -204,7 +204,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                       onTap: () => toggleButton(buttonText),
                     ),
                   );
-                }).toList(), 
+                }).toList(),
               ),
             ),
             const SizedBox(height: 14),
@@ -250,6 +250,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                         .symmetric(
                                                         horizontal: 24.0),
                                                     child: FeedbackCard(
+                                                      thumbnail_Height: 260,
                                                       singleFeedback:
                                                           singleReview,
                                                     ),

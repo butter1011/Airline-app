@@ -42,10 +42,10 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               _buildInfoText(
                   "Add your flight schedule below or sync your calendar/email"),
               const SizedBox(height: 22),
-              _buildSectionTitle("Synchronize (Recommended):"),
-              const SizedBox(height: 13),
-              _buildSyncButtons(),
-              const SizedBox(height: 18),
+              // _buildSectionTitle("Synchronize (Recommended):"),
+              // const SizedBox(height: 13),
+              // _buildSyncButtons(),
+              // const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -81,7 +81,7 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               const SizedBox(height: 18),
               _buildTravelClassSelection(ref),
               const SizedBox(height: 18),
-              _buildAdditionalSyncOptions(ref),
+              // _buildAdditionalSyncOptions(ref),
               const SizedBox(height: 16),
             ],
           ),
@@ -214,33 +214,33 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ToggleBtn(
-              buttonText: "Boarding Passes",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Boarding Passes",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Boarding Passes"),
-            ),
-            ToggleBtn(
-              buttonText: "Geolocation",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "Geolocation",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("Geolocation"),
-            ),
-            ToggleBtn(
-              buttonText: "E-Tickets",
-              height: 40,
-              isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-                  "E-Tickets",
-              onSelected: () => ref
-                  .read(aviationInfoProvider.notifier)
-                  .updateSynchronize("E-Tickets"),
-            )
+            // ToggleBtn(
+            //   buttonText: "Boarding Passes",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Boarding Passes",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Boarding Passes"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "Geolocation",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "Geolocation",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("Geolocation"),
+            // ),
+            // ToggleBtn(
+            //   buttonText: "E-Tickets",
+            //   height: 40,
+            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
+            //       "E-Tickets",
+            //   onSelected: () => ref
+            //       .read(aviationInfoProvider.notifier)
+            //       .updateSynchronize("E-Tickets"),
+            // )
           ],
         ),
       ],

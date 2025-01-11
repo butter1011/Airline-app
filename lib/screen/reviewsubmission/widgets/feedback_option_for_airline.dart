@@ -31,19 +31,19 @@ class FeedbackOptionForAirline extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (numForIdentifyOfParent == 1) {
-          if (numberOfFirstSelectedAspects > 3) {
-            _showAlertDialog(context);
-          } else {
-            Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairline,
-                arguments: {'singleAspect': label});
-          }
+          // if (numberOfFirstSelectedAspects > 3) {
+          //   _showAlertDialog(context);
+          // } else {
+          Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairline,
+              arguments: {'singleAspect': label});
+          // }
         } else if (numForIdentifyOfParent == 2) {
-          if (numberOfSecondSelectedAspects > 3) {
-            _showAlertDialog(context);
-          } else {
-            Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairline,
-                arguments: {'singleAspect': label});
-          }
+          // if (numberOfSecondSelectedAspects > 3) {
+          //   _showAlertDialog(context);
+          // } else {
+          Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairline,
+              arguments: {'singleAspect': label});
+          // }
         }
       }, // Change color on tap
       child: Stack(
