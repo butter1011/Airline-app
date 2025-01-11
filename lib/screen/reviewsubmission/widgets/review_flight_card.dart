@@ -30,25 +30,40 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airlineData = airlineAirportNotifier
         .getAirlineData(widget.singleBoardingPass.airlineCode);
-
+    print("🎍🎍🎍${airlineData}");
     final departureAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
     final arrivalAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
 
-    final departureCountryCode = departureAirportData['countryCode'] ?? "";
-    final originTime = widget.singleBoardingPass.departureTime;
-    final arrivalCountryCode = arrivalAirportData['countryCode'] ?? "";
-    final arrivalTime = widget.singleBoardingPass.arrivalTime;
+    if (airlineData == null || departureAirportData == null || arrivalAirportData == null) {
+      return const SizedBox.shrink();
+    }
 
+    final departureCountryCode = departureAirportData['countryCode'];
+    final originTime = widget.singleBoardingPass.departureTime;
+    final arrivalCountryCode = arrivalAirportData['countryCode'];
+    final arrivalTime = widget.singleBoardingPass.arrivalTime;
     final flightNumber = widget.singleBoardingPass.flightNumber;
     final status = widget.singleBoardingPass.visitStatus;
     final String classTravel = widget.singleBoardingPass.classOfTravel;
 
-    final CountryDetails departureCountry =
-        CountryCodes.detailsFromAlpha2(departureCountryCode);
-    final CountryDetails arrivalCountry =
-        CountryCodes.detailsFromAlpha2(arrivalCountryCode);
+    if (departureCountryCode == null || arrivalCountryCode == null) {
+      return const SizedBox.shrink();
+    }
+
+    CountryDetails? departureCountry;
+    CountryDetails? arrivalCountry;
+    try {
+      departureCountry = CountryCodes.detailsFromAlpha2(departureCountryCode);
+      arrivalCountry = CountryCodes.detailsFromAlpha2(arrivalCountryCode);
+    } catch (e) {
+      return const SizedBox.shrink();
+    }
+
+    if (departureCountry == null || arrivalCountry == null) {
+      return const SizedBox.shrink();
+    }
 
     return Opacity(
       opacity: widget.isReviewed ? 0.5 : 1.0,
@@ -120,7 +135,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(flightNumber, style: AppStyles.textStyle_14_500),
-                    Text("WizAir 2923", style: AppStyles.textStyle_14_500),
+                    Text(airlineData["name"], style: AppStyles.textStyle_14_500),
                   ],
                 ),
                 const SizedBox(height: 18),
