@@ -87,6 +87,8 @@ dependencies:
   video_player: ^2.9.2
   flutter_launcher_icons: ^0.14.2
   flutter_svg: ^2.0.16
+  google_mlkit_barcode_scanning: ^0.13.0
+  url_launcher: ^6.3.1
 googleapis_auth: ^1.6.0
 flutter_launcher_icons:
   android: "launcher_icon"

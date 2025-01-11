@@ -172,7 +172,7 @@ class BuildQuestionHeader extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child:  Image.asset(
+          child: Image.asset(
             "assets/images/airport.png",
             fit: BoxFit.cover,
           ),
@@ -200,18 +200,9 @@ class BuildQuestionHeader extends StatelessWidget {
                       ),
                     ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        airportName,
-                        style: AppStyles.oswaldTextStyle,
-                      ),
-                      Text(
-                        ' Airport',
-                        style: AppStyles.oswaldTextStyle,
-                      )
-                    ],
+                  Text(
+                    airportName,
+                    style: AppStyles.oswaldTextStyle,
                   ),
                 ],
               ),
@@ -230,7 +221,7 @@ class BuildQuestionHeader extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                '$airportName Airways, $selecetedOfCalssLevel',
+                '$airportName, $selecetedOfCalssLevel',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
               ),
               SizedBox(

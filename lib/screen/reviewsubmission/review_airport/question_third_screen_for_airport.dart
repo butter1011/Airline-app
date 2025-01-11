@@ -217,8 +217,17 @@ class _QuestionThirdScreenForAirportState
                                   amenities: amenities,
                                   comment: comment,
                                 );
-
-                                final result = await _reviewController
+print("🧧Reviewer: ${review.reviewer}");
+print("Airline: ${review.airline}");
+print("Airport: ${review.airport}");
+print("Class Travel: ${review.classTravel}");
+print("Accessibility: ${review.accessibility}");
+print("Wait Times: ${review.waitTimes}");
+print("Helpfulness: ${review.helpfulness}");
+print("Ambience Comfort: ${review.ambienceComfort}");
+print("Food Beverage: ${review.foodBeverage}");
+print("Amenities: ${review.amenities}");
+print("Comment: ${review.comment}");                                final result = await _reviewController
                                     .saveAirportReview(review);
 
                                 if (_image.isNotEmpty &&

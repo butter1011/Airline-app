@@ -1,15 +1,18 @@
+import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
+import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart' as calendar;
 import 'google_sign_in_helper.dart';
 
-class CalendarEventsWidget extends StatefulWidget {
-  const CalendarEventsWidget({super.key});
+class GoogleCalendarScreen extends StatefulWidget {
+  const GoogleCalendarScreen({super.key});
 
   @override
-  State<CalendarEventsWidget> createState() => _CalendarEventsWidgetState();
+  State<GoogleCalendarScreen> createState() => _GoogleCalendarScreenState();
 }
 
-class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
+class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
   final GoogleSignInHelper _signInHelper = GoogleSignInHelper();
   List<calendar.Event> _events = [];
   bool _isLoading = false;
@@ -31,8 +34,8 @@ class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
       final now = DateTime.now();
       final events = await calendarApi.events.list(
         'primary',
-        timeMin: now.toUtc(),
-        timeMax: now.add(const Duration(days: 7)).toUtc(),
+        timeMin: now.subtract(const Duration(days: 335)).toUtc(),
+        timeMax: now.add(const Duration(days: 30)).toUtc(),
         orderBy: 'startTime',
         singleEvents: true,
         maxResults: 100,
@@ -57,13 +60,24 @@ class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar Events'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _fetchEvents,
+        toolbarHeight: 52.2,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_sharp),
+          onPressed: () => Navigator.pop(context), // Navigate back when pressed
+        ),
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.of(context).translate('Calendar Events'),
+          style: AppStyles.textStyle_18_600,
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(4.0),
+          child: Container(
+            color: Colors.black,
+            height: 4.0,
           ),
-        ],
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: _fetchEvents,
@@ -72,7 +86,11 @@ class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
             : _error != null
                 ? Center(child: Text('Error: $_error'))
                 : _events.isEmpty
-                    ? const Center(child: Text('No upcoming events'))
+                    ? Center(
+                        child: Text(
+                        'No upcoming events',
+                        style: AppStyles.textStyle_14_600,
+                      ))
                     : ListView.builder(
                         itemCount: _events.length,
                         itemBuilder: (context, index) {
@@ -80,6 +98,28 @@ class _CalendarEventsWidgetState extends State<CalendarEventsWidget> {
                           return EventCard(event: event);
                         },
                       ),
+      ),
+      bottomNavigationBar: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              children: [
+                NavButton(
+                  text: AppLocalizations.of(context).translate('Fetch Events'),
+                  onPressed: _fetchEvents,
+                  color: AppStyles.mainColor,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
