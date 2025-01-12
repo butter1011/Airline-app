@@ -282,7 +282,6 @@ class _QuestionThirdScreenForAirlineState
                 mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
           ),
         );
-
         request.fields['id'] = reviewId;
         request.fields['type'] = isVideo ? 'video' : 'image';
 
@@ -392,6 +391,7 @@ class _QuestionThirdScreenForAirlineState
     required int? index,
     required BoardingPassController boardingPassController,
   }) async {
+    print("result: ${result['data']}");
     ref.read(reviewsAirlineProvider.notifier).addReview(result['data']['data']);
 
     if (index != null) {

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
@@ -33,7 +34,18 @@ class _LoginState extends ConsumerState<Login> {
   @override
   void initState() {
     super.initState();
+    _otplessFlutterPlugin.enableDebugLogging(true);
     _checkToken();
+    _initializeOtpless();
+  }
+
+  Future<void> _initializeOtpless() async {
+    if (Platform.isAndroid) {
+      await _otplessFlutterPlugin.enableDebugLogging(true);
+      await _otplessFlutterPlugin.initHeadless(appId);
+      _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
+    }
+    _otplessFlutterPlugin.setWebviewInspectable(true);
   }
 
   Future<void> _checkToken() async {
@@ -51,9 +63,6 @@ class _LoginState extends ConsumerState<Login> {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
       }
       await _fetchDataAndNavigate();
-    } else {
-      // No token, initialize Otpless
-      await _initializeOtpless();
     }
     setState(() {
       isLoading = false;
@@ -78,15 +87,10 @@ class _LoginState extends ConsumerState<Login> {
     Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
   }
 
-  Future<void> _initializeOtpless() async {
-    await _otplessFlutterPlugin.enableDebugLogging(true);
-    await _otplessFlutterPlugin.initHeadless(appId);
-    _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
-  }
-
   void onHeadlessResult(dynamic result) async {
     String jsonString = jsonEncode(result);
     final response;
+    print("----------------------------------------------");
 
     if (result != null && result['data'] != null) {
       showDialog(
@@ -137,7 +141,6 @@ class _LoginState extends ConsumerState<Login> {
         final responseData = jsonDecode(response.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
-        // Save token and userData to SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', userData.idToken);
         await prefs.setString('userData', json.encode(responseData));
@@ -171,11 +174,12 @@ class _LoginState extends ConsumerState<Login> {
     }
   }
 
-  Future<void> _loginWithWhatsApp() async {
+  Future<void> _openLoginPage() async {
     try {
       Map<String, dynamic> arg = {'appId': appId};
       await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
     } catch (e) {
+      print("Login error: $e");
       _showErrorSnackBar('WhatsApp login failed. Please try again.');
     }
   }
@@ -200,7 +204,7 @@ class _LoginState extends ConsumerState<Login> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
-                      _loginWithWhatsApp();
+                      _openLoginPage();
                     },
                     child: Padding(
                       padding:

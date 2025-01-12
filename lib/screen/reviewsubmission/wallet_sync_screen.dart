@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class WalletSyncScreen extends ConsumerStatefulWidget {
   const WalletSyncScreen({super.key});
@@ -96,7 +97,8 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
           });
           // print(
           //     "This is fetched data by Cirium API 🎪 : ============>  $value");
-          if (value['flightStatuses'] != null && value['flightStatuses'].isNotEmpty) {
+          if (value['flightStatuses'] != null &&
+              value['flightStatuses'].isNotEmpty) {
             final departureAirportCode =
                 value['flightStatuses'][0]['departureAirportFsCode'];
 
@@ -114,7 +116,8 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                 "${arrivalEntireTime.hour}:${arrivalEntireTime.minute}";
 
             final airlineCode = value['flightStatuses'][0]['carrierFsCode'];
-            final flightNumber = "$carrier ${value['flightStatuses'][0]['flightNumber']}";
+            final flightNumber =
+                "$carrier ${value['flightStatuses'][0]['flightNumber']}";
 
             final visitStatus = getVisitStatus(departureEntireTime);
 
@@ -154,7 +157,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                 backgroundColor: AppStyles.mainColor,
               ),
             );
-          }          
+          }
         }
       }).catchError((error) {
         if (mounted) {
@@ -191,21 +194,56 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
     }
   }
 
-  void _launchGoogleWallet() async {
-    // This is the URI scheme for Google Wallet
-    const url = 'https://pay.google.com/gp/v/home';
+  // void _launchWallet() async {
+  //   // This is the URI scheme for Google Wallet
+  //   const url = 'https://pay.google.com/gp/v/home';
+  //   final Uri uri = Uri.parse(url);
+  //   if (await canLaunchUrl(uri)) {
+  //     await launchUrl(uri);
+  //   } else {
+  //     // If Google Wallet is not installed, you might want to open the Play Store listing
+  //     const fallbackUrl =
+  //         'https://play.google.com/store/apps/details?id=com.google.android.apps.walletnfcrel';
+  //     final Uri fallbackUri = Uri.parse(fallbackUrl);
+  //     if (await canLaunchUrl(fallbackUri)) {
+  //       await launchUrl(fallbackUri);
+  //     } else {
+  //       throw 'Could not launch $url or $fallbackUrl';
+  //     }
+  //   }
+  // }
+  void _launchWallet() async {
+    if (kIsWeb) {
+      // Handle web platform
+      throw 'Wallet launch is not supported on web platform';
+    }
+
+    String url;
+    String fallbackUrl;
+
+    if (Platform.isAndroid) {
+      // Android: Launch Google Wallet
+      url = 'https://pay.google.com/gp/v/home';
+      fallbackUrl =
+          'https://play.google.com/store/apps/details?id=com.google.android.apps.walletnfcrel';
+    } else if (Platform.isIOS) {
+      // iOS: Launch Apple Wallet
+      url = 'shoebox://';
+      fallbackUrl = 'https://apps.apple.com/us/app/wallet/id1160481993';
+    } else {
+      throw 'Unsupported platform for wallet launch';
+    }
+
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      // If Google Wallet is not installed, you might want to open the Play Store listing
-      const fallbackUrl =
-          'https://play.google.com/store/apps/details?id=com.google.android.apps.walletnfcrel';
+      // If the primary URL fails, try the fallback
       final Uri fallbackUri = Uri.parse(fallbackUrl);
       if (await canLaunchUrl(fallbackUri)) {
         await launchUrl(fallbackUri);
       } else {
-        throw 'Could not launch $url or $fallbackUrl';
+        throw 'Could not launch wallet on ${Platform.operatingSystem}';
       }
     }
   }
@@ -335,7 +373,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                 NavButton(
                   text:
                       AppLocalizations.of(context).translate('Move To Wallet'),
-                  onPressed: _launchGoogleWallet,
+                  onPressed: _launchWallet,
                   color: AppStyles.mainColor,
                 ),
               ],
