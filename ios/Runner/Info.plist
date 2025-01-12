@@ -32,14 +32,14 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>otpless.bzpl0offchgcjrm8a4sj</string>
-				<string>com.googleusercontent.apps.131730519366-nj61u0qbrl68m96e5k1l549hsjg21vef</string>
+				<string>com.googleusercontent.apps.131730519366-p13m4f3l63n3ufthkd45ggv6gjs3id60</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>GIDClientID</key>
-	<string>131730519366-nj61u0qbrl68m96e5k1l549hsjg21vef.apps.googleusercontent.com</string>
+	<string>131730519366-p13m4f3l63n3ufthkd45ggv6gjs3id60.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
