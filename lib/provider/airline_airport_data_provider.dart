@@ -124,7 +124,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
           'entertainmentWifi': score['entertainmentWifi'],
         }
     };
-   print("🎈🎈$scoreMap");
 
     final result = airlineData.map((item) {
          final scores = scoreMap[item['_id']] ??
