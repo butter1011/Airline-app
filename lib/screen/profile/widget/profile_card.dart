@@ -116,7 +116,6 @@ class ProfileCardList extends ConsumerWidget {
             ),
           ),
         ),
-
         // Check if selectedIndex is valid before accessing PCardList
         if (selectedIndex < PCardList.length)
           PCardList[selectedIndex]

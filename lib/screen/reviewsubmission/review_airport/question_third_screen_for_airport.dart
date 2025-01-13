@@ -274,18 +274,14 @@ print("Comment: ${review.comment}");                                final result
                                   if (!mounted) return;
                                   Navigator.pushNamed(
                                       context, AppRoutes.completereviews);
-                                  // await showReviewSuccessBottomSheet(context,
-                                  //     () {
-                                  //   setState(() => isSuccess = true);
-                                  // }, "Review airline");
+  
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content:
-                                            Text('Failed to submit review')),
-                                  );
+                                            Text('Failed to submit review')),                                  );
                                 }
                               } catch (e) {
                                 setState(() => _isLoading = false);

@@ -106,7 +106,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return state.airlineCache[airlineCode] ?? const <String, dynamic>{};
   }
 
-  
   List<Map<String, dynamic>> getAirlineDataSorted(String airlineSortKey) {
     if (state.sortedListCache.containsKey(airlineSortKey)) {
       return state.sortedListCache[airlineSortKey]!;
@@ -134,7 +133,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return result;
   }
 
-   List<Map<String, dynamic>> getAirportDataSorted(String airportSortKey) {
+  List<Map<String, dynamic>> getAirportDataSorted(String airportSortKey) {
     if (state.sortedListCache.containsKey(airportSortKey)) {
       return state.sortedListCache[airportSortKey]!;
     }
@@ -295,11 +294,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     return airport['backgroundImage'];
   }
 
-  /// Filters and sorts data based on multiple criteria
-  /// [filterType] - Type of filter to apply (All, Airline, Airport, etc.)
-  /// [searchQuery] - Optional search query to filter results
-  /// [flyerClass] - Optional class type to sort results
-  /// [selectedContinents] - Optional list of continents to filter by
   void getFilteredList(String filterType, String? searchQuery,
       String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
@@ -344,8 +338,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
         break;
       case 'Flight Experience':
-        filteredList
-            .addAll(getAirlineDataSorted("departureArrival").where(checkContinent));
+        filteredList.addAll(
+            getAirlineDataSorted("departureArrival").where(checkContinent));
+        break;
+      case 'Comfort':
+        filteredList.addAll(
+            getAirlineDataSorted("comfort").where(checkContinent));
         break;
       case 'Cleanliness':
         filteredList
@@ -356,8 +354,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
             getAirlineDataSorted("onboardService").where(checkContinent));
         break;
       case 'Food & Beverage':
-        filteredList.addAll(
-            getAirlineDataSorted("foodBeverage").where(checkContinent));
+        filteredList
+            .addAll(getAirlineDataSorted("foodBeverage").where(checkContinent));
         break;
       case 'Entertainment & WiFi':
         filteredList.addAll(
@@ -368,20 +366,20 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
             getAirportDataSorted("accessibility").where(checkContinent));
         break;
       case 'Wait Times':
-        filteredList.addAll(
-            getAirportDataSorted("waitTimes").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("waitTimes").where(checkContinent));
         break;
       case 'Helpfulness':
-        filteredList.addAll(
-            getAirportDataSorted("helpfulness").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("helpfulness").where(checkContinent));
         break;
       case 'Ambience':
         filteredList.addAll(
             getAirportDataSorted("ambienceComfort").where(checkContinent));
         break;
       case 'Amenities':
-        filteredList.addAll(
-            getAirportDataSorted("amenities").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("amenities").where(checkContinent));
         break;
       default:
         filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
