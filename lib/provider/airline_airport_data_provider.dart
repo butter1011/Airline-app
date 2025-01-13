@@ -114,7 +114,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final airlineScoreData = state.airlineScoreData;
     final airlineData = state.airlineData;
     final scoreMap = {
-       for (var score in airlineScoreData)
+      for (var score in airlineScoreData)
         score['airlineId']: {
           'departureArrival': score['departureArrival'],
           'comfort': score['comfort'],
@@ -124,10 +124,9 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
           'entertainmentWifi': score['entertainmentWifi'],
         }
     };
-   print("🎈🎈$scoreMap");
 
     final result = airlineData.map((item) {
-         final scores = scoreMap[item['_id']] ??
+      final scores = scoreMap[item['_id']] ??
           {
             'departureArrival': 5.0,
             'comfort': 5.0,
@@ -139,7 +138,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       return {
         ...item,
         ...scores,
-       
       };
     }).toList();
 
@@ -158,9 +156,9 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
     final airportScoreData = state.airportScoreData;
     final airportData = state.airportData;
-     
+
     final scoreMap = {
-       for (var score in airportScoreData)
+      for (var score in airportScoreData)
         score['airportId']: {
           'accessibility': score['accessibility'],
           'waitTimes': score['waitTimes'],
@@ -377,8 +375,8 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
             getAirlineDataSorted("departureArrival").where(checkContinent));
         break;
       case 'Comfort':
-        filteredList.addAll(
-            getAirlineDataSorted("comfort").where(checkContinent));
+        filteredList
+            .addAll(getAirlineDataSorted("comfort").where(checkContinent));
         break;
       case 'Cleanliness':
         filteredList
