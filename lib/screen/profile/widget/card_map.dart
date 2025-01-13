@@ -1,5 +1,4 @@
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'dart:convert';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,10 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:airline_app/screen/profile/map_expand_screen.dart';
-import 'package:airline_app/screen/profile/utils/map_visit_confirmed_json.dart';
 import 'package:airline_app/screen/profile/widget/basic_mapbutton.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
@@ -25,18 +22,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   late MapController _mapController;
   Position? _currentPosition;
   bool _isLoading = true;
-  LatLng? _startPosition;
   List<Map<String, dynamic>>? airportData = [];
 
   List<Marker> _airportMarkers = [];
-
-  // TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _mapController = MapController();
-    // Delay the location check until after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLocationPermission();
       _loadAirportMarkers();
@@ -58,37 +51,41 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Future<void> _loadAirportMarkers() async {
     final userData = ref.watch(userDataProvider);
 
-    if (userData == null) {
-      return null;
+    if (userData == null || userData['userData'] == null) {
+      return;
     }
+
     final userId = userData['userData']['_id'];
     final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+
+    if (userReviews.isEmpty) {
+      return;
+    }
+
     final List userAirports = userReviews
+        .where((review) => review['airport'] != null)
         .map((singleReview) => singleReview['airport']['_id'])
         .toSet()
         .toList();
-
-    print('🎄🎄🎃🧧');
-    print(userId);
-    print('🎄🎄🎈');
-    print(userAirports);
 
     final airportData = ref.watch(airlineAirportProvider).airportData;
 
     final filteredAirportReviewData = airportData
         .where((airport) => userAirports.contains(airport['_id']))
         .toList();
-    print('🎄🎄');
-    print(filteredAirportReviewData);
 
     List<Marker> markers = [];
 
     for (var airport in filteredAirportReviewData) {
-      final location = airport['location'];
+      final location = airport['location'] as String?;
+      if (location == null) continue;
 
-      final name = airport['name'];
+      final name = airport['name'] as String?;
+      if (name == null) continue;
+
       final score = airport['overall'];
+      if (score == null) continue;
 
       final coordinates = await getLatLngFromLocation(location);
 
@@ -227,7 +224,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           _isLoading = false;
         });
 
-        // Ensure the map is rendered before moving
         await Future.delayed(const Duration(milliseconds: 100));
         if (mounted && _currentPosition != null) {
           _mapController.move(
@@ -256,19 +252,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   Future<LatLng> getAirportLatLng(String airportName) async {
     try {
-      // Get location from airport name
       List<Location> locations = await locationFromAddress(airportName);
-
-      // Convert to LatLng format
       LatLng airportLocation = LatLng(
         locations.first.latitude,
         locations.first.longitude,
       );
-
       return airportLocation;
     } catch (e) {
       print('Error getting location for $airportName: $e');
-      return const LatLng(0, 0); // Default fallback coordinates
+      return const LatLng(0, 0);
     }
   }
 
@@ -288,8 +280,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final PageController pgcontroller = PageController(viewportFraction: 0.9);
     airportData = ref.watch(airlineAirportProvider).airportData;
 
-    // print('🎃🎊🎃$airportData');
-    final List<Map<String, dynamic>> airportLocations = [];
     return Container(
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -304,12 +294,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                             _currentPosition!.longitude)
                         : const LatLng(0, 0),
                     initialZoom: 4,
-                    onTap: (tapPosition, point) {
-                      setState(() {
-                        // Change the type of _startPosition to LatLng
-                        _startPosition = point;
-                      });
-                    },
                   ),
                   children: [
                     TileLayer(
@@ -356,7 +340,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ),
               Positioned(
                 right: 8,
-                top: 60, // Position below the expand button
+                top: 60,
                 child: Column(
                   children: [
                     Container(
