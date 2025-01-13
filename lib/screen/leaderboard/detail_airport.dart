@@ -382,7 +382,7 @@ class CategoryButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isExpanded = ref.watch(buttonExpandNotifierProvider);
+    final isExpanded = ref.watch(buttonExpandNotifierProvider);  
     Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
       return Expanded(
         child: CategoryRatingOptions(

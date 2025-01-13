@@ -114,14 +114,32 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final airlineScoreData = state.airlineScoreData;
     final airlineData = state.airlineData;
     final scoreMap = {
-      for (var score in airlineScoreData)
-        score['airlineId']: score[airlineSortKey]
+       for (var score in airlineScoreData)
+        score['airlineId']: {
+          'departureArrival': score['departureArrival'],
+          'comfort': score['comfort'],
+          'cleanliness': score['cleanliness'],
+          'onboardService': score['onboardService'],
+          'foodBeverage': score['foodBeverage'],
+          'entertainmentWifi': score['entertainmentWifi'],
+        }
     };
+   print("🎈🎈$scoreMap");
 
     final result = airlineData.map((item) {
+         final scores = scoreMap[item['_id']] ??
+          {
+            'departureArrival': 5.0,
+            'comfort': 5.0,
+            'cleanliness': 5.0,
+            'onboardService': 5.0,
+            'foodBeverage': 5.0,
+            'entertainmentWifi': 5.0,
+          };
       return {
         ...item,
-        airlineSortKey: scoreMap[item['_id']] ?? 5,
+        ...scores,
+       
       };
     }).toList();
 
@@ -140,15 +158,32 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
     final airportScoreData = state.airportScoreData;
     final airportData = state.airportData;
+     
     final scoreMap = {
-      for (var score in airportScoreData)
-        score['airportId']: score[airportSortKey]
+       for (var score in airportScoreData)
+        score['airportId']: {
+          'accessibility': score['accessibility'],
+          'waitTimes': score['waitTimes'],
+          'helpfulness': score['helpfulness'],
+          'ambienceComfort': score['ambienceComfort'],
+          'foodBeverage': score['foodBeverage'],
+          'amenities': score['amenities'],
+        }
     };
 
     final result = airportData.map((item) {
+      final scores = scoreMap[item['_id']] ??
+          {
+            'accessibility': 5.0,
+            'waitTimes': 5.0,
+            'helpfulness': 5.0,
+            'ambienceComfort': 5.0,
+            'foodBeverage': 5.0,
+            'amenities': 5.0,
+          };
       return {
         ...item,
-        airportSortKey: scoreMap[item['_id']] ?? 5,
+        ...scores,
       };
     }).toList();
 
@@ -183,12 +218,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airlineData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'departureArrival': 5,
-            'comfort': 5,
-            'cleanliness': 5,
-            'onboardService': 5,
-            'foodBeverage': 5,
-            'entertainmentWifi': 5,
+            'departureArrival': 5.0,
+            'comfort': 5.0,
+            'cleanliness': 5.0,
+            'onboardService': 5.0,
+            'foodBeverage': 5.0,
+            'entertainmentWifi': 5.0,
           };
 
       return {
@@ -226,12 +261,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airportData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'accessibility': 5,
-            'waitTimes': 5,
-            'helpfulness': 5,
-            'ambienceComfort': 5,
-            'foodBeverage': 5,
-            'amenities': 5,
+            'accessibility': 5.0,
+            'waitTimes': 5.0,
+            'helpfulness': 5.0,
+            'ambienceComfort': 5.0,
+            'foodBeverage': 5.0,
+            'amenities': 5.0,
           };
 
       return {
