@@ -70,4 +70,23 @@ class BoardingPassController {
       return false;
     }
   }
+  
+  Future<bool> checkPnrExists(String pnr) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$apiUrl/api/v2/check-pnr?pnr=$pnr'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['exists'];
+      } else {
+        print('Error: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error checking PNR: $e');
+      return false;
+    }
+  }
 }

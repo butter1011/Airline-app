@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class AppStyles {
   ///Color style
   static Color mainColor = const Color(0xFF3FEA9C);
+  static Color warnningColor= const Color(0xF7E74C4C);
+  static Color notifyColor=  Colors.lightBlue;
   static Color littleBlackColor = const Color(0xff181818);
 
   ///Text style

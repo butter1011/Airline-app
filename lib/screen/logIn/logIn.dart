@@ -90,7 +90,6 @@ class _LoginState extends ConsumerState<Login> {
   void onHeadlessResult(dynamic result) async {
     String jsonString = jsonEncode(result);
     final response;
-    print("----------------------------------------------");
 
     if (result != null && result['data'] != null) {
       showDialog(

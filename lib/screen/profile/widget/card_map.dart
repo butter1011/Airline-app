@@ -408,6 +408,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           .where((review) => !review.containsKey("from"))
                           .toList();
 
+                      if (airportReviews.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
                       return PageView.builder(
                         controller: pgcontroller,
                         itemCount: airportReviews.length,

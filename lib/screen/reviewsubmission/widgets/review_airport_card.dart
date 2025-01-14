@@ -12,8 +12,10 @@ class ReviewAirportCard extends ConsumerWidget {
     super.key,
     required this.index,
     required this.status,
+    required this.countryCode,
     required this.airlineCode,
     required this.airportCode,
+    required this.airportName,
     required this.time,
     required this.isDeparture,
     required this.isReviewed,
@@ -22,9 +24,11 @@ class ReviewAirportCard extends ConsumerWidget {
 
   final int index;
   final String status;
+  final String countryCode;
   final String time;
   final String airlineCode;
   final String airportCode;
+  final String airportName;
   final bool isDeparture;
   final bool isReviewed;
   final String classOfTravel;
@@ -36,14 +40,7 @@ class ReviewAirportCard extends ConsumerWidget {
     final airportData = airlineAirportNotifier.getAirportData(airportCode);
     final airlineData = airlineAirportNotifier.getAirlineData(airlineCode);
 
-    if (airportData == null ||
-        airlineData == null ||
-        airportData['countryCode'] == null) {
-      return const SizedBox.shrink();
-    }
-
-    final CountryDetails country =
-        CountryCodes.detailsFromAlpha2(airportData['countryCode']);
+    final CountryDetails country = CountryCodes.detailsFromAlpha2(countryCode);
 
     return Opacity(
       opacity: status == "Upcoming visit" || isReviewed ? 0.5 : 1,
@@ -51,6 +48,21 @@ class ReviewAirportCard extends ConsumerWidget {
         onTap: isReviewed
             ? null
             : () {
+                if (airportData.isEmpty ||
+                    airlineData.isEmpty ||
+                    airportData['countryCode'] == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'There is no data in the database.',
+                        style: AppStyles.textStyle_16_600,
+                      ),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: Colors.lightBlue,
+                    ),
+                  );
+                  return;
+                }
                 final String airlineId = airlineData['_id'];
                 final String airportId = airportData['_id'];
 
@@ -74,7 +86,7 @@ class ReviewAirportCard extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    buildCountryFlag(airportData['countryCode']),
+                    buildCountryFlag(countryCode),
                     const SizedBox(width: 4),
                     Text(
                       "${country.name}, $time",
@@ -87,7 +99,7 @@ class ReviewAirportCard extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      airportData['name'] ?? '',
+                      airportName,
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),
