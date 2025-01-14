@@ -30,38 +30,27 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
     final airlineData = airlineAirportNotifier
         .getAirlineData(widget.singleBoardingPass.airlineCode);
-    print("🎍🎍🎍${airlineData}");
     final departureAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
     final arrivalAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
-
-    if (airlineData == null || departureAirportData == null || arrivalAirportData == null) {
-      return const SizedBox.shrink();
-    }
-
-    final departureCountryCode = departureAirportData['countryCode'];
+  
+    final airlineName = widget.singleBoardingPass.airlineName;
+    final departureCountryCode = widget.singleBoardingPass.departureCountryCode;
     final originTime = widget.singleBoardingPass.departureTime;
-    final arrivalCountryCode = arrivalAirportData['countryCode'];
+    final arrivalCountryCode = widget.singleBoardingPass.arrivalCountryCode;
     final arrivalTime = widget.singleBoardingPass.arrivalTime;
     final flightNumber = widget.singleBoardingPass.flightNumber;
     final status = widget.singleBoardingPass.visitStatus;
+    final departureCity = widget.singleBoardingPass.departureCity;
+    final arrivalCity = widget.singleBoardingPass.arrivalCity;
     final String classTravel = widget.singleBoardingPass.classOfTravel;
-
-    if (departureCountryCode == null || arrivalCountryCode == null) {
-      return const SizedBox.shrink();
-    }
-
     CountryDetails? departureCountry;
     CountryDetails? arrivalCountry;
     try {
       departureCountry = CountryCodes.detailsFromAlpha2(departureCountryCode);
       arrivalCountry = CountryCodes.detailsFromAlpha2(arrivalCountryCode);
     } catch (e) {
-      return const SizedBox.shrink();
-    }
-
-    if (departureCountry == null || arrivalCountry == null) {
       return const SizedBox.shrink();
     }
 
@@ -73,6 +62,21 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
           onTap: widget.isReviewed
               ? null
               : () {
+                  if (departureAirportData.isEmpty ||
+                      arrivalAirportData.isEmpty ||
+                      airlineData.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'There is no data in the database.',
+                          style: AppStyles.textStyle_16_600,
+                        ),
+                        duration: const Duration(seconds: 1),
+                        backgroundColor: Colors.lightBlue,
+                      ),
+                    );
+                    return;
+                  }
                   final String fromId = departureAirportData['_id'];
                   final String toId = arrivalAirportData['_id'];
                   final String airlineId = airlineData['_id'];
@@ -123,7 +127,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${departureAirportData['name']} -> ${arrivalAirportData['name']}",
+                      "$departureCity -> $arrivalCity",
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),
@@ -135,7 +139,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(flightNumber, style: AppStyles.textStyle_14_500),
-                    Text(airlineData["name"], style: AppStyles.textStyle_14_500),
+                    Text(airlineName, style: AppStyles.textStyle_14_500),
                   ],
                 ),
                 const SizedBox(height: 18),

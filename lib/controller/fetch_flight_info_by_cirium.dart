@@ -7,14 +7,14 @@ class FetchFlightInforByCirium {
     required String carrier,
     required String flightNumber,
     required DateTime flightDate,
-    required String depatureAirport,
+    required String departureAirport,
   }) async {
     try {
       final response = await http.get(
         Uri.parse(
           '$ciriumUrl/json/flight/status/$carrier/$flightNumber/dep/'
           '${flightDate.year}/${flightDate.month}/${flightDate.day}'
-          '?appId=$ciriumAppId&appKey=$ciriumAppKey&airport=$depatureAirport',
+          '?appId=$ciriumAppId&appKey=$ciriumAppKey&airport=$departureAirport',
         ),
       );
       if (response.statusCode == 200) {

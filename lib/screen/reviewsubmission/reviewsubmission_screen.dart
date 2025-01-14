@@ -167,7 +167,9 @@ class _ReviewsubmissionScreenState
                         time: singleBoardingPass.departureTime,
                         isDeparture: true,
                         isReviewed: singleBoardingPass.isDepartureAirportReviewed,
-                        classOfTravel: singleBoardingPass.classOfTravel,
+                        classOfTravel: singleBoardingPass.classOfTravel, 
+                        countryCode: singleBoardingPass.departureCountryCode,
+                        airportName: singleBoardingPass.departureCity,
                       );
                       if (departureCard is SizedBox) {
                         _showDataMissingSnackBar();
@@ -187,6 +189,8 @@ class _ReviewsubmissionScreenState
                         isDeparture: false,
                         isReviewed: singleBoardingPass.isArrivalAirportReviewed,
                         classOfTravel: singleBoardingPass.classOfTravel,
+                         countryCode: singleBoardingPass.arrivalCountryCode,
+                      airportName: singleBoardingPass.arrivalCity,
                       );
                       if (arrivalCard is SizedBox) {
                         _showDataMissingSnackBar();
