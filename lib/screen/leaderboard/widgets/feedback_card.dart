@@ -305,11 +305,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               ),
             ),
           const SizedBox(height: 11),
-          if (widget.singleFeedback['comment'] != null &&
-              widget.singleFeedback['comment'] != '')
-            Text(widget.singleFeedback['comment'],
-                style: AppStyles.textStyle_14_400),
-          const SizedBox(height: 16),
+          SizedBox(
+            height: 40,
+            child: Text(
+              widget.singleFeedback['comment'] ?? '',
+              style: AppStyles.textStyle_14_400,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),  
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
