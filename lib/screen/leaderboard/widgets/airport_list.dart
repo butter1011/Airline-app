@@ -24,7 +24,7 @@ class AirportList extends ConsumerWidget {
         0.0
       );
     }
-
+    
     if (scoreHistory.length == 1) {
       // If only one data point exists, create a flat line with same value
       final score = double.parse(scoreHistory.first['score'].toString());

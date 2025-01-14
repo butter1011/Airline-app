@@ -32,7 +32,7 @@ class _LeaderboardFilterScreenState
     "Flight Experience",
     "Comfort",
     "Cleanliness",
-    "Onboard Service",
+    "Onboard",
     "Food & Beverage",
     "Entertainment & WiFi"
   ];
@@ -42,7 +42,7 @@ class _LeaderboardFilterScreenState
     "Helpfulness",
     "Ambience",
     "Food & Beverage",
-    "Amenities and Facilities"
+    "Amenities"
   ];
   final List<dynamic> continent = [
     "All",
