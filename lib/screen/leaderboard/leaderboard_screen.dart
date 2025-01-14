@@ -1,6 +1,7 @@
 import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
+import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
@@ -74,6 +75,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       buttonStates[buttonText] = true;
       filterType = buttonText;
     });
+    ref.read(filterButtonProvider.notifier).setFilterType(buttonText);
     ref
         .read(airlineAirportProvider.notifier)
         .getFilteredList(filterType, null, null, null);
@@ -232,6 +234,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final trendingreviews =
         ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
+    final selectedFilterButton = ref.watch(filterButtonProvider);
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -332,7 +335,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                     padding: const EdgeInsets.only(right: 8),
                     child: MainButton(
                       text: buttonText,
-                      isSelected: buttonStates[buttonText]!,
+                      isSelected: buttonText == selectedFilterButton,
                       onTap: () => toggleButton(buttonText),
                     ),
                   );
