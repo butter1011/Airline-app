@@ -24,7 +24,7 @@ class AirportList extends ConsumerWidget {
         0.0
       );
     }
-    
+
     if (scoreHistory.length == 1) {
       // If only one data point exists, create a flat line with same value
       final score = double.parse(scoreHistory.first['score'].toString());
@@ -187,7 +187,9 @@ class AirportList extends ConsumerWidget {
                                 selecedFilterButton == "Airline" ||
                                 selecedFilterButton == "Airport")
                             ? 'Rate of Growth'
-                            : selecedFilterButton,
+                            : selecedFilterButton == "Entertainment & WiFi"
+                                ? "En.. & WiFi"
+                                : selecedFilterButton,
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
