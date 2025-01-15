@@ -1,4 +1,5 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -28,10 +29,10 @@ class _LeaderboardFilterScreenState
   ];
 
   final List airlineCategory = [
-    "Departure & Arrival Experience",
+    "Flight Experience",
     "Comfort",
     "Cleanliness",
-    "Onboard Service",
+    "Onboard",
     "Food & Beverage",
     "Entertainment & WiFi"
   ];
@@ -41,7 +42,7 @@ class _LeaderboardFilterScreenState
     "Helpfulness",
     "Ambience",
     "Food & Beverage",
-    "Amenities and Facilities"
+    "Amenities"
   ];
   final List<dynamic> continent = [
     "All",
@@ -89,7 +90,6 @@ class _LeaderboardFilterScreenState
     }
     selectedCategoryStates =
         List.generate(currentCategories.length, (index) => false);
-        
   }
 
   void _toggleFilter(int index, List selectedStates) {
@@ -128,6 +128,12 @@ class _LeaderboardFilterScreenState
         }
       }
     });
+    if (selectedCategory.isEmpty) {
+      ref.read(filterButtonProvider.notifier).setFilterType(selectedAirType);
+    } else {
+      ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
+    }
+    ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
     ref.read(airlineAirportProvider.notifier).getFilteredList(
           selectedAirType,
           null,
@@ -160,6 +166,11 @@ class _LeaderboardFilterScreenState
     });
 
     // Update the filtered list after selection
+    if (selectedCategory.isEmpty) {
+      ref.read(filterButtonProvider.notifier).setFilterType(selectedAirType);
+    } else {
+      ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
+    }
     ref.read(airlineAirportProvider.notifier).getFilteredList(
           selectedAirType,
           null,
