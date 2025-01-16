@@ -103,7 +103,8 @@ class __InputCardState extends State<_InputCard> {
           color: _isClicked
               ? AppStyles.mainColor
               : Colors.white, // Change color on click
-          borderRadius: BorderRadius.circular(24), // Match your card decoration
+          borderRadius: BorderRadius.circular(24), 
+// Match your card decoration
 // Keep the original shadow if needed
         ),
         child: Center(
