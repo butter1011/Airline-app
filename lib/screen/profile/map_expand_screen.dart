@@ -184,7 +184,7 @@ class _MapExpandScreenState extends State<MapExpandScreen> {
                     decoration: AppStyles.circleDecoration,
                     width: 40,
                     height: 40,
-                    child: Image.asset('assets/icons/1.png'),
+                    child: Image.asset('assets/icons/expand.png'),
                   ),
                 ),
               ),

@@ -24,7 +24,7 @@ class AirportList extends ConsumerWidget {
         0.0
       );
     }
-    
+
     if (scoreHistory.length == 1) {
       // If only one data point exists, create a flat line with same value
       final score = double.parse(scoreHistory.first['score'].toString());
@@ -116,8 +116,16 @@ class AirportList extends ConsumerWidget {
                     decoration: AppStyles.circleDecoration,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        airportData['logoImage'],
+                      child: Image(
+                        image: airportData['logoImage'] != null
+                            ? NetworkImage(airportData['logoImage'])
+                            : airportData['isAirline']
+                                ? const AssetImage(
+                                        'assets/images/airline_logo.png')
+                                    as ImageProvider
+                                : const AssetImage(
+                                        'assets/images/airport_logo.png')
+                                    as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -128,12 +128,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airlineData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'departureArrival': 5.0,
-            'comfort': 5.0,
-            'cleanliness': 5.0,
-            'onboardService': 5.0,
-            'foodBeverage': 5.0,
-            'entertainmentWifi': 5.0,
+            'departureArrival': 0.0,
+            'comfort': 0.0,
+            'cleanliness': 0.0,
+            'onboardService': 0.0,
+            'foodBeverage': 0.0,
+            'entertainmentWifi': 0.0,
           };
       return {
         ...item,
@@ -172,12 +172,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airportData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'accessibility': 5.0,
-            'waitTimes': 5.0,
-            'helpfulness': 5.0,
-            'ambienceComfort': 5.0,
-            'foodBeverage': 5.0,
-            'amenities': 5.0,
+            'accessibility': 0.0,
+            'waitTimes': 0.0,
+            'helpfulness': 0.0,
+            'ambienceComfort': 0.0,
+            'foodBeverage': 0.0,
+            'amenities': 0.0,
           };
       return {
         ...item,
@@ -216,12 +216,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airlineData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'departureArrival': 5.0,
-            'comfort': 5.0,
-            'cleanliness': 5.0,
-            'onboardService': 5.0,
-            'foodBeverage': 5.0,
-            'entertainmentWifi': 5.0,
+            'departureArrival': 0.0,
+            'comfort': 0.0,
+            'cleanliness': 0.0,
+            'onboardService': 0.0,
+            'foodBeverage': 0.0,
+            'entertainmentWifi': 0.0,
           };
 
       return {
@@ -259,12 +259,12 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     final result = airportData.map((item) {
       final scores = scoreMap[item['_id']] ??
           {
-            'accessibility': 5.0,
-            'waitTimes': 5.0,
-            'helpfulness': 5.0,
-            'ambienceComfort': 5.0,
-            'foodBeverage': 5.0,
-            'amenities': 5.0,
+            'accessibility': 0.0,
+            'waitTimes': 0.0,
+            'helpfulness': 0.0,
+            'ambienceComfort': 0.0,
+            'foodBeverage': 0.0,
+            'amenities': 0.0,
           };
 
       return {
@@ -292,7 +292,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airline) => airline['_id'] == airlineId,
       orElse: () => {'logoImage': ''},
     );
-    return airline['logoImage'];
+    return airline['logoImage']?? '';
   }
 
   String getAirlineBackgroundImage(String airlineId) {
@@ -300,7 +300,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airline) => airline['_id'] == airlineId,
       orElse: () => {'backgroundImage': ''},
     );
-    return airline['backgroundImage'];
+    return airline['backgroundImage'] ?? '';
   }
 
   String getAirportName(String airportId) {
@@ -316,7 +316,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airport) => airport['_id'] == airportId,
       orElse: () => {'logoImage': ''},
     );
-    return airport['logoImage'];
+    return airport['logoImage']??'';
   }
 
   String getAirportBackgroundImage(String airportId) {
@@ -324,7 +324,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airport) => airport['_id'] == airportId,
       orElse: () => {'backgroundImage': ''},
     );
-    return airport['backgroundImage'];
+    return airport['backgroundImage'] ?? '';
   }
 
   void getFilteredList(String filterType, String? searchQuery,

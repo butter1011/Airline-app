@@ -247,6 +247,7 @@ class UserData {
   final String channel;
   final String idToken;
 
+
   UserData(
       {required this.name,
       required this.identityValue,

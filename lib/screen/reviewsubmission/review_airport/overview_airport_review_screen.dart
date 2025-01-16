@@ -55,21 +55,16 @@ class _OverviewAirportReviewScreenState
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                child: 
                                     Text(
                                       airportName,
                                       style: AppStyles.oswaldTextStyle
                                           .copyWith(fontSize: 24),
-                                    ),
-                                    Text(
-                                      ' Airport',
-                                      style: AppStyles.oswaldTextStyle
-                                          .copyWith(fontSize: 24),
-                                    )
-                                  ],
+                                      overflow: TextOverflow.visible,
+                                      softWrap: true,
+                                      textAlign: TextAlign.center,
+                                                          
+                                
                                 ),
                               ),
                               Container(
