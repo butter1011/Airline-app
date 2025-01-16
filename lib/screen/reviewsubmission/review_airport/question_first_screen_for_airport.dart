@@ -195,15 +195,14 @@ class BuildQuestionHeader extends StatelessWidget {
                       height: 40,
                       decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(logoImage)
-                          
-                      ),
+                          radius: 30, backgroundImage: NetworkImage(logoImage)),
                     ),
                   SizedBox(height: 10),
                   Text(
                     airportName,
                     style: AppStyles.oswaldTextStyle,
+                    overflow: TextOverflow.visible,
+                    softWrap: true,
                   ),
                 ],
               ),

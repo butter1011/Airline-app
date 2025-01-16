@@ -211,6 +211,8 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     Text(
                       name,
                       style: AppStyles.textStyle_24_600,
+                      overflow: TextOverflow.visible,
+                      softWrap: true,
                     ),
                     SizedBox(height: 2),
                     Text(

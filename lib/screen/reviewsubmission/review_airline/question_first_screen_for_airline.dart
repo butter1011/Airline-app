@@ -213,18 +213,12 @@ class BuildQuestionHeader extends StatelessWidget {
                       ),
                     ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        airlineName,
-                        style: AppStyles.oswaldTextStyle,
-                      ),
-                      Text(
-                        ' Airlines',
-                        style: AppStyles.oswaldTextStyle,
-                      )
-                    ],
+                  Text(
+                    airlineName,
+                    style: AppStyles.oswaldTextStyle,
+                    overflow: TextOverflow.visible,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

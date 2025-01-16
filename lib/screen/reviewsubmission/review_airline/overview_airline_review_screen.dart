@@ -58,21 +58,13 @@ class _OverviewAirlineReviewScreenState
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      airlineName,
-                                      style: AppStyles.oswaldTextStyle.copyWith(
-                                          color: Colors.black, fontSize: 24),
-                                    ),
-                                    Text(
-                                      ' Airlines',
-                                      style: AppStyles.oswaldTextStyle.copyWith(
-                                          color: Colors.black, fontSize: 24),
-                                    )
-                                  ],
+                                child: Text(
+                                  airlineName,
+                                  style: AppStyles.oswaldTextStyle.copyWith(
+                                      color: Colors.black, fontSize: 24),
+                                  overflow: TextOverflow.visible,
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               Container(
