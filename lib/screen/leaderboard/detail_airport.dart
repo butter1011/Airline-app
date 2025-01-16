@@ -88,7 +88,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final String descriptionBio = args['descriptionBio'];
     final String perksBio = args['perksBio'];
     final String trendingBio = args['trendingBio'];
-    final String backgroundImage = args['backgroundImage'];
+    final String backgroundImage = args['backgroundImage'] ?? "";
     final String bookMarkId = args['_id'];
 
     final int totalReviews = args['totalReviews'];
@@ -130,11 +130,15 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
               background: Stack(
                 children: [
                   Positioned.fill(
-                    child: Image.network(
-                      backgroundImage,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                      child: backgroundImage.isNotEmpty
+                          ? Image.network(
+                              backgroundImage,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/images/airline_background.jpg',
+                              fit: BoxFit.cover,
+                            )),
                   Positioned(
                     child: Container(
                       height: 120,
@@ -382,7 +386,7 @@ class CategoryButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isExpanded = ref.watch(buttonExpandNotifierProvider);  
+    final isExpanded = ref.watch(buttonExpandNotifierProvider);
     Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
       return Expanded(
         child: CategoryRatingOptions(

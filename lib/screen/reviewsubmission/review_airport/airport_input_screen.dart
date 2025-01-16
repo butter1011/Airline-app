@@ -39,11 +39,7 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
               const SizedBox(height: 19),
               _buildInfoText(
                   "Add your flight schedule below or sync your calendar/email"),
-              const SizedBox(height: 22),
-              // _buildSectionTitle("Synchronize (Recommended):"),
-              // const SizedBox(height: 13),
-              // _buildSyncButtons(),
-              // const SizedBox(height: 18),
+              const SizedBox(height: 22),    
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -108,45 +104,6 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: AppStyles.textStyle_14_600,
-    );
-  }
-
-  Widget _buildSyncButtons() {
-    return Row(
-      children: [
-        Expanded(child: _buildSyncButton("E-mail Sync")),
-        const SizedBox(width: 8),
-        Expanded(child: _buildSyncButton("Calendar Sync")),
-      ],
-    );
-  }
-
-  Widget _buildSyncButton(String label) {
-    return Container(
-      height: 40,
-      decoration: AppStyles.cardDecoration,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: AppStyles.mainColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        onPressed: () {
-          // Add functionality for syncing here
-          // Placeholder for functionality
-        },
-        child: Center(
-          child: Text(label, style: AppStyles.textStyle_14_600),
-        ),
-      ),
-    );
-  }
 
   Widget _buildTravelClassSelection(WidgetRef ref) {
     return Column(
@@ -188,49 +145,6 @@ class _AirportInputScreenState extends ConsumerState<AirportInputScreen> {
                   .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Economy"),
             ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAdditionalSyncOptions(WidgetRef ref) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Synchronize (Recommended):", style: AppStyles.textStyle_14_600),
-        const SizedBox(height: 13),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            // ToggleBtn(
-            //   buttonText: "Boarding Passes",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "Boarding Passes",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("Boarding Passes"),
-            // ),
-            // ToggleBtn(
-            //   buttonText: "Geolocation",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "Geolocation",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("Geolocation"),
-            // ),
-            // ToggleBtn(
-            //   buttonText: "E-Tickets",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "E-Tickets",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("E-Tickets"),
-            // )
           ],
         ),
       ],

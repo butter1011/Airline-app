@@ -196,7 +196,8 @@ class BuildQuestionHeader extends StatelessWidget {
                       decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
                         radius: 30,
-                        backgroundImage: NetworkImage(logoImage),
+                        backgroundImage: NetworkImage(logoImage)
+                          
                       ),
                     ),
                   SizedBox(height: 10),
