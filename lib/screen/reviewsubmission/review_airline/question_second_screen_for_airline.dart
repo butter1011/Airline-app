@@ -1,7 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -49,7 +49,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-          flexibleSpace: BuildQuestionHeader(
+          flexibleSpace: BuildQuestionHeaderForAirline(
             backgorundImage: backgroundImage,
             subTitle: "What could be improved?",
             logoImage: logoImage,
@@ -62,7 +62,8 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects, numberOfSecondSelectedAspects),
+              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects,
+                  numberOfSecondSelectedAspects),
               _buildNavigationButtons(context),
             ],
           ),
@@ -71,7 +72,8 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects, int numberOfSecondSelectedAspects) {
+  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects,
+      int numberOfSecondSelectedAspects) {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirline;
 
@@ -131,29 +133,14 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: NavPageButton(
-                    text: 'Go back',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icons.arrow_back),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: NavPageButton(
-                    text: 'Next',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, AppRoutes.questionthirdscreenforairline);
-                    },
-                    icon: Icons.arrow_forward),
-              )
-            ],
-          ),
-        ),
+          child: NavPageButton(
+              text: 'Next',
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.questionthirdscreenforairline);
+              },
+              icon: Icons.arrow_forward),
+        )
       ],
     );
   }

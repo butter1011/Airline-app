@@ -34,7 +34,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         .getAirportData(widget.singleBoardingPass.departureAirportCode);
     final arrivalAirportData = airlineAirportNotifier
         .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
-  
+
     final airlineName = widget.singleBoardingPass.airlineName;
     final departureCountryCode = widget.singleBoardingPass.departureCountryCode;
     final originTime = widget.singleBoardingPass.departureTime;
@@ -44,6 +44,8 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     final status = widget.singleBoardingPass.visitStatus;
     final departureCity = widget.singleBoardingPass.departureCity;
     final arrivalCity = widget.singleBoardingPass.arrivalCity;
+    final departureAirportCode = widget.singleBoardingPass.departureAirportCode;
+    final arrivalAirportCode = widget.singleBoardingPass.arrivalAirportCode;
     final String classTravel = widget.singleBoardingPass.classOfTravel;
     CountryDetails? departureCountry;
     CountryDetails? arrivalCountry;
@@ -125,11 +127,17 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                 const SizedBox(height: 7),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "$departureCity -> $arrivalCity",
-                      style: AppStyles.textStyle_16_600
-                          .copyWith(color: Colors.black),
+                    Expanded(
+                      child: Text(
+                        "$departureCity ($departureAirportCode) -> $arrivalCity ($arrivalAirportCode)",
+                        style: AppStyles.textStyle_16_600
+                            .copyWith(color: Colors.black),
+                        overflow: TextOverflow.visible,
+                        softWrap: true,
+                        maxLines: 2,
+                      ),
                     ),
                     const Icon(Icons.arrow_forward)
                   ],
@@ -137,8 +145,17 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                 const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(flightNumber, style: AppStyles.textStyle_14_500),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Class : $classTravel",
+                            style: AppStyles.textStyle_14_500),
+                        Text("Flight Number : $flightNumber",
+                            style: AppStyles.textStyle_14_500),
+                      ],
+                    ),
                     Text(airlineName, style: AppStyles.textStyle_14_500),
                   ],
                 ),

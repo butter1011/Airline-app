@@ -95,7 +95,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
             children: [
               InkWell(
                 onTap: () {
-                  print('🎈🎈🎈${entry.value}');
+           
                   Navigator.pushNamed(context, AppRoutes.bookmarkprofilescreen,
                       arguments: {
                         'continentAirlineList': entry.value,

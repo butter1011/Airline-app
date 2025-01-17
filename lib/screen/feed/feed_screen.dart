@@ -1,5 +1,5 @@
-import 'package:airline_app/controller/airline_review_controller.dart';
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
@@ -68,14 +68,14 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       isLoading = true;
     });
 
-    final reviewAirlineController = AirlineReviewController();
+    final reviewAirlineController = GetReviewAirlineController();
     final airlineResult = await reviewAirlineController.getAirlineReviews();
     if (airlineResult['success']) {
       ref
           .read(reviewsAirlineProvider.notifier)
           .setReviewData(airlineResult['data']);
     }
-    final reviewAirportController = AirportReviewController();
+    final reviewAirportController = GetReviewAirportController();
     final airportResult = await reviewAirportController.getAirportReviews();
     if (airportResult['success']) {
       ref
@@ -250,7 +250,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                         .symmetric(
                                                         horizontal: 24.0),
                                                     child: FeedbackCard(
-                                                      thumbnail_Height: 260,
+                                                      thumbnailHeight: 260,
                                                       singleFeedback:
                                                           singleReview,
                                                     ),

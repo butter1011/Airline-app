@@ -1,4 +1,4 @@
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
@@ -22,7 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 
-import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
 
 final selectedEmojiNumberProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
@@ -707,7 +707,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                             borderRadius: BorderRadius.circular(
                                                 8), // Adjust the border radius as needed
                                             child: FeedbackCard(
-                                              thumbnail_Height: 189,
+                                              thumbnailHeight: 189,
                                               singleFeedback: singleFeedback,
                                             ),
                                           ),
