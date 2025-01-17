@@ -4,6 +4,7 @@ import 'package:airline_app/controller/airport_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
@@ -132,7 +133,7 @@ class _QuestionThirdScreenForAirportState
     final ambienceComfort = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
     final amenities = reviewData[5]["subCategory"];
-
+    print('💘💝$reviewData');
     final airlinData = ref.watch(aviationInfoProvider);
 
     final airportname = ref
@@ -217,17 +218,19 @@ class _QuestionThirdScreenForAirportState
                                   amenities: amenities,
                                   comment: comment,
                                 );
-print("🧧Reviewer: ${review.reviewer}");
-print("Airline: ${review.airline}");
-print("Airport: ${review.airport}");
-print("Class Travel: ${review.classTravel}");
-print("Accessibility: ${review.accessibility}");
-print("Wait Times: ${review.waitTimes}");
-print("Helpfulness: ${review.helpfulness}");
-print("Ambience Comfort: ${review.ambienceComfort}");
-print("Food Beverage: ${review.foodBeverage}");
-print("Amenities: ${review.amenities}");
-print("Comment: ${review.comment}");                                final result = await _reviewController
+                                print("🧧Reviewer: ${review.reviewer}");
+                                print("Airline: ${review.airline}");
+                                print("Airport: ${review.airport}");
+                                print("Class Travel: ${review.classTravel}");
+                                print("Accessibility: ${review.accessibility}");
+                                print("Wait Times: ${review.waitTimes}");
+                                print("Helpfulness: ${review.helpfulness}");
+                                print(
+                                    "Ambience Comfort: ${review.ambienceComfort}");
+                                print("Food Beverage: ${review.foodBeverage}");
+                                print("Amenities: ${review.amenities}");
+                                print("Comment: ${review.comment}");
+                                final result = await _reviewController
                                     .saveAirportReview(review);
 
                                 if (_image.isNotEmpty &&
@@ -244,6 +247,11 @@ print("Comment: ${review.comment}");                                final result
                                               ref.watch(userDataProvider)?[
                                                   'userData']['_id'],
                                               500);
+
+                                  ref.read(scoreProvider.notifier).updateScore(
+                                      result['data']['data']['score']);
+
+                                  // print("💘💝💟💨${ref.watch(scoreProvider)}");
                                   ref
                                       .read(userDataProvider.notifier)
                                       .setUserData(updatedUserData["data"]);
@@ -274,14 +282,14 @@ print("Comment: ${review.comment}");                                final result
                                   if (!mounted) return;
                                   Navigator.pushNamed(
                                       context, AppRoutes.completereviews);
-  
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content:
-                                            Text('Failed to submit review')),                                  );
+                                            Text('Failed to submit review')),
+                                  );
                                 }
                               } catch (e) {
                                 setState(() => _isLoading = false);

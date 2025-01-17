@@ -7,6 +7,8 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:airline_app/provider/score_provider.dart';
+
 class CompleteReviews extends ConsumerWidget {
   const CompleteReviews({super.key});
 
@@ -15,6 +17,7 @@ class CompleteReviews extends ConsumerWidget {
     final userData = ref.watch(userDataProvider);
     final points = userData?["userData"]["points"];
     final screenSize = MediaQuery.of(context).size;
+    final scores = ref.watch(scoreProvider);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -106,7 +109,7 @@ class CompleteReviews extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Text("Your Score is 9",
+                          child: Text("Your Score is $scores",
                               style: AppStyles.textStyle_32_600),
                         ),
                         const SizedBox(height: 21),

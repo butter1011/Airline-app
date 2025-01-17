@@ -16,6 +16,7 @@ class AirportReviewController {
       );
 
       if (response.statusCode == 201) {
+        print('💘💝💕💌💌💟${jsonDecode(response.body)}');
         return {'success': true, 'data': jsonDecode(response.body)};
       } else {
         final errorMessage =
@@ -43,7 +44,8 @@ class AirportReviewController {
       return {'success': false, 'message': error.toString()};
     }
   }
-    Future<Map<String, dynamic>> increaseUserPoints(
+
+  Future<Map<String, dynamic>> increaseUserPoints(
       String userId, int pointsToAdd) async {
     try {
       final response = await http.post(
