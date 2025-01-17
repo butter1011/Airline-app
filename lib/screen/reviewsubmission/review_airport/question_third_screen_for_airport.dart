@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
@@ -11,9 +11,8 @@ import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/review_success_bottom_sheet.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,8 @@ class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
 class _QuestionThirdScreenForAirportState
     extends ConsumerState<QuestionThirdScreenForAirport> {
   final List<File> _image = [];
-  final AirportReviewController _reviewController = AirportReviewController();
+  final GetReviewAirportController _reviewController =
+      GetReviewAirportController();
   final TextEditingController _commentController = TextEditingController();
   final BoardingPassController _boardingPassController =
       BoardingPassController();
@@ -160,7 +160,7 @@ class _QuestionThirdScreenForAirportState
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeader(
+                flexibleSpace: BuildQuestionHeaderForAirport(
                   airportName: airportname,
                   subTitle: "Share your experience.",
                   logoImage: logoImage,

@@ -77,7 +77,7 @@ class _LoginState extends ConsumerState<Login> {
     }
 
     final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
+    final reviewsResult = await reviewsController.getAirlineReviews();
     if (reviewsResult['success']) {
       ref
           .read(reviewsAirlineProvider.notifier)
@@ -151,7 +151,7 @@ class _LoginState extends ConsumerState<Login> {
         }
 
         final reviewsController = GetReviewsAirlineController();
-        final reviewsResult = await reviewsController.getReviews();
+        final reviewsResult = await reviewsController.getAirlineReviews();
         if (reviewsResult['success']) {
           ref
               .read(reviewsAirlineProvider.notifier)

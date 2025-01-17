@@ -1,8 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
-
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +54,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-        flexibleSpace: BuildQuestionHeader(
+        flexibleSpace: BuildQuestionHeaderForAirline(
           backgorundImage: backgroundImage,
           subTitle: "Tell us what you liked about your journey.",
           logoImage: logoImage,

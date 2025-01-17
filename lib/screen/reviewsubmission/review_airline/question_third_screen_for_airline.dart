@@ -10,6 +10,7 @@ import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_success_bottom_sheet.dart';
@@ -126,7 +127,7 @@ class _QuestionThirdScreenForAirlineState
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeader(
+                flexibleSpace: BuildQuestionHeaderForAirline(
                   backgorundImage: backgroundImage,
                   subTitle: "Share your experience.",
                   logoImage: logoImage,

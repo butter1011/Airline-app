@@ -1,6 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -49,7 +50,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-          flexibleSpace: BuildQuestionHeader(
+          flexibleSpace: BuildQuestionHeaderForAirline(
             backgorundImage: backgroundImage,
             subTitle: "What could be improved?",
             logoImage: logoImage,
