@@ -99,7 +99,7 @@ class ReviewAirportCard extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      airportName,
+                      "$airportName ($airportCode)",
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
                     ),
