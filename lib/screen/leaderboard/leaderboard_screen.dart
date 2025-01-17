@@ -129,6 +129,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       if (!mounted) return;
 
       if (futures[0]['success']) {
+        print('💦💤${futures[0]['data']}');
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[0]['data']);
@@ -147,6 +148,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             .setAirportScoreData(futures[3]['data']['data']);
       }
       if (futures[4]['success']) {
+        print('💦💤${futures[4]['data']}');
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[4]['data']);
@@ -159,7 +161,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           .getFilteredList("All", null, null, null);
 
       final ratingList = ref.read(reviewsAirlineProvider).reviews;
-      
+
       final UserId = ref.read(userDataProvider)?['userData']['_id'];
 
       for (var ratingreview in ratingList) {
