@@ -42,8 +42,7 @@ class _NavPageButtonState extends State<NavPageButton> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           overlayColor: AppStyles.mainColor,
-          backgroundColor:
-              widget.text == 'Next' ? AppStyles.mainColor : Colors.white,
+          backgroundColor: AppStyles.mainColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
@@ -9,6 +8,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
@@ -34,7 +34,7 @@ class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
 class _QuestionThirdScreenForAirlineState
     extends ConsumerState<QuestionThirdScreenForAirline> {
   final List<File> _image = [];
-  final  _reviewController = GetReviewAirlineController();
+  final _reviewController = GetReviewAirlineController();
   final TextEditingController _commentController = TextEditingController();
   bool _isPickingImage = false;
 
@@ -120,77 +120,79 @@ class _QuestionThirdScreenForAirlineState
       },
       child: Stack(
         children: [
-          Scaffold(
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeaderForAirline(
-                  backgorundImage: backgroundImage,
-                  subTitle: "Share your experience.",
-                  logoImage: logoImage,
-                  classes: selectedClassOfTravel,
-                  airlineName: airlineName,
-                  from: fromAirport,
-                  to: toAirport,
-                ),
-              ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildFeedbackOptions(context),
-                      const SizedBox(height: 20),
-                    ],
+          KeyboardDismissWidget(
+            child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,             
+                  toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+                  flexibleSpace: BuildQuestionHeaderForAirline(
+                    backgorundImage: backgroundImage,
+                    subTitle: "Share your experience.",
+                    logoImage: logoImage,
+                    classes: selectedClassOfTravel,
+                    airlineName: airlineName,
+                    from: fromAirport,
+                    to: toAirport,
                   ),
                 ),
-              ),
-              bottomNavigationBar: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(height: 2, color: Colors.black),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Row(
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Go back',
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icons.arrow_back,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Submit',
-                            onPressed: () => _handleSubmission(
-                              context: context,
-                              userData: userData,
-                              from: from,
-                              to: to,
-                              classTravel: classTravel,
-                              airline: airline,
-                              departureArrival: departureArrival,
-                              comfort: comfort,
-                              cleanliness: cleanliness,
-                              onboardService: onboardService,
-                              foodBeverage: foodBeverage,
-                              entertainmentWifi: entertainmentWifi,
-                              index: index,
-                              boardingPassController: boardingPassController,
-                            ),
-                            icon: Icons.arrow_forward,
-                          ),
-                        ),
+                        _buildFeedbackOptions(context),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
-                ],
-              )),
+                ),
+                bottomNavigationBar: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(height: 2, color: Colors.black),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: NavPageButton(
+                              text: 'Go back',
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icons.arrow_back,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: NavPageButton(
+                              text: 'Submit',
+                              onPressed: () => _handleSubmission(
+                                context: context,
+                                userData: userData,
+                                from: from,
+                                to: to,
+                                classTravel: classTravel,
+                                airline: airline,
+                                departureArrival: departureArrival,
+                                comfort: comfort,
+                                cleanliness: cleanliness,
+                                onboardService: onboardService,
+                                foodBeverage: foodBeverage,
+                                entertainmentWifi: entertainmentWifi,
+                                index: index,
+                                boardingPassController: boardingPassController,
+                              ),
+                              icon: Icons.arrow_forward,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+          ),
           if (_isLoading)
             Container(
                 color: Colors.black.withOpacity(0.5),

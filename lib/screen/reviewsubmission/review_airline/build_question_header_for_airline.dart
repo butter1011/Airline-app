@@ -25,7 +25,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
         if (backgorundImage.isNotEmpty)
           Positioned.fill(
             child: Image.asset(
-              "assets/images/airline.png",
+              "assets/images/airport.png",
               fit: BoxFit.cover,
             ),
           ),

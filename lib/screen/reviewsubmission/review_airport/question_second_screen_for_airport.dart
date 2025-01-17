@@ -125,28 +125,13 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: NavPageButton(
-                    text: 'Go back',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icons.arrow_back),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: NavPageButton(
-                    text: 'Next',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, AppRoutes.questionthirdscreenforairport);
-                    },
-                    icon: Icons.arrow_forward),
-              )
-            ],
-          ),
+          child: NavPageButton(
+              text: 'Next',
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.questionthirdscreenforairport);
+              },
+              icon: Icons.arrow_forward),
         ),
       ],
     );
