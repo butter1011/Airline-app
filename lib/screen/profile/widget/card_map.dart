@@ -56,6 +56,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
 
     final userId = userData['userData']['_id'];
+
     final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
 
@@ -74,7 +75,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final filteredAirportReviewData = airportData
         .where((airport) => userAirports.contains(airport['_id']))
         .toList();
-
     List<Marker> markers = [];
 
     for (var airport in filteredAirportReviewData) {

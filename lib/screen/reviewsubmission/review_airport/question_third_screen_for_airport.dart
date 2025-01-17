@@ -1,18 +1,18 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/review_success_bottom_sheet.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,8 @@ class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
 class _QuestionThirdScreenForAirportState
     extends ConsumerState<QuestionThirdScreenForAirport> {
   final List<File> _image = [];
-  final AirportReviewController _reviewController = AirportReviewController();
+  final GetReviewAirportController _reviewController =
+      GetReviewAirportController();
   final TextEditingController _commentController = TextEditingController();
   final BoardingPassController _boardingPassController =
       BoardingPassController();
@@ -159,7 +160,7 @@ class _QuestionThirdScreenForAirportState
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeader(
+                flexibleSpace: BuildQuestionHeaderForAirport(
                   airportName: airportname,
                   subTitle: "Share your experience.",
                   logoImage: logoImage,
@@ -217,17 +218,19 @@ class _QuestionThirdScreenForAirportState
                                   amenities: amenities,
                                   comment: comment,
                                 );
-print("🧧Reviewer: ${review.reviewer}");
-print("Airline: ${review.airline}");
-print("Airport: ${review.airport}");
-print("Class Travel: ${review.classTravel}");
-print("Accessibility: ${review.accessibility}");
-print("Wait Times: ${review.waitTimes}");
-print("Helpfulness: ${review.helpfulness}");
-print("Ambience Comfort: ${review.ambienceComfort}");
-print("Food Beverage: ${review.foodBeverage}");
-print("Amenities: ${review.amenities}");
-print("Comment: ${review.comment}");                                final result = await _reviewController
+                                print("🧧Reviewer: ${review.reviewer}");
+                                print("Airline: ${review.airline}");
+                                print("Airport: ${review.airport}");
+                                print("Class Travel: ${review.classTravel}");
+                                print("Accessibility: ${review.accessibility}");
+                                print("Wait Times: ${review.waitTimes}");
+                                print("Helpfulness: ${review.helpfulness}");
+                                print(
+                                    "Ambience Comfort: ${review.ambienceComfort}");
+                                print("Food Beverage: ${review.foodBeverage}");
+                                print("Amenities: ${review.amenities}");
+                                print("Comment: ${review.comment}");
+                                final result = await _reviewController
                                     .saveAirportReview(review);
 
                                 if (_image.isNotEmpty &&
@@ -244,6 +247,10 @@ print("Comment: ${review.comment}");                                final result
                                               ref.watch(userDataProvider)?[
                                                   'userData']['_id'],
                                               500);
+
+                                  ref.read(scoreProvider.notifier).updateScore(
+                                      result['data']['data']['score']);
+
                                   ref
                                       .read(userDataProvider.notifier)
                                       .setUserData(updatedUserData["data"]);
@@ -274,14 +281,14 @@ print("Comment: ${review.comment}");                                final result
                                   if (!mounted) return;
                                   Navigator.pushNamed(
                                       context, AppRoutes.completereviews);
-  
                                 } else {
                                   setState(() => _isLoading = false);
                                   if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content:
-                                            Text('Failed to submit review')),                                  );
+                                            Text('Failed to submit review')),
+                                  );
                                 }
                               } catch (e) {
                                 setState(() => _isLoading = false);

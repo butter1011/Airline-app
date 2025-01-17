@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:airline_app/controller/airline_review_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
@@ -10,9 +10,8 @@ import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/review_success_bottom_sheet.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:airline_app/provider/score_provider.dart';
 
 class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
   const QuestionThirdScreenForAirline({super.key});
@@ -34,7 +34,7 @@ class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
 class _QuestionThirdScreenForAirlineState
     extends ConsumerState<QuestionThirdScreenForAirline> {
   final List<File> _image = [];
-  final AirlineReviewController _reviewController = AirlineReviewController();
+  final  _reviewController = GetReviewAirlineController();
   final TextEditingController _commentController = TextEditingController();
   bool _isPickingImage = false;
 
@@ -125,7 +125,7 @@ class _QuestionThirdScreenForAirlineState
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeader(
+                flexibleSpace: BuildQuestionHeaderForAirline(
                   backgorundImage: backgroundImage,
                   subTitle: "Share your experience.",
                   logoImage: logoImage,
@@ -244,6 +244,9 @@ class _QuestionThirdScreenForAirlineState
       if (result['success']) {
         final updatedUserData = await _reviewController.increaseUserPoints(
             userData?['userData']['_id'], 500);
+        ref
+            .read(scoreProvider.notifier)
+            .updateScore(result['data']['data']['score']);
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);

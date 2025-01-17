@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -82,7 +83,7 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
       body: RefreshIndicator(
         onRefresh: _fetchEvents,
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: LoadingWidget())
             : _error != null
                 ? Center(child: Text('Error: $_error'))
                 : _events.isEmpty

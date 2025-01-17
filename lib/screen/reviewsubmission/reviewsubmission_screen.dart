@@ -5,11 +5,9 @@ import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/google_calendar.dart';
-import 'package:airline_app/screen/reviewsubmission/google_calendar/calendar_widget.dart';
+import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/calendar.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
@@ -45,7 +43,8 @@ class _ReviewsubmissionScreenState
     try {
       await Future.wait([
         _boardingPassController
-            .getBoardingPasses(ref.read(userDataProvider)?['userData']?['_id'])
+            .getBoardingPasses(
+                ref.read(userDataProvider)?['userData']?['_id'] ?? '')
             .then((boardingPasses) {
           if (mounted) {
             ref.read(boardingPassesProvider.notifier).setData(boardingPasses);
@@ -66,7 +65,8 @@ class _ReviewsubmissionScreenState
       selectedType = type;
     });
   }
-  
+
+
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
@@ -119,91 +119,60 @@ class _ReviewsubmissionScreenState
         const SizedBox(height: 26),
         const Divider(color: Colors.black, thickness: 2),
       ],
+    );  }
+
+
+
+  Widget _buildCardWidget(BoardingPass singleBoardingPass) {
+    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Column(
+        children: [
+          if (selectedType == "All" || selectedType == "Flights")
+            ReviewFlightCard(
+              singleBoardingPass: singleBoardingPass,
+              index: index,
+              isReviewed: singleBoardingPass.isFlightReviewed,
+            ),
+          if ((selectedType == "All" || selectedType == "Airports") &&
+              (selectedType != "Flights"))
+            Column(
+              children: [
+                if (selectedType == "All") const SizedBox(height: 10),
+                ReviewAirportCard(
+                  index: index,
+                  status: singleBoardingPass.visitStatus,
+                  airlineCode: singleBoardingPass.airlineCode,
+                  airportCode: singleBoardingPass.departureAirportCode,
+                  time: singleBoardingPass.departureTime,
+                  isDeparture: true,
+                  isReviewed: singleBoardingPass.isDepartureAirportReviewed,
+                  classOfTravel: singleBoardingPass.classOfTravel,
+                  countryCode: singleBoardingPass.departureCountryCode,
+                  airportName: singleBoardingPass.departureCity,
+                ),
+                const SizedBox(height: 10),
+                ReviewAirportCard(
+                  index: index,
+                  status: singleBoardingPass.visitStatus,
+                  airlineCode: singleBoardingPass.airlineCode,
+                  airportCode: singleBoardingPass.arrivalAirportCode,
+                  time: singleBoardingPass.arrivalTime,
+                  isDeparture: false,
+                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
+                  classOfTravel: singleBoardingPass.classOfTravel,
+                  countryCode: singleBoardingPass.arrivalCountryCode,
+                  airportName: singleBoardingPass.arrivalCity,
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
-    void _showDataMissingSnackBar() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Some required data is missing in the database'),
-          duration: const Duration(seconds: 3),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
 
-    Widget _buildCardWidget(BoardingPass singleBoardingPass) {
-      final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
-  
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
-        child: Column(
-          children: [
-            if (selectedType == "All" || selectedType == "Flights")
-              Builder(
-                builder: (context) {
-                  final flightCard = ReviewFlightCard(
-                    singleBoardingPass: singleBoardingPass,
-                    index: index,
-                    isReviewed: singleBoardingPass.isFlightReviewed,
-                  );
-                  if (flightCard is SizedBox) {
-                    _showDataMissingSnackBar();
-                  }
-                  return flightCard;
-                },
-              ),
-            if ((selectedType == "All" || selectedType == "Airports") &&
-                (selectedType != "Flights"))
-              Column(
-                children: [
-                  if (selectedType == "All") const SizedBox(height: 10),
-                  Builder(
-                    builder: (context) {
-                      final departureCard = ReviewAirportCard(
-                        index: index,
-                        status: singleBoardingPass.visitStatus,
-                        airlineCode: singleBoardingPass.airlineCode,
-                        airportCode: singleBoardingPass.departureAirportCode,
-                        time: singleBoardingPass.departureTime,
-                        isDeparture: true,
-                        isReviewed: singleBoardingPass.isDepartureAirportReviewed,
-                        classOfTravel: singleBoardingPass.classOfTravel, 
-                        countryCode: singleBoardingPass.departureCountryCode,
-                        airportName: singleBoardingPass.departureCity,
-                      );
-                      if (departureCard is SizedBox) {
-                        _showDataMissingSnackBar();
-                      }
-                      return departureCard;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Builder(
-                    builder: (context) {
-                      final arrivalCard = ReviewAirportCard(
-                        index: index,
-                        status: singleBoardingPass.visitStatus,
-                        airlineCode: singleBoardingPass.airlineCode,
-                        airportCode: singleBoardingPass.arrivalAirportCode,
-                        time: singleBoardingPass.arrivalTime,
-                        isDeparture: false,
-                        isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                        classOfTravel: singleBoardingPass.classOfTravel,
-                         countryCode: singleBoardingPass.arrivalCountryCode,
-                      airportName: singleBoardingPass.arrivalCity,
-                      );
-                      if (arrivalCard is SizedBox) {
-                        _showDataMissingSnackBar();
-                      }
-                      return arrivalCard;
-                    },
-                  ),
-                ],
-              ),
-          ],
-        ),
-      );
-    }
   @override
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
@@ -217,10 +186,10 @@ class _ReviewsubmissionScreenState
         appBar: AppBar(
           toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_sharp),
-            onPressed: () => Navigator.pop(context),
-          ),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_ios_sharp),
+          //   onPressed: () => Navigator.pop(context),
+          // ),
           centerTitle: true,
           title: Text(
             AppLocalizations.of(context).translate('Reviews'),

@@ -56,8 +56,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
   }
 
   Future<void> parseIataBarcode(String rawValue) async {
-    setState(() => isLoading = true); 
-    print("Raw value ===================>  $rawValue");
+    setState(() => isLoading = true);
     try {
       final RegExp regex = RegExp(
           r'([A-Z0-9]{5,7})\s+([A-Z]{6}[A-Z0-9]{2})\s+(\d{4})\s+(\d{3}[A-Z])');
@@ -71,16 +70,13 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       final String routeOfFlight = match.group(2)!;
       final String flightNumber = match.group(3)!;
       final String julianDateAndClassOfService = match.group(4)!;
-
       final String departureAirport = routeOfFlight.substring(0, 3);
       final String arrivalAirport = routeOfFlight.substring(3, 6);
       final String carrier = routeOfFlight.substring(6, 8);
-
       final String julianDate = julianDateAndClassOfService.substring(0, 3);
       final String classOfServiceKey =
           julianDateAndClassOfService.substring(3, 4);
       final String classOfService = _getClassOfService(classOfServiceKey);
-
       final DateTime baseDate = DateTime(DateTime.now().year, 1, 0);
       final DateTime date = baseDate.add(Duration(days: int.parse(julianDate)));
 
@@ -93,7 +89,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
 
       final Map<String, dynamic> flightInfo =
           await _flightInfoFetcher.fetchFlightInfo(
-         carrier: carrier,
+        carrier: carrier,
         flightNumber: flightNumber,
         flightDate: date,
         departureAirport: departureAirport,
@@ -130,16 +126,13 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
           'No flight data found for the boarding pass', AppStyles.notifyColor);
       return;
     }
-
     final flightStatus = flightInfo['flightStatuses'][0];
     final airports = flightInfo['appendix']['airports'];
     final airlineName = flightInfo['appendix']['airlines'][0]['name'];
-
     final departureAirport = airports.firstWhere(
         (airport) => airport['fs'] == flightStatus['departureAirportFsCode']);
     final arrivalAirport = airports.firstWhere(
         (airport) => airport['fs'] == flightStatus['arrivalAirportFsCode']);
-
     final departureEntireTime =
         DateTime.parse(flightStatus['departureDate']['dateLocal']);
     final arrivalEntireTime =

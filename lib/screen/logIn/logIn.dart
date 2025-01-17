@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
-import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
 
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
@@ -76,8 +76,8 @@ class _LoginState extends ConsumerState<Login> {
       ref.read(airlineAirportProvider.notifier).setData(result['data']);
     }
 
-    final reviewsController = GetReviewsAirlineController();
-    final reviewsResult = await reviewsController.getReviews();
+    final reviewsController = GetReviewAirlineController();
+    final reviewsResult = await reviewsController.getAirlineReviews();
     if (reviewsResult['success']) {
       ref
           .read(reviewsAirlineProvider.notifier)
@@ -150,8 +150,8 @@ class _LoginState extends ConsumerState<Login> {
           ref.read(airlineAirportProvider.notifier).setData(result['data']);
         }
 
-        final reviewsController = GetReviewsAirlineController();
-        final reviewsResult = await reviewsController.getReviews();
+        final reviewsController = GetReviewAirlineController();
+        final reviewsResult = await reviewsController.getAirlineReviews();
         if (reviewsResult['success']) {
           ref
               .read(reviewsAirlineProvider.notifier)
