@@ -23,6 +23,7 @@ import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:airline_app/provider/score_provider.dart';
 
 class QuestionThirdScreenForAirline extends ConsumerStatefulWidget {
   const QuestionThirdScreenForAirline({super.key});
@@ -245,6 +246,9 @@ class _QuestionThirdScreenForAirlineState
       if (result['success']) {
         final updatedUserData = await _reviewController.increaseUserPoints(
             userData?['userData']['_id'], 500);
+        ref
+            .read(scoreProvider.notifier)
+            .updateScore(result['data']['data']['score']);
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);

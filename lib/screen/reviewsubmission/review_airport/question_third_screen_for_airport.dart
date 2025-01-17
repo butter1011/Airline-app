@@ -4,6 +4,7 @@ import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
+import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
@@ -246,6 +247,10 @@ class _QuestionThirdScreenForAirportState
                                               ref.watch(userDataProvider)?[
                                                   'userData']['_id'],
                                               500);
+
+                                  ref.read(scoreProvider.notifier).updateScore(
+                                      result['data']['data']['score']);
+
                                   ref
                                       .read(userDataProvider.notifier)
                                       .setUserData(updatedUserData["data"]);

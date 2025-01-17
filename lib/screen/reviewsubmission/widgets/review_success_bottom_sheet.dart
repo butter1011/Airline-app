@@ -7,6 +7,7 @@ import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
 import 'package:gif/gif.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/score_provider.dart';
 
 Future<void> showReviewSuccessBottomSheet(BuildContext context,
     VoidCallback onSuccess, String reviewButtonText) async {
@@ -69,6 +70,7 @@ class _ReviewSuccessContentState extends ConsumerState<_ReviewSuccessContent>
     final size = MediaQuery.of(context).size;
     final userData = ref.watch(userDataProvider);
     final points = userData?["userData"]["points"];
+    final scores = ref.watch(scoreProvider);
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -109,7 +111,7 @@ class _ReviewSuccessContentState extends ConsumerState<_ReviewSuccessContent>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Text("Your Score is 9",
+                        child: Text("Your Score is $scores",
                             style: AppStyles.textStyle_32_600),
                       ),
                       const SizedBox(height: 21),

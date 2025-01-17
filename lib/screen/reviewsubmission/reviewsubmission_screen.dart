@@ -66,6 +66,7 @@ class _ReviewsubmissionScreenState
     });
   }
 
+
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
@@ -118,18 +119,9 @@ class _ReviewsubmissionScreenState
         const SizedBox(height: 26),
         const Divider(color: Colors.black, thickness: 2),
       ],
-    );
-  }
+    );  }
 
-  void _showDataMissingSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Some required data is missing in the database'),
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
+
 
   Widget _buildCardWidget(BoardingPass singleBoardingPass) {
     final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
@@ -194,10 +186,10 @@ class _ReviewsubmissionScreenState
         appBar: AppBar(
           toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_sharp),
-            onPressed: () => Navigator.pop(context),
-          ),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_ios_sharp),
+          //   onPressed: () => Navigator.pop(context),
+          // ),
           centerTitle: true,
           title: Text(
             AppLocalizations.of(context).translate('Reviews'),
