@@ -101,60 +101,82 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void dispose() {
     _searchController.dispose();
     _channel.sink.close();
+    // Cancel any pending operations before disposing
+    if (mounted) {
+      ref.invalidate(reviewsAirlineProvider);
+      ref.invalidate(airlineAirportProvider);
+      ref.invalidate(filterButtonProvider);
+      ref.invalidate(liveFeedProvider);
+    }
     super.dispose();
   }
 
   Future<void> fetchLeaderboardData() async {
+    if (!mounted) return;
+
     final reviewsController = GetReviewsAirlineController();
     final airportController = AirportReviewController();
-    final futures = await Future.wait([
-      reviewsController.getReviews(),
-      airlineController.getAirlineAirport(),
-      airlineScoreController.getAirlineScore(),
-      airportScoreController.getAirportScore(),
-      airportController.getAirportReviews(),
-    ]);
 
-    if (futures[0]['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(futures[0]['data']);
-    }
-    if (futures[1]['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
-    }
-    if (futures[2]['success']) {
-      ref
-          .read(airlineAirportProvider.notifier)
-          .setAirlineScoreData(futures[2]['data']['data']);
-    }
-    if (futures[3]['success']) {
-      ref
-          .read(airlineAirportProvider.notifier)
-          .setAirportScoreData(futures[3]['data']['data']);
-    }
-    if (futures[4]['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(futures[4]['data']);
-    }
+    try {
+      final futures = await Future.wait([
+        reviewsController.getReviews(),
+        airlineController.getAirlineAirport(),
+        airlineScoreController.getAirlineScore(),
+        airportScoreController.getAirportScore(),
+        airportController.getAirportReviews(),
+      ]);
 
-    ref
-        .read(airlineAirportProvider.notifier)
-        .getFilteredList("All", null, null, null);
+      if (!mounted) return;
 
-    final ratingList = ref.watch(reviewsAirlineProvider).reviews;
-    final UserId = ref.watch(userDataProvider)?['userData']['_id'];
-    for (var ratingreview in ratingList) {
-      ref
-          .read(selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
-          .state = ratingreview['rating']?.length ?? 0;
-      if (ratingreview['reviewer']?['_id'] == UserId &&
-          ratingreview['rating'] != null) {
+      if (futures[0]['success']) {
         ref
-            .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
-            .state = ratingreview['rating'][UserId] ?? 0;
+            .read(reviewsAirlineProvider.notifier)
+            .setReviewData(futures[0]['data']);
       }
+      if (futures[1]['success']) {
+        ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
+      }
+      if (futures[2]['success']) {
+        ref
+            .read(airlineAirportProvider.notifier)
+            .setAirlineScoreData(futures[2]['data']['data']);
+      }
+      if (futures[3]['success']) {
+        ref
+            .read(airlineAirportProvider.notifier)
+            .setAirportScoreData(futures[3]['data']['data']);
+      }
+      if (futures[4]['success']) {
+        ref
+            .read(reviewsAirlineProvider.notifier)
+            .setReviewData(futures[4]['data']);
+      }
+
+      if (!mounted) return;
+
+      ref
+          .read(airlineAirportProvider.notifier)
+          .getFilteredList("All", null, null, null);
+
+      final ratingList = ref.read(reviewsAirlineProvider).reviews;
+      
+      final UserId = ref.read(userDataProvider)?['userData']['_id'];
+
+      for (var ratingreview in ratingList) {
+        if (!mounted) return;
+        ref
+            .read(
+                selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
+            .state = ratingreview['rating']?.length ?? 0;
+        if (ratingreview['reviewer']?['_id'] == UserId &&
+            ratingreview['rating'] != null) {
+          ref
+              .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
+              .state = ratingreview['rating'][UserId] ?? 0;
+        }
+      }
+    } catch (e) {
+      print('Error fetching leaderboard data: $e');
     }
   }
 

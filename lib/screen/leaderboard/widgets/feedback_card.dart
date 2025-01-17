@@ -1,7 +1,5 @@
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
-import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
-import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -218,7 +216,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       viewportFraction: 1,
                       height: 189,
                       enableInfiniteScroll: false,
-                      scrollPhysics: NeverScrollableScrollPhysics(),
                     ),
                     carouselController: buttonCarouselController,
                     items: [...images, ...videos].map((mediaItem) {
@@ -243,28 +240,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     }).toList(),
                   ),
                 ),
-                Positioned(
-                  top: 79,
-                  right: 16,
-                  child: InkWell(
-                    onTap: () => buttonCarouselController.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.linear),
-                    child: const NextButton(),
-                  ),
-                ),
-                Positioned(
-                  top: 79,
-                  left: 16,
-                  child: InkWell(
-                    onTap: () => buttonCarouselController.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.linear),
-                    child: const PreviousButton(),
-                  ),
-                ),
-              ],
-            )
+
+              ],            )
           else
             InkWell(
               onTap: () {
@@ -313,7 +290,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
-          ),  
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
