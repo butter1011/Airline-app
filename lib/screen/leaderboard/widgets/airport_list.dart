@@ -116,8 +116,16 @@ class AirportList extends ConsumerWidget {
                     decoration: AppStyles.circleDecoration,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        airportData['logoImage'],
+                      child: Image(
+                        image: airportData['logoImage'] != null
+                            ? NetworkImage(airportData['logoImage'])
+                            : airportData['isAirline']
+                                ? const AssetImage(
+                                        'assets/images/airline_logo.png')
+                                    as ImageProvider
+                                : const AssetImage(
+                                        'assets/images/airport_logo.png')
+                                    as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -6,7 +6,6 @@ import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,10 +41,6 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
               _buildInfoText(
                   "Add your flight schedule below or sync your calendar/email"),
               const SizedBox(height: 22),
-              // _buildSectionTitle("Synchronize (Recommended):"),
-              // const SizedBox(height: 13),
-              // _buildSyncButtons(),
-              // const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -198,49 +193,6 @@ class _FlightInputScreenState extends ConsumerState<FlightInputScreen> {
                   .read(aviationInfoProvider.notifier)
                   .updateClassOfTravel("Economy"),
             ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAdditionalSyncOptions(WidgetRef ref) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Synchronize (Recommended):", style: AppStyles.textStyle_14_600),
-        const SizedBox(height: 13),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            // ToggleBtn(
-            //   buttonText: "Boarding Passes",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "Boarding Passes",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("Boarding Passes"),
-            // ),
-            // ToggleBtn(
-            //   buttonText: "Geolocation",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "Geolocation",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("Geolocation"),
-            // ),
-            // ToggleBtn(
-            //   buttonText: "E-Tickets",
-            //   height: 40,
-            //   isSelected: ref.watch(aviationInfoProvider).selectedSynchronize ==
-            //       "E-Tickets",
-            //   onSelected: () => ref
-            //       .read(aviationInfoProvider.notifier)
-            //       .updateSynchronize("E-Tickets"),
-            // )
           ],
         ),
       ],
@@ -414,3 +366,4 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
     );
   }
 }
+
