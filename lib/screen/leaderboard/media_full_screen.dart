@@ -4,8 +4,6 @@ import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/leaderboard/widgets/next_button.dart';
-import 'package:airline_app/screen/leaderboard/widgets/previous_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -30,7 +28,9 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
   @override
   void initState() {
     super.initState();
-    _initVideos();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initVideos();
+    });
   }
 
   Future<void> _initVideos() async {
@@ -75,6 +75,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
 
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
+
     if (controller == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -123,7 +124,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         children: [
           Stack(
             children: [
-              if (imgList.isEmpty)
+              if (mediaList.isEmpty)
                 Container(
                   height: 594.0,
                   decoration: BoxDecoration(
@@ -138,6 +139,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   options: CarouselOptions(
                     viewportFraction: 1,
                     height: 594.0,
+                    enableInfiniteScroll: false,
                   ),
                   items: mediaList.map((media) {
                     return Builder(
@@ -162,39 +164,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   }).toList(),
                   carouselController: buttonCarouselController,
                 ),
-              Positioned(
-                top: 40,
-                left: 16,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_sharp,
-                      color: Colors.white),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              if (imgList.length > 1) ...[
-                Positioned(
-                  top: 281,
-                  right: 24,
-                  child: InkWell(
-                    onTap: () => buttonCarouselController.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.linear),
-                    child: const NextButton(),
-                  ),
-                ),
-                Positioned(
-                  top: 281,
-                  left: 24,
-                  child: InkWell(
-                    onTap: () => buttonCarouselController.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.linear),
-                    child: const PreviousButton(),
-                  ),
-                ),
-              ],
             ],
           ),
           Padding(
