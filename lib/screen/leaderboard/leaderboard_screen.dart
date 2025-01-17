@@ -22,7 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 
-import 'package:airline_app/controller/get_reviews_airline_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
 
 final selectedEmojiNumberProvider =
     StateProvider.family<int, String>((ref, feedbackId) => 0);
@@ -105,7 +105,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Future<void> fetchLeaderboardData() async {
-    final reviewsController = GetReviewsAirlineController();
+    final reviewsController = GetReviewAirlineController();
     final airportController = GetReviewAirportController();
     final futures = await Future.wait([
       reviewsController.getAirlineReviews(),

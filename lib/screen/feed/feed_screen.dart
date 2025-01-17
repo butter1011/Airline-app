@@ -1,4 +1,4 @@
-import 'package:airline_app/controller/airline_review_controller.dart';
+import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
@@ -68,7 +68,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       isLoading = true;
     });
 
-    final reviewAirlineController = AirlineReviewController();
+    final reviewAirlineController = GetReviewAirlineController();
     final airlineResult = await reviewAirlineController.getAirlineReviews();
     if (airlineResult['success']) {
       ref

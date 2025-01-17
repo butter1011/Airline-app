@@ -3,7 +3,7 @@ import 'package:airline_app/models/airline_review_model.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:http/http.dart' as http;
 
-class GetReviewsAirlineController {
+class GetReviewAirlineController {
   Future<Map<String, dynamic>> saveAirlineReview(AirlineReviewModel review) async {
     try {
       final response = await http.post(
