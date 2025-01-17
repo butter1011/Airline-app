@@ -84,9 +84,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "This is single feedback    ======================     ${widget.singleFeedback}");
-
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -97,11 +94,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
     final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
-    print(
-        "This is single feedback🎇    ======================     ${widget.singleFeedback['airline']}");
-
-    print(
-        "This is single feedback🎎    ======================     ${widget.singleFeedback['from'] ?? widget.singleFeedback['airport']}");
 
     return SizedBox(
       child: Column(
@@ -173,8 +165,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                          '${widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city']}',
-                          style: AppStyles.textStyle_14_600),
+                          '${widget.singleFeedback['from']['city'].toString().length > 12 ? '${widget.singleFeedback['from']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city'].toString().length > 12 ? '${widget.singleFeedback['to']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['to']['city']}',                          style: AppStyles.textStyle_14_600),
                     ),
                   ],
                 )
