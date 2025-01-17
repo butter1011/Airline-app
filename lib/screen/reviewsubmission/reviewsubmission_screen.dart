@@ -66,7 +66,7 @@ class _ReviewsubmissionScreenState
       selectedType = type;
     });
   }
-  
+
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const SizedBox(height: 24),
@@ -121,89 +121,91 @@ class _ReviewsubmissionScreenState
       ],
     );
   }
-    void _showDataMissingSnackBar() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Some required data is missing in the database'),
-          duration: const Duration(seconds: 3),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
 
-    Widget _buildCardWidget(BoardingPass singleBoardingPass) {
-      final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
-  
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
-        child: Column(
-          children: [
-            if (selectedType == "All" || selectedType == "Flights")
-              Builder(
-                builder: (context) {
-                  final flightCard = ReviewFlightCard(
-                    singleBoardingPass: singleBoardingPass,
-                    index: index,
-                    isReviewed: singleBoardingPass.isFlightReviewed,
-                  );
-                  if (flightCard is SizedBox) {
-                    _showDataMissingSnackBar();
-                  }
-                  return flightCard;
-                },
-              ),
-            if ((selectedType == "All" || selectedType == "Airports") &&
-                (selectedType != "Flights"))
-              Column(
-                children: [
-                  if (selectedType == "All") const SizedBox(height: 10),
-                  Builder(
-                    builder: (context) {
-                      final departureCard = ReviewAirportCard(
-                        index: index,
-                        status: singleBoardingPass.visitStatus,
-                        airlineCode: singleBoardingPass.airlineCode,
-                        airportCode: singleBoardingPass.departureAirportCode,
-                        time: singleBoardingPass.departureTime,
-                        isDeparture: true,
-                        isReviewed: singleBoardingPass.isDepartureAirportReviewed,
-                        classOfTravel: singleBoardingPass.classOfTravel, 
-                        countryCode: singleBoardingPass.departureCountryCode,
-                        airportName: singleBoardingPass.departureCity,
-                      );
-                      if (departureCard is SizedBox) {
-                        _showDataMissingSnackBar();
-                      }
-                      return departureCard;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Builder(
-                    builder: (context) {
-                      final arrivalCard = ReviewAirportCard(
-                        index: index,
-                        status: singleBoardingPass.visitStatus,
-                        airlineCode: singleBoardingPass.airlineCode,
-                        airportCode: singleBoardingPass.arrivalAirportCode,
-                        time: singleBoardingPass.arrivalTime,
-                        isDeparture: false,
-                        isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                        classOfTravel: singleBoardingPass.classOfTravel,
-                         countryCode: singleBoardingPass.arrivalCountryCode,
+  void _showDataMissingSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Some required data is missing in the database'),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildCardWidget(BoardingPass singleBoardingPass) {
+    final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Column(
+        children: [
+          if (selectedType == "All" || selectedType == "Flights")
+            Builder(
+              builder: (context) {
+                final flightCard = ReviewFlightCard(
+                  singleBoardingPass: singleBoardingPass,
+                  index: index,
+                  isReviewed: singleBoardingPass.isFlightReviewed,
+                );
+                if (flightCard is SizedBox) {
+                  _showDataMissingSnackBar();
+                }
+                return flightCard;
+              },
+            ),
+          if ((selectedType == "All" || selectedType == "Airports") &&
+              (selectedType != "Flights"))
+            Column(
+              children: [
+                if (selectedType == "All") const SizedBox(height: 10),
+                Builder(
+                  builder: (context) {
+                    final departureCard = ReviewAirportCard(
+                      index: index,
+                      status: singleBoardingPass.visitStatus,
+                      airlineCode: singleBoardingPass.airlineCode,
+                      airportCode: singleBoardingPass.departureAirportCode,
+                      time: singleBoardingPass.departureTime,
+                      isDeparture: true,
+                      isReviewed: singleBoardingPass.isDepartureAirportReviewed,
+                      classOfTravel: singleBoardingPass.classOfTravel,
+                      countryCode: singleBoardingPass.departureCountryCode,
+                      airportName: singleBoardingPass.departureCity,
+                    );
+                    if (departureCard is SizedBox) {
+                      _showDataMissingSnackBar();
+                    }
+                    return departureCard;
+                  },
+                ),
+                const SizedBox(height: 10),
+                Builder(
+                  builder: (context) {
+                    final arrivalCard = ReviewAirportCard(
+                      index: index,
+                      status: singleBoardingPass.visitStatus,
+                      airlineCode: singleBoardingPass.airlineCode,
+                      airportCode: singleBoardingPass.arrivalAirportCode,
+                      time: singleBoardingPass.arrivalTime,
+                      isDeparture: false,
+                      isReviewed: singleBoardingPass.isArrivalAirportReviewed,
+                      classOfTravel: singleBoardingPass.classOfTravel,
+                      countryCode: singleBoardingPass.arrivalCountryCode,
                       airportName: singleBoardingPass.arrivalCity,
-                      );
-                      if (arrivalCard is SizedBox) {
-                        _showDataMissingSnackBar();
-                      }
-                      return arrivalCard;
-                    },
-                  ),
-                ],
-              ),
-          ],
-        ),
-      );
-    }
+                    );
+                    if (arrivalCard is SizedBox) {
+                      _showDataMissingSnackBar();
+                    }
+                    return arrivalCard;
+                  },
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
@@ -217,10 +219,10 @@ class _ReviewsubmissionScreenState
         appBar: AppBar(
           toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_sharp),
-            onPressed: () => Navigator.pop(context),
-          ),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_ios_sharp),
+          //   onPressed: () => Navigator.pop(context),
+          // ),
           centerTitle: true,
           title: Text(
             AppLocalizations.of(context).translate('Reviews'),

@@ -133,7 +133,7 @@ class _QuestionThirdScreenForAirportState
     final ambienceComfort = reviewData[3]["subCategory"];
     final foodBeverage = reviewData[4]["subCategory"];
     final amenities = reviewData[5]["subCategory"];
-    print('💘💝$reviewData');
+
     final airlinData = ref.watch(aviationInfoProvider);
 
     final airportname = ref
@@ -251,7 +251,6 @@ class _QuestionThirdScreenForAirportState
                                   ref.read(scoreProvider.notifier).updateScore(
                                       result['data']['data']['score']);
 
-                                  // print("💘💝💟💨${ref.watch(scoreProvider)}");
                                   ref
                                       .read(userDataProvider.notifier)
                                       .setUserData(updatedUserData["data"]);

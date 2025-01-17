@@ -27,10 +27,11 @@ class CompleteReviews extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_sharp),
-            onPressed: () => Navigator.pop(context),
-          ),
+          automaticallyImplyLeading: false,
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_ios_sharp),
+          //   onPressed: () => Navigator.pop(context),
+          // ),
           centerTitle: true,
           title: Text(
             AppLocalizations.of(context).translate('Feedback Quest Complete'),
@@ -109,7 +110,8 @@ class CompleteReviews extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Text("Your Score is $scores",
+                          child: Text(
+                              "Your Score is ${(scores ?? 0).toStringAsFixed(1)}",
                               style: AppStyles.textStyle_32_600),
                         ),
                         const SizedBox(height: 21),
