@@ -23,11 +23,9 @@ import 'package:share_plus/share_plus.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard(
-      {super.key,
-      required this.singleFeedback,
-      required this.thumbnail_Height});
+      {super.key, required this.singleFeedback, required this.thumbnailHeight});
   final Map<String, dynamic> singleFeedback;
-  final double thumbnail_Height;
+  final double thumbnailHeight;
 
   @override
   ConsumerState<FeedbackCard> createState() => _FeedbackCardState();
@@ -86,6 +84,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "This is single feedback    ======================     ${widget.singleFeedback}");
+
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
       return Container(); // Return empty container if data is null
@@ -96,6 +97,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
     final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
+    print(
+        "This is single feedback🎇    ======================     ${widget.singleFeedback['airline']}");
+
+    print(
+        "This is single feedback🎎    ======================     ${widget.singleFeedback['from'] ?? widget.singleFeedback['airport']}");
 
     return SizedBox(
       child: Column(
@@ -153,7 +159,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               SizedBox(width: 6),
               Expanded(
                 child: Text(
-                    '${widget.singleFeedback['airline']['name'].toString().split(' ')[0]}, ${widget.singleFeedback['classTravel']}',
+                    '${widget.singleFeedback['airline']['name'].toString().length > 13 ? '${widget.singleFeedback['airline']['name'].toString().substring(0, 13)}..' : widget.singleFeedback['airline']['name']}, ${widget.singleFeedback['classTravel']}',
                     style: AppStyles.textStyle_14_600),
               )
             ],
@@ -167,7 +173,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                          '${widget.singleFeedback['from']['name']} -> ${widget.singleFeedback['to']['name']}',
+                          '${widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city']}',
                           style: AppStyles.textStyle_14_600),
                     ),
                   ],
@@ -178,7 +184,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         style: AppStyles.textStyle_14_400_littleGrey),
                     SizedBox(width: 6),
                     Expanded(
-                      child: Text('${widget.singleFeedback['airport']['name']}',
+                      child: Text('${widget.singleFeedback['airport']['city']}',
                           style: AppStyles.textStyle_14_600),
                     ),
                   ],
@@ -294,7 +300,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
-                  height: widget.thumbnail_Height,
+                  height: widget.thumbnailHeight,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/default.png'),
@@ -313,7 +319,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
-          ),  
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -1,4 +1,4 @@
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
@@ -106,9 +106,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   Future<void> fetchLeaderboardData() async {
     final reviewsController = GetReviewsAirlineController();
-    final airportController = AirportReviewController();
+    final airportController = GetReviewAirportController();
     final futures = await Future.wait([
-      reviewsController.getReviews(),
+      reviewsController.getAirlineReviews(),
       airlineController.getAirlineAirport(),
       airlineScoreController.getAirlineScore(),
       airportScoreController.getAirportScore(),
@@ -683,7 +683,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                             borderRadius: BorderRadius.circular(
                                                 8), // Adjust the border radius as needed
                                             child: FeedbackCard(
-                                              thumbnail_Height: 189,
+                                              thumbnailHeight: 189,
                                               singleFeedback: singleFeedback,
                                             ),
                                           ),

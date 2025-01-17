@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:airline_app/controller/airport_review_controller.dart';
+import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
@@ -33,7 +33,8 @@ class QuestionThirdScreenForAirport extends ConsumerStatefulWidget {
 class _QuestionThirdScreenForAirportState
     extends ConsumerState<QuestionThirdScreenForAirport> {
   final List<File> _image = [];
-  final AirportReviewController _reviewController = AirportReviewController();
+  final GetReviewAirportController _reviewController =
+      GetReviewAirportController();
   final TextEditingController _commentController = TextEditingController();
   final BoardingPassController _boardingPassController =
       BoardingPassController();

@@ -82,7 +82,7 @@ class __InputCardState extends State<_InputCard> {
     });
 
     // Reset the state after the animation duration
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds:200), () {
       setState(() {
         _isClicked = false;
       });

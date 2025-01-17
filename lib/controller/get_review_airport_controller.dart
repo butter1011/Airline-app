@@ -3,7 +3,7 @@ import 'package:airline_app/models/airport_review_model.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:http/http.dart' as http;
 
-class AirportReviewController {
+class GetReviewAirportController {
   Future<Map<String, dynamic>> saveAirportReview(
       AirportReviewModel review) async {
     try {
@@ -43,7 +43,8 @@ class AirportReviewController {
       return {'success': false, 'message': error.toString()};
     }
   }
-    Future<Map<String, dynamic>> increaseUserPoints(
+
+  Future<Map<String, dynamic>> increaseUserPoints(
       String userId, int pointsToAdd) async {
     try {
       final response = await http.post(
