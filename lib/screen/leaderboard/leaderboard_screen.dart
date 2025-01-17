@@ -21,7 +21,6 @@ import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 
 final selectedEmojiNumberProvider =
@@ -114,16 +113,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Future<void> fetchLeaderboardData() async {
     if (!mounted) return;
 
-    final reviewsController = GetReviewsAirlineController();
-    final airportController = AirportReviewController();
+    final airlineReviewController = GetReviewAirlineController();
+    final airportReviewController = GetReviewAirportController();
 
     try {
       final futures = await Future.wait([
-        reviewsController.getReviews(),
+        airlineReviewController.getAirlineReviews(),
         airlineController.getAirlineAirport(),
         airlineScoreController.getAirlineScore(),
         airportScoreController.getAirportScore(),
-        airportController.getAirportReviews(),
+        airportReviewController.getAirportReviews(),
       ]);
 
       if (!mounted) return;
