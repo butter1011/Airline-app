@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:airline_app/provider/button_expand_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
+import 'package:airline_app/screen/leaderboard/widgets/category_buttons_widget.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
-
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
@@ -258,7 +256,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     SizedBox(
                       height: 12,
                     ),
-                    CategoryButtons(
+                    CategoryButtonsWidget(
                       isAirline: isAirline,
                       airportData: args,
                     ),
@@ -375,131 +373,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
           )
         ],
       ),
-    );
-  }
-}
-
-class CategoryButtons extends ConsumerWidget {
-  final bool isAirline;
-  final Map airportData;
-
-  const CategoryButtons(
-      {super.key, required this.isAirline, required this.airportData});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isExpanded = ref.watch(buttonExpandNotifierProvider);
-    Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
-      return Expanded(
-        child: CategoryRatingOptions(
-          iconUrl: iconUrl,
-          label: label,
-          badgeScore: badgeScore,
-        ),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_boarding.png',
-                        'Boarding and\nArrival Experience',
-                        airportData['departureArrival'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_access.png',
-                        'Accessibility',
-                        airportData['accessibility'].round().toString()),
-                const SizedBox(width: 16),
-                isAirline
-                    ? buildCategoryRow('assets/icons/review_icon_comfort.png',
-                        'Comfort', airportData['comfort'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_wait.png',
-                        'Wait Times',
-                        airportData['waitTimes'].round().toString()),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_cleanliness.png',
-                        'Cleanliness',
-                        airportData['cleanliness'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_help.png',
-                        'Helpfulness/Ease of Travel',
-                        airportData['helpfulness'].round().toString()),
-                const SizedBox(width: 16),
-                isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_onboard.png',
-                        'Onboard Service',
-                        airportData['onboardService'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_ambience.png',
-                        'Ambience/Comfort',
-                        airportData['ambienceComfort'].round().toString()),
-              ],
-            ),
-            if (isExpanded) ...[
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  isAirline
-                      ? buildCategoryRow(
-                          'assets/icons/review_icon_food.png',
-                          'Food & Beverage',
-                          airportData['foodBeverage'].round().toString())
-                      : buildCategoryRow(
-                          'assets/icons/review_icon_food.png',
-                          'Food & Beverage and Shopping',
-                          airportData['foodBeverage'].round().toString()),
-                  const SizedBox(width: 16),
-                  isAirline
-                      ? buildCategoryRow(
-                          'assets/icons/review_icon_entertainment.png',
-                          'In-Flight\nEntertainment',
-                          airportData['entertainmentWifi'].round().toString())
-                      : buildCategoryRow(
-                          'assets/icons/review_icon_entertainment.png',
-                          'Amenities and Facilities',
-                          airportData['amenities'].round().toString()),
-                ],
-              ),
-            ],
-            const SizedBox(height: 19),
-            InkWell(
-              onTap: () => ref
-                  .read(buttonExpandNotifierProvider.notifier)
-                  .toggleButton(isExpanded),
-              child: IntrinsicWidth(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                        isExpanded
-                            ? "Show less categories"
-                            : "Show more categories",
-                        style:
-                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
-                    const SizedBox(width: 8),
-                    Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ],
     );
   }
 }
