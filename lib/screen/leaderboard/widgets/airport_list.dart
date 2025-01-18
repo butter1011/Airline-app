@@ -195,7 +195,9 @@ class AirportList extends ConsumerWidget {
                                 selecedFilterButton == "Airline" ||
                                 selecedFilterButton == "Airport")
                             ? 'Rate of Growth'
-                            : selecedFilterButton,
+                            : selecedFilterButton == "Entertainment & WiFi"
+                                ? "En.. & WiFi"
+                                : selecedFilterButton,
                         style: AppStyles.textStyle_14_600.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
