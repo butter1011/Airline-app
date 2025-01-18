@@ -5,7 +5,6 @@ import 'package:airline_app/screen/reviewsubmission/widgets/custom_dropdown_butt
 import 'package:airline_app/screen/reviewsubmission/widgets/toggle_btn.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

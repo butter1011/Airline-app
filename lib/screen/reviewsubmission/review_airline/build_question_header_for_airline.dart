@@ -22,13 +22,12 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (backgorundImage.isNotEmpty)
-          Positioned.fill(
-            child: Image.asset(
-              "assets/images/airline.png",
-              fit: BoxFit.cover,
-            ),
+        Positioned.fill(
+          child: Image.asset(
+            "assets/images/airline.png",
+            fit: BoxFit.cover,
           ),
+        ),
         Container(
           color:
               Color(0xff181818).withOpacity(0.75), // Black overlay with opacity

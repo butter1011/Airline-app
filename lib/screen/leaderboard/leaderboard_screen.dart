@@ -21,7 +21,6 @@ import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 
 final selectedEmojiNumberProvider =
@@ -101,60 +100,84 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void dispose() {
     _searchController.dispose();
     _channel.sink.close();
+    // Cancel any pending operations before disposing
+    if (mounted) {
+      ref.invalidate(reviewsAirlineProvider);
+      ref.invalidate(airlineAirportProvider);
+      ref.invalidate(filterButtonProvider);
+      ref.invalidate(liveFeedProvider);
+    }
     super.dispose();
   }
 
   Future<void> fetchLeaderboardData() async {
-    final reviewsController = GetReviewAirlineController();
-    final airportController = GetReviewAirportController();
-    final futures = await Future.wait([
-      reviewsController.getAirlineReviews(),
-      airlineController.getAirlineAirport(),
-      airlineScoreController.getAirlineScore(),
-      airportScoreController.getAirportScore(),
-      airportController.getAirportReviews(),
-    ]);
+    if (!mounted) return;
 
-    if (futures[0]['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(futures[0]['data']);
-    }
-    if (futures[1]['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
-    }
-    if (futures[2]['success']) {
-      ref
-          .read(airlineAirportProvider.notifier)
-          .setAirlineScoreData(futures[2]['data']['data']);
-    }
-    if (futures[3]['success']) {
-      ref
-          .read(airlineAirportProvider.notifier)
-          .setAirportScoreData(futures[3]['data']['data']);
-    }
-    if (futures[4]['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(futures[4]['data']);
-    }
+    final airlineReviewController = GetReviewAirlineController();
+    final airportReviewController = GetReviewAirportController();
 
-    ref
-        .read(airlineAirportProvider.notifier)
-        .getFilteredList("All", null, null, null);
+    try {
+      final futures = await Future.wait([
+        airlineReviewController.getAirlineReviews(),
+        airlineController.getAirlineAirport(),
+        airlineScoreController.getAirlineScore(),
+        airportScoreController.getAirportScore(),
+        airportReviewController.getAirportReviews(),
+      ]);
 
-    final ratingList = ref.watch(reviewsAirlineProvider).reviews;
-    final UserId = ref.watch(userDataProvider)?['userData']['_id'];
-    for (var ratingreview in ratingList) {
-      ref
-          .read(selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
-          .state = ratingreview['rating']?.length ?? 0;
-      if (ratingreview['reviewer']?['_id'] == UserId &&
-          ratingreview['rating'] != null) {
+      if (!mounted) return;
+
+      if (futures[0]['success']) {
+        print('💦💤${futures[0]['data']}');
         ref
-            .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
-            .state = ratingreview['rating'][UserId] ?? 0;
+            .read(reviewsAirlineProvider.notifier)
+            .setReviewData(futures[0]['data']);
       }
+      if (futures[1]['success']) {
+        ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
+      }
+      if (futures[2]['success']) {
+        ref
+            .read(airlineAirportProvider.notifier)
+            .setAirlineScoreData(futures[2]['data']['data']);
+      }
+      if (futures[3]['success']) {
+        ref
+            .read(airlineAirportProvider.notifier)
+            .setAirportScoreData(futures[3]['data']['data']);
+      }
+      if (futures[4]['success']) {
+        print('💦💤${futures[4]['data']}');
+        ref
+            .read(reviewsAirlineProvider.notifier)
+            .setReviewData(futures[4]['data']);
+      }
+
+      if (!mounted) return;
+
+      ref
+          .read(airlineAirportProvider.notifier)
+          .getFilteredList("All", null, null, null);
+
+      final ratingList = ref.read(reviewsAirlineProvider).reviews;
+
+      final UserId = ref.read(userDataProvider)?['userData']['_id'];
+
+      for (var ratingreview in ratingList) {
+        if (!mounted) return;
+        ref
+            .read(
+                selectedEmojiNumberProvider(ratingreview['_id'] ?? '').notifier)
+            .state = ratingreview['rating']?.length ?? 0;
+        if (ratingreview['reviewer']?['_id'] == UserId &&
+            ratingreview['rating'] != null) {
+          ref
+              .read(selectedEmojiProvider(ratingreview['_id'] ?? '').notifier)
+              .state = ratingreview['rating'][UserId] ?? 0;
+        }
+      }
+    } catch (e) {
+      print('Error fetching leaderboard data: $e');
     }
   }
 
@@ -380,253 +403,253 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                     });
                                   },
                                 ),
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('Live Feed'),
-                                  style: AppStyles.textStyle_16_600.copyWith(
-                                    color: Color(0xff38433E),
-                                  ),
-                                ),
-                                SizedBox(height: 17),
-                                Container(
-                                  height: 270,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[50],
-                                    borderRadius: BorderRadius.circular(12),
-                                    border:
-                                        Border.all(color: Colors.grey[200]!),
-                                  ),
-                                  child: Consumer(
-                                    builder: (context, ref, child) {
-                                      final liveFeedItems =
-                                          ref.watch(liveFeedProvider);
-                                      return liveFeedItems.isEmpty
-                                          ? Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.feed_outlined,
-                                                    size: 32,
-                                                    color: Colors.grey[400],
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Text(
-                                                    'No live feed data available',
-                                                    style: AppStyles
-                                                        .textStyle_14_400
-                                                        .copyWith(
-                                                      color: Colors.grey[600],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          : AnimatedList(
-                                              key: GlobalKey<
-                                                  AnimatedListState>(),
-                                              initialItemCount:
-                                                  liveFeedItems.length,
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 8),
-                                              itemBuilder:
-                                                  (context, index, animation) {
-                                                final item =
-                                                    liveFeedItems[index];
-                                                return SlideTransition(
-                                                  position: animation.drive(
-                                                    Tween<Offset>(
-                                                      begin: Offset(0.0,
-                                                          -1.0), // Slide from top
-                                                      end: Offset.zero,
-                                                    ).chain(CurveTween(
-                                                        curve: Curves.easeOut)),
-                                                  ),
-                                                  child: FadeTransition(
-                                                    opacity: animation.drive(
-                                                      Tween<double>(
-                                                              begin: 0.0,
-                                                              end: 1.0)
-                                                          .chain(CurveTween(
-                                                              curve: Curves
-                                                                  .easeOut)),
-                                                    ),
-                                                    child: Container(
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 12,
-                                                              vertical: 4),
-                                                      padding:
-                                                          EdgeInsets.all(12),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.05),
-                                                            blurRadius: 4,
-                                                            offset:
-                                                                Offset(0, 2),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: item.type ==
-                                                                      'airline'
-                                                                  ? Colors
-                                                                      .blue[50]
-                                                                  : Colors
-                                                                      .green[50],
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8),
-                                                            ),
-                                                            child: Text(
-                                                              item.type ==
-                                                                      'airline'
-                                                                  ? '✈️'
-                                                                  : '🛫',
-                                                              style: TextStyle(
-                                                                  fontSize: 16),
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 12),
-                                                          Expanded(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Text(
-                                                                            item.userName,
-                                                                            style:
-                                                                                AppStyles.textStyle_14_600.copyWith(
-                                                                              color: Colors.black87,
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            child:
-                                                                                Text(
-                                                                              ' rated ${item.entityName}',
-                                                                              style: AppStyles.textStyle_14_400.copyWith(
-                                                                                color: Colors.black54,
-                                                                              ),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                      DateTime.now().difference(item.timeStamp).inMinutes <
-                                                                              60
-                                                                          ? '${DateTime.now().difference(item.timeStamp).inMinutes}m ago'
-                                                                          : DateTime.now().difference(item.timeStamp).inHours < 24
-                                                                              ? '${DateTime.now().difference(item.timeStamp).inHours}h ago'
-                                                                              : '${DateTime.now().difference(item.timeStamp).inDays}d ago',
-                                                                      style: AppStyles
-                                                                          .textStyle_12_600
-                                                                          .copyWith(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 4),
-                                                                Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .symmetric(
-                                                                        horizontal:
-                                                                            8,
-                                                                        vertical:
-                                                                            2,
-                                                                      ),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .amber[100],
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12),
-                                                                      ),
-                                                                      child:
-                                                                          Text(
-                                                                        '${item.rating}/10',
-                                                                        style: AppStyles
-                                                                            .textStyle_14_600
-                                                                            .copyWith(
-                                                                          color:
-                                                                              Colors.amber[900],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    if (item
-                                                                        .comment
-                                                                        .isNotEmpty) ...[
-                                                                      SizedBox(
-                                                                          width:
-                                                                              8),
-                                                                      Expanded(
-                                                                        child:
-                                                                            Text(
-                                                                          '"${item.comment}"',
-                                                                          style: AppStyles
-                                                                              .textStyle_14_400
-                                                                              .copyWith(
-                                                                            color:
-                                                                                Colors.black54,
-                                                                            fontStyle:
-                                                                                FontStyle.italic,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                    },
-                                  ),
-                                ),
+                                // Text(
+                                //   AppLocalizations.of(context)
+                                //       .translate('Live Feed'),
+                                //   style: AppStyles.textStyle_16_600.copyWith(
+                                //     color: Color(0xff38433E),
+                                //   ),
+                                // ),
+                                // SizedBox(height: 17),
+                                // Container(
+                                //   height: 270,
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.grey[50],
+                                //     borderRadius: BorderRadius.circular(12),
+                                //     border:
+                                //         Border.all(color: Colors.grey[200]!),
+                                //   ),
+                                //   child: Consumer(
+                                //     builder: (context, ref, child) {
+                                //       final liveFeedItems =
+                                //           ref.watch(liveFeedProvider);
+                                //       return liveFeedItems.isEmpty
+                                //           ? Center(
+                                //               child: Column(
+                                //                 mainAxisAlignment:
+                                //                     MainAxisAlignment.center,
+                                //                 children: [
+                                //                   Icon(
+                                //                     Icons.feed_outlined,
+                                //                     size: 32,
+                                //                     color: Colors.grey[400],
+                                //                   ),
+                                //                   SizedBox(height: 8),
+                                //                   Text(
+                                //                     'No live feed data available',
+                                //                     style: AppStyles
+                                //                         .textStyle_14_400
+                                //                         .copyWith(
+                                //                       color: Colors.grey[600],
+                                //                     ),
+                                //                   ),
+                                //                 ],
+                                //               ),
+                                //             )
+                                //           : AnimatedList(
+                                //               key: GlobalKey<
+                                //                   AnimatedListState>(),
+                                //               initialItemCount:
+                                //                   liveFeedItems.length,
+                                //               padding: EdgeInsets.symmetric(
+                                //                   vertical: 8),
+                                //               itemBuilder:
+                                //                   (context, index, animation) {
+                                //                 final item =
+                                //                     liveFeedItems[index];
+                                //                 return SlideTransition(
+                                //                   position: animation.drive(
+                                //                     Tween<Offset>(
+                                //                       begin: Offset(0.0,
+                                //                           -1.0), // Slide from top
+                                //                       end: Offset.zero,
+                                //                     ).chain(CurveTween(
+                                //                         curve: Curves.easeOut)),
+                                //                   ),
+                                //                   child: FadeTransition(
+                                //                     opacity: animation.drive(
+                                //                       Tween<double>(
+                                //                               begin: 0.0,
+                                //                               end: 1.0)
+                                //                           .chain(CurveTween(
+                                //                               curve: Curves
+                                //                                   .easeOut)),
+                                //                     ),
+                                //                     child: Container(
+                                //                       margin:
+                                //                           EdgeInsets.symmetric(
+                                //                               horizontal: 12,
+                                //                               vertical: 4),
+                                //                       padding:
+                                //                           EdgeInsets.all(12),
+                                //                       decoration: BoxDecoration(
+                                //                         color: Colors.white,
+                                //                         borderRadius:
+                                //                             BorderRadius
+                                //                                 .circular(8),
+                                //                         boxShadow: [
+                                //                           BoxShadow(
+                                //                             color: Colors.black
+                                //                                 .withOpacity(
+                                //                                     0.05),
+                                //                             blurRadius: 4,
+                                //                             offset:
+                                //                                 Offset(0, 2),
+                                //                           ),
+                                //                         ],
+                                //                       ),
+                                //                       child: Row(
+                                //                         crossAxisAlignment:
+                                //                             CrossAxisAlignment
+                                //                                 .start,
+                                //                         children: [
+                                //                           Container(
+                                //                             padding:
+                                //                                 EdgeInsets.all(
+                                //                                     8),
+                                //                             decoration:
+                                //                                 BoxDecoration(
+                                //                               color: item.type ==
+                                //                                       'airline'
+                                //                                   ? Colors
+                                //                                       .blue[50]
+                                //                                   : Colors
+                                //                                       .green[50],
+                                //                               borderRadius:
+                                //                                   BorderRadius
+                                //                                       .circular(
+                                //                                           8),
+                                //                             ),
+                                //                             child: Text(
+                                //                               item.type ==
+                                //                                       'airline'
+                                //                                   ? '✈️'
+                                //                                   : '🛫',
+                                //                               style: TextStyle(
+                                //                                   fontSize: 16),
+                                //                             ),
+                                //                           ),
+                                //                           SizedBox(width: 12),
+                                //                           Expanded(
+                                //                             child: Column(
+                                //                               crossAxisAlignment:
+                                //                                   CrossAxisAlignment
+                                //                                       .start,
+                                //                               children: [
+                                //                                 Row(
+                                //                                   mainAxisAlignment:
+                                //                                       MainAxisAlignment
+                                //                                           .spaceBetween,
+                                //                                   children: [
+                                //                                     Expanded(
+                                //                                       child:
+                                //                                           Row(
+                                //                                         children: [
+                                //                                           Text(
+                                //                                             item.userName,
+                                //                                             style:
+                                //                                                 AppStyles.textStyle_14_600.copyWith(
+                                //                                               color: Colors.black87,
+                                //                                             ),
+                                //                                           ),
+                                //                                           Expanded(
+                                //                                             child:
+                                //                                                 Text(
+                                //                                               ' rated ${item.entityName}',
+                                //                                               style: AppStyles.textStyle_14_400.copyWith(
+                                //                                                 color: Colors.black54,
+                                //                                               ),
+                                //                                               overflow: TextOverflow.ellipsis,
+                                //                                             ),
+                                //                                           ),
+                                //                                         ],
+                                //                                       ),
+                                //                                     ),
+                                //                                     Text(
+                                //                                       DateTime.now().difference(item.timeStamp).inMinutes <
+                                //                                               60
+                                //                                           ? '${DateTime.now().difference(item.timeStamp).inMinutes}m ago'
+                                //                                           : DateTime.now().difference(item.timeStamp).inHours < 24
+                                //                                               ? '${DateTime.now().difference(item.timeStamp).inHours}h ago'
+                                //                                               : '${DateTime.now().difference(item.timeStamp).inDays}d ago',
+                                //                                       style: AppStyles
+                                //                                           .textStyle_12_600
+                                //                                           .copyWith(
+                                //                                         color: Colors
+                                //                                             .grey,
+                                //                                       ),
+                                //                                     ),
+                                //                                   ],
+                                //                                 ),
+                                //                                 SizedBox(
+                                //                                     height: 4),
+                                //                                 Row(
+                                //                                   children: [
+                                //                                     Container(
+                                //                                       padding:
+                                //                                           EdgeInsets
+                                //                                               .symmetric(
+                                //                                         horizontal:
+                                //                                             8,
+                                //                                         vertical:
+                                //                                             2,
+                                //                                       ),
+                                //                                       decoration:
+                                //                                           BoxDecoration(
+                                //                                         color: Colors
+                                //                                             .amber[100],
+                                //                                         borderRadius:
+                                //                                             BorderRadius.circular(12),
+                                //                                       ),
+                                //                                       child:
+                                //                                           Text(
+                                //                                         '${item.rating}/10',
+                                //                                         style: AppStyles
+                                //                                             .textStyle_14_600
+                                //                                             .copyWith(
+                                //                                           color:
+                                //                                               Colors.amber[900],
+                                //                                         ),
+                                //                                       ),
+                                //                                     ),
+                                //                                     if (item
+                                //                                         .comment
+                                //                                         .isNotEmpty) ...[
+                                //                                       SizedBox(
+                                //                                           width:
+                                //                                               8),
+                                //                                       Expanded(
+                                //                                         child:
+                                //                                             Text(
+                                //                                           '"${item.comment}"',
+                                //                                           style: AppStyles
+                                //                                               .textStyle_14_400
+                                //                                               .copyWith(
+                                //                                             color:
+                                //                                                 Colors.black54,
+                                //                                             fontStyle:
+                                //                                                 FontStyle.italic,
+                                //                                           ),
+                                //                                           overflow:
+                                //                                               TextOverflow.ellipsis,
+                                //                                         ),
+                                //                                       ),
+                                //                                     ],
+                                //                                   ],
+                                //                                 ),
+                                //                               ],
+                                //                             ),
+                                //                           ),
+                                //                         ],
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                 );
+                                //               },
+                                //             );
+                                //     },
+                                //   ),
+                                // ),
                                 SizedBox(height: 28),
                                 Text(
                                   AppLocalizations.of(context)

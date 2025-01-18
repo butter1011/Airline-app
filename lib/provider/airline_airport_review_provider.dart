@@ -41,8 +41,17 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   ReviewsAirlineNotifier() : super(const ReviewState());
 
   void setReviewData(Map<String, dynamic> value) {
-    final newData = value["data"] as List;
-    final newItems = newData
+    final dataList = value["data"] as List;
+
+    // Check if any item in the list has 'from' field
+    bool hasFromField = dataList.any(
+        (item) => item is Map<String, dynamic> && item.containsKey('from'));
+
+    if (hasFromField) {
+      state = const ReviewState(); // Reset state if 'from' exists
+    }
+
+    final newItems = dataList
         .where((newItem) {
           if (newItem is! Map<String, dynamic>) return false;
           return !state.reviews
