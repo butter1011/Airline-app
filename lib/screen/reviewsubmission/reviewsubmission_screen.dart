@@ -17,7 +17,6 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:file_picker/file_picker.dart';
 
 class ReviewsubmissionScreen extends ConsumerStatefulWidget {
   const ReviewsubmissionScreen({super.key});
@@ -65,7 +64,6 @@ class _ReviewsubmissionScreenState
       selectedType = type;
     });
   }
-
 
   Widget _buildEmptyState() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -119,9 +117,8 @@ class _ReviewsubmissionScreenState
         const SizedBox(height: 26),
         const Divider(color: Colors.black, thickness: 2),
       ],
-    );  }
-
-
+    );
+  }
 
   Widget _buildCardWidget(BoardingPass singleBoardingPass) {
     final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
