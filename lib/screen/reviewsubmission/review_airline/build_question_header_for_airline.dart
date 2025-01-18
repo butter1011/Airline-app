@@ -82,8 +82,10 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                 height: 4,
               ),
               Text(
-                '$from > $to',
+                '${from.length > 20 ? '${from.substring(0, 20)}...' : from} > ${to.length > 20 ? '${to.substring(0, 20)}...' : to}',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               Spacer(), // This will push the following container to the bottom
               Container(

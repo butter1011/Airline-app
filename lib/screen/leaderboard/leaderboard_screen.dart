@@ -4,6 +4,7 @@ import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
@@ -266,486 +267,488 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         bottomNavigationBar: BottomNavBar(
           currentIndex: 0,
         ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 44,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 271,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      border: Border.all(width: 2, color: Colors.black),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            offset: Offset(2, 2))
-                      ],
-                    ),
-                    child: Center(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            _searchQuery = value.toLowerCase();
-                          });
-                          ref
-                              .read(airlineAirportProvider.notifier)
-                              .getFilteredList(
-                                  filterType, _searchQuery, null, null);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
-                              fontFamily: 'Clash Grotesk', fontSize: 14),
-                          contentPadding: EdgeInsets.all(0),
-                          prefixIcon: Icon(Icons.search),
-                          border: InputBorder.none,
+        body: KeyboardDismissWidget(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 44,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 271,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        border: Border.all(width: 2, color: Colors.black),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              offset: Offset(2, 2))
+                        ],
+                      ),
+                      child: Center(
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              _searchQuery = value.toLowerCase();
+                            });
+                            ref
+                                .read(airlineAirportProvider.notifier)
+                                .getFilteredList(
+                                    filterType, _searchQuery, null, null);
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontFamily: 'Clash Grotesk', fontSize: 14),
+                            contentPadding: EdgeInsets.all(0),
+                            prefixIcon: Icon(Icons.search),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.filterscreen);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: Image.asset('assets/icons/setting.png'),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.filterscreen);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(width: 2, color: Colors.black),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset('assets/icons/setting.png'),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate('Filter by category'),
-                    style: AppStyles.textStyle_15_500
-                        .copyWith(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: buttonStates.keys.map((buttonText) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: MainButton(
-                      text: buttonText,
-                      isSelected: buttonText == selectedFilterButton,
-                      onTap: () => toggleButton(buttonText),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)
+                          .translate('Filter by category'),
+                      style: AppStyles.textStyle_15_500
+                          .copyWith(color: Colors.black),
                     ),
-                  );
-                }).toList(),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 14),
-            Container(
-              height: 5,
-              decoration: BoxDecoration(color: AppStyles.littleBlackColor),
-            ),
-            Expanded(
-              child: isLeaderboardLoading
-                  ? Center(
-                      child: LoadingWidget(),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      'Trending Airlines & Airports'),
-                                  style: AppStyles.textStyle_16_600.copyWith(
-                                    color: Color(0xff38433E),
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: buttonStates.keys.map((buttonText) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: MainButton(
+                        text: buttonText,
+                        isSelected: buttonText == selectedFilterButton,
+                        onTap: () => toggleButton(buttonText),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 14),
+              Container(
+                height: 5,
+                decoration: BoxDecoration(color: AppStyles.littleBlackColor),
+              ),
+              Expanded(
+                child: isLeaderboardLoading
+                    ? Center(
+                        child: LoadingWidget(),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context).translate(
+                                        'Trending Airlines & Airports'),
+                                    style: AppStyles.textStyle_16_600.copyWith(
+                                      color: Color(0xff38433E),
+                                    ),
                                   ),
-                                ),
-                                _AirportListSection(
-                                  leaderBoardList: ref
-                                      .watch(airlineAirportProvider)
-                                      .filteredList,
-                                  expandedItems: expandedItems,
-                                  onExpand: () {
-                                    setState(() {
-                                      expandedItems += 5;
-                                    });
-                                  },
-                                ),
-                                // Text(
-                                //   AppLocalizations.of(context)
-                                //       .translate('Live Feed'),
-                                //   style: AppStyles.textStyle_16_600.copyWith(
-                                //     color: Color(0xff38433E),
-                                //   ),
-                                // ),
-                                // SizedBox(height: 17),
-                                // Container(
-                                //   height: 270,
-                                //   decoration: BoxDecoration(
-                                //     color: Colors.grey[50],
-                                //     borderRadius: BorderRadius.circular(12),
-                                //     border:
-                                //         Border.all(color: Colors.grey[200]!),
-                                //   ),
-                                //   child: Consumer(
-                                //     builder: (context, ref, child) {
-                                //       final liveFeedItems =
-                                //           ref.watch(liveFeedProvider);
-                                //       return liveFeedItems.isEmpty
-                                //           ? Center(
-                                //               child: Column(
-                                //                 mainAxisAlignment:
-                                //                     MainAxisAlignment.center,
-                                //                 children: [
-                                //                   Icon(
-                                //                     Icons.feed_outlined,
-                                //                     size: 32,
-                                //                     color: Colors.grey[400],
-                                //                   ),
-                                //                   SizedBox(height: 8),
-                                //                   Text(
-                                //                     'No live feed data available',
-                                //                     style: AppStyles
-                                //                         .textStyle_14_400
-                                //                         .copyWith(
-                                //                       color: Colors.grey[600],
-                                //                     ),
-                                //                   ),
-                                //                 ],
-                                //               ),
-                                //             )
-                                //           : AnimatedList(
-                                //               key: GlobalKey<
-                                //                   AnimatedListState>(),
-                                //               initialItemCount:
-                                //                   liveFeedItems.length,
-                                //               padding: EdgeInsets.symmetric(
-                                //                   vertical: 8),
-                                //               itemBuilder:
-                                //                   (context, index, animation) {
-                                //                 final item =
-                                //                     liveFeedItems[index];
-                                //                 return SlideTransition(
-                                //                   position: animation.drive(
-                                //                     Tween<Offset>(
-                                //                       begin: Offset(0.0,
-                                //                           -1.0), // Slide from top
-                                //                       end: Offset.zero,
-                                //                     ).chain(CurveTween(
-                                //                         curve: Curves.easeOut)),
-                                //                   ),
-                                //                   child: FadeTransition(
-                                //                     opacity: animation.drive(
-                                //                       Tween<double>(
-                                //                               begin: 0.0,
-                                //                               end: 1.0)
-                                //                           .chain(CurveTween(
-                                //                               curve: Curves
-                                //                                   .easeOut)),
-                                //                     ),
-                                //                     child: Container(
-                                //                       margin:
-                                //                           EdgeInsets.symmetric(
-                                //                               horizontal: 12,
-                                //                               vertical: 4),
-                                //                       padding:
-                                //                           EdgeInsets.all(12),
-                                //                       decoration: BoxDecoration(
-                                //                         color: Colors.white,
-                                //                         borderRadius:
-                                //                             BorderRadius
-                                //                                 .circular(8),
-                                //                         boxShadow: [
-                                //                           BoxShadow(
-                                //                             color: Colors.black
-                                //                                 .withOpacity(
-                                //                                     0.05),
-                                //                             blurRadius: 4,
-                                //                             offset:
-                                //                                 Offset(0, 2),
-                                //                           ),
-                                //                         ],
-                                //                       ),
-                                //                       child: Row(
-                                //                         crossAxisAlignment:
-                                //                             CrossAxisAlignment
-                                //                                 .start,
-                                //                         children: [
-                                //                           Container(
-                                //                             padding:
-                                //                                 EdgeInsets.all(
-                                //                                     8),
-                                //                             decoration:
-                                //                                 BoxDecoration(
-                                //                               color: item.type ==
-                                //                                       'airline'
-                                //                                   ? Colors
-                                //                                       .blue[50]
-                                //                                   : Colors
-                                //                                       .green[50],
-                                //                               borderRadius:
-                                //                                   BorderRadius
-                                //                                       .circular(
-                                //                                           8),
-                                //                             ),
-                                //                             child: Text(
-                                //                               item.type ==
-                                //                                       'airline'
-                                //                                   ? '✈️'
-                                //                                   : '🛫',
-                                //                               style: TextStyle(
-                                //                                   fontSize: 16),
-                                //                             ),
-                                //                           ),
-                                //                           SizedBox(width: 12),
-                                //                           Expanded(
-                                //                             child: Column(
-                                //                               crossAxisAlignment:
-                                //                                   CrossAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 Row(
-                                //                                   mainAxisAlignment:
-                                //                                       MainAxisAlignment
-                                //                                           .spaceBetween,
-                                //                                   children: [
-                                //                                     Expanded(
-                                //                                       child:
-                                //                                           Row(
-                                //                                         children: [
-                                //                                           Text(
-                                //                                             item.userName,
-                                //                                             style:
-                                //                                                 AppStyles.textStyle_14_600.copyWith(
-                                //                                               color: Colors.black87,
-                                //                                             ),
-                                //                                           ),
-                                //                                           Expanded(
-                                //                                             child:
-                                //                                                 Text(
-                                //                                               ' rated ${item.entityName}',
-                                //                                               style: AppStyles.textStyle_14_400.copyWith(
-                                //                                                 color: Colors.black54,
-                                //                                               ),
-                                //                                               overflow: TextOverflow.ellipsis,
-                                //                                             ),
-                                //                                           ),
-                                //                                         ],
-                                //                                       ),
-                                //                                     ),
-                                //                                     Text(
-                                //                                       DateTime.now().difference(item.timeStamp).inMinutes <
-                                //                                               60
-                                //                                           ? '${DateTime.now().difference(item.timeStamp).inMinutes}m ago'
-                                //                                           : DateTime.now().difference(item.timeStamp).inHours < 24
-                                //                                               ? '${DateTime.now().difference(item.timeStamp).inHours}h ago'
-                                //                                               : '${DateTime.now().difference(item.timeStamp).inDays}d ago',
-                                //                                       style: AppStyles
-                                //                                           .textStyle_12_600
-                                //                                           .copyWith(
-                                //                                         color: Colors
-                                //                                             .grey,
-                                //                                       ),
-                                //                                     ),
-                                //                                   ],
-                                //                                 ),
-                                //                                 SizedBox(
-                                //                                     height: 4),
-                                //                                 Row(
-                                //                                   children: [
-                                //                                     Container(
-                                //                                       padding:
-                                //                                           EdgeInsets
-                                //                                               .symmetric(
-                                //                                         horizontal:
-                                //                                             8,
-                                //                                         vertical:
-                                //                                             2,
-                                //                                       ),
-                                //                                       decoration:
-                                //                                           BoxDecoration(
-                                //                                         color: Colors
-                                //                                             .amber[100],
-                                //                                         borderRadius:
-                                //                                             BorderRadius.circular(12),
-                                //                                       ),
-                                //                                       child:
-                                //                                           Text(
-                                //                                         '${item.rating}/10',
-                                //                                         style: AppStyles
-                                //                                             .textStyle_14_600
-                                //                                             .copyWith(
-                                //                                           color:
-                                //                                               Colors.amber[900],
-                                //                                         ),
-                                //                                       ),
-                                //                                     ),
-                                //                                     if (item
-                                //                                         .comment
-                                //                                         .isNotEmpty) ...[
-                                //                                       SizedBox(
-                                //                                           width:
-                                //                                               8),
-                                //                                       Expanded(
-                                //                                         child:
-                                //                                             Text(
-                                //                                           '"${item.comment}"',
-                                //                                           style: AppStyles
-                                //                                               .textStyle_14_400
-                                //                                               .copyWith(
-                                //                                             color:
-                                //                                                 Colors.black54,
-                                //                                             fontStyle:
-                                //                                                 FontStyle.italic,
-                                //                                           ),
-                                //                                           overflow:
-                                //                                               TextOverflow.ellipsis,
-                                //                                         ),
-                                //                                       ),
-                                //                                     ],
-                                //                                   ],
-                                //                                 ),
-                                //                               ],
-                                //                             ),
-                                //                           ),
-                                //                         ],
-                                //                       ),
-                                //                     ),
-                                //                   ),
-                                //                 );
-                                //               },
-                                //             );
-                                //     },
-                                //   ),
-                                // ),
-                                SizedBox(height: 28),
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('Trending Feedback'),
-                                  style: AppStyles.textStyle_16_600.copyWith(
-                                    color: Color(0xff38433E),
+                                  _AirportListSection(
+                                    leaderBoardList: ref
+                                        .watch(airlineAirportProvider)
+                                        .filteredList,
+                                    expandedItems: expandedItems,
+                                    onExpand: () {
+                                      setState(() {
+                                        expandedItems += 5;
+                                      });
+                                    },
                                   ),
-                                ),
-                                SizedBox(height: 17),
-                              ],
+                                  // Text(
+                                  //   AppLocalizations.of(context)
+                                  //       .translate('Live Feed'),
+                                  //   style: AppStyles.textStyle_16_600.copyWith(
+                                  //     color: Color(0xff38433E),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 17),
+                                  // Container(
+                                  //   height: 270,
+                                  //   decoration: BoxDecoration(
+                                  //     color: Colors.grey[50],
+                                  //     borderRadius: BorderRadius.circular(12),
+                                  //     border:
+                                  //         Border.all(color: Colors.grey[200]!),
+                                  //   ),
+                                  //   child: Consumer(
+                                  //     builder: (context, ref, child) {
+                                  //       final liveFeedItems =
+                                  //           ref.watch(liveFeedProvider);
+                                  //       return liveFeedItems.isEmpty
+                                  //           ? Center(
+                                  //               child: Column(
+                                  //                 mainAxisAlignment:
+                                  //                     MainAxisAlignment.center,
+                                  //                 children: [
+                                  //                   Icon(
+                                  //                     Icons.feed_outlined,
+                                  //                     size: 32,
+                                  //                     color: Colors.grey[400],
+                                  //                   ),
+                                  //                   SizedBox(height: 8),
+                                  //                   Text(
+                                  //                     'No live feed data available',
+                                  //                     style: AppStyles
+                                  //                         .textStyle_14_400
+                                  //                         .copyWith(
+                                  //                       color: Colors.grey[600],
+                                  //                     ),
+                                  //                   ),
+                                  //                 ],
+                                  //               ),
+                                  //             )
+                                  //           : AnimatedList(
+                                  //               key: GlobalKey<
+                                  //                   AnimatedListState>(),
+                                  //               initialItemCount:
+                                  //                   liveFeedItems.length,
+                                  //               padding: EdgeInsets.symmetric(
+                                  //                   vertical: 8),
+                                  //               itemBuilder:
+                                  //                   (context, index, animation) {
+                                  //                 final item =
+                                  //                     liveFeedItems[index];
+                                  //                 return SlideTransition(
+                                  //                   position: animation.drive(
+                                  //                     Tween<Offset>(
+                                  //                       begin: Offset(0.0,
+                                  //                           -1.0), // Slide from top
+                                  //                       end: Offset.zero,
+                                  //                     ).chain(CurveTween(
+                                  //                         curve: Curves.easeOut)),
+                                  //                   ),
+                                  //                   child: FadeTransition(
+                                  //                     opacity: animation.drive(
+                                  //                       Tween<double>(
+                                  //                               begin: 0.0,
+                                  //                               end: 1.0)
+                                  //                           .chain(CurveTween(
+                                  //                               curve: Curves
+                                  //                                   .easeOut)),
+                                  //                     ),
+                                  //                     child: Container(
+                                  //                       margin:
+                                  //                           EdgeInsets.symmetric(
+                                  //                               horizontal: 12,
+                                  //                               vertical: 4),
+                                  //                       padding:
+                                  //                           EdgeInsets.all(12),
+                                  //                       decoration: BoxDecoration(
+                                  //                         color: Colors.white,
+                                  //                         borderRadius:
+                                  //                             BorderRadius
+                                  //                                 .circular(8),
+                                  //                         boxShadow: [
+                                  //                           BoxShadow(
+                                  //                             color: Colors.black
+                                  //                                 .withOpacity(
+                                  //                                     0.05),
+                                  //                             blurRadius: 4,
+                                  //                             offset:
+                                  //                                 Offset(0, 2),
+                                  //                           ),
+                                  //                         ],
+                                  //                       ),
+                                  //                       child: Row(
+                                  //                         crossAxisAlignment:
+                                  //                             CrossAxisAlignment
+                                  //                                 .start,
+                                  //                         children: [
+                                  //                           Container(
+                                  //                             padding:
+                                  //                                 EdgeInsets.all(
+                                  //                                     8),
+                                  //                             decoration:
+                                  //                                 BoxDecoration(
+                                  //                               color: item.type ==
+                                  //                                       'airline'
+                                  //                                   ? Colors
+                                  //                                       .blue[50]
+                                  //                                   : Colors
+                                  //                                       .green[50],
+                                  //                               borderRadius:
+                                  //                                   BorderRadius
+                                  //                                       .circular(
+                                  //                                           8),
+                                  //                             ),
+                                  //                             child: Text(
+                                  //                               item.type ==
+                                  //                                       'airline'
+                                  //                                   ? '✈️'
+                                  //                                   : '🛫',
+                                  //                               style: TextStyle(
+                                  //                                   fontSize: 16),
+                                  //                             ),
+                                  //                           ),
+                                  //                           SizedBox(width: 12),
+                                  //                           Expanded(
+                                  //                             child: Column(
+                                  //                               crossAxisAlignment:
+                                  //                                   CrossAxisAlignment
+                                  //                                       .start,
+                                  //                               children: [
+                                  //                                 Row(
+                                  //                                   mainAxisAlignment:
+                                  //                                       MainAxisAlignment
+                                  //                                           .spaceBetween,
+                                  //                                   children: [
+                                  //                                     Expanded(
+                                  //                                       child:
+                                  //                                           Row(
+                                  //                                         children: [
+                                  //                                           Text(
+                                  //                                             item.userName,
+                                  //                                             style:
+                                  //                                                 AppStyles.textStyle_14_600.copyWith(
+                                  //                                               color: Colors.black87,
+                                  //                                             ),
+                                  //                                           ),
+                                  //                                           Expanded(
+                                  //                                             child:
+                                  //                                                 Text(
+                                  //                                               ' rated ${item.entityName}',
+                                  //                                               style: AppStyles.textStyle_14_400.copyWith(
+                                  //                                                 color: Colors.black54,
+                                  //                                               ),
+                                  //                                               overflow: TextOverflow.ellipsis,
+                                  //                                             ),
+                                  //                                           ),
+                                  //                                         ],
+                                  //                                       ),
+                                  //                                     ),
+                                  //                                     Text(
+                                  //                                       DateTime.now().difference(item.timeStamp).inMinutes <
+                                  //                                               60
+                                  //                                           ? '${DateTime.now().difference(item.timeStamp).inMinutes}m ago'
+                                  //                                           : DateTime.now().difference(item.timeStamp).inHours < 24
+                                  //                                               ? '${DateTime.now().difference(item.timeStamp).inHours}h ago'
+                                  //                                               : '${DateTime.now().difference(item.timeStamp).inDays}d ago',
+                                  //                                       style: AppStyles
+                                  //                                           .textStyle_12_600
+                                  //                                           .copyWith(
+                                  //                                         color: Colors
+                                  //                                             .grey,
+                                  //                                       ),
+                                  //                                     ),
+                                  //                                   ],
+                                  //                                 ),
+                                  //                                 SizedBox(
+                                  //                                     height: 4),
+                                  //                                 Row(
+                                  //                                   children: [
+                                  //                                     Container(
+                                  //                                       padding:
+                                  //                                           EdgeInsets
+                                  //                                               .symmetric(
+                                  //                                         horizontal:
+                                  //                                             8,
+                                  //                                         vertical:
+                                  //                                             2,
+                                  //                                       ),
+                                  //                                       decoration:
+                                  //                                           BoxDecoration(
+                                  //                                         color: Colors
+                                  //                                             .amber[100],
+                                  //                                         borderRadius:
+                                  //                                             BorderRadius.circular(12),
+                                  //                                       ),
+                                  //                                       child:
+                                  //                                           Text(
+                                  //                                         '${item.rating}/10',
+                                  //                                         style: AppStyles
+                                  //                                             .textStyle_14_600
+                                  //                                             .copyWith(
+                                  //                                           color:
+                                  //                                               Colors.amber[900],
+                                  //                                         ),
+                                  //                                       ),
+                                  //                                     ),
+                                  //                                     if (item
+                                  //                                         .comment
+                                  //                                         .isNotEmpty) ...[
+                                  //                                       SizedBox(
+                                  //                                           width:
+                                  //                                               8),
+                                  //                                       Expanded(
+                                  //                                         child:
+                                  //                                             Text(
+                                  //                                           '"${item.comment}"',
+                                  //                                           style: AppStyles
+                                  //                                               .textStyle_14_400
+                                  //                                               .copyWith(
+                                  //                                             color:
+                                  //                                                 Colors.black54,
+                                  //                                             fontStyle:
+                                  //                                                 FontStyle.italic,
+                                  //                                           ),
+                                  //                                           overflow:
+                                  //                                               TextOverflow.ellipsis,
+                                  //                                         ),
+                                  //                                       ),
+                                  //                                     ],
+                                  //                                   ],
+                                  //                                 ),
+                                  //                               ],
+                                  //                             ),
+                                  //                           ),
+                                  //                         ],
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 );
+                                  //               },
+                                  //             );
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  SizedBox(height: 28),
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('Trending Feedback'),
+                                    style: AppStyles.textStyle_16_600.copyWith(
+                                      color: Color(0xff38433E),
+                                    ),
+                                  ),
+                                  SizedBox(height: 17),
+                                ],
+                              ),
                             ),
-                          ),
-                          NotificationListener<ScrollNotification>(
-                            onNotification: (scrollNotification) {
-                              if (scrollNotification
-                                  is ScrollUpdateNotification) {
-                                setState(() {
-                                  leftPadding =
-                                      scrollNotification.metrics.pixels > 0
-                                          ? 0
-                                          : 24.0;
-                                });
-                              }
-                              return true;
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(left: leftPadding),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: trendingreviews.map(
-                                    (singleFeedback) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 16),
-                                        child: Container(
-                                          width: 299,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                8), // Adjust the border radius as needed
-                                            boxShadow: [
-                                              // BoxShadow(
-                                              //   color: Colors.black
-                                              //       .withOpacity(0.1),
-                                              //   spreadRadius: 2,
-                                              //   blurRadius: 4,
-                                              //   offset: Offset(0,
-                                              //       2), // changes position of shadow
-                                              // ),
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                8), // Adjust the border radius as needed
-                                            child: FeedbackCard(
-                                              thumbnailHeight: 189,
-                                              singleFeedback: singleFeedback,
+                            NotificationListener<ScrollNotification>(
+                              onNotification: (scrollNotification) {
+                                if (scrollNotification
+                                    is ScrollUpdateNotification) {
+                                  setState(() {
+                                    leftPadding =
+                                        scrollNotification.metrics.pixels > 0
+                                            ? 0
+                                            : 24.0;
+                                  });
+                                }
+                                return true;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(left: leftPadding),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: trendingreviews.map(
+                                      (singleFeedback) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 16),
+                                          child: Container(
+                                            width: 299,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(
+                                                  8), // Adjust the border radius as needed
+                                              boxShadow: [
+                                                // BoxShadow(
+                                                //   color: Colors.black
+                                                //       .withOpacity(0.1),
+                                                //   spreadRadius: 2,
+                                                //   blurRadius: 4,
+                                                //   offset: Offset(0,
+                                                //       2), // changes position of shadow
+                                                // ),
+                                              ],
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  8), // Adjust the border radius as needed
+                                              child: FeedbackCard(
+                                                thumbnailHeight: 189,
+                                                singleFeedback: singleFeedback,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ).toList(),
+                                        );
+                                      },
+                                    ).toList(),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 18,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.feedscreen);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('See all feedback'),
-                                  style: AppStyles.textStyle_15_600,
-                                ),
-                                Icon(Icons.arrow_forward)
-                              ],
+                            SizedBox(
+                              height: 18,
                             ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                        ],
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.feedscreen);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('See all feedback'),
+                                    style: AppStyles.textStyle_15_600,
+                                  ),
+                                  Icon(Icons.arrow_forward)
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

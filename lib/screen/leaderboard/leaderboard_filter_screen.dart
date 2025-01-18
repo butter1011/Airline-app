@@ -63,8 +63,6 @@ class _LeaderboardFilterScreenState
   bool flyerClassIsExpanded = true;
   bool categoryIsExpanded = true;
   bool continentIsExpanded = true;
-  bool openedSearchTextField = false;
-
   String selectedAirType = "All";
   String selectedFlyerClass = "";
   String selectedCategory = "";

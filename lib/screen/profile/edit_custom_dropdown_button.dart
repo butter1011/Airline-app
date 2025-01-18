@@ -2,8 +2,8 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropdownButton extends StatefulWidget {
-  const CustomDropdownButton(
+class EditCustomDropdownButton extends StatefulWidget {
+  const EditCustomDropdownButton(
       {super.key,
       required this.labelText,
       required this.hintText,
@@ -16,10 +16,11 @@ class CustomDropdownButton extends StatefulWidget {
   final List<dynamic> airlineNames;
 
   @override
-  State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
+  State<EditCustomDropdownButton> createState() =>
+      _EditCustomDropdownButtonState();
 }
 
-class _CustomDropdownButtonState extends State<CustomDropdownButton> {
+class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
   final TextEditingController textEditingController = TextEditingController();
   String? selectedValue;
 
@@ -39,7 +40,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
-            hint: Text('Select ${widget.hintText}',
+            hint: Text('Select your favorite airline',
                 style: AppStyles.textStyle_15_400
                     .copyWith(color: Color(0xFF38433E))),
             items: widget.airlineNames
@@ -58,11 +59,10 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
               var id = widget.airlineNames
                   .where((element) => element['name'] == value)
                   .first['_id'];
-
               setState(() {
                 selectedValue = value;
               });
-              widget.onChanged(id ?? ""); // Call the callback
+              widget.onChanged(selectedValue ?? ""); // Call the callback
             },
             buttonStyleData: ButtonStyleData(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -94,7 +94,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    hintText: "Select ${widget.hintText}",
+                    hintText: "Select your favorite airline",
                     hintStyle: AppStyles.textStyle_15_400
                         .copyWith(color: Color(0xFF38433E)),
                     border: OutlineInputBorder(
@@ -104,7 +104,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                 ),
               ),
               searchMatchFn: (item, searchValue) {
-                return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
+                return item.value.toString().contains(searchValue);
               },
             ),
             onMenuStateChange: (isOpen) {

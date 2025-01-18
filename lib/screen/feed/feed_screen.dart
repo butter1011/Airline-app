@@ -4,6 +4,7 @@ import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
@@ -115,183 +116,193 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         return false;
       },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavBar(currentIndex: 3),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 44,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 271,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      border: Border.all(width: 2, color: Colors.black),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            offset: Offset(2, 2))
-                      ],
-                    ),
-                    child: const Center(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
-                              fontFamily: 'Clash Grotesk', fontSize: 14),
-                          contentPadding: EdgeInsets.all(0),
-                          prefixIcon: Icon(Icons.search),
-                          border: InputBorder.none,
+      child: KeyboardDismissWidget(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          bottomNavigationBar: BottomNavBar(currentIndex: 3),
+          body: Column(
+            children: [
+              SizedBox(
+                height: 44,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 271,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                        border: Border.all(width: 2, color: Colors.black),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              offset: Offset(2, 2))
+                        ],
+                      ),
+                      child: const Center(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontFamily: 'Clash Grotesk', fontSize: 14),
+                            contentPadding: EdgeInsets.all(0),
+                            prefixIcon: Icon(Icons.search),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.feedfilterscreen);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: Image.asset('assets/icons/setting.png'),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, AppRoutes.feedfilterscreen);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(width: 2, color: Colors.black),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, offset: Offset(2, 2))
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset('assets/icons/setting.png'),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate('Filter by category'),
-                    style: AppStyles.textStyle_15_500
-                        .copyWith(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: buttonStates.keys.map((buttonText) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: MainButton(
-                      text: buttonText,
-                      isSelected: buttonStates[buttonText]!,
-                      onTap: () => toggleButton(buttonText),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)
+                          .translate('Filter by category'),
+                      style: AppStyles.textStyle_15_500
+                          .copyWith(color: Colors.black),
                     ),
-                  );
-                }).toList(),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 14),
-            Container(height: 4, color: AppStyles.littleBlackColor),
-            Expanded(
-                child: isLoading
-                    ? const LoadingWidget()
-                    : SingleChildScrollView(
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 24,
-                                ),
-                                Column(
-                                  children: reviewList.isEmpty
-                                      ? [
-                                          Text(
-                                            "No reviews available",
-                                            style: AppStyles.textStyle_14_600,
-                                          )
-                                        ]
-                                      : reviewList.asMap().entries.map((entry) {
-                                          final index = entry.key;
-                                          final singleReview = entry.value;
-                                          if (singleReview != null) {
-                                            final reviewer =
-                                                singleReview['reviewer'];
-                                            final airline =
-                                                singleReview['airline'];
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: buttonStates.keys.map((buttonText) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: MainButton(
+                        text: buttonText,
+                        isSelected: buttonStates[buttonText]!,
+                        onTap: () => toggleButton(buttonText),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(height: 4, color: AppStyles.littleBlackColor),
+              Expanded(
+                  child: isLoading
+                      ? const LoadingWidget()
+                      : SingleChildScrollView(
+                          child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 24,
+                                  ),
+                                  Column(
+                                    children: reviewList.isEmpty
+                                        ? [
+                                            Text(
+                                              "No reviews available",
+                                              style: AppStyles.textStyle_14_600,
+                                            )
+                                          ]
+                                        : reviewList
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                            final index = entry.key;
+                                            final singleReview = entry.value;
+                                            if (singleReview != null) {
+                                              final reviewer =
+                                                  singleReview['reviewer'];
+                                              final airline =
+                                                  singleReview['airline'];
 
-                                            if (reviewer != null &&
-                                                airline != null) {
-                                              return Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 24.0),
-                                                    child: FeedbackCard(
-                                                      thumbnailHeight: 260,
-                                                      singleFeedback:
-                                                          singleReview,
-                                                    ),
-                                                  ),
-                                                  if (index !=
-                                                      reviewList.length - 1)
+                                              if (reviewer != null &&
+                                                  airline != null) {
+                                                return Column(
+                                                  children: [
                                                     Padding(
                                                       padding: const EdgeInsets
                                                           .symmetric(
                                                           horizontal: 24.0),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 9,
-                                                          ),
-                                                          Divider(
-                                                            thickness: 2,
-                                                            color: Colors.black,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 24,
-                                                          )
-                                                        ],
+                                                      child: FeedbackCard(
+                                                        thumbnailHeight: 260,
+                                                        singleFeedback:
+                                                            singleReview,
                                                       ),
                                                     ),
-                                                ],
-                                              );
+                                                    if (index !=
+                                                        reviewList.length - 1)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    24.0),
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: 9,
+                                                            ),
+                                                            Divider(
+                                                              thickness: 2,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 24,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              }
                                             }
-                                          }
-                                          return const SizedBox.shrink();
-                                        }).toList(),
-                                ),
-                                SizedBox(
-                                  height: 18,
-                                ),
-                              ],
+                                            return const SizedBox.shrink();
+                                          }).toList(),
+                                  ),
+                                  SizedBox(
+                                    height: 18,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )))
-          ],
+                          ],
+                        )))
+            ],
+          ),
         ),
       ),
     );
