@@ -1,4 +1,5 @@
 import 'package:airline_app/provider/chatbot_notifier.dart';
+import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -59,36 +60,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           child: Container(color: Colors.black, height: 4.0),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              reverse: true,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: messages.length + (_isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == 0 && _isLoading) {
-                  return const Padding(
-                    padding: EdgeInsets.only(bottom: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: LoadingBallWidget(),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                final messageIndex = _isLoading ? index - 1 : index;
-                final message = messages[messages.length - 1 - messageIndex];
-                return _buildMessageWidget(message);
-              },
+      body: KeyboardDismissWidget(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                reverse: true,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: messages.length + (_isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == 0 && _isLoading) {
+                    return const Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: LoadingBallWidget(),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  final messageIndex = _isLoading ? index - 1 : index;
+                  final message = messages[messages.length - 1 - messageIndex];
+                  return _buildMessageWidget(message);
+                },
+              ),
             ),
-          ),
-          _buildInputArea(),
-        ],
+            _buildInputArea(),
+          ],
+        ),
       ),
     );
   }

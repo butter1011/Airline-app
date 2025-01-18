@@ -414,11 +414,6 @@ class _QuestionThirdScreenForAirlineState
     if (!mounted) return;
 
     Navigator.pushNamed(context, AppRoutes.completereviews);
-    // await showReviewSuccessBottomSheet(
-    //   context,
-    //   () => setState(() => isSuccess = true),
-    //   "Review airport",
-    // );
   }
 
   void _handleFailedSubmission(BuildContext context) {
