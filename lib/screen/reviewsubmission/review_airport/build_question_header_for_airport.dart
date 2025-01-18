@@ -72,6 +72,8 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
               Text(
                 '$airportName, $selecetedOfCalssLevel',
                 style: AppStyles.textStyle_15_600.copyWith(color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               SizedBox(
                 height: 4,
