@@ -13,7 +13,6 @@ import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
-
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -203,49 +202,66 @@ class _LoginState extends ConsumerState<Login> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
-      body: isLoading
-          ? const LoadingWidget()
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/login.svg',
-                    width: screenSize.width,
-                    height: screenSize.height * 0.74,
-                    fit: BoxFit.cover,
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      _openLoginPage();
-                    },
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(bottom: 100, right: 48, left: 48),
-                      child: Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                        Text(
-                          "   Tap here to signin   ",
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600),
-                          selectionColor: Colors.black,
-                        ),
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                      ]),
-                    ),
-                  )
-                ],
+      body: Stack(
+        children: [
+          // Background Image
+          Center(
+            child: Container(
+              color: AppStyles.mainColor,
+              child: SvgPicture.asset(
+                'assets/images/launchImage.svg',
+                width: screenSize.width * 0.7,
+                height: screenSize.width * 0.5,
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+          // Existing Content
+          isLoading
+              ? const LoadingWidget()
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/login.svg',
+                        width: screenSize.width,
+                        height: screenSize.height * 0.74,
+                        fit: BoxFit.cover,
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          _openLoginPage();
+                        },
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(bottom: 100, right: 48, left: 48),
+                          child: Row(children: <Widget>[
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                            Text(
+                              "   Tap here to signin   ",
+                              style: TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600),
+                              selectionColor: Colors.black,
+                            ),
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                          ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
