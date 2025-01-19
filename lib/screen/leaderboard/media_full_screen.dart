@@ -156,6 +156,14 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   }).toList(),
                   carouselController: buttonCarouselController,
                 ),
+              Positioned(
+                top: 40,
+                left: 16,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
             ],
           ),
           Padding(
@@ -239,7 +247,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     );
   }
 }
-
 class VerifiedButton extends StatelessWidget {
   const VerifiedButton({super.key});
 

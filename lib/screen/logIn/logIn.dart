@@ -11,15 +11,10 @@ import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
-import 'package:airline_app/controller/get_review_airline_controller.dart';
-
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   ConsumerState<Login> createState() => _LoginState();
@@ -55,36 +50,27 @@ class _LoginState extends ConsumerState<Login> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    final lastAccessTime = prefs.getInt('lastAccessTime');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (token != null) {
-      // Token exists, fetch necessary data and navigate to LeaderboardScreen
+    // Check if 24 hours have passed since last access
+    if (token != null &&
+        lastAccessTime != null &&
+        currentTime - lastAccessTime < Duration(hours: 24).inMilliseconds) {
+      // Update last access time
+      await prefs.setInt('lastAccessTime', currentTime);
+
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
       }
-      await _fetchDataAndNavigate();
+    } else {
+      // Clear expired data
+      await prefs.clear();
     }
     setState(() {
       isLoading = false;
     });
-  }
-
-  Future<void> _fetchDataAndNavigate() async {
-    final airlineController = GetAirlineAirportController();
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
-    }
-
-    final reviewsController = GetReviewAirlineController();
-    final reviewsResult = await reviewsController.getAirlineReviews();
-    if (reviewsResult['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(reviewsResult['data']);
-    }
-
-    Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
   }
 
   void onHeadlessResult(dynamic result) async {
@@ -140,23 +126,13 @@ class _LoginState extends ConsumerState<Login> {
         final responseData = jsonDecode(response.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
+        // When storing the data
         final prefs = await SharedPreferences.getInstance();
+        final lastAccessTime = DateTime.now().millisecondsSinceEpoch;
+
         await prefs.setString('token', userData.idToken);
         await prefs.setString('userData', json.encode(responseData));
-
-        final airlineController = GetAirlineAirportController();
-        final result = await airlineController.getAirlineAirport();
-        if (result['success']) {
-          ref.read(airlineAirportProvider.notifier).setData(result['data']);
-        }
-
-        final reviewsController = GetReviewAirlineController();
-        final reviewsResult = await reviewsController.getAirlineReviews();
-        if (reviewsResult['success']) {
-          ref
-              .read(reviewsAirlineProvider.notifier)
-              .setReviewData(reviewsResult['data']);
-        }
+        await prefs.setInt('lastAccessTime', lastAccessTime);
 
         Navigator.pop(context); // Remove loading dialog
 
@@ -188,49 +164,66 @@ class _LoginState extends ConsumerState<Login> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
-      body: isLoading
-          ? const LoadingWidget()
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/login.svg',
-                    width: screenSize.width,
-                    height: screenSize.height * 0.74,
-                    fit: BoxFit.cover,
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      _openLoginPage();
-                    },
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(bottom: 100, right: 48, left: 48),
-                      child: Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                        Text(
-                          "   Tap here to signin   ",
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600),
-                          selectionColor: Colors.black,
-                        ),
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                      ]),
-                    ),
-                  )
-                ],
+      body: Stack(
+        children: [
+          // Background Image
+          Center(
+            child: Container(
+              color: AppStyles.mainColor,
+              child: SvgPicture.asset(
+                'assets/images/launchImage.svg',
+                width: screenSize.width * 0.7,
+                height: screenSize.width * 0.5,
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+          // Existing Content
+          isLoading
+              ? const LoadingWidget()
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/login.svg',
+                        width: screenSize.width,
+                        height: screenSize.height * 0.74,
+                        fit: BoxFit.cover,
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          _openLoginPage();
+                        },
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(bottom: 100, right: 48, left: 48),
+                          child: Row(children: <Widget>[
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                            Text(
+                              "   Tap here to signin   ",
+                              style: TextStyle(
+                                  fontFamily: 'Clash Grotesk',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600),
+                              selectionColor: Colors.black,
+                            ),
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                          ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
@@ -246,7 +239,6 @@ class UserData {
   final String identityValue;
   final String channel;
   final String idToken;
-
 
   UserData(
       {required this.name,
