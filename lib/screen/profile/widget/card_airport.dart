@@ -27,6 +27,7 @@ class CLeaderboardScreen extends ConsumerWidget {
     }
 
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+
     return Column(
       children: [
         Padding(
