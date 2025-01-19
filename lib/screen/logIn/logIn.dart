@@ -55,15 +55,26 @@ class _LoginState extends ConsumerState<Login> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    final lastAccessTime = prefs.getInt('lastAccessTime');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (token != null) {
-      // Token exists, fetch necessary data and navigate to LeaderboardScreen
+    // Check if 24 hours have passed since last access
+    if (token != null &&
+        lastAccessTime != null &&
+        currentTime - lastAccessTime < Duration(hours: 24).inMilliseconds) {
+      // Update last access time
+      await prefs.setInt('lastAccessTime', currentTime);
+
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
       }
       await _fetchDataAndNavigate();
+    } else {
+      // Clear expired data
+      await prefs.clear();
     }
+
     setState(() {
       isLoading = false;
     });
@@ -140,9 +151,13 @@ class _LoginState extends ConsumerState<Login> {
         final responseData = jsonDecode(response.body);
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
+        // When storing the data
         final prefs = await SharedPreferences.getInstance();
+        final lastAccessTime = DateTime.now().millisecondsSinceEpoch;
+
         await prefs.setString('token', userData.idToken);
         await prefs.setString('userData', json.encode(responseData));
+        await prefs.setInt('lastAccessTime', lastAccessTime);
 
         final airlineController = GetAirlineAirportController();
         final result = await airlineController.getAirlineAirport();
@@ -246,7 +261,6 @@ class UserData {
   final String identityValue;
   final String channel;
   final String idToken;
-
 
   UserData(
       {required this.name,
