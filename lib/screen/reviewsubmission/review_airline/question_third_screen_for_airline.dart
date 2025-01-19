@@ -124,7 +124,7 @@ class _QuestionThirdScreenForAirlineState
             child: Scaffold(
                 resizeToAvoidBottomInset: true,
                 appBar: AppBar(
-                  automaticallyImplyLeading: false,             
+                  automaticallyImplyLeading: false,
                   toolbarHeight: MediaQuery.of(context).size.height * 0.3,
                   flexibleSpace: BuildQuestionHeaderForAirline(
                     backgorundImage: backgroundImage,
@@ -235,6 +235,18 @@ class _QuestionThirdScreenForAirlineState
         entertainmentWifi: entertainmentWifi,
         comment: comment,
       );
+      print("🧧Reviewer: ${review.reviewer}");
+      print("Airline: ${review.airline}");
+      print("Airport: ${review.from}");
+      print("Airport: ${review.to}");
+      print("Class Travel: ${review.classTravel}");
+      print("Accessibility: ${review.departureArrival}");
+      print("Wait Times: ${review.comfort}");
+      print("Helpfulness: ${review.cleanliness}");
+      print("Ambience Comfort: ${review.onboardService}");
+      print("Food Beverage: ${review.foodBeverage}");
+      print("Amenities: ${review.entertainmentWifi}");
+      print("Comment: ${review.comment}");
 
       final result = await _reviewController.saveAirlineReview(review);
 
