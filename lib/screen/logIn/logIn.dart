@@ -11,14 +11,10 @@ import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
-import 'package:airline_app/controller/get_review_airline_controller.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   ConsumerState<Login> createState() => _LoginState();
@@ -68,33 +64,13 @@ class _LoginState extends ConsumerState<Login> {
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
       }
-      await _fetchDataAndNavigate();
     } else {
       // Clear expired data
       await prefs.clear();
     }
-
     setState(() {
       isLoading = false;
     });
-  }
-
-  Future<void> _fetchDataAndNavigate() async {
-    final airlineController = GetAirlineAirportController();
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
-    }
-
-    final reviewsController = GetReviewAirlineController();
-    final reviewsResult = await reviewsController.getAirlineReviews();
-    if (reviewsResult['success']) {
-      ref
-          .read(reviewsAirlineProvider.notifier)
-          .setReviewData(reviewsResult['data']);
-    }
-
-    Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
   }
 
   void onHeadlessResult(dynamic result) async {
@@ -157,20 +133,6 @@ class _LoginState extends ConsumerState<Login> {
         await prefs.setString('token', userData.idToken);
         await prefs.setString('userData', json.encode(responseData));
         await prefs.setInt('lastAccessTime', lastAccessTime);
-
-        final airlineController = GetAirlineAirportController();
-        final result = await airlineController.getAirlineAirport();
-        if (result['success']) {
-          ref.read(airlineAirportProvider.notifier).setData(result['data']);
-        }
-
-        final reviewsController = GetReviewAirlineController();
-        final reviewsResult = await reviewsController.getAirlineReviews();
-        if (reviewsResult['success']) {
-          ref
-              .read(reviewsAirlineProvider.notifier)
-              .setReviewData(reviewsResult['data']);
-        }
 
         Navigator.pop(context); // Remove loading dialog
 

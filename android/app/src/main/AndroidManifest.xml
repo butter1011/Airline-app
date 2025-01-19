@@ -9,7 +9,7 @@
         android:name="${applicationName}"
         android:networkSecurityConfig="@xml/otpless_network_security_config"
         android:enableOnBackInvokedCallback="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         
         <activity
             android:name=".MainActivity"
