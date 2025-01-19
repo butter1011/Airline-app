@@ -129,7 +129,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       if (!mounted) return;
 
       if (futures[0]['success']) {
-        print('💦💤${futures[0]['data']}');
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[0]['data']);
@@ -148,7 +147,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             .setAirportScoreData(futures[3]['data']['data']);
       }
       if (futures[4]['success']) {
-        print('💦💤${futures[4]['data']}');
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[4]['data']);
@@ -274,7 +272,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                 height: 44,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -682,7 +681,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: trendingreviews.map(
                                       (singleFeedback) {
                                         return Padding(
