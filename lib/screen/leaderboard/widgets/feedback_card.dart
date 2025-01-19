@@ -79,6 +79,27 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     );
   }
 
+  Widget buildEmojiRatings(List<int> uniqueRatings) {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: uniqueRatings.length,
+        itemBuilder: (context, index) {
+          int rating = uniqueRatings[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: SvgPicture.asset(
+              'assets/icons/emoji_$rating.svg',
+              width: 24,
+              height: 24,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.singleFeedback['reviewer'] == null ||
@@ -91,6 +112,22 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
     final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
+    final ratingMap = widget.singleFeedback['rating'] as Map<String, dynamic>?;
+    // final rating = widget.singleFeedback['rating'] ?? [];
+    List<int> getRatingValues(Map<String, dynamic>? ratingMap) {
+      if (ratingMap == null || ratingMap.isEmpty) return [];
+
+      // Extract values and convert to int, then get unique values
+      Set<int> uniqueValues = ratingMap.values
+          .map((value) => value is int ? value : int.tryParse(value.toString()))
+          .where((value) => value != null)
+          .cast<int>()
+          .toSet();
+
+      return uniqueValues.toList();
+    }
+
+    List<int> uniqueRatings = getRatingValues(ratingMap);
 
     return SizedBox(
       child: Column(
@@ -162,7 +199,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                          '${widget.singleFeedback['from']['city'].toString().length > 12 ? '${widget.singleFeedback['from']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city'].toString().length > 12 ? '${widget.singleFeedback['to']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['to']['city']}',                          style: AppStyles.textStyle_14_600),
+                          '${widget.singleFeedback['from']['city'].toString().length > 12 ? '${widget.singleFeedback['from']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city'].toString().length > 12 ? '${widget.singleFeedback['to']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['to']['city']}',
+                          style: AppStyles.textStyle_14_600),
                     ),
                   ],
                 )
@@ -181,102 +219,207 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           if (images.isNotEmpty || videos.isNotEmpty)
             Stack(
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                        arguments: {
-                          'userId': userId,
-                          'feedbackId': widget.singleFeedback['_id'],
-                          'Images': images,
-                          'Videos': videos,
-                          'Name': widget.singleFeedback['reviewer']['name'],
-                          'Avatar': widget.singleFeedback['reviewer']
-                              ['profilePhoto'],
-                          'Date':
-                              'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                          'Usedairport': widget.singleFeedback['airline']
-                              ['name'],
-                          'Content': widget.singleFeedback['comment'] != null &&
-                                  widget.singleFeedback['comment'] != ''
-                              ? widget.singleFeedback['comment']
-                              : '',
-                          'rating': ((widget.singleFeedback["rating"]
-                                      as Map<String, dynamic>?) ??
-                                  {})
-                              .length
-                              .toString(),
-                        });
-                  },
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      viewportFraction: 1,
-                      height: 189,
-                      enableInfiniteScroll: false,
-                    ),
-                    carouselController: buttonCarouselController,
-                    items: [...images, ...videos].map((mediaItem) {
-                      return Builder(builder: (BuildContext context) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Container(
+                widget.singleFeedback['from'] != null
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.mediafullscreen,
+                              arguments: {
+                                'userId': userId,
+                                'feedbackId': widget.singleFeedback['_id'],
+                                'Images': images,
+                                'Videos': videos,
+                                'Name': widget.singleFeedback['reviewer']
+                                    ['name'],
+                                'Avatar': widget.singleFeedback['reviewer']
+                                    ['profilePhoto'],
+                                'Date':
+                                    'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                                'Usedairport': widget.singleFeedback['airline']
+                                    ['name'],
+                                'Content': widget.singleFeedback['comment'] !=
+                                            null &&
+                                        widget.singleFeedback['comment'] != ''
+                                    ? widget.singleFeedback['comment']
+                                    : '',
+                                'rating': ((widget.singleFeedback["rating"]
+                                            as Map<String, dynamic>?) ??
+                                        {})
+                                    .length
+                                    .toString(),
+                              });
+                        },
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 1,
                             height: 189,
-                            child: videos.contains(mediaItem)
-                                ? _buildVideoPlayer(mediaItem)
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage('$mediaItem'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
+                            enableInfiniteScroll: false,
                           ),
-                        );
-                      });
-                    }).toList(),
-                  ),
-                ),
-
-              ],            )
+                          carouselController: buttonCarouselController,
+                          items: [...images, ...videos].map((mediaItem) {
+                            return Builder(builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                  height: 189,
+                                  child: videos.contains(mediaItem)
+                                      ? _buildVideoPlayer(mediaItem)
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage('$mediaItem'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              );
+                            });
+                          }).toList(),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.mediafullscreen,
+                              arguments: {
+                                'userId': userId,
+                                'feedbackId': widget.singleFeedback['_id'],
+                                'Images': images,
+                                'Videos': videos,
+                                'Name': widget.singleFeedback['reviewer']
+                                    ['name'],
+                                'Avatar': widget.singleFeedback['reviewer']
+                                    ['profilePhoto'],
+                                'Date':
+                                    'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                                'Usedairport': widget.singleFeedback['airport']
+                                    ['name'],
+                                'Content': widget.singleFeedback['comment'] !=
+                                            null &&
+                                        widget.singleFeedback['comment'] != ''
+                                    ? widget.singleFeedback['comment']
+                                    : '',
+                                'rating': ((widget.singleFeedback["rating"]
+                                            as Map<String, dynamic>?) ??
+                                        {})
+                                    .length
+                                    .toString(),
+                              });
+                        },
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 1,
+                            height: 189,
+                            enableInfiniteScroll: false,
+                          ),
+                          carouselController: buttonCarouselController,
+                          items: [...images, ...videos].map((mediaItem) {
+                            return Builder(builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                  height: 189,
+                                  child: videos.contains(mediaItem)
+                                      ? _buildVideoPlayer(mediaItem)
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage('$mediaItem'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              );
+                            });
+                          }).toList(),
+                        ),
+                      ),
+              ],
+            )
           else
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                    arguments: {
-                      'userId': userId,
-                      'feedbackId': widget.singleFeedback['_id'],
-                      'Images': images,
-                      'Videos': videos,
-                      'Name': widget.singleFeedback['reviewer']['name'],
-                      'Avatar': widget.singleFeedback['reviewer']
-                          ['profilePhoto'],
-                      'Date':
-                          'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                      'Usedairport': widget.singleFeedback['airline']['name'],
-                      'Content': widget.singleFeedback['comment'] != null &&
-                              widget.singleFeedback['comment'] != ''
-                          ? widget.singleFeedback['comment']
-                          : '',
-                      'rating': ((widget.singleFeedback["rating"]
-                                  as Map<String, dynamic>?) ??
-                              {})
-                          .length
-                          .toString(),
-                    });
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Container(
-                  height: widget.thumbnailHeight,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/default.png'),
-                      fit: BoxFit.cover,
+            widget.singleFeedback['from'] != null
+                ? InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                          arguments: {
+                            'userId': userId,
+                            'feedbackId': widget.singleFeedback['_id'],
+                            'Images': images,
+                            'Videos': videos,
+                            'Name': widget.singleFeedback['reviewer']['name'],
+                            'Avatar': widget.singleFeedback['reviewer']
+                                ['profilePhoto'],
+                            'Date':
+                                'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                            'Usedairport': widget.singleFeedback['airline']
+                                ['name'],
+                            'Content':
+                                widget.singleFeedback['comment'] != null &&
+                                        widget.singleFeedback['comment'] != ''
+                                    ? widget.singleFeedback['comment']
+                                    : '',
+                            'rating': ((widget.singleFeedback["rating"]
+                                        as Map<String, dynamic>?) ??
+                                    {})
+                                .length
+                                .toString(),
+                          });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        height: widget.thumbnailHeight,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/default.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
+                          arguments: {
+                            'userId': userId,
+                            'feedbackId': widget.singleFeedback['_id'],
+                            'Images': images,
+                            'Videos': videos,
+                            'Name': widget.singleFeedback['reviewer']['name'],
+                            'Avatar': widget.singleFeedback['reviewer']
+                                ['profilePhoto'],
+                            'Date':
+                                'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                            'Usedairport': widget.singleFeedback['airport']
+                                ['name'],
+                            'Content':
+                                widget.singleFeedback['comment'] != null &&
+                                        widget.singleFeedback['comment'] != ''
+                                    ? widget.singleFeedback['comment']
+                                    : '',
+                            'rating': ((widget.singleFeedback["rating"]
+                                        as Map<String, dynamic>?) ??
+                                    {})
+                                .length
+                                .toString(),
+                          });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        height: widget.thumbnailHeight,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/default.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
           const SizedBox(height: 11),
           SizedBox(
             height: 40,
@@ -287,6 +430,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               maxLines: 2,
             ),
           ),
+          buildEmojiRatings(uniqueRatings),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -297,86 +441,177 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      final RenderBox button =
-                          context.findRenderObject() as RenderBox;
-                      final index =
-                          await EmojiBox.showCustomDialog(context, button);
+              widget.singleFeedback['from'] != null
+                  ? Row(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            final RenderBox button =
+                                context.findRenderObject() as RenderBox;
+                            final index = await EmojiBox.showCustomDialog(
+                                context, button);
 
-                      if (index != null) {
-                        setState(() {
-                          ref
-                              .read(selectedEmojiProvider(
-                                      widget.singleFeedback['_id'] ?? '')
-                                  .notifier)
-                              .state = index + 1;
-                        });
+                            if (index != null) {
+                              setState(() {
+                                ref
+                                    .read(selectedEmojiProvider(
+                                            widget.singleFeedback['_id'] ?? '')
+                                        .notifier)
+                                    .state = index + 1;
+                              });
 
-                        try {
-                          // Update reaction in backend
+                              try {
+                                // Update reaction in backend
 
-                          final response = await http.post(
-                            Uri.parse('$apiUrl/api/v1/airline-review/update'),
-                            headers: {
-                              'Content-Type': 'application/json',
-                              'Accept': 'application/json',
-                            },
-                            body: jsonEncode({
-                              'feedbackId': widget.singleFeedback['_id'],
-                              'user_id': userId,
-                              'reactionType': ref
-                                  .watch(selectedEmojiProvider(
-                                          widget.singleFeedback['_id'] ?? '')
-                                      .notifier)
-                                  .state,
-                            }),
-                          );
+                                final response = await http.post(
+                                  Uri.parse(
+                                      '$apiUrl/api/v1/airline-review/update'),
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                  },
+                                  body: jsonEncode({
+                                    'feedbackId': widget.singleFeedback['_id'],
+                                    'user_id': userId,
+                                    'reactionType': ref
+                                        .watch(selectedEmojiProvider(
+                                                widget.singleFeedback['_id'] ??
+                                                    '')
+                                            .notifier)
+                                        .state,
+                                  }),
+                                );
 
-                          if (response.statusCode == 200) {
-                            setState(() {
-                              ref
-                                  .read(reviewsAirlineProvider.notifier)
-                                  .updateReview(
-                                      jsonDecode(response.body)['data']);
-                              ref
-                                  .read(selectedEmojiNumberProvider(
-                                          widget.singleFeedback['_id'] ?? '')
-                                      .notifier)
-                                  .state = jsonDecode(response.body)['data']
-                                      ['rating']
-                                  .length;
-                            });
-                          } else {
-                            // Show error message if API call fails
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Failed to update reaction')),
-                            );
-                          }
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Something went wrong')),
-                          );
-                        }
-                      } // Update selected emoji after dialog closes
-                    },
-                    icon: selectedEmojiIndex != 0
-                        ? SvgPicture.asset(
-                            'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
-                            width: 24,
-                            height: 24,
-                          )
-                        : Icon(Icons.thumb_up_outlined),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
-                  ),
-                ],
-              ),
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    ref
+                                        .read(reviewsAirlineProvider.notifier)
+                                        .updateReview(
+                                            jsonDecode(response.body)['data']);
+                                    ref
+                                        .read(selectedEmojiNumberProvider(
+                                                widget.singleFeedback['_id'] ??
+                                                    '')
+                                            .notifier)
+                                        .state = jsonDecode(
+                                            response.body)['data']['rating']
+                                        .length;
+                                  });
+                                } else {
+                                  // Show error message if API call fails
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text('Failed to update reaction')),
+                                  );
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Something went wrong')),
+                                );
+                              }
+                            } // Update selected emoji after dialog closes
+                          },
+                          icon: selectedEmojiIndex != 0
+                              ? SvgPicture.asset(
+                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
+                                  width: 24,
+                                  height: 24,
+                                )
+                              : Icon(Icons.thumb_up_outlined),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            final RenderBox button =
+                                context.findRenderObject() as RenderBox;
+                            final index = await EmojiBox.showCustomDialog(
+                                context, button);
+
+                            if (index != null) {
+                              setState(() {
+                                ref
+                                    .read(selectedEmojiProvider(
+                                            widget.singleFeedback['_id'] ?? '')
+                                        .notifier)
+                                    .state = index + 1;
+                              });
+
+                              try {
+                                // Update reaction in backend
+
+                                final response = await http.post(
+                                  Uri.parse(
+                                      '$apiUrl/api/v1/airport-review/update'),
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                  },
+                                  body: jsonEncode({
+                                    'feedbackId': widget.singleFeedback['_id'],
+                                    'user_id': userId,
+                                    'reactionType': ref
+                                        .watch(selectedEmojiProvider(
+                                                widget.singleFeedback['_id'] ??
+                                                    '')
+                                            .notifier)
+                                        .state,
+                                  }),
+                                );
+
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    ref
+                                        .read(reviewsAirlineProvider.notifier)
+                                        .updateReview(
+                                            jsonDecode(response.body)['data']);
+                                    ref
+                                        .read(selectedEmojiNumberProvider(
+                                                widget.singleFeedback['_id'] ??
+                                                    '')
+                                            .notifier)
+                                        .state = jsonDecode(
+                                            response.body)['data']['rating']
+                                        .length;
+                                  });
+                                } else {
+                                  // Show error message if API call fails
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text('Failed to update reaction')),
+                                  );
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Something went wrong')),
+                                );
+                              }
+                            } // Update selected emoji after dialog closes
+                          },
+                          icon: selectedEmojiIndex != 0
+                              ? SvgPicture.asset(
+                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
+                                  width: 24,
+                                  height: 24,
+                                )
+                              : Icon(Icons.thumb_up_outlined),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
+                        ),
+                      ],
+                    ),
             ],
           ),
         ],
