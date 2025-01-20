@@ -91,6 +91,8 @@ class ReviewAirportCard extends ConsumerWidget {
                     Text(
                       "${country.name}, $time",
                       style: AppStyles.textStyle_13_600,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     )
                   ],
                 ),
@@ -102,6 +104,8 @@ class ReviewAirportCard extends ConsumerWidget {
                       "$airportName ($airportCode)",
                       style: AppStyles.textStyle_16_600
                           .copyWith(color: Colors.black),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                     ),
                     const Icon(Icons.arrow_forward)
                   ],
