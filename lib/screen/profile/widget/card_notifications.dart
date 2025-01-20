@@ -163,7 +163,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Notifications (5)'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -193,7 +193,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
         //         Text(
         //           AppLocalizations.of(context).translate('Contact Support'),
         //           style: TextStyle(
-        //               fontFamily: 'Arial',
+        //               fontFamily: 'inter',
         //               fontSize: 20,
         //               color: Color(0xFF181818),
         //               fontWeight: FontWeight.w600),
@@ -222,7 +222,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
         //         Text(
         //           AppLocalizations.of(context).translate('Calendar Sync'),
         //           style: TextStyle(
-        //               fontFamily: 'Arial',
+        //               fontFamily: 'inter',
         //               fontSize: 20,
         //               color: Color(0xFF181818),
         //               fontWeight: FontWeight.w600),
@@ -251,7 +251,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Edit Profile'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -280,7 +280,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Help & FAQs'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -309,7 +309,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate("About the app"),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -338,7 +338,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Terms of Service'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -361,7 +361,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('App Language'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -426,7 +426,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Sign Out'),
                   style: TextStyle(
-                      fontFamily: 'Arial',
+                      fontFamily: 'inter',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),

@@ -40,7 +40,7 @@ class ButtonChart extends StatelessWidget {
             Text(
               '$btntext',
               style: const TextStyle(
-                  fontFamily: 'Arial',
+                  fontFamily: 'inter',
                   fontSize: 14,
                   fontWeight: FontWeight.bold),
             ),

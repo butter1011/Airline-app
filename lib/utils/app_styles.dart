@@ -10,107 +10,106 @@ class AppStyles {
 
   ///Text style
   static TextStyle textStyle_12_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 12,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle textStyle_13_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 13,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle normalTextStyle = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
   static TextStyle textStyle_14_400 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
 
   static TextStyle textStyle_14_400_grey = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: Colors.grey,
   );
 
   static TextStyle textStyle_14_400_littleGrey = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: Color(0xFF38433E),
   );
 
   static TextStyle textStyle_14_500 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: Color(0xff38433E),
   );
   static TextStyle textStyle_14_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: Color(0xFF000000),
   );
   static TextStyle textStyle_15_400 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
   static TextStyle textStyle_15_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 15,
     fontWeight: FontWeight.w600,
     color: Color(0xFF000000),
   );
   static TextStyle textStyle_15_500 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 15,
     fontWeight: FontWeight.w500,
     color: Color(0xFF000000),
   );
 
   static TextStyle textStyle_16_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: Color(0xFF000000),
   );
   static TextStyle textStyle_18_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle textStyle_24_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle textStyle_32_600 = const TextStyle(
-    fontFamily: 'Arial',
+    fontFamily: 'inter',
     fontSize: 32,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
-  static TextStyle oswaldTextStyle = GoogleFonts.getFont(
-    'Arial',
-    textStyle: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontStyle: FontStyle.italic,
-      color: Colors.white,
-      fontSize: 18,
-    ),
+  
+ static TextStyle oswaldTextStyle = TextStyle(
+    fontFamily: 'inter',
+    fontWeight: FontWeight.bold,
+    fontStyle: FontStyle.italic,
+    color: Colors.white,
+    fontSize: 18,
   );
 
   /// Box style
