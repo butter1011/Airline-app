@@ -116,7 +116,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                             '${userData?['userData']['selectedbadges']}'),
                                                     style: TextStyle(
                                                         fontFamily:
-                                                            'Clash Grotesk',
+                                                            'Arial',
                                                         fontSize: 16,
                                                         color: Colors.white,
                                                         fontWeight:
@@ -162,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     '${userData?['userData']['badgeNumber']}',
                                                     style: TextStyle(
                                                         fontFamily:
-                                                            'Clash Grotesk',
+                                                            'Arial',
                                                         fontSize: 16,
                                                         color: Colors.white,
                                                         fontWeight:
@@ -194,7 +194,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
+                                            horizontal: 1),
                                         child: Row(
                                           children: [
                                             Image.asset(
@@ -202,22 +202,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               height: 20,
                                               width: 20,
                                             ),
-                                            Center(
+                                            Expanded(
                                               child: Text(
                                                 '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
                                                 style: TextStyle(
-                                                    fontFamily: 'Clash Grotesk',
+                                                    fontFamily: 'Arial',
                                                     fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w500),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+
+                                  ),                                ],
                               )
                             ],
                           ),
@@ -229,7 +230,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['name']}',
                               style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
+                                fontFamily: 'Arial',
                                 fontSize: 24,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -240,7 +241,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['bio']}',
                               style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
+                                fontFamily: 'Arial',
                                 letterSpacing: 0.6,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
@@ -258,7 +259,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   AppLocalizations.of(context)
                                       .translate('My favorite Airline is'),
                                   style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
+                                    fontFamily: 'Arial',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -267,7 +268,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 Text(
                                   ' ${userData?['userData']['favoriteAirlines']}',
                                   style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
+                                    fontFamily: 'Arial',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
@@ -287,7 +288,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   AppLocalizations.of(context)
                                       .translate('Points received:'),
                                   style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
+                                    fontFamily: 'Arial',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -296,7 +297,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 Text(
                                   "  ${userData?['userData']["points"]}",
                                   style: const TextStyle(
-                                    fontFamily: 'Clash Grotesk',
+                                    fontFamily: 'Arial',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,

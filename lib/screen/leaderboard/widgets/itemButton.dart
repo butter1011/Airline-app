@@ -27,7 +27,7 @@ class ItemButton extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: GoogleFonts.getFont("Schibsted Grotesk",
+              style: GoogleFonts.getFont("Arial",
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   // letterSpacing: 0.7,

@@ -45,7 +45,7 @@ class DetailButton extends StatelessWidget {
                       width: 3,
                     ),
                     Text("$text $score/10",
-                        style: GoogleFonts.getFont("Familjen Grotesk",
+                        style: GoogleFonts.getFont("Arial",
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.2),

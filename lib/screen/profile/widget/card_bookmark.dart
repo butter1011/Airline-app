@@ -109,7 +109,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
                     Text(
                       ' ${entry.key} (${entry.value.length})',
                       style: TextStyle(
-                          fontFamily: 'Clash Grotesk',
+                          fontFamily: 'Arial',
                           fontSize: 20,
                           color: Color(0xFF181818),
                           fontWeight: FontWeight.w600),

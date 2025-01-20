@@ -30,7 +30,12 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
       case 0:
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
       case 1:
-        Navigator.pushNamed(context, AppRoutes.chatbotscreen);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('This feature is currently under development'),
+            duration: Duration(seconds: 2),
+          ),
+        );
       case 2:
         Navigator.pushNamed(context, AppRoutes.startreviews);
       case 3:
