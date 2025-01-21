@@ -67,6 +67,23 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
   }
 
+  void setReviewUserProfileImageData(String id, String image) {
+    final updatedProfileImageReviews = state.reviews.map((review) {
+      if (review['id'] == id) {
+        // Create a new map with the updated profile photo
+        return {
+          ...review,
+          'reviewer': {...review['reviewer'], 'profilePhoto': image}
+        };
+      }
+      return review;
+    }).toList();
+
+    state = state.copyWith(
+      reviews: updatedProfileImageReviews,
+    );
+  }
+
   void setAirlineScoreData(List<dynamic> value) {
     state = state.copyWith(
       airlineScoreData: List<Map<String, dynamic>>.from(value),

@@ -1,8 +1,14 @@
+import 'package:airline_app/controller/boarding_pass_controller.dart';
+import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
+import 'package:airline_app/models/boarding_pass.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/calendar/v3.dart' as calendar;
 import 'google_sign_in_helper.dart';
 
@@ -43,9 +49,31 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
       );
 
       setState(() {
-        _events = events.items ?? [];
+        _events = (events.items ?? [])
+            .where((event) =>
+                event.summary != null &&
+                RegExp(r'\([A-Z]{2} \d+\)').hasMatch(event.summary!))
+            .toList();
         _isLoading = false;
       });
+      for (var event in _events) {
+        print("Event Details:");
+        print("Summary: ${event.summary}");
+        print("Description: ${event.description}");
+        print("Start Time: ${event.start?.dateTime ?? event.start?.date}");
+        print("End Time: ${event.end?.dateTime ?? event.end?.date}");
+        print("Location: ${event.location}");
+        print("Creator: ${event.creator?.email}");
+        print("Created: ${event.created}");
+        print("Updated: ${event.updated}");
+        print("Status: ${event.status}");
+        print("----------------------------------------");
+        print("Event Keys:");
+        event.toJson().keys.forEach((key) {
+          print(key);
+        });
+        print("----------------------------------------");
+      }
     } catch (e) {
       setState(() {
         _error = e.toString();
@@ -126,45 +154,174 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
   }
 }
 
-class EventCard extends StatelessWidget {
+class EventCard extends ConsumerStatefulWidget {
+  EventCard({super.key, required this.event});
   final calendar.Event event;
 
-  const EventCard({super.key, required this.event});
-
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              event.summary ?? 'No title',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Start: ${_formatDateTime(event.start?.dateTime ?? event.start?.date)}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              'End: ${_formatDateTime(event.end?.dateTime ?? event.end?.date)}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
+  ConsumerState<EventCard> createState() => _EventCardState();
+}
+
+class _EventCardState extends ConsumerState<EventCard> {
+  final FetchFlightInforByCirium _flightInfoFetcher =
+      FetchFlightInforByCirium();
+  final BoardingPassController _boardingPassController =
+      BoardingPassController();
+  bool _isLoading = false;
+
+  void _showSnackBar(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: AppStyles.textStyle_16_600),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
 
-  String _formatDateTime(DateTime? dateTime) {
-    if (dateTime == null) return 'N/A';
-    return '${dateTime.toLocal().year}-'
-        '${dateTime.toLocal().month.toString().padLeft(2, '0')}-'
-        '${dateTime.toLocal().day.toString().padLeft(2, '0')} '
-        '${dateTime.toLocal().hour.toString().padLeft(2, '0')}:'
-        '${dateTime.toLocal().minute.toString().padLeft(2, '0')}';
+  Future<void> parseEvent(calendar.Event event) async {
+    setState(() => _isLoading = true);
+    try {
+      print("This is scanned barcode ========================> $event");
+
+      final RegExp regexSummary = RegExp(r'\([A-Z]{2} \d+\)');
+      final Match? match = regexSummary.firstMatch(event.summary!);
+      final RegExp regexLocation = RegExp(r'([A-Z]{3})');
+      final Match? matchLocation = regexLocation.firstMatch(event.location!);
+
+      if (match == null) {
+        throw Exception('Invalid barcode format');
+      }
+
+      final String pnr = event.iCalUID!;
+      final String carrier = match.group(0)!.substring(1, 3);
+      final String flightNumber =
+          match.group(0)!.substring(4, match.group(0)!.length - 1);
+      final DateTime date = event.start!.dateTime!;
+      final String departureAirport = matchLocation!.group(0)!;
+      final String classOfService =
+          event.description!.substring(0, event.description!.indexOf(" "));
+
+      final bool pnrExists = await _boardingPassController.checkPnrExists(pnr);
+      if (pnrExists) {
+        _showSnackBar(
+            'Boarding pass has already been reviewed', AppStyles.mainColor);
+        return;
+      }
+
+      Map<String, dynamic> flightInfo =
+          await _flightInfoFetcher.fetchFlightInfo(
+        carrier: carrier,
+        flightNumber: flightNumber,
+        flightDate: date,
+        departureAirport: departureAirport,
+      );
+
+      await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
+    } catch (e) {
+      _showSnackBar(
+          'Oops! We had trouble processing your boarding pass. Please try again.',
+          AppStyles.warnningColor);
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _processFetchedFlightInfo(Map<String, dynamic> flightInfo,
+      String pnr, String classOfService) async {
+    if (flightInfo['flightStatuses']?.isEmpty ?? true) {
+      _showSnackBar(
+          'No flight data found for the boarding pass', AppStyles.notifyColor);
+      return;
+    }
+    final flightStatus = flightInfo['flightStatuses'][0];
+    final airlines = flightInfo['appendix']['airlines'];
+    final airports = flightInfo['appendix']['airports'];
+    final airlineName = airlines.firstWhere((airline) =>
+        airline['fs'] == flightStatus['primaryCarrierFsCode'])['name'];
+    final departureAirport = airports.firstWhere(
+        (airport) => airport['fs'] == flightStatus['departureAirportFsCode']);
+    final arrivalAirport = airports.firstWhere(
+        (airport) => airport['fs'] == flightStatus['arrivalAirportFsCode']);
+    final departureEntireTime =
+        DateTime.parse(flightStatus['departureDate']['dateLocal']);
+    final arrivalEntireTime =
+        DateTime.parse(flightStatus['arrivalDate']['dateLocal']);
+
+    final newPass = BoardingPass(
+      name: ref.read(userDataProvider)?['userData']['_id'],
+      pnr: pnr,
+      airlineName: airlineName,
+      departureAirportCode: departureAirport['fs'],
+      departureCity: departureAirport['city'],
+      departureCountryCode: departureAirport['countryCode'],
+      departureTime: _formatTime(departureEntireTime),
+      arrivalAirportCode: arrivalAirport['fs'],
+      arrivalCity: arrivalAirport['city'],
+      arrivalCountryCode: arrivalAirport['countryCode'],
+      arrivalTime: _formatTime(arrivalEntireTime),
+      classOfTravel: classOfService,
+      airlineCode: flightStatus['carrierFsCode'],
+      flightNumber:
+          "${flightStatus['carrierFsCode']} ${flightStatus['flightNumber']}",
+      visitStatus: _getVisitStatus(departureEntireTime),
+    );
+
+    final bool result = await _boardingPassController.saveBoardingPass(newPass);
+    if (result) {
+      Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+      _showSnackBar('Boarding pass saved successfully', AppStyles.mainColor);
+    }
+  }
+
+  String _getVisitStatus(DateTime departureEntireTime) {
+    final now = DateTime.now();
+    final difference = now.difference(departureEntireTime);
+
+    if (departureEntireTime.isAfter(now)) {
+      return "Upcoming";
+    } else if (difference.inDays <= 20) {
+      return "Recent";
+    } else {
+      return "Earlier";
+    }
+  }
+
+  String _formatTime(DateTime? time) =>
+      "${time?.hour.toString().padLeft(2, '0')}:${time?.minute.toString().padLeft(2, '0')}";
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? const Center(child: LoadingWidget())
+        : InkWell(
+            onTap: () {
+              parseEvent(widget.event);
+            },
+            child: Card(
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.event.summary ?? 'No title',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Start: ${_formatTime(widget.event.start?.dateTime ?? widget.event.start?.date)}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Text(
+                      'End: ${_formatTime(widget.event.end?.dateTime ?? widget.event.end?.date)}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }
