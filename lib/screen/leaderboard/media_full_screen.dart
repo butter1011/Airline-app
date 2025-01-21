@@ -259,12 +259,8 @@ class VerifiedButton extends StatelessWidget {
           color: const Color(0xff181818),
           borderRadius: BorderRadius.circular(12)),
       child: Center(
-        child: Text("Verified",
-            style: GoogleFonts.getFont("Schibsted Grotesk",
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                letterSpacing: -0.5,
-                color: Colors.white)),
+    child: Text("Verified",
+        style: AppStyles.textStyle_14_400.copyWith(color: Colors.white)),
       ),
     );
   }

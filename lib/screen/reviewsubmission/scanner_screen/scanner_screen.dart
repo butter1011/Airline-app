@@ -94,7 +94,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
   Future<void> parseIataBarcode(String rawValue) async {
     setState(() => isLoading = true);
-    print("rawValue =====================> $rawValue");
+    print("rawValue 🎎 =====================> $rawValue");
     try {
       final regex = RegExp(
           r'([A-Z0-9]{5,7})\s+([A-Z]{6}[A-Z0-9]{2})\s+(\d{4})\s+(\d{3}[A-Z])');
@@ -114,28 +114,50 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
       final julianDate = julianDateAndClassOfService.substring(0, 3);
       final classOfServiceKey = julianDateAndClassOfService.substring(3, 4);
       final classOfService = _getClassOfService(classOfServiceKey);
-
       final baseDate = DateTime(DateTime.now().year, 1, 0);
       final date = baseDate.add(Duration(days: int.parse(julianDate)));
+
+      print("This is scanned date ✨ ============ > $date");
 
       final pnrExists = await _boardingPassController.checkPnrExists(pnr);
       if (pnrExists) {
         _showSnackBar(
             'Boarding pass has already been reviewed', AppStyles.mainColor);
-        return;
+            Navigator.pop(context);
+
+        
       }
 
-      final flightInfo = await _fetchFlightInfo.fetchFlightInfo(
-          carrier: carrier,
+      Map<String, dynamic> flightInfo = await _fetchFlightInfo.fetchFlightInfo(
+        carrier: carrier,
         flightNumber: flightNumber,
         flightDate: date,
         departureAirport: departureAirport,
       );
 
+      if (flightInfo['flightStatuses']?.isEmpty ?? true) {
+        final DateTime lastYearDate =
+            DateTime(date.year - 1, date.month, date.day);
+        flightInfo = await _fetchFlightInfo.fetchFlightInfo(
+          carrier: carrier,
+          flightNumber: flightNumber,
+          flightDate: lastYearDate,
+          departureAirport: departureAirport,
+        );
+
+        if (flightInfo['flightStatuses']?.isEmpty ?? true) {
+          _showSnackBar(
+              'Oops! We had trouble processing your boarding pass. Please try again.',
+              AppStyles.notifyColor);
+          Navigator.pop(context);
+        }
+      }
+
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar('Error processing boarding pass: ${e.toString()}',
+      _showSnackBar('Unable to process boarding pass. Please try scanning again.',
           AppStyles.notifyColor);
+          Navigator.pop(context);
     } finally {
       if (mounted) {
         setState(() {
@@ -171,8 +193,10 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
     }
 
     final flightStatus = flightInfo['flightStatuses'][0];
+    final airlines = flightInfo['appendix']['airlines'];
     final airports = flightInfo['appendix']['airports'];
-    final airlineName = flightInfo['appendix']['airlines'][0]['name'];
+    final airlineName = airlines.firstWhere((airline) =>
+        airline['fs'] == flightStatus['primaryCarrierFsCode'])['name'];
 
     final departureAirport = airports.firstWhere(
         (airport) => airport['fs'] == flightStatus['departureAirportFsCode']);
@@ -243,8 +267,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
     return Stack(
       children: [
         Scaffold(
-          appBar: 
-          AppBar(
+          appBar: AppBar(
             toolbarHeight: screenSize.height * 0.08,
             backgroundColor: Colors.white,
             leading: IconButton(
@@ -263,7 +286,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
                 height: 4.0,
               ),
             ),
-          ),        
+          ),
           backgroundColor: Colors.black,
           body: Stack(
             children: [
@@ -304,11 +327,11 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
   }
 
   @override
-  Future<void> dispose() async {
+  void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    await _subscription?.cancel();
+    _subscription?.cancel();
     _subscription = null;
-    await controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 }

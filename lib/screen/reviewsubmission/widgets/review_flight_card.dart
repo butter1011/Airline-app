@@ -131,8 +131,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        "$departureCity ($departureAirportCode) -> $arrivalCity ($arrivalAirportCode)",
-                        style: AppStyles.textStyle_16_600
+                        "${departureCity.length > 12 ? '${departureCity.substring(0, 12)}...' : departureCity}  ($departureAirportCode) -> ${arrivalCity.length > 12 ? '${arrivalCity.substring(0, 12)}...' : arrivalCity} ($arrivalAirportCode)",                        style: AppStyles.textStyle_16_600
                             .copyWith(color: Colors.black),
                         overflow: TextOverflow.visible,
                         softWrap: true,

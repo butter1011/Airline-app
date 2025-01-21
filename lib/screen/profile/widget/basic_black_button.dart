@@ -31,7 +31,7 @@ class BasicBlackButton extends StatelessWidget {
           child: Text(
             btntext,
             style: const TextStyle(
-                fontFamily: 'Clash Grotesk',
+                fontFamily: 'Arial',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.white),

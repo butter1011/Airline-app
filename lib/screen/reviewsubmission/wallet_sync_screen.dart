@@ -44,12 +44,18 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       final BarcodeCapture? barcodeCapture =
           await _controller.analyzeImage(file.path);
       final String? rawValue = barcodeCapture?.barcodes.firstOrNull?.rawValue;
+      print("This is scanned barcode ========================> $rawValue");
       if (rawValue != null) {
         await parseIataBarcode(rawValue);
+      } else {
+        _showSnackBar(
+            "This boarding pass cannot be scanned due to poor quality",
+            AppStyles.notifyColor);
       }
     } catch (e) {
       _showSnackBar(
-          'Error analyzing image: ${e.toString()}', AppStyles.warnningColor);
+          'Unable to scan the boarding pass. Please try again with a clearer image.',
+          AppStyles.warnningColor);
     } finally {
       setState(() => isLoading = false);
     }
@@ -58,6 +64,8 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
   Future<void> parseIataBarcode(String rawValue) async {
     setState(() => isLoading = true);
     try {
+      print("This is scanned barcode ========================> $rawValue");
+
       final RegExp regex = RegExp(
           r'([A-Z0-9]{5,7})\s+([A-Z]{6}[A-Z0-9]{2})\s+(\d{4})\s+(\d{3}[A-Z])');
       final Match? match = regex.firstMatch(rawValue);
@@ -87,7 +95,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
         return;
       }
 
-      final Map<String, dynamic> flightInfo =
+      Map<String, dynamic> flightInfo =
           await _flightInfoFetcher.fetchFlightInfo(
         carrier: carrier,
         flightNumber: flightNumber,
@@ -95,9 +103,28 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
         departureAirport: departureAirport,
       );
 
+      if (flightInfo['flightStatuses']?.isEmpty ?? true) {
+        final DateTime lastYearDate =
+            DateTime(date.year - 1, date.month, date.day);
+        flightInfo = await _flightInfoFetcher.fetchFlightInfo(
+          carrier: carrier,
+          flightNumber: flightNumber,
+          flightDate: lastYearDate,
+          departureAirport: departureAirport,
+        );
+
+        if (flightInfo['flightStatuses']?.isEmpty ?? true) {
+          _showSnackBar(
+              'Flight data is only available for up to one year in the past',
+              AppStyles.notifyColor);
+          return;
+        }
+      }
+
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar('Error processing boarding pass: ${e.toString()}',
+      _showSnackBar(
+          'Oops! We had trouble processing your boarding pass. Please try again.',
           AppStyles.warnningColor);
     } finally {
       setState(() => isLoading = false);
@@ -127,8 +154,10 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       return;
     }
     final flightStatus = flightInfo['flightStatuses'][0];
+    final airlines = flightInfo['appendix']['airlines'];
     final airports = flightInfo['appendix']['airports'];
-    final airlineName = flightInfo['appendix']['airlines'][0]['name'];
+    final airlineName = airlines.firstWhere((airline) =>
+        airline['fs'] == flightStatus['primaryCarrierFsCode'])['name'];
     final departureAirport = airports.firstWhere(
         (airport) => airport['fs'] == flightStatus['departureAirportFsCode']);
     final arrivalAirport = airports.firstWhere(
@@ -213,6 +242,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       SnackBar(
         content: Text(message, style: AppStyles.textStyle_16_600),
         backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 2),
       ),
     );
   }

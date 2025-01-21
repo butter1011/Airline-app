@@ -40,7 +40,7 @@ class BasicLanguageButton extends StatelessWidget {
           child: Text(
             '$btntext',
             style: const TextStyle(
-                fontFamily: 'Clash Grotesk',
+                fontFamily: 'Arial',
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: Colors.black),

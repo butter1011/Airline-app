@@ -430,7 +430,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               maxLines: 2,
             ),
           ),
-          buildEmojiRatings(uniqueRatings),
+          // buildEmojiRatings(uniqueRatings),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

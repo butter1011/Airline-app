@@ -163,7 +163,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Notifications (5)'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -178,35 +178,35 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
           ),
         ),
         // ... (rest of the UI code remains the same)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.profilesupportscreen,
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('Contact Support'),
-                  style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
-                      fontSize: 20,
-                      color: Color(0xFF181818),
-                      fontWeight: FontWeight.w600),
-                ),
-                Image.asset(
-                  'assets/icons/rightarrow.png',
-                  width: 40,
-                  height: 40,
-                )
-              ],
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
+        //   child: InkWell(
+        //     onTap: () {
+        //       Navigator.pushNamed(
+        //         context,
+        //         AppRoutes.profilesupportscreen,
+        //       );
+        //     },
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Text(
+        //           AppLocalizations.of(context).translate('Contact Support'),
+        //           style: TextStyle(
+        //               fontFamily: 'Arial',
+        //               fontSize: 20,
+        //               color: Color(0xFF181818),
+        //               fontWeight: FontWeight.w600),
+        //         ),
+        //         Image.asset(
+        //           'assets/icons/rightarrow.png',
+        //           width: 40,
+        //           height: 40,
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
         // Padding(
         //   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
         //   child: InkWell(
@@ -222,7 +222,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
         //         Text(
         //           AppLocalizations.of(context).translate('Calendar Sync'),
         //           style: TextStyle(
-        //               fontFamily: 'Clash Grotesk',
+        //               fontFamily: 'Arial',
         //               fontSize: 20,
         //               color: Color(0xFF181818),
         //               fontWeight: FontWeight.w600),
@@ -251,7 +251,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Edit Profile'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -280,7 +280,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Help & FAQs'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -309,7 +309,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate("About the app"),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -338,7 +338,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Terms of Service'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -361,7 +361,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('App Language'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -426,7 +426,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Sign Out'),
                   style: TextStyle(
-                      fontFamily: 'Clash Grotesk',
+                      fontFamily: 'Arial',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),

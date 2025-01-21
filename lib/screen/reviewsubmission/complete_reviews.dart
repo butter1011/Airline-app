@@ -28,10 +28,6 @@ class CompleteReviews extends ConsumerWidget {
           toolbarHeight: screenSize.height * 0.08,
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back_ios_sharp),
-          //   onPressed: () => Navigator.pop(context),
-          // ),
           centerTitle: true,
           title: Text(
             AppLocalizations.of(context).translate('Feedback Quest Complete'),
@@ -92,75 +88,78 @@ class CompleteReviews extends ConsumerWidget {
             ]),
           ),
         ]),
-        bottomNavigationBar: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              height: screenSize.height * 0.37,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 27, bottom: 16, left: 24, right: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                              "Your Score is ${(scores ?? 0).toStringAsFixed(1)}",
-                              style: AppStyles.textStyle_32_600),
-                        ),
-                        const SizedBox(height: 21),
-                        Text(
-                          "You've earned 500 points",
-                          style: AppStyles.textStyle_24_600
-                              .copyWith(fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "Your feedback helps make every journey better!",
-                          style: AppStyles.textStyle_14_400,
-                        ),
-                        const SizedBox(height: 18),
-                        const Row(
-                          children: [
-                            ReviewScoreIcon(
-                                iconUrl: 'assets/icons/review_cup.png'),
-                            SizedBox(width: 16),
-                            ReviewScoreIcon(
-                                iconUrl:
-                                    'assets/icons/review_notification.png'),
-                          ],
-                        )
-                      ],
+        bottomNavigationBar: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                height: screenSize.height * 0.37,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 27, bottom: 16, left: 24, right: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                                "Your Score is ${(scores ?? 0).toStringAsFixed(1)}",
+                                style: AppStyles.textStyle_32_600),
+                          ),
+                          const SizedBox(height: 21),
+                          Text(
+                            "You've earned 500 points",
+                            style: AppStyles.textStyle_24_600
+                                .copyWith(fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            "Your feedback helps make every journey better!",
+                            style: AppStyles.textStyle_14_400,
+                          ),
+                          const SizedBox(height: 18),
+                          const Row(
+                            children: [
+                              ReviewScoreIcon(
+                                  iconUrl: 'assets/icons/review_cup.png'),
+                              SizedBox(width: 16),
+                              ReviewScoreIcon(
+                                  iconUrl:
+                                      'assets/icons/review_notification.png'),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(thickness: 2, color: Colors.black),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
-                    child: NavButton(
-                        text: "Review Airport",
-                        onPressed: () => Navigator.pushNamed(
-                            context, AppRoutes.reviewsubmissionscreen),
-                        color: Colors.white),
-                  )
-                ],
+                    const Divider(thickness: 2, color: Colors.black),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      child: NavButton(
+                          text: "Go to Home",
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.leaderboardscreen),
+                          color: Colors.white),                        
+                    )
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () =>
-                    Navigator.pushNamed(context, AppRoutes.leaderboardscreen),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

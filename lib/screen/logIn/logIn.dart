@@ -106,6 +106,20 @@ class _LoginState extends ConsumerState<Login> {
             'name': userData.name,
             'whatsappNumber': userData.identityValue,
             'email': "",
+            'apple': "",
+          }),
+        );
+      } else if (userData.channel == 'APPLE') {
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': "",
+            'email': "",
+            'apple': userData.identityValue,
           }),
         );
       } else {
@@ -118,6 +132,7 @@ class _LoginState extends ConsumerState<Login> {
             'name': userData.name,
             'whatsappNumber': '',
             'email': userData.identityValue,
+            'apple': "",
           }),
         );
       }
@@ -207,7 +222,7 @@ class _LoginState extends ConsumerState<Login> {
                             Text(
                               "   Tap here to signin   ",
                               style: TextStyle(
-                                  fontFamily: 'Clash Grotesk',
+                                  fontFamily: 'Arial',
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600),
                               selectionColor: Colors.black,
