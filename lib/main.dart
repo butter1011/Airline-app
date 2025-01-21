@@ -4,6 +4,7 @@ import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_filter_screen.dart';
 import 'package:airline_app/screen/leaderboard/media_full_screen.dart';
 import 'package:airline_app/screen/logIn/logIn.dart';
+
 import 'package:airline_app/screen/logIn/skip_screen.dart';
 import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';

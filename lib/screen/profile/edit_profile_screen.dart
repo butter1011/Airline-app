@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/profile/edit_custom_dropdown_button.dart';
@@ -210,8 +211,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     child: Container(
                       height: 40, // Increased height for better visibility
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(20), // Adjusted for new height
+                        borderRadius: BorderRadius.circular(
+                            20), // Adjusted for new height
                         color: Colors.white,
                         border: Border.all(width: 2, color: Colors.black),
                         boxShadow: [
@@ -225,12 +226,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         // Added Center widget
                         child: TextField(
                           controller: _nameController,
-                          textAlignVertical:
-                              TextAlignVertical.center, // Centers text vertically
+                          textAlignVertical: TextAlignVertical
+                              .center, // Centers text vertically
                           style: AppStyles
                               .textStyle_15_500, // Adjust font size as needed
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 16),
                             border: InputBorder.none,
                             isCollapsed: true, // Removes the default padding
                           ),
@@ -455,7 +457,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       if (userInformationResponse.statusCode == 200) {
         final responseData = jsonDecode(userInformationResponse.body);
+
         ref.read(userDataProvider.notifier).setUserData(responseData);
+
+// Or using a ref (if using Riverpod)
+        ref.read(reviewsAirlineProvider.notifier).setReviewUserProfileImageData(
+            userData?['userData']['_id'],
+            userData?['userData']['profilePhoto']);
+
         final prefs = await SharedPreferences.getInstance();
 
         await prefs.setString('userData', json.encode(responseData));
@@ -482,7 +491,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: MediaQuery.of(context).size.height * 0.1,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 68, 45, 45),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
         onPressed: () => Navigator.pop(context),
@@ -497,4 +506,3 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     );
   }
 }
-
