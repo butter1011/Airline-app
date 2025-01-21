@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
@@ -5,18 +6,15 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
-
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   ConsumerState<Login> createState() => _LoginState();
@@ -31,7 +29,18 @@ class _LoginState extends ConsumerState<Login> {
   @override
   void initState() {
     super.initState();
+    _otplessFlutterPlugin.enableDebugLogging(true);
     _checkToken();
+    _initializeOtpless();
+  }
+
+  Future<void> _initializeOtpless() async {
+    if (Platform.isAndroid) {
+      await _otplessFlutterPlugin.enableDebugLogging(true);
+      await _otplessFlutterPlugin.initHeadless(appId);
+      _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
+    }
+    _otplessFlutterPlugin.setWebviewInspectable(true);
   }
 
   Future<void> _checkToken() async {
@@ -41,174 +50,127 @@ class _LoginState extends ConsumerState<Login> {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    final lastAccessTime = prefs.getInt('lastAccessTime');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (token != null) {
-      // Token exists, fetch necessary data and navigate to LeaderboardScreen
+    // Check if 24 hours have passed since last access
+    if (token != null &&
+        lastAccessTime != null &&
+        currentTime - lastAccessTime < Duration(hours: 24).inMilliseconds) {
+      // Update last access time
+      await prefs.setInt('lastAccessTime', currentTime);
+
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
       }
-      await _fetchDataAndNavigate();
     } else {
-      // No token, initialize Otpless
-      // await _initializeOtpless();
-      await testLogin();
+      // Clear expired data
+      await prefs.clear();
     }
     setState(() {
       isLoading = false;
     });
   }
 
-  Future<void> _fetchDataAndNavigate() async {
-    final airlineController = GetAirlineAirportController();
-    final result = await airlineController.getAirlineAirport();
-    if (result['success']) {
-      ref.read(airlineAirportProvider.notifier).setData(result['data']);
-    }
-
-    Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
-  }
-
-  // Future<void> _initializeOtpless() async {
-  //   await _otplessFlutterPlugin.enableDebugLogging(true);
-  //   await _otplessFlutterPlugin.initHeadless(appId);
-  //   _otplessFlutterPlugin.setHeadlessCallback(onHeadlessResult);
-  // }
-
-  // void onHeadlessResult(dynamic result) async {
-  //   String jsonString = jsonEncode(result);
-  //   final response;
-
-  //   if (result != null && result['data'] != null) {
-  //     showDialog(
-  //       context: context,
-  //       barrierDismissible: false,
-  //       builder: (BuildContext context) {
-  //         return Container(
-  //           color: Colors.black.withOpacity(0.5),
-  //           child: BackdropFilter(
-  //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-  //             child: const Center(
-  //               child: LoadingWidget(),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     );
-
-  //     UserData userData = UserData.fromJson(jsonString);
-
-  //     if (userData.channel == 'WHATSAPP') {
-  //       response = await http.post(
-  //         Uri.parse('$apiUrl/api/v1/user'),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: json.encode({
-  //           'name': userData.name,
-  //           'whatsappNumber': userData.identityValue,
-  //           'email': "",
-  //         }),
-  //       );
-  //     } else {
-  //       response = await http.post(
-  //         Uri.parse('$apiUrl/api/v1/user'),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: json.encode({
-  //           'name': userData.name,
-  //           'whatsappNumber': '',
-  //           'email': userData.identityValue,
-  //         }),
-  //       );
-  //     }
-
-  //     if (response.statusCode == 200) {
-  //       final responseData = jsonDecode(response.body);
-  //       ref.read(userDataProvider.notifier).setUserData(responseData);
-
-  //       // Save token and userData to SharedPreferences
-  //       final prefs = await SharedPreferences.getInstance();
-  //       await prefs.setString('token', userData.idToken);
-  //       await prefs.setString('userData', json.encode(responseData));
-
-  //       final airlineController = GetAirlineAirportController();
-  //       final result = await airlineController.getAirlineAirport();
-  //       if (result['success']) {
-  //         ref.read(airlineAirportProvider.notifier).setData(result['data']);
-  //       }
-
-  //       final reviewsController = GetReviewsAirlineController();
-  //       final reviewsResult = await reviewsController.getReviews();
-  //       if (reviewsResult['success']) {
-  //         ref
-  //             .read(reviewsAirlineProvider.notifier)
-  //             .setReviewData(reviewsResult['data']);
-  //       }
-
-  //       Navigator.pop(context); // Remove loading dialog
-
-  //       if (responseData['userState'] == 0) {
-  //         Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
-  //       } else {
-  //         Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
-  //       }
-  //     } else {
-  //       Navigator.pop(context); // Remove loading dialog
-  //     }
-  //   } else {
-  //     _showErrorSnackBar('Login failed. Please try again.');
-  //   }
-  // }
-
-  // Future<void> _loginWithWhatsApp() async {
-  //   try {
-  //     Map<String, dynamic> arg = {'appId': appId};
-  //     await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
-  //   } catch (e) {
-  //     _showErrorSnackBar('WhatsApp login failed. Please try again.');
-  //   }
-  // }
-
-  Future<void> testLogin() async {
+  void onHeadlessResult(dynamic result) async {
+    String jsonString = jsonEncode(result);
     final response;
-    response = await http.post(
-      Uri.parse('$apiUrl/api/v1/user'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: json.encode({
-        'name': 'Morris Hart',
-        'whatsappNumber': '',
-        'email': 'morrishart0220@gmail.com',
-      }),
-    );
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      ref.read(userDataProvider.notifier).setUserData(responseData);
+    if (result != null && result['data'] != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Container(
+            color: Colors.black.withOpacity(0.5),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: const Center(
+                child: LoadingWidget(),
+              ),
+            ),
+          );
+        },
+      );
 
-      // Save token and userData to SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', 'morrishart0220@gmail.com');
-      await prefs.setString('userData', json.encode(responseData));
+      UserData userData = UserData.fromJson(jsonString);
 
-      final airlineController = GetAirlineAirportController();
-      final result = await airlineController.getAirlineAirport();
-      if (result['success']) {
-        ref.read(airlineAirportProvider.notifier).setData(result['data']);
+      if (userData.channel == 'WHATSAPP') {
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': userData.identityValue,
+            'email': "",
+            'apple': "",
+          }),
+        );
+      } else if (userData.channel == 'APPLE') {
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': "",
+            'email': "",
+            'apple': userData.identityValue,
+          }),
+        );
+      } else {
+        response = await http.post(
+          Uri.parse('$apiUrl/api/v1/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'name': userData.name,
+            'whatsappNumber': '',
+            'email': userData.identityValue,
+            'apple': "",
+          }),
+        );
       }
 
-      Navigator.pop(context); // Remove loading dialog
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        ref.read(userDataProvider.notifier).setUserData(responseData);
 
-      if (responseData['userState'] == 0) {
-        Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+        // When storing the data
+        final prefs = await SharedPreferences.getInstance();
+        final lastAccessTime = DateTime.now().millisecondsSinceEpoch;
+
+        await prefs.setString('token', userData.idToken);
+        await prefs.setString('userData', json.encode(responseData));
+        await prefs.setInt('lastAccessTime', lastAccessTime);
+
+        Navigator.pop(context); // Remove loading dialog
+
+        if (responseData['userState'] == 0) {
+          Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+        }
       } else {
-        Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+        Navigator.pop(context); // Remove loading dialog
       }
     } else {
-      Navigator.pop(context); // Remove loading dialog
+      _showErrorSnackBar('Login failed. Please try again.');
+    }
+  }
+
+  Future<void> _openLoginPage() async {
+    try {
+      Map<String, dynamic> arg = {'appId': appId};
+      await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
+    } catch (e) {
+      print("Login error: $e");
+      _showErrorSnackBar('WhatsApp login failed. Please try again.');
     }
   }
 
@@ -217,50 +179,66 @@ class _LoginState extends ConsumerState<Login> {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
-      body: isLoading
-          ? const LoadingWidget()
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/login.png',
-                    width: screenSize.width,
-                    height: screenSize.height * 0.74,
-                    fit: BoxFit.cover,
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      // _loginWithWhatsApp();
-                      testLogin();
-                    },
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(bottom: 100, right: 48, left: 48),
-                      child: Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                        Text(
-                          "   Tap here to signin   ",
-                          style: TextStyle(
-                              fontFamily: 'Clash Grotesk',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600),
-                          selectionColor: Colors.black,
-                        ),
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                        )),
-                      ]),
-                    ),
-                  )
-                ],
+      body: Stack(
+        children: [
+          // Background Image
+          Center(
+            child: Container(
+              color: AppStyles.mainColor,
+              child: SvgPicture.asset(
+                'assets/images/launchImage.svg',
+                width: screenSize.width * 0.7,
+                height: screenSize.width * 0.5,
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+          // Existing Content
+          isLoading
+              ? const LoadingWidget()
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/login.svg',
+                        width: screenSize.width,
+                        height: screenSize.height * 0.74,
+                        fit: BoxFit.cover,
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          _openLoginPage();
+                        },
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(bottom: 100, right: 48, left: 48),
+                          child: Row(children: <Widget>[
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                            Text(
+                              "   Tap here to signin   ",
+                              style: TextStyle(
+                                  fontFamily: 'Arial',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600),
+                              selectionColor: Colors.black,
+                            ),
+                            Expanded(
+                                child: Divider(
+                              color: Colors.black,
+                            )),
+                          ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
