@@ -439,15 +439,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           ),
           // buildEmojiRatings(uniqueRatings),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(
-                onPressed: () async {
-                  // await BottomSheetHelper.showScoreBottomSheet(context);
-                  sharedFunction("https://airlinereviewapp.com");
-                },
-                icon: Image.asset('assets/icons/share.png'),
-              ),
+              // IconButton(
+              //   onPressed: () async {
+              //     // await BottomSheetHelper.showScoreBottomSheet(context);
+              //     sharedFunction("https://airlinereviewapp.com");
+              //   },
+              //   icon: Image.asset('assets/icons/share.png'),
+              // ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [

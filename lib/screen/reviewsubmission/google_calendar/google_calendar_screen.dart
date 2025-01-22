@@ -199,8 +199,7 @@ class _EventCardState extends ConsumerState<EventCard> {
           match.group(0)!.substring(4, match.group(0)!.length - 1);
       final DateTime date = event.start!.dateTime!;
       final String departureAirport = matchLocation!.group(0)!;
-      final String classOfService =
-          event.description!.substring(0, event.description!.indexOf(" "));
+      final String classOfService = "Business";
 
       final bool pnrExists = await _boardingPassController.checkPnrExists(pnr);
       if (pnrExists) {
