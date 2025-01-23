@@ -263,7 +263,7 @@ class _ReviewsubmissionScreenState
                     },
                     color: Colors.white,
                   ),
-                  // const SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   // NavButton(
                   //   text: AppLocalizations.of(context)
                   //       .translate('Input manually'),

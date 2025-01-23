@@ -8,17 +8,14 @@ class FeedbackOptionForAirline extends StatelessWidget {
   final String iconUrl;
   final int label;
   final int selectedNumberOfSubcategoryForLike;
-  final int numberOfFirstSelectedAspects;
-  final int numberOfSecondSelectedAspects;
 
-  const FeedbackOptionForAirline(
-      {super.key,
-      required this.numForIdentifyOfParent,
-      required this.iconUrl,
-      required this.label,
-      required this.selectedNumberOfSubcategoryForLike,
-      required this.numberOfFirstSelectedAspects,
-      required this.numberOfSecondSelectedAspects});
+  const FeedbackOptionForAirline({
+    super.key,
+    required this.numForIdentifyOfParent,
+    required this.iconUrl,
+    required this.label,
+    required this.selectedNumberOfSubcategoryForLike,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,46 +95,6 @@ class FeedbackOptionForAirline extends StatelessWidget {
                 ))
         ],
       ),
-    );
-  }
-
-  void _showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          backgroundColor: Colors.white,
-          title: Row(
-            children: [
-              Icon(Icons.warning, color: Colors.red, size: 24), // Warning icon
-              SizedBox(width: 10),
-              Text("Limit Exceeded",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: Text(
-            "You can select up to 4 aspects.",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blue, // Button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
-      },
     );
   }
 }

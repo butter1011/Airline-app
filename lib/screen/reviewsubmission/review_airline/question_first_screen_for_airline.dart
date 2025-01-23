@@ -64,8 +64,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects),
+              _buildFeedbackOptions(selections),
               _buildNavigationButtons(context),
             ],
           ),
@@ -74,8 +73,9 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects,
-      int numberOfSecondSelectedAspects) {
+  Widget _buildFeedbackOptions(
+    selections,
+  ) {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirline;
 
@@ -110,8 +110,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  numberOfFirstSelectedAspects: numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
                   selectedNumberOfSubcategoryForLike: selections[index]
                           ['subCategory']
                       .values
