@@ -65,24 +65,16 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final controller = _videoControllers[videoUrl];
     if (controller == null) return Container();
 
-    return FutureBuilder(
-      future: controller.initialize(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          controller.play(); // Auto-play video
-          controller.setLooping(true); // Ensure looping is enabled
-          return AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: VideoPlayer(controller),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          );
-        }
-      },
+     if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller..play()),
+      );
+    }
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey,
+      ),
     );
   }
 
