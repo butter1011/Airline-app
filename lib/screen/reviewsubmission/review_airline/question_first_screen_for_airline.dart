@@ -92,7 +92,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select up to 4 positive aspects',
+              'Select positive aspects',
               style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),

@@ -7,4 +7,3 @@ const String ciriumAppId = "95773e10";
 const String ciriumAppKey = "6847f849d0848f2d1d99065b88ef4100";
 // const backendUrl = "10.0.2.2:3000";
 // const apiUrl = "http://10.0.2.2:3000";
-// https://api.flightstats.com/flex/flightstatus/historical/rest/v3/json/flight/status/CX/0171/dep/2025/1/7?appId=95773e10&appKey=6847f849d0848f2d1d99065b88ef4100&airport=HKG

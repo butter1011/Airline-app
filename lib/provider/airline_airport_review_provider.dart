@@ -244,6 +244,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   void getFilteredReviews(String filterType, String? searchQuery,
       String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
+    // print(object)
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
 
@@ -265,7 +266,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
 
     final cacheKey =
-        '${filterType}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
+        '${filterType}_${searchQuery ?? ''}_${flyerClass ?? ''}_${selectedContinents?.join('_') ?? ''}';
 
     if (state.sortedListCache.containsKey(cacheKey)) {
       state = state.copyWith(filteredReviews: state.sortedListCache[cacheKey]!);
@@ -277,35 +278,28 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     switch (filterType) {
       case 'All':
         filteredReviews = [
-          ...getAirlineReviewsWithScore().where(checkContinent),
+          ...getAirlineReviewsWithScore(),
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
         break;
       case 'Airline':
-        filteredReviews =
-            getAirlineReviewsWithScore().where(checkContinent).toList();
+        filteredReviews = getAirlineReviewsWithScore().toList();
         break;
       case 'Airport':
         filteredReviews =
             getAirportReviewsWithScore().where(checkContinent).toList();
         break;
       case 'Cleanliness':
-        filteredReviews = getAirlineReviewsSorted("cleanliness")
-            .where(checkContinent)
-            .toList();
+        filteredReviews = getAirlineReviewsSorted("cleanliness").toList();
         break;
       case 'Onboard':
-        filteredReviews = getAirlineReviewsSorted("onboardService")
-            .where(checkContinent)
-            .toList();
+        filteredReviews = getAirlineReviewsSorted("onboardService").toList();
         break;
       case 'Food & Beverage':
-        filteredReviews.addAll(
-            getAirlineReviewsSorted("foodBeverage").where(checkContinent));
+        filteredReviews.addAll(getAirlineReviewsSorted("foodBeverage"));
         break;
       case 'Entertainment & WiFi':
-        filteredReviews.addAll(
-            getAirlineReviewsSorted("entertainmentWifi").where(checkContinent));
+        filteredReviews.addAll(getAirlineReviewsSorted("entertainmentWifi"));
         break;
       case 'Accessibility':
         filteredReviews.addAll(
@@ -329,7 +323,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         break;
       default:
         filteredReviews = [
-          ...getAirlineReviewsWithScore().where(checkContinent),
+          ...getAirlineReviewsWithScore(),
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
     }
@@ -391,6 +385,27 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
               .compareTo(a['airport'][sortKey] ?? 0));
         }
       }
+    }
+
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      final query = searchQuery.toLowerCase();
+      filteredReviews = filteredReviews.where((item) {
+        final name = item['reviewer']['name'].toString().toLowerCase();
+        final departureAirport =
+            item['from']?['name']?.toString().toLowerCase() ?? '';
+        final arrivalAirport =
+            item['to']?['name']?.toString().toLowerCase() ?? '';
+        final airport =
+            item['airport']?['name']?.toString().toLowerCase() ?? '';
+        final airline =
+            item['airline']?['name']?.toString().toLowerCase() ?? '';
+
+        return name.contains(query) ||
+            departureAirport.contains(query) ||
+            arrivalAirport.contains(query) ||
+            airport.contains(query) ||
+            airline.contains(query);
+      }).toList();
     }
     state = state.copyWith(
       filteredReviews: filteredReviews,

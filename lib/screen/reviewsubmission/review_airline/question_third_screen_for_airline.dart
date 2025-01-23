@@ -236,6 +236,19 @@ class _QuestionThirdScreenForAirlineState
         comment: comment,
       );
 
+      print("✨reviewer: ${review.reviewer}");
+      print("from: ${review.from}");
+      print("to: ${review.to}");
+      print("classTravel: ${review.classTravel}");
+      print("airline: ${review.airline}");
+      print("departureArrival: ${review.departureArrival}");
+      print("comfort: ${review.comfort}");
+      print("cleanliness: ${review.cleanliness}");
+      print("onboardService: ${review.onboardService}");
+      print("foodBeverage: ${review.foodBeverage}");
+      print("entertainmentWifi: ${review.entertainmentWifi}");
+      print("comment: ${review.comment}");
+
       final result = await _reviewController.saveAirlineReview(review);
 
       if (_image.isNotEmpty && result['data']?['data']?['_id'] != null) {

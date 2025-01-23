@@ -292,7 +292,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airline) => airline['_id'] == airlineId,
       orElse: () => {'logoImage': ''},
     );
-    return airline['logoImage']?? '';
+    return airline['logoImage'] ?? '';
   }
 
   String getAirlineBackgroundImage(String airlineId) {
@@ -316,7 +316,7 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       (airport) => airport['_id'] == airportId,
       orElse: () => {'logoImage': ''},
     );
-    return airport['logoImage']??'';
+    return airport['logoImage'] ?? '';
   }
 
   String getAirportBackgroundImage(String airportId) {
@@ -361,64 +361,52 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
 
     switch (filterType) {
       case 'All':
-        filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
+        filteredList.addAll(getAirlineDataWithScore());
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
         break;
       case 'Airline':
-        filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
+        filteredList.addAll(getAirlineDataWithScore());
         break;
       case 'Airport':
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
         break;
       case 'Flight Experience':
-        filteredList.addAll(
-            getAirlineDataSorted("departureArrival").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("departureArrival"));
         break;
       case 'Comfort':
-        filteredList
-            .addAll(getAirlineDataSorted("comfort").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("comfort"));
         break;
       case 'Cleanliness':
-        filteredList
-            .addAll(getAirlineDataSorted("cleanliness").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("cleanliness"));
         break;
       case 'Onboard':
-        filteredList.addAll(
-            getAirlineDataSorted("onboardService").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("onboardService"));
         break;
       case 'Food & Beverage':
-        filteredList
-            .addAll(getAirlineDataSorted("foodBeverage").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("foodBeverage"));
         break;
       case 'Entertainment & WiFi':
-        filteredList.addAll(
-            getAirlineDataSorted("entertainmentWifi").where(checkContinent));
+        filteredList.addAll(getAirlineDataSorted("entertainmentWifi"));
         break;
       case 'Accessibility':
-        filteredList.addAll(
-            getAirportDataSorted("accessibility").where(checkContinent));
+        filteredList.addAll(getAirportDataSorted("accessibility").where(checkContinent));
         break;
       case 'Wait Times':
-        filteredList
-            .addAll(getAirportDataSorted("waitTimes").where(checkContinent));
+        filteredList.addAll(getAirportDataSorted("waitTimes").where(checkContinent));
         break;
       case 'Helpfulness':
-        filteredList
-            .addAll(getAirportDataSorted("helpfulness").where(checkContinent));
+        filteredList.addAll(getAirportDataSorted("helpfulness").where(checkContinent));
         break;
       case 'Ambience':
-        filteredList.addAll(
-            getAirportDataSorted("ambienceComfort").where(checkContinent));
+        filteredList.addAll(getAirportDataSorted("ambienceComfort").where(checkContinent));
         break;
       case 'Amenities':
-        filteredList
-            .addAll(getAirportDataSorted("amenities").where(checkContinent));
+        filteredList.addAll(getAirportDataSorted("amenities").where(checkContinent));
         break;
       default:
-        filteredList.addAll(getAirlineDataWithScore().where(checkContinent));
+        filteredList.addAll(getAirlineDataWithScore());
         filteredList.addAll(getAirportDataWithScore().where(checkContinent));
     }
-
     if (flyerClass != null && flyerClass != 'All') {
       final sortKey = flyerClass == "Business"
           ? 'businessClass'
@@ -457,7 +445,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
             trendingBio.contains(query);
       }).toList();
     }
-
     state = state.copyWith(
       filteredList: filteredList,
       sortedListCache: {...state.sortedListCache, cacheKey: filteredList},

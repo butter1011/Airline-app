@@ -246,6 +246,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     );
   }
 }
+
 class VerifiedButton extends StatelessWidget {
   const VerifiedButton({super.key});
 
@@ -258,8 +259,8 @@ class VerifiedButton extends StatelessWidget {
           color: const Color(0xff181818),
           borderRadius: BorderRadius.circular(12)),
       child: Center(
-    child: Text("Verified",
-        style: AppStyles.textStyle_14_400.copyWith(color: Colors.white)),
+        child: Text("Verified",
+            style: AppStyles.textStyle_14_400.copyWith(color: Colors.white)),
       ),
     );
   }
