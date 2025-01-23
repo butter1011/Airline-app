@@ -28,19 +28,12 @@ class FeedbackOptionForAirport extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (numForIdentifyOfParent == 1) {
-          // if (numberOfFirstSelectedAspects > 3) {
-          //   _showAlertDialog(context);
-          // } else {
           Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairport,
               arguments: {'singleAspect': label});
-          // }
         } else if (numForIdentifyOfParent == 2) {
-          // if (numberOfSecondSelectedAspects > 3) {
-          //   _showAlertDialog(context);
-          // } else {
+       
           Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
               arguments: {'singleAspect': label});
-          // }
         }
    
       }, // Change color on tap

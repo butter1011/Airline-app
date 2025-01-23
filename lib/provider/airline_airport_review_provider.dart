@@ -244,7 +244,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   void getFilteredReviews(String filterType, String? searchQuery,
       String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
-    // print(object)
+   
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
 

@@ -244,7 +244,11 @@ class _LoginState extends ConsumerState<Login> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content:
+            Center(child: Text(message, style: AppStyles.textStyle_14_600)),
+        backgroundColor: AppStyles.notifyColor,
+      ),
     );
   }
 }
