@@ -105,15 +105,12 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   }
 
   void updateReview(Map<String, dynamic> value) {
-    print(" --------------------✨ ${value['rating']}");
     final updatedReviews = state.reviews.map((review) {
       if (review['id'] == value['id']) {
         return {...review, 'rating': value['rating']};
       }
       return review;
     }).toList();
-    print(" --------------------🎏 $updatedReviews");
-
     state = state.copyWith(
       reviews: updatedReviews,
       sortedListCache: {},

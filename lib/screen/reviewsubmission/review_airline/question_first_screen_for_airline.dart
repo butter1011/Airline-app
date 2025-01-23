@@ -49,8 +49,13 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           flexibleSpace: BuildQuestionHeaderForAirline(
             backgorundImage: backgroundImage,
             subTitle: "Tell us what you liked about your journey.",

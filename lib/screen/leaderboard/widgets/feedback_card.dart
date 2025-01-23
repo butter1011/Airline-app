@@ -404,7 +404,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           onPressed: () async {
                             setState(() {
                               isFavorite = !isFavorite;
-                              print("This is users support : $isFavorite");
+
                               if (isFavorite) {
                                 totalFavorites++;
                               } else {
@@ -437,12 +437,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                           jsonDecode(response.body)['data']);
                                 });
                               } else {
-                                // Show error message if API call fails
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('Failed to update reaction')),
-                                );
+                                print('Failed to update reaction');
+                                //  Show error message if API call fails
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //       content:
+                                //           Text('Failed to update reaction')),
+                                // );
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -462,7 +463,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             color: Colors.black,
                           ),
                         ),
-                      
                       ],
                     )
                   : Row(
@@ -471,7 +471,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                           onPressed: () async {
                             setState(() {
                               isFavorite = !isFavorite;
-                              print("This is users support : $isFavorite");
                               if (isFavorite) {
                                 totalFavorites++;
                               } else {
@@ -504,12 +503,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                           jsonDecode(response.body)['data']);
                                 });
                               } else {
+                                print('Failed to update reaction'); 
                                 // Show error message if API call fails
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('Failed to update reaction')),
-                                );
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //       content:
+                                //           Text('Failed to update reaction')),
+                                // );
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
