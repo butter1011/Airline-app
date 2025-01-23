@@ -40,7 +40,7 @@ class BasicMapbutton extends StatelessWidget {
             Text(
               '$btntext',
               style: const TextStyle(
-                  fontFamily: 'Arial',
+                  fontFamily: 'inter',
                   fontSize: 14,
                   fontWeight: FontWeight.w500),
             ),

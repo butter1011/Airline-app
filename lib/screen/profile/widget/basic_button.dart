@@ -39,7 +39,7 @@ class BasicButton extends StatelessWidget {
           child: Text(
             '$btntext',
             style: const TextStyle(
-                fontFamily: 'Arial',
+                fontFamily: 'inter',
                 fontSize: 14,
                 fontWeight: FontWeight.bold),
           ),

@@ -116,7 +116,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                             '${userData?['userData']['selectedbadges']}'),
                                                     style: TextStyle(
                                                         fontFamily:
-                                                            'Arial',
+                                                            'inter',
                                                         fontSize: 16,
                                                         color: Colors.white,
                                                         fontWeight:
@@ -162,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     '${userData?['userData']['badgeNumber']}',
                                                     style: TextStyle(
                                                         fontFamily:
-                                                            'Arial',
+                                                            'inter',
                                                         fontSize: 16,
                                                         color: Colors.white,
                                                         fontWeight:
@@ -206,7 +206,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               child: Text(
                                                 '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
                                                 style: TextStyle(
-                                                    fontFamily: 'Arial',
+                                                    fontFamily: 'inter',
                                                     fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w500),
@@ -230,7 +230,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['name']}',
                               style: const TextStyle(
-                                fontFamily: 'Arial',
+                                fontFamily: 'inter',
                                 fontSize: 24,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -241,7 +241,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['bio']}',
                               style: const TextStyle(
-                                fontFamily: 'Arial',
+                                fontFamily: 'inter',
                                 letterSpacing: 0.6,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
@@ -259,7 +259,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   AppLocalizations.of(context)
                                       .translate('My favorite Airline is'),
                                   style: const TextStyle(
-                                    fontFamily: 'Arial',
+                                    fontFamily: 'inter',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -268,7 +268,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 Text(
                                   ' ${userData?['userData']['favoriteAirlines']}',
                                   style: const TextStyle(
-                                    fontFamily: 'Arial',
+                                    fontFamily: 'inter',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
@@ -288,7 +288,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   AppLocalizations.of(context)
                                       .translate('Points received:'),
                                   style: const TextStyle(
-                                    fontFamily: 'Arial',
+                                    fontFamily: 'inter',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -297,7 +297,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                 Text(
                                   "  ${userData?['userData']["points"]}",
                                   style: const TextStyle(
-                                    fontFamily: 'Arial',
+                                    fontFamily: 'inter',
                                     letterSpacing: 0.3,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,

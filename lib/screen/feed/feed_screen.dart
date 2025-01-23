@@ -150,7 +150,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                           decoration: InputDecoration(
                             hintText: 'Search',
                             hintStyle: TextStyle(
-                                fontFamily: 'Arial', fontSize: 14),
+                                fontFamily: 'inter', fontSize: 14),
                             contentPadding: EdgeInsets.all(0),
                             prefixIcon: Icon(Icons.search),
                             border: InputBorder.none,

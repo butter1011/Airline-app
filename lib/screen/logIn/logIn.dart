@@ -222,7 +222,7 @@ class _LoginState extends ConsumerState<Login> {
                             Text(
                               "   Tap here to signin   ",
                               style: TextStyle(
-                                  fontFamily: 'Arial',
+                                  fontFamily: 'inter',
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600),
                               selectionColor: Colors.black,

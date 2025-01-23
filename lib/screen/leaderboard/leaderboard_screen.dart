@@ -306,7 +306,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           decoration: InputDecoration(
                             hintText: 'Search',
                             hintStyle:
-                                TextStyle(fontFamily: 'Arial', fontSize: 14),
+                                TextStyle(fontFamily: 'inter', fontSize: 14),
                             contentPadding: EdgeInsets.all(0),
                             prefixIcon: Icon(Icons.search),
                             border: InputBorder.none,
