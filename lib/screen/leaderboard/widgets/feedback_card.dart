@@ -46,8 +46,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
     isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
-    totalFavorites = (widget.singleFeedback['rating'] as List).length;
-  }
+    totalFavorites = (widget.singleFeedback['rating'] as List).length;  }
 
   @override
   void dispose() {
@@ -522,8 +521,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               : Icon(Icons.favorite_border),
                         ),
                         SizedBox(width: 8),
-                        Text(
-                          totalFavorites.toString(),
+                           AnimatedFlipCounter(
+                          value: totalFavorites,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),

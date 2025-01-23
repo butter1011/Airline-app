@@ -205,18 +205,26 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Was in ",
-                      style: AppStyles.textStyle_14_400
-                          .copyWith(color: const Color(0xFF38433E)),
+                    Flexible(
+                      child: Text(
+                        "Was in ",
+                        style: AppStyles.textStyle_14_400
+                            .copyWith(color: const Color(0xFF38433E)),
+                      ),
                     ),
-                    Text(
-                      "${args?['Usedairport'] ?? ''}, ",
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        "${args?['Usedairport'] ?? ''}, ",
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text(
-                      'Premium Economy',
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        'Premium Economy',
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     )
                   ],
                 ),

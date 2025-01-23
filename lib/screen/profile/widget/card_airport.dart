@@ -38,7 +38,8 @@ class CLeaderboardScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
-                  AppLocalizations.of(context).translate('Showing'),
+                  AppLocalizations.of(context)
+                      .translate('Most Recently Reviews'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -46,7 +47,7 @@ class CLeaderboardScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              Expanded(child: ReviewScore())
+              // Expanded(child: ReviewScore())
             ],
           ),
         ),
@@ -101,72 +102,74 @@ class CLeaderboardScreen extends ConsumerWidget {
   }
 }
 
-class ReviewScore extends StatefulWidget {
-  @override
-  _ReviewScoreState createState() => _ReviewScoreState();
-}
+// class ReviewScore extends StatefulWidget {
+//   const ReviewScore({super.key});
 
-class _ReviewScoreState extends State<ReviewScore> {
-  String? _selectedItem;
-  final List<dynamic> _items = [
-    'Highest Score',
-    'Lowest Score',
-  ];
+//   @override
+//   State<ReviewScore> createState() => _ReviewScoreState();
+// }
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedItem = _items[0];
-  }
+// class _ReviewScoreState extends State<ReviewScore> {
+//   String? _selectedItem;
+//   // final List<dynamic> _items = [
+//   //   'Highest Score',
+//   //   'Lowest Score',
+//   // ];
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: _selectedItem,
-          isExpanded: true,
-          icon: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(
-              Icons.expand_more,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          style: TextStyle(
-              color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
-          menuMaxHeight: 600,
-          elevation: 8,
-          dropdownColor: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              setState(() {
-                _selectedItem = newValue;
-              });
-            }
-          },
-          items: _items.map<DropdownMenuItem<String>>((dynamic value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: Colors.transparent,
-                ),
-                child: Text(
-                  AppLocalizations.of(context).translate(value) ?? value,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   void initState() {
+//     super.initState();
+//     // _selectedItem = _items[0];
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: DropdownButtonHideUnderline(
+//         child: DropdownButton<String>(
+//           value: _selectedItem,
+//           isExpanded: true,
+//           icon: Padding(
+//             padding: const EdgeInsets.only(left: 8.0),
+//             child: Icon(
+//               Icons.expand_more,
+//               color: Colors.grey.shade600,
+//             ),
+//           ),
+//           style: TextStyle(
+//               color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
+//           menuMaxHeight: 600,
+//           elevation: 8,
+//           dropdownColor: Colors.white,
+//           borderRadius: BorderRadius.circular(8),
+//           onChanged: (String? newValue) {
+//             if (newValue != null) {
+//               setState(() {
+//                 _selectedItem = newValue;
+//               });
+//             }
+//           },
+//           // items: _items.map<DropdownMenuItem<String>>((dynamic value) {
+//           //   return DropdownMenuItem<String>(
+//           //     value: value,
+//           //     child: Container(
+//           //       padding: EdgeInsets.symmetric(vertical: 8.0),
+//           //       decoration: BoxDecoration(
+//           //         borderRadius: BorderRadius.circular(24),
+//           //         color: Colors.transparent,
+//           //       ),
+//           //       child: Text(
+//           //         AppLocalizations.of(context).translate(value) ?? value,
+//           //         style: TextStyle(
+//           //           color: Colors.black,
+//           //           fontSize: 16,
+//           //         ),
+//           //       ),
+//           //     ),
+//           //   );
+//           // }).toList(),
+//         ),
+//       ),
+//     );
+//   }
+// }
