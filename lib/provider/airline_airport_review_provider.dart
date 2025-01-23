@@ -105,12 +105,14 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   }
 
   void updateReview(Map<String, dynamic> value) {
+    print(" --------------------✨ ${value['rating']}");
     final updatedReviews = state.reviews.map((review) {
       if (review['id'] == value['id']) {
         return {...review, 'rating': value['rating']};
       }
       return review;
     }).toList();
+    print(" --------------------🎏 $updatedReviews");
 
     state = state.copyWith(
       reviews: updatedReviews,
@@ -244,7 +246,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   void getFilteredReviews(String filterType, String? searchQuery,
       String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
-   
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
 

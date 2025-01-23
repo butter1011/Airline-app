@@ -100,8 +100,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     final List<dynamic> imgList = args?['Images'] ?? [];
     final List<dynamic> videoList = args?['Videos'] ?? [];
     final List<dynamic> mediaList = [...imgList, ...videoList];
-    final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
 
     return Scaffold(
       body: Column(
