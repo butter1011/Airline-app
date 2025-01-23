@@ -65,33 +65,19 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     super.dispose();
   }
 
-   Widget _buildVideoPlayer(String videoUrl) {
+  Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
+    if (controller == null) return Container();
 
-    if (controller == null) {
-      return const Center(child: CircularProgressIndicator());
+    if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller..play()),
+      );
     }
-    return AspectRatio(
-      aspectRatio: controller.value.aspectRatio,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          VideoPlayer(controller),
-          IconButton(
-            icon: Icon(
-              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              size: 50.0,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                controller.value.isPlaying
-                    ? controller.pause()
-                    : controller.play();
-              });
-            },
-          ),
-        ],
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey,
       ),
     );
   }

@@ -112,6 +112,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
     final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
     final ratingMap = widget.singleFeedback['rating'] as Map<String, dynamic>?;
+
     // final rating = widget.singleFeedback['rating'] ?? [];
     List<int> getRatingValues(Map<String, dynamic>? ratingMap) {
       if (ratingMap == null || ratingMap.isEmpty) return [];

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
@@ -236,24 +237,10 @@ class _QuestionThirdScreenForAirlineState
         comment: comment,
       );
 
-      print("✨reviewer: ${review.reviewer}");
-      print("from: ${review.from}");
-      print("to: ${review.to}");
-      print("classTravel: ${review.classTravel}");
-      print("airline: ${review.airline}");
-      print("departureArrival: ${review.departureArrival}");
-      print("comfort: ${review.comfort}");
-      print("cleanliness: ${review.cleanliness}");
-      print("onboardService: ${review.onboardService}");
-      print("foodBeverage: ${review.foodBeverage}");
-      print("entertainmentWifi: ${review.entertainmentWifi}");
-      print("comment: ${review.comment}");
-
-      final result = await _reviewController.saveAirlineReview(review);
+      var result = await _reviewController.saveAirlineReview(review);
 
       if (_image.isNotEmpty && result['data']?['data']?['_id'] != null) {
-        print("uploading the image...");
-        await _uploadImages(result['data']['data']['_id']);
+        result = await _uploadImages(result['data']['data']['_id']);
       }
 
       if (result['success']) {
@@ -278,47 +265,47 @@ class _QuestionThirdScreenForAirlineState
       _handleSubmissionError(context, e);
     }
   }
+    Future<Map<String, dynamic>> _uploadImages(String reviewId) async {
+      final url = Uri.parse('$apiUrl/api/v1/airline-review/upload-media');
+      Map<String, dynamic> lastResponse = {'success': false};
 
-  Future<void> _uploadImages(String reviewId) async {
-    final url = Uri.parse('$apiUrl/api/v1/airline-review/upload-media');
+      for (var media in _image) {
+        try {
+          final request = http.MultipartRequest('POST', url);
+          final filename = media.path.split('/').last;
+          final mimeType = lookupMimeType(media.path);
 
-    for (var media in _image) {
-      try {
-        final request = http.MultipartRequest('POST', url);
-        final filename = media.path.split('/').last;
-        final mimeType = lookupMimeType(media.path);
+          // Check if file is video or image
+          final isVideo = mimeType?.startsWith('video/') ?? false;
 
-        // Check if file is video or image
-        final isVideo = mimeType?.startsWith('video/') ?? false;
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'files',
+              media.path,
+              filename: filename,
+              contentType: MediaType.parse(
+                  mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
+            ),
+          );
+          request.fields['id'] = reviewId;
+          request.fields['type'] = isVideo ? 'video' : 'image';
 
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'files',
-            media.path,
-            filename: filename,
-            contentType: MediaType.parse(
-                mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
-          ),
-        );
-        request.fields['id'] = reviewId;
-        request.fields['type'] = isVideo ? 'video' : 'image';
+          final streamedResponse = await request.send();
+          final response = await http.Response.fromStream(streamedResponse);
 
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
+          if (response.statusCode != 200) {
+            throw Exception('Failed to upload media: ${response.body}');
+          }
 
-        if (response.statusCode != 200) {
-          throw Exception('Failed to upload media: ${response.body}');
+          lastResponse = jsonDecode(response.body);
+        } catch (e) {
+          print('Error uploading media: $e');
+          // Continue with next file even if current one fails
+          continue;
         }
-
-        print(
-            'Successfully uploaded ${isVideo ? 'video' : 'image'}: $filename');
-      } catch (e) {
-        print('Error uploading media: $e');
-        // Continue with next file even if current one fails
-        continue;
       }
+      return lastResponse;
     }
-  }
 
   Future<void> _pickMedia() async {
     if (_isPickingImage) return;
@@ -409,7 +396,6 @@ class _QuestionThirdScreenForAirlineState
     required int? index,
     required BoardingPassController boardingPassController,
   }) async {
-    print("result: ${result['data']}");
     ref.read(reviewsAirlineProvider.notifier).addReview(result['data']['data']);
 
     if (index != null) {
