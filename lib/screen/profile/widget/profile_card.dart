@@ -84,12 +84,12 @@ class ProfileCardList extends ConsumerWidget {
                         .state = 0, // Update state
                   ),
                   ProfileCard2(
-                    count: 1,
-                    iconPath: iconPaths[1],
-                    isActive: selectedIndex == 1,
-                    myfun: () =>
-                        ref.read(selectedIndexProvider.notifier).state = 1,
-                  ),
+                      count: 1,
+                      iconPath: iconPaths[1],
+                      isActive: selectedIndex == 1,
+                      myfun: () {}
+                      // ref.read(selectedIndexProvider.notifier).state = 1,
+                      ),
                   ProfileCard3(
                     count: 2,
                     iconPath: iconPaths[2],

@@ -23,6 +23,8 @@ class FeedScreen extends ConsumerStatefulWidget {
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
+  final TextEditingController _searchController = TextEditingController();
+    String _searchQuery = '';
   late bool selectedAll = true;
   late bool selectedAirline = false;
   late bool selectedAirport = false;
@@ -145,9 +147,19 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                               offset: Offset(2, 2))
                         ],
                       ),
-                      child: const Center(
+                      child: Center(
                         child: TextField(
-                          decoration: InputDecoration(
+                          controller:_searchController,
+                             onChanged: (value) {
+                            setState(() {
+                              _searchQuery = value.toLowerCase();
+                            });
+                            ref
+                                .read(reviewsAirlineProvider.notifier)
+                                .getFilteredReviews(
+                                    filterType, _searchQuery, null, null);
+                          },
+                          decoration: const InputDecoration(
                             hintText: 'Search',
                             hintStyle: TextStyle(
                                 fontFamily: 'inter', fontSize: 14),

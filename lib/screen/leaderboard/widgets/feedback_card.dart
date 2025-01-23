@@ -57,9 +57,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     super.dispose();
   }
 
-  void sharedFunction(String url) {
-    Share.share(url);
-  }
+  // void sharedFunction(String url) {
+  //   Share.share(url);
+  // }
 
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
