@@ -206,7 +206,7 @@ class _OverviewAirportReviewScreenState
                   SizedBox(width: constraints.maxWidth * 0.03),
                   Flexible(
                     child: Text(
-                      "Select up to 4 positive aspects",
+                      "Select positive aspects",
                       style: AppStyles.textStyle_14_600,
                     ),
                   ),

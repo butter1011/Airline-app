@@ -30,21 +30,8 @@ class FeedbackOptionForAirport extends StatelessWidget {
     final labelName = mainCategoryNames[label];
     return GestureDetector(
       onTap: () {
-        if (numForIdentifyOfParent == 1) {
-          if (numberOfFirstSelectedAspects > 3) {
-            _showAlertDialog(context);
-          } else {
-            Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairport,
-                arguments: {'singleAspect': label});
-          }
-        } else if (numForIdentifyOfParent == 2) {
-          if (numberOfSecondSelectedAspects > 3) {
-            _showAlertDialog(context);
-          } else {
-            Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
-                arguments: {'singleAspect': label});
-          }
-        }
+        Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
+            arguments: {'singleAspect': label});
       }, // Change color on tap
       child: Stack(
         children: [
@@ -98,46 +85,6 @@ class FeedbackOptionForAirport extends StatelessWidget {
                 ))
         ],
       ),
-    );
-  }
-
-  void _showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          backgroundColor: Colors.white,
-          title: Row(
-            children: [
-              Icon(Icons.warning, color: Colors.red, size: 24), // Warning icon
-              SizedBox(width: 10),
-              Text("Limit Exceeded",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: Text(
-            "You can select up to 4 positive aspects.",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blue, // Button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
-      },
     );
   }
 }

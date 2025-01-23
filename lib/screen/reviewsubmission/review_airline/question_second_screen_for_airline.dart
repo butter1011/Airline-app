@@ -90,7 +90,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select up to 4 negative aspects',
+              'Select negative aspects',
               style: AppStyles.textStyle_14_600,
             ),
             SizedBox(height: 16),

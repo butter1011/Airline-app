@@ -59,44 +59,40 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
 
   @override
   void dispose() {
-    // Cancel any pending operations
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-    
-    // Dispose video controllers
     for (var controller in _videoControllers.values) {
       controller.dispose();
     }
-    _videoControllers.clear();
-    
     super.dispose();
   }
 
-  Widget _buildVideoPlayer(String videoUrl) {
+   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
-    if (controller == null) return Container();
 
-    return FutureBuilder(
-      future: controller.initialize(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          controller.play(); // Auto-play video
-          controller.setLooping(true); // Ensure looping is enabled
-          return AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: VideoPlayer(controller),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
+    if (controller == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          VideoPlayer(controller),
+          IconButton(
+            icon: Icon(
+              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              size: 50.0,
+              color: Colors.white,
             ),
-          );
-        }
-      },
+            onPressed: () {
+              setState(() {
+                controller.value.isPlaying
+                    ? controller.pause()
+                    : controller.play();
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -250,6 +246,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     );
   }
 }
+
 class VerifiedButton extends StatelessWidget {
   const VerifiedButton({super.key});
 
@@ -262,8 +259,8 @@ class VerifiedButton extends StatelessWidget {
           color: const Color(0xff181818),
           borderRadius: BorderRadius.circular(12)),
       child: Center(
-    child: Text("Verified",
-        style: AppStyles.textStyle_14_400.copyWith(color: Colors.white)),
+        child: Text("Verified",
+            style: AppStyles.textStyle_14_400.copyWith(color: Colors.white)),
       ),
     );
   }
