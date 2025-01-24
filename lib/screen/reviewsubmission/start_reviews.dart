@@ -21,7 +21,7 @@ class StartReviews extends StatelessWidget {
           backgroundColor: Colors.white,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_sharp),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.leaderboardscreen),
           ),
           centerTitle: true,
           title: Text(
