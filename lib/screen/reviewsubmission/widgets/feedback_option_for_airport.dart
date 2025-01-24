@@ -28,6 +28,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     final labelName = mainCategoryNames[label];
+    print("This si ++++++++ $selectedNumberOfSubcategoryForLike");
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,

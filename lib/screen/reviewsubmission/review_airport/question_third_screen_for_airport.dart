@@ -219,28 +219,16 @@ class _QuestionThirdScreenForAirportState
                                     amenities: amenities,
                                     comment: comment,
                                   );
-                                  print("🧧Reviewer: ${review.reviewer}");
-                                  print("Airline: ${review.airline}");
-                                  print("Airport: ${review.airport}");
-                                  print("Class Travel: ${review.classTravel}");
-                                  print("Accessibility: ${review.accessibility}");
-                                  print("Wait Times: ${review.waitTimes}");
-                                  print("Helpfulness: ${review.helpfulness}");
-                                  print(
-                                      "Ambience Comfort: ${review.ambienceComfort}");
-                                  print("Food Beverage: ${review.foodBeverage}");
-                                  print("Amenities: ${review.amenities}");
-                                  print("Comment: ${review.comment}");
                                   final result = await _reviewController
                                       .saveAirportReview(review);
-            
+
                                   if (_image.isNotEmpty &&
                                       result['data']?['data']?['_id'] != null) {
                                     print("uploading the image...");
                                     await _uploadImages(
                                         result['data']['data']['_id']);
                                   }
-            
+
                                   if (result['success']) {
                                     final updatedUserData =
                                         await _reviewController
@@ -248,10 +236,12 @@ class _QuestionThirdScreenForAirportState
                                                 ref.watch(userDataProvider)?[
                                                     'userData']['_id'],
                                                 500);
-            
-                                    ref.read(scoreProvider.notifier).updateScore(
-                                        result['data']['data']['score']);
-            
+
+                                    ref
+                                        .read(scoreProvider.notifier)
+                                        .updateScore(
+                                            result['data']['data']['score']);
+
                                     ref
                                         .read(userDataProvider.notifier)
                                         .setUserData(updatedUserData["data"]);
@@ -264,11 +254,11 @@ class _QuestionThirdScreenForAirportState
                                           .updateBoardingPass(
                                               updatedBoardingPass);
                                     }
-            
+
                                     ref
                                         .read(reviewsAirlineProvider.notifier)
                                         .addReview(result['data']['data']);
-            
+
                                     ref
                                         .read(aviationInfoProvider.notifier)
                                         .resetState();
@@ -276,9 +266,9 @@ class _QuestionThirdScreenForAirportState
                                         .read(reviewFeedBackProviderForAirport
                                             .notifier)
                                         .resetState();
-            
+
                                     setState(() => _isLoading = false);
-            
+
                                     if (!mounted) return;
                                     Navigator.pushNamed(
                                         context, AppRoutes.completereviews);
@@ -296,7 +286,8 @@ class _QuestionThirdScreenForAirportState
                                   if (!mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Text('Error: ${e.toString()}')),
+                                        content:
+                                            Text('Error: ${e.toString()}')),
                                   );
                                 }
                               },
