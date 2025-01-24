@@ -34,32 +34,43 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       CarouselSliderController();
   final Map<String, VideoPlayerController> _videoControllers = {};
 
-  @override
+ @override 
   void initState() {
     super.initState();
-    // Initialize video controllers for all videos
     for (var video in widget.singleFeedback['videos'] ?? []) {
       _videoControllers[video] = VideoPlayerController.networkUrl(
         Uri.parse(video),
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
       )..initialize().then((_) {
-          _videoControllers[video]?.setLooping(true);
-        });
+        if (mounted) {
+          setState(() {
+            _videoControllers[video]?.setLooping(true);
+            _handleVideoState();
+          });
+        }
+      });
     }
   }
 
   @override
   void dispose() {
-    // Dispose all video controllers
-    _videoControllers.forEach((_, controller) {
+    for (var controller in _videoControllers.values) {
+      controller.pause(); // Pause before disposing
       controller.dispose();
-    });
+    }
+    _videoControllers.clear(); // Clear the map
     super.dispose();
   }
 
-  // void sharedFunction(String url) {
-  //   Share.share(url);
-  // }
+  void _handleVideoState() {
+    if (mounted) {
+      _videoControllers.forEach((url, controller) {
+        if (!controller.value.isPlaying) {
+          controller.play();
+        }
+      });
+    }
+  }
 
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];

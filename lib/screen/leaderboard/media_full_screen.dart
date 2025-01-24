@@ -25,6 +25,13 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     });
   }
 
+  void _pauseAllVideos() {
+    _videoControllers.forEach((_, controller) {
+      controller.pause();
+    });
+  }
+
+
   Future<void> _initVideos() async {
     setState(() {
       isLoading = true;
@@ -60,8 +67,10 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
   @override
   void dispose() {
     for (var controller in _videoControllers.values) {
+      controller.pause();  // Pause before disposing
       controller.dispose();
     }
+    _videoControllers.clear(); // Clear the map
     super.dispose();
   }
 
@@ -75,6 +84,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         child: VideoPlayer(controller..play()),
       );
     }
+    
     return Center(
       child: CircularProgressIndicator(
         color: Colors.grey,
@@ -117,6 +127,9 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                     viewportFraction: 1,
                     height: 594.0,
                     enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) {
+                      _pauseAllVideos(); // Pause videos when sliding
+                    },
                   ),
                   items: mediaList.map((media) {
                     return Builder(
@@ -145,7 +158,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 top: 40,
                 left: 16,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
