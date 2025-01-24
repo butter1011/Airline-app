@@ -30,7 +30,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   bool isFavorite = false;
   late int totalFavorites;
 
- @override 
+  @override
   void initState() {
     super.initState();
     for (var video in widget.singleFeedback['videos'] ?? []) {
@@ -38,19 +38,20 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         Uri.parse(video),
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
       )..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _videoControllers[video]?.setLooping(true);
-            _handleVideoState();
-          });
-        }
-      });
+          if (mounted) {
+            setState(() {
+              _videoControllers[video]?.setLooping(true);
+              _handleVideoState();
+            });
+          }
+        });
     }
 
     // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
     isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
-    totalFavorites = (widget.singleFeedback['rating'] as List).length;  }
+    totalFavorites = (widget.singleFeedback['rating'] as List).length;
+  }
 
   @override
   void dispose() {
@@ -71,11 +72,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       });
     }
   }
+
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
     if (controller == null) return Container();
 
-     if (controller.value.isInitialized) {
+    if (controller.value.isInitialized) {
       return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: VideoPlayer(controller..play()),
@@ -509,7 +511,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                           jsonDecode(response.body)['data']);
                                 });
                               } else {
-                                print('Failed to update reaction'); 
+                                print('Failed to update reaction');
                                 // Show error message if API call fails
                                 // ScaffoldMessenger.of(context).showSnackBar(
                                 //   SnackBar(
@@ -528,7 +530,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               : Icon(Icons.favorite_border),
                         ),
                         SizedBox(width: 8),
-                           AnimatedFlipCounter(
+                        AnimatedFlipCounter(
                           value: totalFavorites,
                           textStyle: TextStyle(
                             fontSize: 16,
