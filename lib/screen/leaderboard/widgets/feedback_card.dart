@@ -30,17 +30,21 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   bool isFavorite = false;
   late int totalFavorites;
 
-  @override
+ @override 
   void initState() {
     super.initState();
-    // Initialize video controllers for all videos
     for (var video in widget.singleFeedback['videos'] ?? []) {
       _videoControllers[video] = VideoPlayerController.networkUrl(
         Uri.parse(video),
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
       )..initialize().then((_) {
-          _videoControllers[video]?.setLooping(true);
-        });
+        if (mounted) {
+          setState(() {
+            _videoControllers[video]?.setLooping(true);
+            _handleVideoState();
+          });
+        }
+      });
     }
 
     // Initialize favorite state and count
@@ -50,34 +54,37 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
   @override
   void dispose() {
-    _videoControllers.forEach((_, controller) {
+    for (var controller in _videoControllers.values) {
+      controller.pause(); // Pause before disposing
       controller.dispose();
-    });
+    }
+    _videoControllers.clear(); // Clear the map
     super.dispose();
   }
 
+  void _handleVideoState() {
+    if (mounted) {
+      _videoControllers.forEach((url, controller) {
+        if (!controller.value.isPlaying) {
+          controller.play();
+        }
+      });
+    }
+  }
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
     if (controller == null) return Container();
 
-    return FutureBuilder(
-      future: controller.initialize(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          controller.play(); // Auto-play video
-          controller.setLooping(true); // Ensure looping is enabled
-          return AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: VideoPlayer(controller),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.grey,
-            ),
-          );
-        }
-      },
+     if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller..play()),
+      );
+    }
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey,
+      ),
     );
   }
 
