@@ -25,6 +25,13 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     });
   }
 
+  void _pauseAllVideos() {
+    _videoControllers.forEach((_, controller) {
+      controller.pause();
+    });
+  }
+
+
   Future<void> _initVideos() async {
     setState(() {
       isLoading = true;
@@ -60,38 +67,27 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
   @override
   void dispose() {
     for (var controller in _videoControllers.values) {
+      controller.pause();  // Pause before disposing
       controller.dispose();
     }
+    _videoControllers.clear(); // Clear the map
     super.dispose();
   }
 
-   Widget _buildVideoPlayer(String videoUrl) {
+  Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
+    if (controller == null) return Container();
 
-    if (controller == null) {
-      return const Center(child: CircularProgressIndicator());
+    if (controller.value.isInitialized) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller..play()),
+      );
     }
-    return AspectRatio(
-      aspectRatio: controller.value.aspectRatio,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          VideoPlayer(controller),
-          IconButton(
-            icon: Icon(
-              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              size: 50.0,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                controller.value.isPlaying
-                    ? controller.pause()
-                    : controller.play();
-              });
-            },
-          ),
-        ],
+    
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey,
       ),
     );
   }
@@ -106,8 +102,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     final List<dynamic> imgList = args?['Images'] ?? [];
     final List<dynamic> videoList = args?['Videos'] ?? [];
     final List<dynamic> mediaList = [...imgList, ...videoList];
-    final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
 
     return Scaffold(
       body: Column(
@@ -131,6 +125,9 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                     viewportFraction: 1,
                     height: 594.0,
                     enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) {
+                      _pauseAllVideos(); // Pause videos when sliding
+                    },
                   ),
                   items: mediaList.map((media) {
                     return Builder(
@@ -159,7 +156,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 top: 40,
                 left: 16,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -213,18 +210,26 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Was in ",
-                      style: AppStyles.textStyle_14_400
-                          .copyWith(color: const Color(0xFF38433E)),
+                    Flexible(
+                      child: Text(
+                        "Was in ",
+                        style: AppStyles.textStyle_14_400
+                            .copyWith(color: const Color(0xFF38433E)),
+                      ),
                     ),
-                    Text(
-                      "${args?['Usedairport'] ?? ''}, ",
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        "${args?['Usedairport'] ?? ''}, ",
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text(
-                      'Premium Economy',
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        'Premium Economy',
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     )
                   ],
                 ),

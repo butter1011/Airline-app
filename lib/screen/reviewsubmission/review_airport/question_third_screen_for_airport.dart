@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/airport_review_model.dart';
@@ -45,8 +46,10 @@ class _QuestionThirdScreenForAirportState
   bool _isLoading = false;
   bool isSuccess = false;
 
-  Future<void> _uploadImages(String reviewId) async {
+  Future<Map<String, dynamic>> _uploadImages(String reviewId) async {
     final url = Uri.parse('$apiUrl/api/v1/airport-review/upload-media');
+
+    Map<String, dynamic> lastResponse = {'success': false};
 
     for (var media in _image) {
       try {
@@ -66,7 +69,6 @@ class _QuestionThirdScreenForAirportState
                 mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
           ),
         );
-
         request.fields['id'] = reviewId;
         request.fields['type'] = isVideo ? 'video' : 'image';
 
@@ -77,13 +79,14 @@ class _QuestionThirdScreenForAirportState
           throw Exception('Failed to upload media: ${response.body}');
         }
 
-        print(
-            'Successfully uploaded ${isVideo ? 'video' : 'image'}: $filename');
+        lastResponse = jsonDecode(response.body);
       } catch (e) {
         print('Error uploading media: $e');
+        // Continue with next file even if current one fails
         continue;
       }
     }
+    return lastResponse;
   }
 
   Future<void> _pickImage() async {
@@ -219,13 +222,27 @@ class _QuestionThirdScreenForAirportState
                                     amenities: amenities,
                                     comment: comment,
                                   );
-                                  final result = await _reviewController
+                                  print("🧧Reviewer: ${review.reviewer}");
+                                  print("Airline: ${review.airline}");
+                                  print("Airport: ${review.airport}");
+                                  print("Class Travel: ${review.classTravel}");
+                                  print(
+                                      "Accessibility: ${review.accessibility}");
+                                  print("Wait Times: ${review.waitTimes}");
+                                  print("Helpfulness: ${review.helpfulness}");
+                                  print(
+                                      "Ambience Comfort: ${review.ambienceComfort}");
+                                  print(
+                                      "Food Beverage: ${review.foodBeverage}");
+                                  print("Amenities: ${review.amenities}");
+                                  print("Comment: ${review.comment}");
+                                  var result = await _reviewController
                                       .saveAirportReview(review);
 
                                   if (_image.isNotEmpty &&
                                       result['data']?['data']?['_id'] != null) {
                                     print("uploading the image...");
-                                    await _uploadImages(
+                                    result = await _uploadImages(
                                         result['data']['data']['_id']);
                                   }
 

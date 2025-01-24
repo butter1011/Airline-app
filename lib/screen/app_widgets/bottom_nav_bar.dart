@@ -29,18 +29,19 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
     switch (_selectedIndex) {
       case 0:
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+      // case 1:
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('This feature is currently under development'),
+      //       duration: Duration(seconds: 2),
+      //     ),
+      //   );
       case 1:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('This feature is currently under development'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        Navigator.pushNamed(context, AppRoutes.feedscreen);
+        
       case 2:
         Navigator.pushNamed(context, AppRoutes.startreviews);
       case 3:
-        Navigator.pushNamed(context, AppRoutes.feedscreen);
-      case 4:
         Navigator.pushNamed(context, AppRoutes.profilescreen);
         break;
       default:
@@ -108,6 +109,49 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                   ),
               label: 'Leaderboard',
             ),
+            // BottomNavigationBarItem(
+            //   icon: Container(
+            //       width: 50,
+            //       height: 50,
+            //       decoration: BoxDecoration(
+            //         color: _selectedIndex == 1
+            //             ? AppStyles.littleBlackColor
+            //             : Colors.white,
+            //         borderRadius: BorderRadius.circular(30),
+            //         border:
+            //             Border.all(width: 2, color: AppStyles.littleBlackColor),
+            //         boxShadow: [
+            //           BoxShadow(
+            //             color: AppStyles.littleBlackColor,
+            //             offset: const Offset(2, 2),
+            //           ),
+            //         ],
+            //       ),
+            //       child: _selectedIndex == 1
+            //           ? Center(
+            //               child: SvgPicture.string(
+            //                 '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            //                 <path d="M18 10.2499C18 14.3921 14.6421 17.7499 10.5 17.7499H3.60344C3.31192 17.7499 3.11052 17.4582 3.2138 17.1856L3.95851 15.2201C4.14953 14.716 4.07355 14.1561 3.82688 13.6767C3.29834 12.6496 3 11.4846 3 10.2499C3 6.10778 6.35786 2.74992 10.5 2.74992M13.5556 11.6388C13.5556 10.1573 12.6667 7.19436 9.11111 7.19436C10.5926 7.19436 13.5556 6.30547 13.5556 2.74992C13.5556 4.2314 14.4444 7.19436 18 7.19436C16.5185 7.19436 13.5556 8.08325 13.5556 11.6388ZM18 4.41659C18 3.86103 17.6667 2.74992 16.3333 2.74992C16.8889 2.74992 18 2.41659 18 1.08325C18 2.41659 19.1111 2.74992 19.6667 2.74992C18.3333 2.74992 18 3.86103 18 4.41659ZM9.38889 12.7499C9.38889 12.287 9.11111 11.361 8 11.361C8.46296 11.361 9.38889 11.0833 9.38889 9.97214C9.38889 11.0833 10.3148 11.361 10.7778 11.361C9.66667 11.361 9.38889 12.287 9.38889 12.7499Z" stroke="#F9F9F9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            //                 </svg>
+            //                 ''',
+            //                 width: 30,
+            //                 height: 30,
+            //                 fit: BoxFit.contain,
+            //               ),
+            //             )
+            //           : Center(
+            //               child: SvgPicture.string(
+            //                 '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            //                 <path d="M18 10.4997C18 14.6418 14.6421 17.9997 10.5 17.9997H3.60344C3.31192 17.9997 3.11052 17.708 3.2138 17.4354L3.95851 15.4699C4.14953 14.9657 4.07355 14.4059 3.82688 13.9265C3.29834 12.8993 3 11.7343 3 10.4997C3 6.35754 6.35786 2.99967 10.5 2.99967M13.5556 11.8886C13.5556 10.4071 12.6667 7.44412 9.11111 7.44412C10.5926 7.44412 13.5556 6.55523 13.5556 2.99967C13.5556 4.48116 14.4444 7.44412 18 7.44412C16.5185 7.44412 13.5556 8.33301 13.5556 11.8886ZM18 4.66634C18 4.11079 17.6667 2.99967 16.3333 2.99967C16.8889 2.99967 18 2.66634 18 1.33301C18 2.66634 19.1111 2.99967 19.6667 2.99967C18.3333 2.99967 18 4.11079 18 4.66634ZM9.38889 12.9997C9.38889 12.5367 9.11111 11.6108 8 11.6108C8.46296 11.6108 9.38889 11.333 9.38889 10.2219C9.38889 11.333 10.3148 11.6108 10.7778 11.6108C9.66667 11.6108 9.38889 12.5367 9.38889 12.9997Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            //                 </svg>
+            //                 ''',
+            //                 width: 30,
+            //                 height: 30,
+            //                 fit: BoxFit.contain,
+            //               ),
+            //             )),
+            //   label: 'Ai Chat',
+            // ),
             BottomNavigationBarItem(
               icon: Container(
                   width: 50,
@@ -127,69 +171,6 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                     ],
                   ),
                   child: _selectedIndex == 1
-                      ? Center(
-                          child: SvgPicture.string(
-                            '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 10.2499C18 14.3921 14.6421 17.7499 10.5 17.7499H3.60344C3.31192 17.7499 3.11052 17.4582 3.2138 17.1856L3.95851 15.2201C4.14953 14.716 4.07355 14.1561 3.82688 13.6767C3.29834 12.6496 3 11.4846 3 10.2499C3 6.10778 6.35786 2.74992 10.5 2.74992M13.5556 11.6388C13.5556 10.1573 12.6667 7.19436 9.11111 7.19436C10.5926 7.19436 13.5556 6.30547 13.5556 2.74992C13.5556 4.2314 14.4444 7.19436 18 7.19436C16.5185 7.19436 13.5556 8.08325 13.5556 11.6388ZM18 4.41659C18 3.86103 17.6667 2.74992 16.3333 2.74992C16.8889 2.74992 18 2.41659 18 1.08325C18 2.41659 19.1111 2.74992 19.6667 2.74992C18.3333 2.74992 18 3.86103 18 4.41659ZM9.38889 12.7499C9.38889 12.287 9.11111 11.361 8 11.361C8.46296 11.361 9.38889 11.0833 9.38889 9.97214C9.38889 11.0833 10.3148 11.361 10.7778 11.361C9.66667 11.361 9.38889 12.287 9.38889 12.7499Z" stroke="#F9F9F9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            ''',
-                            width: 30,
-                            height: 30,
-                            fit: BoxFit.contain,
-                          ),
-                        )
-                      : Center(
-                          child: SvgPicture.string(
-                            '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 10.4997C18 14.6418 14.6421 17.9997 10.5 17.9997H3.60344C3.31192 17.9997 3.11052 17.708 3.2138 17.4354L3.95851 15.4699C4.14953 14.9657 4.07355 14.4059 3.82688 13.9265C3.29834 12.8993 3 11.7343 3 10.4997C3 6.35754 6.35786 2.99967 10.5 2.99967M13.5556 11.8886C13.5556 10.4071 12.6667 7.44412 9.11111 7.44412C10.5926 7.44412 13.5556 6.55523 13.5556 2.99967C13.5556 4.48116 14.4444 7.44412 18 7.44412C16.5185 7.44412 13.5556 8.33301 13.5556 11.8886ZM18 4.66634C18 4.11079 17.6667 2.99967 16.3333 2.99967C16.8889 2.99967 18 2.66634 18 1.33301C18 2.66634 19.1111 2.99967 19.6667 2.99967C18.3333 2.99967 18 4.11079 18 4.66634ZM9.38889 12.9997C9.38889 12.5367 9.11111 11.6108 8 11.6108C8.46296 11.6108 9.38889 11.333 9.38889 10.2219C9.38889 11.333 10.3148 11.6108 10.7778 11.6108C9.66667 11.6108 9.38889 12.5367 9.38889 12.9997Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            ''',
-                            width: 30,
-                            height: 30,
-                            fit: BoxFit.contain,
-                          ),
-                        )),
-              label: 'Ai Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppStyles.mainColor,
-                  borderRadius: BorderRadius.circular(30),
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppStyles.littleBlackColor,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Image.asset('assets/icons/plus.png'),
-              ),
-              label: 'Review',
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: _selectedIndex == 3
-                        ? AppStyles.littleBlackColor
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    border:
-                        Border.all(width: 2, color: AppStyles.littleBlackColor),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppStyles.littleBlackColor,
-                        offset: const Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  child: _selectedIndex == 3
                       ? Center(
                           child: SvgPicture.string(
                             '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -219,7 +200,29 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: _selectedIndex == 4
+                  color: _selectedIndex == 2? AppStyles.littleBlackColor
+                      : Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  border:
+                      Border.all(width: 2, color: AppStyles.littleBlackColor),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppStyles.littleBlackColor,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Center(child: Text("+", style: TextStyle(fontSize: 25, color:_selectedIndex == 2? Colors.white:Colors.black))),
+              ),
+              label: 'Review',
+            ),
+            
+            BottomNavigationBarItem(
+              icon: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: _selectedIndex == 3
                       ? AppStyles.littleBlackColor
                       : Colors.white,
                   borderRadius: BorderRadius.circular(30),

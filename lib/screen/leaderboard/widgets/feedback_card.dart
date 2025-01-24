@@ -1,22 +1,16 @@
-import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
-import 'package:airline_app/screen/leaderboard/widgets/emoji_box.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:share_plus/share_plus.dart';
-// final selectedEmojiProvider =
-//     StateProvider.family<int, String>((ref, feedbackId) => 0);
 
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard(
@@ -33,34 +27,50 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   final CarouselSliderController buttonCarouselController =
       CarouselSliderController();
   final Map<String, VideoPlayerController> _videoControllers = {};
+  bool isFavorite = false;
+  late int totalFavorites;
 
-  @override
+ @override 
   void initState() {
     super.initState();
-    // Initialize video controllers for all videos
     for (var video in widget.singleFeedback['videos'] ?? []) {
       _videoControllers[video] = VideoPlayerController.networkUrl(
         Uri.parse(video),
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
       )..initialize().then((_) {
-          _videoControllers[video]?.setLooping(true);
-        });
+        if (mounted) {
+          setState(() {
+            _videoControllers[video]?.setLooping(true);
+            _handleVideoState();
+          });
+        }
+      });
     }
-  }
+
+    // Initialize favorite state and count
+    final userId = ref.read(userDataProvider)?['userData']?['_id'];
+    isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
+    totalFavorites = (widget.singleFeedback['rating'] as List).length;  }
 
   @override
   void dispose() {
-    // Dispose all video controllers
-    _videoControllers.forEach((_, controller) {
+    for (var controller in _videoControllers.values) {
+      controller.pause(); // Pause before disposing
       controller.dispose();
-    });
+    }
+    _videoControllers.clear(); // Clear the map
     super.dispose();
   }
 
-  // void sharedFunction(String url) {
-  //   Share.share(url);
-  // }
-
+  void _handleVideoState() {
+    if (mounted) {
+      _videoControllers.forEach((url, controller) {
+        if (!controller.value.isPlaying) {
+          controller.play();
+        }
+      });
+    }
+  }
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
     if (controller == null) return Container();
@@ -78,55 +88,16 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     );
   }
 
-  Widget buildEmojiRatings(List<int> uniqueRatings) {
-    return SizedBox(
-      height: 40,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: uniqueRatings.length,
-        itemBuilder: (context, index) {
-          int rating = uniqueRatings[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: SvgPicture.asset(
-              'assets/icons/emoji_$rating.svg',
-              width: 24,
-              height: 24,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.singleFeedback['reviewer'] == null ||
         widget.singleFeedback['airline'] == null) {
-      return Container(); // Return empty container if data is null
+      return Container();
     }
-
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-    final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? ''));
+
     final List<dynamic> images = widget.singleFeedback['images'] ?? [];
     final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
-    final ratingMap = widget.singleFeedback['rating'] as Map<String, dynamic>?;
-    // final rating = widget.singleFeedback['rating'] ?? [];
-    List<int> getRatingValues(Map<String, dynamic>? ratingMap) {
-      if (ratingMap == null || ratingMap.isEmpty) return [];
-
-      // Extract values and convert to int, then get unique values
-      Set<int> uniqueValues = ratingMap.values
-          .map((value) => value is int ? value : int.tryParse(value.toString()))
-          .where((value) => value != null)
-          .cast<int>()
-          .toSet();
-
-      return uniqueValues.toList();
-    }
-
-    List<int> uniqueRatings = getRatingValues(ratingMap);
 
     return SizedBox(
       child: Column(
@@ -241,11 +212,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                         widget.singleFeedback['comment'] != ''
                                     ? widget.singleFeedback['comment']
                                     : '',
-                                'rating': ((widget.singleFeedback["rating"]
-                                            as Map<String, dynamic>?) ??
-                                        {})
-                                    .length
-                                    .toString(),
+                                'rating': totalFavorites.toString(),
                               });
                         },
                         child: CarouselSlider(
@@ -299,11 +266,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                         widget.singleFeedback['comment'] != ''
                                     ? widget.singleFeedback['comment']
                                     : '',
-                                'rating': ((widget.singleFeedback["rating"]
-                                            as Map<String, dynamic>?) ??
-                                        {})
-                                    .length
-                                    .toString(),
+                                'rating': totalFavorites.toString(),
                               });
                         },
                         child: CarouselSlider(
@@ -359,11 +322,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                         widget.singleFeedback['comment'] != ''
                                     ? widget.singleFeedback['comment']
                                     : '',
-                            'rating': ((widget.singleFeedback["rating"]
-                                        as Map<String, dynamic>?) ??
-                                    {})
-                                .length
-                                .toString(),
+                            'rating':
+                                ((widget.singleFeedback["rating"] as List?) ??
+                                        [])
+                                    .length
+                                    .toString(),
                           });
                     },
                     child: ClipRRect(
@@ -399,11 +362,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                         widget.singleFeedback['comment'] != ''
                                     ? widget.singleFeedback['comment']
                                     : '',
-                            'rating': ((widget.singleFeedback["rating"]
-                                        as Map<String, dynamic>?) ??
-                                    {})
-                                .length
-                                .toString(),
+                            'rating':
+                                ((widget.singleFeedback["rating"] as List?) ??
+                                        [])
+                                    .length
+                                    .toString(),
                           });
                     },
                     child: ClipRRect(
@@ -445,84 +408,66 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       children: [
                         IconButton(
                           onPressed: () async {
-                            final RenderBox button =
-                                context.findRenderObject() as RenderBox;
-                            final index = await EmojiBox.showCustomDialog(
-                                context, button);
+                            setState(() {
+                              isFavorite = !isFavorite;
 
-                            if (index != null) {
-                              setState(() {
-                                ref
-                                    .read(selectedEmojiProvider(
-                                            widget.singleFeedback['_id'] ?? '')
-                                        .notifier)
-                                    .state = index + 1;
-                              });
-
-                              try {
-                                // Update reaction in backend
-
-                                final response = await http.post(
-                                  Uri.parse(
-                                      '$apiUrl/api/v1/airline-review/update'),
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                  },
-                                  body: jsonEncode({
-                                    'feedbackId': widget.singleFeedback['_id'],
-                                    'user_id': userId,
-                                    'reactionType': ref
-                                        .watch(selectedEmojiProvider(
-                                                widget.singleFeedback['_id'] ??
-                                                    '')
-                                            .notifier)
-                                        .state,
-                                  }),
-                                );
-
-                                if (response.statusCode == 200) {
-                                  setState(() {
-                                    ref
-                                        .read(reviewsAirlineProvider.notifier)
-                                        .updateReview(
-                                            jsonDecode(response.body)['data']);
-                                    ref
-                                        .read(selectedEmojiNumberProvider(
-                                                widget.singleFeedback['_id'] ??
-                                                    '')
-                                            .notifier)
-                                        .state = jsonDecode(
-                                            response.body)['data']['rating']
-                                        .length;
-                                  });
-                                } else {
-                                  // Show error message if API call fails
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Failed to update reaction')),
-                                  );
-                                }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Something went wrong')),
-                                );
+                              if (isFavorite) {
+                                totalFavorites++;
+                              } else {
+                                totalFavorites--;
                               }
-                            } // Update selected emoji after dialog closes
+                            });
+
+                            try {
+                              // Update reaction in backend
+
+                              final response = await http.post(
+                                Uri.parse(
+                                    '$apiUrl/api/v1/airline-review/update'),
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                },
+                                body: jsonEncode({
+                                  'feedbackId': widget.singleFeedback['_id'],
+                                  'user_id': userId,
+                                  'isFavorite': isFavorite,
+                                }),
+                              );
+
+                              if (response.statusCode == 200) {
+                                setState(() {
+                                  ref
+                                      .read(reviewsAirlineProvider.notifier)
+                                      .updateReview(
+                                          jsonDecode(response.body)['data']);
+                                });
+                              } else {
+                                print('Failed to update reaction');
+                                //  Show error message if API call fails
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //       content:
+                                //           Text('Failed to update reaction')),
+                                // );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Something went wrong')),
+                              );
+                            }
                           },
-                          icon: selectedEmojiIndex != 0
-                              ? SvgPicture.asset(
-                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
-                                  width: 24,
-                                  height: 24,
-                                )
-                              : Icon(Icons.thumb_up_outlined),
+                          icon: isFavorite
+                              ? Icon(Icons.favorite, color: Colors.red)
+                              : Icon(Icons.favorite_border),
                         ),
                         SizedBox(width: 8),
-                        Text(
-                          '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
+                        AnimatedFlipCounter(
+                          value: totalFavorites,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     )
@@ -530,84 +475,65 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       children: [
                         IconButton(
                           onPressed: () async {
-                            final RenderBox button =
-                                context.findRenderObject() as RenderBox;
-                            final index = await EmojiBox.showCustomDialog(
-                                context, button);
-
-                            if (index != null) {
-                              setState(() {
-                                ref
-                                    .read(selectedEmojiProvider(
-                                            widget.singleFeedback['_id'] ?? '')
-                                        .notifier)
-                                    .state = index + 1;
-                              });
-
-                              try {
-                                // Update reaction in backend
-
-                                final response = await http.post(
-                                  Uri.parse(
-                                      '$apiUrl/api/v1/airport-review/update'),
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                  },
-                                  body: jsonEncode({
-                                    'feedbackId': widget.singleFeedback['_id'],
-                                    'user_id': userId,
-                                    'reactionType': ref
-                                        .watch(selectedEmojiProvider(
-                                                widget.singleFeedback['_id'] ??
-                                                    '')
-                                            .notifier)
-                                        .state,
-                                  }),
-                                );
-
-                                if (response.statusCode == 200) {
-                                  setState(() {
-                                    ref
-                                        .read(reviewsAirlineProvider.notifier)
-                                        .updateReview(
-                                            jsonDecode(response.body)['data']);
-                                    ref
-                                        .read(selectedEmojiNumberProvider(
-                                                widget.singleFeedback['_id'] ??
-                                                    '')
-                                            .notifier)
-                                        .state = jsonDecode(
-                                            response.body)['data']['rating']
-                                        .length;
-                                  });
-                                } else {
-                                  // Show error message if API call fails
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Failed to update reaction')),
-                                  );
-                                }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Something went wrong')),
-                                );
+                            setState(() {
+                              isFavorite = !isFavorite;
+                              if (isFavorite) {
+                                totalFavorites++;
+                              } else {
+                                totalFavorites--;
                               }
-                            } // Update selected emoji after dialog closes
+                            });
+
+                            try {
+                              // Update reaction in backend
+
+                              final response = await http.post(
+                                Uri.parse(
+                                    '$apiUrl/api/v1/airport-review/update'),
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                },
+                                body: jsonEncode({
+                                  'feedbackId': widget.singleFeedback['_id'],
+                                  'user_id': userId,
+                                  'isFavorite': isFavorite,
+                                }),
+                              );
+
+                              if (response.statusCode == 200) {
+                                setState(() {
+                                  ref
+                                      .read(reviewsAirlineProvider.notifier)
+                                      .updateReview(
+                                          jsonDecode(response.body)['data']);
+                                });
+                              } else {
+                                print('Failed to update reaction'); 
+                                // Show error message if API call fails
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //       content:
+                                //           Text('Failed to update reaction')),
+                                // );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Something went wrong')),
+                              );
+                            }
                           },
-                          icon: selectedEmojiIndex != 0
-                              ? SvgPicture.asset(
-                                  'assets/icons/emoji_${ref.watch(selectedEmojiProvider(widget.singleFeedback['_id'] ?? '').notifier).state}.svg',
-                                  width: 24,
-                                  height: 24,
-                                )
-                              : Icon(Icons.thumb_up_outlined),
+                          icon: isFavorite
+                              ? Icon(Icons.favorite, color: Colors.red)
+                              : Icon(Icons.favorite_border),
                         ),
                         SizedBox(width: 8),
-                        Text(
-                          '${ref.watch(selectedEmojiNumberProvider(widget.singleFeedback['_id'] ?? '').notifier).state}',
+                           AnimatedFlipCounter(
+                          value: totalFavorites,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),
