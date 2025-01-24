@@ -102,8 +102,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     final List<dynamic> imgList = args?['Images'] ?? [];
     final List<dynamic> videoList = args?['Videos'] ?? [];
     final List<dynamic> mediaList = [...imgList, ...videoList];
-    final selectedEmojiIndex =
-        ref.watch(selectedEmojiProvider(args?['feedbackId'] ?? ''));
 
     return Scaffold(
       body: Column(
@@ -212,18 +210,26 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Was in ",
-                      style: AppStyles.textStyle_14_400
-                          .copyWith(color: const Color(0xFF38433E)),
+                    Flexible(
+                      child: Text(
+                        "Was in ",
+                        style: AppStyles.textStyle_14_400
+                            .copyWith(color: const Color(0xFF38433E)),
+                      ),
                     ),
-                    Text(
-                      "${args?['Usedairport'] ?? ''}, ",
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        "${args?['Usedairport'] ?? ''}, ",
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text(
-                      'Premium Economy',
-                      style: AppStyles.textStyle_14_600,
+                    Flexible(
+                      child: Text(
+                        'Premium Economy',
+                        style: AppStyles.textStyle_14_600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     )
                   ],
                 ),

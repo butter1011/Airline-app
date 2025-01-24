@@ -264,14 +264,15 @@ class _ReviewsubmissionScreenState
                     color: Colors.white,
                   ),
                   const SizedBox(height: 12),
-                  NavButton(
-                    text: AppLocalizations.of(context)
-                        .translate('Input manually'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.manualinput);
-                    },
-                    color: AppStyles.mainColor,
-                  )
+                  // NavButton(
+                  //   text: AppLocalizations.of(context)
+                  //       .translate('Input manually'),
+                  //   onPressed: () {
+                  //     Navigator.pushNamed(context, AppRoutes.manualinput);
+                  //   },
+                  //   color: AppStyles.mainColor,
+                  // )
+
                 ],
               ),
             ),

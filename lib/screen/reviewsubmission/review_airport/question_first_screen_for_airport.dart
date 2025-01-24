@@ -100,8 +100,6 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  numberOfFirstSelectedAspects: numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
                   selectedNumberOfSubcategoryForLike: selections[index]
                           ['subCategory']
                       .values

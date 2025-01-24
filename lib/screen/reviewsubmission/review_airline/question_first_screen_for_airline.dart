@@ -49,8 +49,13 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           flexibleSpace: BuildQuestionHeaderForAirline(
             backgorundImage: backgroundImage,
             subTitle: "Tell us what you liked about your journey.",
@@ -64,8 +69,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections, numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects),
+              _buildFeedbackOptions(selections),
               _buildNavigationButtons(context),
             ],
           ),
@@ -74,8 +78,9 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeedbackOptions(selections, int numberOfFirstSelectedAspects,
-      int numberOfSecondSelectedAspects) {
+  Widget _buildFeedbackOptions(
+    selections,
+  ) {
     final List<Map<String, dynamic>> feedbackOptions =
         mainCategoryAndSubcategoryForAirline;
 
@@ -110,8 +115,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  numberOfFirstSelectedAspects: numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
                   selectedNumberOfSubcategoryForLike: selections[index]
                           ['subCategory']
                       .values

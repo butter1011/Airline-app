@@ -16,7 +16,6 @@ class GetReviewAirportController {
       );
 
       if (response.statusCode == 201) {
-        print('💘💝💕💌💌💟${jsonDecode(response.body)}');
         return {'success': true, 'data': jsonDecode(response.body)};
       } else {
         final errorMessage =
