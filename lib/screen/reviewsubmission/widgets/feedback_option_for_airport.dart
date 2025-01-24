@@ -8,8 +8,6 @@ class FeedbackOptionForAirport extends StatelessWidget {
   final String iconUrl;
   final int label;
   final int selectedNumberOfSubcategoryForLike;
-  final int numberOfFirstSelectedAspects;
-  final int numberOfSecondSelectedAspects;
 
   const FeedbackOptionForAirport(
       {super.key,
@@ -17,8 +15,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
       required this.iconUrl,
       required this.label,
       required this.selectedNumberOfSubcategoryForLike,
-      required this.numberOfFirstSelectedAspects,
-      required this.numberOfSecondSelectedAspects});
+});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +27,15 @@ class FeedbackOptionForAirport extends StatelessWidget {
     final labelName = mainCategoryNames[label];
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
-            arguments: {'singleAspect': label});
+        if (numForIdentifyOfParent == 1) {
+          Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairport,
+              arguments: {'singleAspect': label});
+        } else if (numForIdentifyOfParent == 2) {
+       
+          Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
+              arguments: {'singleAspect': label});
+        }
+   
       }, // Change color on tap
       child: Stack(
         children: [

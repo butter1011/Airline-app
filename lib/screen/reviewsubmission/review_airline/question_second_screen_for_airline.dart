@@ -107,9 +107,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                 return FeedbackOptionForAirline(
                   numForIdentifyOfParent: 2,
                   iconUrl: feedbackOptions[index]['iconUrl'],
-                  label: index,
-                  numberOfFirstSelectedAspects: numberOfFirstSelectedAspects,
-                  numberOfSecondSelectedAspects: numberOfSecondSelectedAspects,
+                  label: index,                         
                   selectedNumberOfSubcategoryForLike: selections[index]
                           ['subCategory']
                       .values

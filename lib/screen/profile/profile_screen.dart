@@ -32,7 +32,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavBar(currentIndex: 4),
+        bottomNavigationBar: BottomNavBar(currentIndex: 3),
         body: Stack(children: [
           ListView(children: [
             Column(

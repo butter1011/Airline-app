@@ -111,7 +111,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
       }
       return review;
     }).toList();
-
     state = state.copyWith(
       reviews: updatedReviews,
       sortedListCache: {},
@@ -127,7 +126,9 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   List<Map<String, dynamic>> getReviewsByUserId(String userId) {
     return state.reviews
         .where((review) => review['reviewer']['_id'] == userId)
-        .toList();
+        .toList()
+      ..sort((a, b) =>
+          DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
   }
 
   List<Map<String, dynamic>> getTopFiveReviews() {
@@ -244,7 +245,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   void getFilteredReviews(String filterType, String? searchQuery,
       String? flyerClass, String? selectedCategory,
       [List<dynamic>? selectedContinents]) {
-    // print(object)
     bool checkContinent(Map<String, dynamic> item) {
       if (selectedContinents == null || selectedContinents.isEmpty) return true;
 
@@ -327,31 +327,27 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
     }
-
+    print("here is filteredReviews🧵🧵$filteredReviews");
     if (flyerClass != null && flyerClass != 'All') {
       final sortKey = flyerClass == "Business"
           ? 'businessClass'
           : flyerClass == "Premium economy"
               ? 'pey'
               : 'economyClass';
-
+      print("here is flyerClass$flyerClass");
       filteredReviews = filteredReviews.where((item) {
-        if (item.containsKey("from")) {
-          return item['airline'][sortKey] != null;
-        } else {
-          return item['airport'][sortKey] != null;
-        }
+        return item['classTravel'] == flyerClass;
       }).toList();
 
-      if (filteredReviews.isNotEmpty) {
-        if (filteredReviews[0].containsKey("from")) {
-          filteredReviews.sort((a, b) => (b['airline'][sortKey] ?? 0)
-              .compareTo(a['airline'][sortKey] ?? 0));
-        } else {
-          filteredReviews.sort((a, b) => (b['airport'][sortKey] ?? 0)
-              .compareTo(a['airport'][sortKey] ?? 0));
-        }
-      }
+      // if (filteredReviews.isNotEmpty) {
+      //   if (filteredReviews[0].containsKey("from")) {
+      //     filteredReviews.sort((a, b) => (b['airline'][sortKey] ?? 0)
+      //         .compareTo(a['airline'][sortKey] ?? 0));
+      //   } else {
+      //     filteredReviews.sort((a, b) => (b['airport'][sortKey] ?? 0)
+      //         .compareTo(a['airport'][sortKey] ?? 0));
+      //   }
+      // }
     }
     if (selectedCategory != null && selectedCategory.isNotEmpty) {
       final sortKey = switch (selectedCategory) {

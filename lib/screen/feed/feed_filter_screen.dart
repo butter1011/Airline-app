@@ -123,6 +123,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         }
       }
     });
+    print("1111111111111111111111111 $selectedFlyerClass");
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
           selectedAirType,
           null,
@@ -143,13 +144,14 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
       if (selectedStates == selectedairTypeStates) {
         selectedAirType = airType[index];
-              updateCurrentCategories();
+        updateCurrentCategories();
       } else if (selectedStates == selectedFlyerClassStates) {
         selectedFlyerClass = flyerClass[index];
       } else if (selectedStates == selectedCategoryStates) {
         selectedCategory = currentCategories[index];
       }
     });
+
 
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
           selectedAirType,

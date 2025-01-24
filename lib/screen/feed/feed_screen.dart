@@ -121,7 +121,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       child: KeyboardDismissWidget(
         child: Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar: BottomNavBar(currentIndex: 3),
+          bottomNavigationBar: BottomNavBar(currentIndex: 1),
           body: Column(
             children: [
               SizedBox(

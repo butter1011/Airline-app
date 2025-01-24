@@ -63,9 +63,11 @@ class _LoginState extends ConsumerState<Login> {
       final userData = prefs.getString('userData');
       if (userData != null) {
         ref.read(userDataProvider.notifier).setUserData(json.decode(userData));
+        if (mounted) {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
       }
     } else {
-      // Clear expired data
       await prefs.clear();
     }
     setState(() {
@@ -75,7 +77,7 @@ class _LoginState extends ConsumerState<Login> {
 
   void onHeadlessResult(dynamic result) async {
     String jsonString = jsonEncode(result);
-    final response;
+    final http.Response response;
 
     if (result != null && result['data'] != null) {
       showDialog(
@@ -244,7 +246,11 @@ class _LoginState extends ConsumerState<Login> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content:
+            Center(child: Text(message, style: AppStyles.textStyle_14_600)),
+        backgroundColor: AppStyles.notifyColor,
+      ),
     );
   }
 }

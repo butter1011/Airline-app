@@ -66,13 +66,11 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
         print("Creator: ${event.creator?.email}");
         print("Created: ${event.created}");
         print("Updated: ${event.updated}");
-        print("Status: ${event.status}");
-        print("----------------------------------------");
+        print("Status: ${event.status}");    
         print("Event Keys:");
         event.toJson().keys.forEach((key) {
           print(key);
-        });
-        print("----------------------------------------");
+        });   
       }
     } catch (e) {
       setState(() {
