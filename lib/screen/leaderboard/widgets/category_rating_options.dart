@@ -35,7 +35,7 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
             width: MediaQuery.of(context).size.width * 0.41,
             decoration: AppStyles.cardDecoration.copyWith(
               color: _isClicked
-                  ? AppStyles.mainColor
+                  ? Colors.black
                   : Colors.white, // Change color based on click state
             ),
             padding: EdgeInsets.only(
@@ -47,7 +47,7 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
                   height: 48,
                   width: 48,
                   decoration: AppStyles.cardDecoration.copyWith(
-                    color: _isClicked ? Colors.white : AppStyles.mainColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(widget.iconUrl, height: 40),
@@ -56,7 +56,9 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
                 Text(
                   widget.label,
                   textAlign: TextAlign.center,
-                  style: AppStyles.textStyle_14_600, // Optional styling
+                  style: AppStyles.textStyle_14_600.copyWith(
+                    color: _isClicked ? Colors.white : Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -80,7 +82,9 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
                   child: Center(
                     child: Text(
                       "${widget.badgeScore}/10",
-                      style: AppStyles.textStyle_12_600,
+                      style: AppStyles.textStyle_12_600.copyWith(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ))
