@@ -47,20 +47,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             height: 28,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
                                 onTap: toggleEditIcon,
                                 child: Container(
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.white,
+                                      border: Border.all(width: 2),
                                       boxShadow: [
                                         BoxShadow(
                                             color: Colors.black,
                                             offset: Offset(4, 4)),
                                       ]),
                                   child: CircleAvatar(
-                                    radius: 36,
+                                    radius: 50,
                                     backgroundImage: userData?['userData']
                                                 ['profilePhoto'] !=
                                             null
@@ -74,152 +76,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () => ref
-                                            .read(
-                                                selectedIndexProvider.notifier)
-                                            .state = 2,
-                                        child: Container(
-                                          height: 32,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(),
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(27),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0),
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/icons/text.png',
-                                                    color: Colors.white,
-                                                    width: 16,
-                                                    height: 16,
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            '${userData?['userData']['selectedbadges']}'),
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'inter',
-                                                        fontSize: 16,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Container(
-                                        width: 63,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(27),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black,
-                                              offset: Offset(2, 2),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(1.0),
-                                          child: Center(
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                      'assets/icons/LeadIcon.png'),
-                                                  SizedBox(
-                                                    width: 4,
-                                                  ),
-                                                  Text(
-                                                    '${userData?['userData']['badgeNumber']}',
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'inter',
-                                                        fontSize: 16,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    width: 227,
-                                    height: 32,
+                              InkWell(
+                                onTap: toggleEditIcon,
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
                                     decoration: BoxDecoration(
-                                      border: Border.all(width: 2),
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(27),
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                        width: 2,
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black,
-                                          offset: Offset(2, 2),
+                                          offset: const Offset(4, 4),
                                         ),
                                       ],
                                     ),
                                     child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 1),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/Lead Icon.png',
-                                              height: 20,
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
-                                                style: TextStyle(
-                                                    fontFamily: 'inter',
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                      child: Image.asset(
+                                        "assets/icons/gear.png",
                                       ),
-                                    ),
-
-                                  ),                                ],
-                              )
+                                    )),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -282,28 +162,45 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('Points received:'),
-                                  style: const TextStyle(
-                                    fontFamily: 'inter',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
+                            child: Container(
+                              width: 227,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 2),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(27),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 1),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/icons/Lead Icon.png',
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
+                                          style: TextStyle(
+                                              fontFamily: 'inter',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  "  ${userData?['userData']["points"]}",
-                                  style: const TextStyle(
-                                    fontFamily: 'inter',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
@@ -361,3 +258,130 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 }
+ // Align(
+                          //   alignment: Alignment.centerLeft,
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         AppLocalizations.of(context)
+                          //             .translate('Points received:'),
+                          //         style: const TextStyle(
+                          //           fontFamily: 'inter',
+                          //           letterSpacing: 0.3,
+                          //           fontSize: 15,
+                          //           fontWeight: FontWeight.w400,
+                          //         ),
+                          //       ),
+                          //       Text(
+                          //         "  ${userData?['userData']["points"]}",
+                          //         style: const TextStyle(
+                          //           fontFamily: 'inter',
+                          //           letterSpacing: 0.3,
+                          //           fontSize: 15,
+                          //           fontWeight: FontWeight.w600,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+ // Column(
+                              //   crossAxisAlignment: CrossAxisAlignment.start,
+                              //   children: [
+                              //     Row(
+                              //       children: [
+                              //         // InkWell(
+                              //         //   onTap: () => ref
+                              //         //       .read(
+                              //         //           selectedIndexProvider.notifier)
+                              //         //       .state = 2,
+                              //         //   child: Container(
+                              //         //     height: 32,
+                              //         //     decoration: BoxDecoration(
+                              //         //       border: Border.all(),
+                              //         //       color: Colors.black,
+                              //         //       borderRadius:
+                              //         //           BorderRadius.circular(27),
+                              //         //     ),
+                              //         //     child: Padding(
+                              //         //       padding: const EdgeInsets.symmetric(
+                              //         //           horizontal: 10.0),
+                              //         //       child: Center(
+                              //         //         child: Row(
+                              //         //           mainAxisAlignment:
+                              //         //               MainAxisAlignment.center,
+                              //         //           children: [
+                              //         //             Image.asset(
+                              //         //               'assets/icons/text.png',
+                              //         //               color: Colors.white,
+                              //         //               width: 16,
+                              //         //               height: 16,
+                              //         //             ),
+                              //         //             const SizedBox(width: 8),
+                              //         //             Text(
+                              //         //               AppLocalizations.of(context)
+                              //         //                   .translate(
+                              //         //                       '${userData?['userData']['selectedbadges']}'),
+                              //         //               style: TextStyle(
+                              //         //                   fontFamily:
+                              //         //                       'inter',
+                              //         //                   fontSize: 16,
+                              //         //                   color: Colors.white,
+                              //         //                   fontWeight:
+                              //         //                       FontWeight.w500),
+                              //         //             ),
+                              //         //           ],
+                              //         //         ),
+                              //         //       ),
+                              //         //     ),
+                              //         //   ),
+                              //         // ),
+                              //         const SizedBox(
+                              //           width: 8,
+                              //         ),
+                              //         Container(
+                              //           width: 63,
+                              //           height: 32,
+                              //           decoration: BoxDecoration(
+                              //             border: Border.all(),
+                              //             color: Colors.black,
+                              //             borderRadius:
+                              //                 BorderRadius.circular(27),
+                              //             boxShadow: [
+                              //               BoxShadow(
+                              //                 color: Colors.black,
+                              //                 offset: Offset(2, 2),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //           child: Padding(
+                              //             padding: const EdgeInsets.all(1.0),
+                              //             child: Center(
+                              //               child: Row(
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment.center,
+                              //                   children: [
+                              //                     Image.asset(
+                              //                         'assets/icons/LeadIcon.png'),
+                              //                     SizedBox(
+                              //                       width: 4,
+                              //                     ),
+                              //                     Text(
+                              //                       '${userData?['userData']['badgeNumber']}',
+                              //                       style: TextStyle(
+                              //                           fontFamily: 'inter',
+                              //                           fontSize: 16,
+                              //                           color: Colors.white,
+                              //                           fontWeight:
+                              //                               FontWeight.w500),
+                              //                     ),
+                              //                   ]),
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     const SizedBox(
+                              //       height: 8,
+                              //     ),
+                              //   ],
+                              // )

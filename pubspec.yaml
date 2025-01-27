@@ -143,6 +143,11 @@ flutter:
         - asset: fonts/ClashGrotesk-Medium.otf
         - asset: fonts/ClashGrotesk-Semibold.otf
         - asset: fonts/ClashGrotesk-Bold.otf
+    
+    - family: ArialBlack
+      fonts:
+       - asset: fonts/ariblk.ttf
+
 
   # fonts:
   #   - family: Schyler
