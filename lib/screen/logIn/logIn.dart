@@ -180,21 +180,45 @@ class _LoginState extends ConsumerState<Login> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: AppStyles.mainColor,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // Background Image
           Center(
-            child: Container(
-              color: AppStyles.mainColor,
-              child: SvgPicture.asset(
-                'assets/images/launchImage.svg',
-                width: screenSize.width * 0.7,
-                height: screenSize.width * 0.5,
-                fit: BoxFit.cover,
-              ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 200),
+              child: Column(children: [
+                Image.asset(
+                  'assets/icon/logoIcon.png',
+                  width: screenSize.width * 0.5,
+                  // height: screenSize.width * 0.5,
+                  // fit: BoxFit.cover,
+                ),
+                // SizedBox(
+                //   height: 18,
+                // ),
+                Text("Exp.aero",
+                    style: TextStyle(
+                        fontFamily: 'ArialBlack',
+                        fontWeight: FontWeight.w900,
+                        fontSize: 60,
+                        height: 0.8,
+                        color: Colors.black)),
+                SizedBox(
+                  height: 214,
+                ),
+                Text(
+                  "Let's get flying",
+                  style: TextStyle(
+                      fontFamily: 'inter',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 40,
+                      color: Colors.black),
+                ),
+              ]),
             ),
           ),
+
           // Existing Content
           isLoading
               ? const LoadingWidget()
@@ -202,12 +226,6 @@ class _LoginState extends ConsumerState<Login> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
-                        'assets/images/login.svg',
-                        width: screenSize.width,
-                        height: screenSize.height * 0.74,
-                        fit: BoxFit.cover,
-                      ),
                       Spacer(),
                       GestureDetector(
                         onTap: () {
@@ -215,27 +233,35 @@ class _LoginState extends ConsumerState<Login> {
                         },
                         child: Padding(
                           padding:
-                              EdgeInsets.only(bottom: 100, right: 48, left: 48),
-                          child: Row(children: <Widget>[
-                            Expanded(
-                                child: Divider(
-                              color: Colors.black,
-                            )),
-                            Text(
-                              "   Tap here to signin   ",
-                              style: TextStyle(
-                                  fontFamily: 'inter',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600),
-                              selectionColor: Colors.black,
+                              EdgeInsets.only(bottom: 68, right: 24, left: 24),
+                          child: Container(
+                            height: 56,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(2, 2),
+                                  )
+                                ],
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2,
+                                )),
+                            child: Center(
+                              child: Text(
+                                "   Tap here to signin   ",
+                                style: TextStyle(
+                                    fontFamily: 'Clash Grotesk',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                                selectionColor: Colors.black,
+                              ),
                             ),
-                            Expanded(
-                                child: Divider(
-                              color: Colors.black,
-                            )),
-                          ]),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

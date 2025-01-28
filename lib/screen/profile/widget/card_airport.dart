@@ -37,8 +37,7 @@ class CLeaderboardScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('Most Recently Reviews'),
+                  AppLocalizations.of(context).translate('Recent Contribution'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

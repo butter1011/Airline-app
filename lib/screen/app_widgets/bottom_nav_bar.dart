@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,10 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
       case 2:
         Navigator.pushNamed(context, AppRoutes.startreviews);
       case 3:
-        Navigator.pushNamed(context, AppRoutes.profilescreen);
+        {
+          Navigator.pushNamed(context, AppRoutes.profilescreen);
+          ref.read(selectedIndexProvider.notifier).state = 0;
+        }
         break;
       default:
     }
