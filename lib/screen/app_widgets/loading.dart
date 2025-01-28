@@ -4,6 +4,7 @@ import 'package:airline_app/utils/app_styles.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -12,15 +13,13 @@ class LoadingWidget extends StatelessWidget {
       height: 80,
       child: LoadingIndicator(
         indicatorType: Indicator.ballSpinFadeLoader,
-        colors: [AppStyles.mainColor],
-        strokeWidth: 2,
+        colors: [AppStyles.blackColor],
+        strokeWidth: 1,
         backgroundColor: Colors.transparent,
-        pathBackgroundColor: Colors.pink,
       ),
     ));
   }
 }
-
 
 class LoadingBallWidget extends StatelessWidget {
   const LoadingBallWidget({super.key});
@@ -33,10 +32,9 @@ class LoadingBallWidget extends StatelessWidget {
       height: 40,
       child: LoadingIndicator(
         indicatorType: Indicator.ballPulse,
-        colors: [AppStyles.mainColor],
-        strokeWidth: 2,
+        colors: [AppStyles.blackColor],
+        strokeWidth: 1,
         backgroundColor: Colors.transparent,
-        pathBackgroundColor: Colors.pink,
       ),
     ));
   }

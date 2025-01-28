@@ -21,12 +21,6 @@ class _LeaderboardFilterScreenState
     "Airport",
     "Airline",
   ];
-  final List<dynamic> flyerClass = [
-    "All",
-    "Business",
-    "Premium economy",
-    "Economy",
-  ];
 
   final List airlineCategory = [
     "Flight Experience",
@@ -36,6 +30,7 @@ class _LeaderboardFilterScreenState
     "Food & Beverage",
     "Entertainment & WiFi"
   ];
+
   final List airportCategory = [
     "Accessibility",
     "Wait Times",
@@ -44,6 +39,8 @@ class _LeaderboardFilterScreenState
     "Food & Beverage",
     "Amenities"
   ];
+
+  bool categoryIsExpanded = true;
   final List<dynamic> continent = [
     "All",
     "Africa",
@@ -53,20 +50,25 @@ class _LeaderboardFilterScreenState
     "Oceania"
   ];
 
-  late List<bool> selectedAirTypeStates;
-  late List<bool> selectedFlyerClassStates;
-  late List<bool> selectedContinentStates;
-  late List<bool> selectedCategoryStates;
-  List<String> currentCategories = [];
-
-  bool typeIsExpanded = true;
-  bool flyerClassIsExpanded = true;
-  bool categoryIsExpanded = true;
   bool continentIsExpanded = true;
+  List<String> currentCategories = [];
+  final List<dynamic> flyerClass = [
+    "All",
+    "Business",
+    "Premium economy",
+    "Economy",
+  ];
+
+  bool flyerClassIsExpanded = true;
   String selectedAirType = "All";
-  String selectedFlyerClass = "";
+  late List<bool> selectedAirTypeStates;
   String selectedCategory = "";
+  late List<bool> selectedCategoryStates;
+  late List<bool> selectedContinentStates;
   List<dynamic> selectedContinents = [];
+  String selectedFlyerClass = "";
+  late List<bool> selectedFlyerClassStates;
+  bool typeIsExpanded = true;
 
   @override
   void initState() {
@@ -178,46 +180,6 @@ class _LeaderboardFilterScreenState
               ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
               : selectedContinents,
         );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: Text(
-          AppLocalizations.of(context).translate('Filters'),
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(color: Colors.black, height: 4.0),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            _buildTypeCategory(),
-            const SizedBox(height: 17),
-            _buildFlyerClassLeaderboards(),
-            const SizedBox(height: 17),
-            _buildCategoryLeaderboards(),
-            const SizedBox(height: 17),
-            _buildContinentLeaderboards(),
-            const SizedBox(height: 85),
-          ],
-        ),
-      ),
-      bottomSheet: _buildApplyButton(),
-    );
   }
 
   Widget _buildTypeCategory() {
@@ -421,7 +383,7 @@ class _LeaderboardFilterScreenState
               width: MediaQuery.of(context).size.width * 0.87,
               height: 56,
               decoration: BoxDecoration(
-                  color: AppStyles.mainColor,
+                  color: Colors.white,                              
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
                   borderRadius: BorderRadius.circular(28),
@@ -432,13 +394,54 @@ class _LeaderboardFilterScreenState
               child: Center(
                 child: Text(
                   AppLocalizations.of(context).translate('Apply'),
-                  style: AppStyles.textStyle_15_600,
+                  style:
+                      AppStyles.textStyle_15_600.copyWith(color: Colors.black),
                 ),
               ),
             ),
           ),
         )
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios, size: 24)),
+        title: Text(
+          AppLocalizations.of(context).translate('Filters'),
+          textAlign: TextAlign.center,
+          style: AppStyles.textStyle_16_600,
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(4.0),
+          child: Container(color: Colors.black, height: 4.0),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            _buildTypeCategory(),
+            const SizedBox(height: 17),
+            _buildFlyerClassLeaderboards(),
+            const SizedBox(height: 17),
+            _buildCategoryLeaderboards(),
+            const SizedBox(height: 17),
+            _buildContinentLeaderboards(),
+            const SizedBox(height: 85),
+          ],
+        ),
+      ),
+      bottomSheet: _buildApplyButton(),
     );
   }
 }
@@ -451,9 +454,9 @@ class FilterButton extends StatelessWidget {
     required this.onTap,
   });
 
-  final String text;
   final bool isSelected;
   final VoidCallback onTap;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -464,7 +467,7 @@ class FilterButton extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: isSelected ? AppStyles.mainColor : Colors.white,
+                color: isSelected ? Colors.black : Colors.white,
                 border: Border(
                   top: BorderSide(color: Colors.black, width: 2),
                   left: BorderSide(color: Colors.black, width: 2),
@@ -474,7 +477,10 @@ class FilterButton extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(
-                child: Text(text, style: AppStyles.textStyle_14_600),
+                child: Text(text,
+                    style: AppStyles.textStyle_14_600.copyWith(
+                      color: isSelected ? Colors.white : Colors.black,
+                    )),
               ),
             ),
           ),

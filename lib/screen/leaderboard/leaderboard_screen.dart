@@ -69,11 +69,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void dispose() {
     _searchController.dispose();
     _channel.sink.close();
-    // Cancel any pending operations before disposing
-    if (mounted) {
-      ref.invalidate(reviewsAirlineProvider);
-      ref.invalidate(airlineAirportProvider);
-    }   
     super.dispose();
   }
 
@@ -183,7 +178,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Future<void> _initializeData() async {
     await Future.wait([
       connectWebSocket(),
-      fetchLeaderboardData(),
+      // fetchLeaderboardData(),
     ]);
     setState(() {
       isLeaderboardLoading = false;

@@ -85,7 +85,7 @@ class _LoginState extends ConsumerState<Login> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.white.withOpacity(0.9),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: const Center(
