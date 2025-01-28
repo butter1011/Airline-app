@@ -43,7 +43,7 @@ class _SkipScreenState extends State<SkipScreen> {
             SizedBox(height: 63),
             Center(
               child: SizedBox(
-                width: screenSize.width - 70,
+                width: screenSize.width - 120,
                 child: selectedIndex == 0
                     ? _buildTextFieldFirst()
                     : selectedIndex == 1
