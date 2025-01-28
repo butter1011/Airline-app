@@ -57,8 +57,9 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
           automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeaderForAirline(
-            subTitle: "What could be improved?",
-            backgorundImage: backgroundImage,
+            title: "Tell us about your airline experience",
+            subTitle: "What did you dislike about your experience?",
+            backgroundImage: backgroundImage,
             logoImage: logoImage,
             classes: selectedClassOfTravel,
             airlineName: airline,
@@ -112,7 +113,6 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
                     labelName: itemkeys[index],
                     isSelected: value == false ? true : false,
                     onTap: () {
-
                       value == true
                           ? print("Value is false, no action performed.")
                           : ref

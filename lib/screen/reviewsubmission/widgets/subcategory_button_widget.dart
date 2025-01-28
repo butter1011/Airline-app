@@ -22,7 +22,7 @@ class SubcategoryButtonWidget extends StatelessWidget {
         height: 126,
         width: MediaQuery.of(context).size.width * 0.41,
         decoration: AppStyles.cardDecoration.copyWith(
-          color: isSelected ? AppStyles.mainColor : Colors.white,
+          color: isSelected ? AppStyles.blackColor : Colors.white,
         ),
         padding: EdgeInsets.only(bottom: 10, top: 16),
         child: Column(
@@ -32,7 +32,7 @@ class SubcategoryButtonWidget extends StatelessWidget {
               height: 48,
               width: 48,
               decoration: AppStyles.cardDecoration.copyWith(
-                color: isSelected ? Colors.white : AppStyles.mainColor,
+                color:  Colors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Image.asset(imagePath, height: 40),
@@ -41,7 +41,9 @@ class SubcategoryButtonWidget extends StatelessWidget {
             Text(
               labelName,
               textAlign: TextAlign.center,
-              style: AppStyles.textStyle_14_600,
+              style: AppStyles.textStyle_14_600.copyWith(
+                color: isSelected ? Colors.white : AppStyles.blackColor,
+              ),
             ),
           ],
         ),

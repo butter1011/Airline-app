@@ -22,7 +22,7 @@ class MainButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: isSelected ? AppStyles.mainColor : Colors.white,
+          color: isSelected ? Colors.black : Colors.white,
           border: Border.all(width: 2, color: Colors.black),
           boxShadow: const [
             BoxShadow(color: Colors.black, offset: Offset(2, 2))
@@ -33,7 +33,9 @@ class MainButton extends StatelessWidget {
           child: Center(
             child: Text(
               AppLocalizations.of(context).translate('${text}'),
-              style: AppStyles.textStyle_14_600,
+              style: AppStyles.textStyle_14_600.copyWith(
+                color: isSelected ? Colors.white : Colors.black,
+              ),
             ),
           ),
         ),

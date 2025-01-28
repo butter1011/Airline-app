@@ -427,7 +427,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
               width: MediaQuery.of(context).size.width * 0.87,
               height: 56,
               decoration: BoxDecoration(
-                  color: AppStyles.mainColor,
+                  color: Colors.white,
                   border:
                       Border.all(width: 2, color: AppStyles.littleBlackColor),
                   borderRadius: BorderRadius.circular(28),
