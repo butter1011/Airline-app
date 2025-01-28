@@ -61,14 +61,19 @@ class _SkipScreenState extends State<SkipScreen> {
                         height: 155,
                       )),
                   Positioned(
-                      left: 49,
+                      left: 0,
                       top: 278,
-                      right: 26,
-                      child: selectedIndex == 0
-                          ? _buildTextFieldFirst()
-                          : selectedIndex == 1
-                              ? _buildTextFieldSecond()
-                              : _buildTextFieldThird()),
+                      right: 0,
+                      child: Center(
+                        child: SizedBox(
+                          width: screenSize.width - 70,
+                          child: selectedIndex == 0
+                              ? _buildTextFieldFirst()
+                              : selectedIndex == 1
+                                  ? _buildTextFieldSecond()
+                                  : _buildTextFieldThird(),
+                        ),
+                      )),
                   Positioned(
                     left: 0,
                     right: 0,

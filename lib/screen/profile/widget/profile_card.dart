@@ -69,10 +69,6 @@ class ProfileCardList extends ConsumerWidget {
             ),
           ],
         ),
-        if (selectedIndex < PCardList.length)
-          PCardList[selectedIndex]
-        else
-          PCardList[0]
       ],
     );
   }

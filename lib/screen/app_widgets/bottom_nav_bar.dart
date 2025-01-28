@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +39,14 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
       //   );
       case 1:
         Navigator.pushNamed(context, AppRoutes.feedscreen);
-        
+
       case 2:
         Navigator.pushNamed(context, AppRoutes.startreviews);
       case 3:
-        Navigator.pushNamed(context, AppRoutes.profilescreen);
+        {
+          Navigator.pushNamed(context, AppRoutes.profilescreen);
+          ref.read(selectedIndexProvider.notifier).state = 0;
+        }
         break;
       default:
     }
@@ -200,7 +204,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: _selectedIndex == 2? AppStyles.littleBlackColor
+                  color: _selectedIndex == 2
+                      ? AppStyles.littleBlackColor
                       : Colors.white,
                   borderRadius: BorderRadius.circular(30),
                   border:
@@ -212,11 +217,17 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
                     ),
                   ],
                 ),
-                child: Center(child: Text("+", style: TextStyle(fontSize: 25, color:_selectedIndex == 2? Colors.white:Colors.black))),
+                child: Center(
+                    child: Text("+",
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: _selectedIndex == 2
+                                ? Colors.white
+                                : Colors.black))),
               ),
               label: 'Review',
             ),
-            
+
             BottomNavigationBarItem(
               icon: Container(
                 width: 50,

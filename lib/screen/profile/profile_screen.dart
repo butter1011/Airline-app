@@ -1,10 +1,19 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/profile/widget/card_airport.dart';
+import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
+import 'package:airline_app/screen/profile/widget/card_chart.dart';
+import 'package:airline_app/screen/profile/widget/card_map.dart';
+import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:airline_app/screen/profile/widget/profile_card.dart';
+import 'package:airline_app/screen/profile/widget/profile_card5.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final selectedIndexProvider = StateProvider<int>((ref) => 0);
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -24,6 +33,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = ref.watch(selectedIndexProvider);
+    final List<dynamic> iconPaths = [
+      "assets/icons/text.png",
+      "assets/icons/pin.png",
+      "assets/icons/trophy.png",
+      "assets/icons/alt.png",
+      "assets/icons/gear.png",
+    ];
+    final List<Widget> PCardList = [
+      SingleChildScrollView(child: CLeaderboardScreen()),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          children: [
+            SizedBox(height: 24),
+            Container(
+              height: 558,
+              decoration: AppStyles.cardDecoration,
+              child: MapScreen(),
+            ),
+            SizedBox(height: 13),
+          ],
+        ),
+      ),
+      Column(
+        children: [
+          SizedBox(height: 24),
+          CardChart(),
+        ],
+      ),
+      CardBookMark(),
+      CardNotifications(),
+    ];
+
     final userData = ref.watch(userDataProvider);
     return WillPopScope(
       onWillPop: () async {
@@ -76,29 +119,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: toggleEditIcon,
-                                child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(
-                                        width: 2,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black,
-                                          offset: const Offset(4, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Image.asset(
-                                        "assets/icons/gear.png",
-                                      ),
-                                    )),
+                              ProfileCard5(
+                                count: 4,
+                                iconPath: iconPaths[4],
+                                isActive: selectedIndex == 4,
+                                myfun: () => ref
+                                    .read(selectedIndexProvider.notifier)
+                                    .state = 4,
                               ),
                             ],
                           ),
@@ -110,7 +137,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['name']}',
                               style: const TextStyle(
-                                fontFamily: 'inter',
+                                fontFamily: 'clash Grotesk',
                                 fontSize: 24,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -121,7 +148,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: Text(
                               '${userData?['userData']['bio']}',
                               style: const TextStyle(
-                                fontFamily: 'inter',
+                                fontFamily: 'Clash Grotesk',
                                 letterSpacing: 0.6,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400,
@@ -158,7 +185,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(
-                            height: 4,
+                            height: 19,
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
@@ -216,7 +243,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     SizedBox(
                       height: 28,
                     ),
-                    ProfileCardList(),
+                    if (selectedIndex < PCardList.length)
+                      PCardList[selectedIndex]
+                    else
+                      PCardList[0]
                   ],
                 ),
               ],

@@ -205,7 +205,7 @@ class _LoginState extends ConsumerState<Login> {
                         height: 0.8,
                         color: Colors.black)),
                 SizedBox(
-                  height: 194,
+                  height: 214,
                 ),
                 Text(
                   "Let's get flying",

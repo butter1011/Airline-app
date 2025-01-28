@@ -21,11 +21,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   final List<Map<String, String>> notifications = [
     {
-      'id': 'points',
-      'title': '500 points added to account',
-      'description': 'The response goes here, creating the second row next.',
-    },
-    {
       'id': 'review',
       'title': 'Review was shared by Steve',
       'description': 'The response goes here, creating the second row next.',
