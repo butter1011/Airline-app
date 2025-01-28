@@ -122,8 +122,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           selectedContinents.add(continent[i]);
         }
       }
-    });
-    print("1111111111111111111111111 $selectedFlyerClass");
+    }); 
     ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
           selectedAirType,
           null,

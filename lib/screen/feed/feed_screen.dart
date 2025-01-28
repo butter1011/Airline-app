@@ -35,18 +35,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   Map<String, bool> buttonStates = {
     "All": true,
     "Airline": false,
-    "Airport": false,
-    "Flight Experience": false,
-    "Comfort": false,
-    "Cleanliness": false,
-    "Onboard": false,
-    "Food & Beverage": false,
-    "Entertainment & WiFi": false,
-    "Accessibility": false,
-    "Wait Times": false,
-    "Helpfulness": false,
-    "Ambience": false,
-    "Amenities": false,
+    "Airport": false, 
   };
   void toggleButton(String buttonText) {
     setState(() {
@@ -207,10 +196,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   ],
                 ),
               ),
-              SingleChildScrollView(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                scrollDirection: Axis.horizontal,
-                child: Row(
+                child: Row(                
+                mainAxisAlignment: MainAxisAlignment.start,
                   children: buttonStates.keys.map((buttonText) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
@@ -223,6 +212,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   }).toList(),
                 ),
               ),
+             
+              
               const SizedBox(height: 14),
               Container(height: 4, color: AppStyles.littleBlackColor),
               Expanded(
