@@ -23,6 +23,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
+
 bool _isWebSocketConnected = false;
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
@@ -51,17 +52,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     "All": true,
     "Airline": false,
     "Airport": false,
-    "Flight Experience": false,
-    "Comfort": false,
-    "Cleanliness": false,
-    "Onboard": false,
-    "Food & Beverage": false,
-    "Entertainment & WiFi": false,
-    "Accessibility": false,
-    "Wait Times": false,
-    "Helpfulness": false,
-    "Ambience": false,
-    "Amenities": false,
+    // "Flight Experience": false,
+    // "Comfort": false,
+    // "Cleanliness": false,
+    // "Onboard": false,
+    // "Food & Beverage": false,
+    // "Entertainment & WiFi": false,
+    // "Accessibility": false,
+    // "Wait Times": false,
+    // "Helpfulness": false,
+    // "Ambience": false,
+    // "Amenities": false,
   };
 
   void toggleButton(String buttonText) {
@@ -153,7 +154,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       ref
           .read(airlineAirportProvider.notifier)
           .getFilteredList("All", null, null, null);
-
     } catch (e) {
       print('Error fetching leaderboard data: $e');
     }
@@ -329,9 +329,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   ],
                 ),
               ),
-              SingleChildScrollView(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: buttonStates.keys.map((buttonText) {
                     return Padding(
@@ -365,12 +364,152 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    AppLocalizations.of(context).translate(
-                                        'Trending Airlines & Airports'),
-                                    style: AppStyles.textStyle_16_600.copyWith(
-                                      color: Color(0xff38433E),
-                                    ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('Top Ranked  Airlines'),
+                                        style:
+                                            AppStyles.textStyle_16_600.copyWith(
+                                          color: Color(0xff38433E),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.info_outline),
+                                        onPressed: () {
+                                          final RenderBox button = context
+                                              .findRenderObject() as RenderBox;
+                                          final Offset offset =
+                                              button.localToGlobal(Offset.zero);
+
+                                          showDialog(
+                                            context: context,
+                                            barrierColor: Colors.transparent,
+                                            builder: (BuildContext context) {
+                                              return Stack(
+                                                children: [
+                                                  Positioned(
+                                                    top: offset.dy + 100,
+                                                    right: 28,
+                                                    child: Material(
+                                                      elevation: 4,
+                                                      borderRadius: BorderRadius.circular(16),
+                                                      child: Container(
+                                                        width: 300,
+                                                        padding:
+                                                            EdgeInsets.all(16),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(16),
+                                                          border: Border.all(
+                                                              width: 2,
+                                                              color:
+                                                                  Colors.black),
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                                color: Colors
+                                                                    .black,
+                                                                blurRadius: 0,
+                                                                spreadRadius: 0,
+                                                                offset: Offset(
+                                                                    2, 2))
+                                                          ],
+                                                        ),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                border: Border.all(
+                                                                    width: 2,
+                                                                    color: Colors
+                                                                        .black),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      blurRadius: 0,
+                                                                      spreadRadius: 0,
+                                                                      offset:
+                                                                          Offset(
+                                                                              2,
+                                                                              2))
+                                                                ],
+                                                              ),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Text(
+                                                                    'How The scoring works',
+                                                                    style: AppStyles
+                                                                        .textStyle_14_500
+                                                                        .copyWith(
+                                                                            color:
+                                                                                Colors.black),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 4),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .check_outlined,
+                                                                      color: Colors
+                                                                          .green,
+                                                                      size: 20),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 18),
+                                                            Text(
+                                                              'Realtime updates',
+                                                              style: AppStyles
+                                                                  .textStyle_15_600,
+                                                            ),
+                                                            SizedBox(height: 8),
+                                                            Text(
+                                                              'score changes are calculated by analyzing the difference in sentiment scores submitted by users within a set timeframe (e.g, 24 hours or 7 days), reflecting the net improvement or decline in performance of the airline or airport.',
+                                                              style: AppStyles
+                                                                  .textStyle_14_500
+                                                                  .copyWith(
+                                                                color: Color(
+                                                                    0xff38433E),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );                                        },
+                                      ),
+                                    ],
                                   ),
                                   _AirportListSection(
                                     leaderBoardList: ref
@@ -382,7 +521,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                         expandedItems += 5;
                                       });
                                     },
-                                  ),                             
+                                  ),
                                   SizedBox(height: 28),
                                   Text(
                                     AppLocalizations.of(context)

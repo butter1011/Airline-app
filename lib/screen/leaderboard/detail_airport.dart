@@ -119,7 +119,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                   ),
                   child: const Icon(
                     Icons.arrow_back_ios,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -339,7 +339,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                       height: 56,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: AppStyles.mainColor,
+                        color: Colors.white,
                         border: Border.all(width: 2, color: Colors.black),
                         boxShadow: const [
                           BoxShadow(color: Colors.black, offset: Offset(2, 2))
