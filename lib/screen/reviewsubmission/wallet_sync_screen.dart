@@ -1,15 +1,14 @@
 import 'dart:io';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
 import 'package:airline_app/models/boarding_pass.dart';
-import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -167,8 +166,9 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
     final arrivalEntireTime =
         DateTime.parse(flightStatus['arrivalDate']['dateLocal']);
 
+    /// ref.read(userDataProvider)?['userData']['_id']
     final newPass = BoardingPass(
-      name: ref.read(userDataProvider)?['userData']['_id'],
+      name: "6791fed3d1e4903a20400b23",
       pnr: pnr,
       airlineName: airlineName,
       departureAirportCode: departureAirport['fs'],
@@ -249,30 +249,15 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            toolbarHeight: screenSize.height * 0.08,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_sharp),
-              onPressed: () => Navigator.pop(context),
-            ),
-            centerTitle: true,
-            title: Text(
-              AppLocalizations.of(context).translate('Sync from Your Wallet'),
-              style: AppStyles.textStyle_16_600,
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(4.0),
-              child: Container(
-                color: Colors.black,
-                height: 4.0,
+          appBar: AppbarWidget(
+              title: "Sync from Your Wallet",
+              onBackPressed: () {
+                Navigator.pop(context);
+              }, 
               ),
-            ),
-          ),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),

@@ -54,11 +54,12 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          automaticallyImplyLeading:false,
+          automaticallyImplyLeading: false,
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeaderForAirline(
-            backgorundImage: backgroundImage,
-            subTitle: "Tell us what you liked about your journey.",
+            backgroundImage: backgroundImage,
+            title: "Tell us about your airline experience",
+            subTitle: "What did you like about your experience?",
             logoImage: logoImage,
             classes: selectedClassOfTravel,
             airlineName: airline,

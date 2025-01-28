@@ -35,13 +35,13 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
 
     final airportname = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.airport);
+        .getAirportName(airlinData.from);
     final logoImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportLogoImage(airlinData.airport);
+        .getAirportLogoImage(airlinData.from);
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportBackgroundImage(airlinData.airport);
+        .getAirportBackgroundImage(airlinData.from);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
 
@@ -52,7 +52,8 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
             toolbarHeight: MediaQuery.of(context).size.height * 0.3,
             flexibleSpace: BuildQuestionHeaderForAirport(
               airportName: airportname,
-              subTitle: "Tell us what you liked about your journey.",
+              title: "Tell us about your airport experience",
+              subTitle: "What did you like about your experience?",
               logoImage: logoImage,
               backgroundImage: backgroundImage,
               selecetedOfCalssLevel: selectedClassOfTravel,

@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/chatbot/ai_chatbot.dart';
 import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/screen/feed/feed_screen.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_filter_screen.dart';
@@ -20,22 +19,15 @@ import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/complete_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_second_screen_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/overview_airline_review_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_first_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/question_third_screen_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/flight_input_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/manual_input_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/airport_input_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_second_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/overview_airport_review_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/question_second_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_third_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/start_reviews.dart';
-import 'package:airline_app/screen/reviewsubmission/synced_screen.dart';
+import 'package:airline_app/screen/reviewsubmission/submit_screen.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -105,13 +97,11 @@ class MyApp extends ConsumerWidget {
         ),
       ),
       routes: {
-        AppRoutes.chatbotscreen: (context) => const ChatScreen(),
         AppRoutes.loginscreen: (context) => const Login(),
         AppRoutes.skipscreen: (context) => const SkipScreen(),
         AppRoutes.startreviews: (context) => const StartReviews(),
         AppRoutes.reviewsubmissionscreen: (context) =>
             const ReviewsubmissionScreen(),
-        AppRoutes.syncedscreen: (context) => SyncedScreen(),
         AppRoutes.feedscreen: (context) => FeedScreen(),
         AppRoutes.feedfilterscreen: (context) => FeedFilterScreen(),
         AppRoutes.leaderboardscreen: (context) => const LeaderboardScreen(),
@@ -121,12 +111,8 @@ class MyApp extends ConsumerWidget {
         AppRoutes.filterscreen: (context) => const LeaderboardFilterScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        AppRoutes.manualinput: (context) => ManualInputScreen(),
-
-        //Airlines routes
-        AppRoutes.flightinput: (context) => FlightInputScreen(),
-        AppRoutes.overviewairlinereviewscreen: (context) =>
-            OverviewAirlineReviewScreen(),
+        //Airlines routes     
+ 
         AppRoutes.questionfirstscreenforairline: (context) =>
             QuestionFirstScreenForAirline(),
         AppRoutes.detailfirstscreenforairline: (context) =>
@@ -135,13 +121,9 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
-        AppRoutes.questionthirdscreenforairline: (context) =>
-            QuestionThirdScreenForAirline(),
+ 
 
-        // Airports routes
-        AppRoutes.overviewairportreviewscreen: (context) =>
-            OverviewAirportReviewScreen(),
-        AppRoutes.airportinput: (context) => AirportInputScreen(),
+        // Airports routes  
         AppRoutes.questionfirstscreenforairport: (context) =>
             QuestionFirstScreenForAirport(),
         AppRoutes.detailfirstscreenforairport: (context) =>
@@ -150,11 +132,11 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
-        AppRoutes.questionthirdscreenforairport: (context) =>
-            QuestionThirdScreenForAirport(),
+   
         //////
+        AppRoutes.submitscreen: (context) => SubmitScreen(),
         AppRoutes.completereviews: (context) => CompleteReviews(),
-
+        
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
