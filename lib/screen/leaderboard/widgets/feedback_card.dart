@@ -30,7 +30,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   bool isFavorite = false;
   late int totalFavorites;
 
- @override 
+  @override
   void initState() {
     super.initState();
     for (var video in widget.singleFeedback['videos'] ?? []) {
@@ -38,19 +38,20 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         Uri.parse(video),
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
       )..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _videoControllers[video]?.setLooping(true);
-            _handleVideoState();
-          });
-        }
-      });
+          if (mounted) {
+            setState(() {
+              _videoControllers[video]?.setLooping(true);
+              _handleVideoState();
+            });
+          }
+        });
     }
 
     // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
     isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
-    totalFavorites = (widget.singleFeedback['rating'] as List).length;  }
+    totalFavorites = (widget.singleFeedback['rating'] as List).length;
+  }
 
   @override
   void dispose() {
@@ -71,11 +72,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       });
     }
   }
+
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
     if (controller == null) return Container();
 
-     if (controller.value.isInitialized) {
+    if (controller.value.isInitialized) {
       return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: VideoPlayer(controller..play()),
@@ -299,89 +301,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         ),
                       ),
               ],
-            )
-          else
-            widget.singleFeedback['from'] != null
-                ? InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                          arguments: {
-                            'userId': userId,
-                            'feedbackId': widget.singleFeedback['_id'],
-                            'Images': images,
-                            'Videos': videos,
-                            'Name': widget.singleFeedback['reviewer']['name'],
-                            'Avatar': widget.singleFeedback['reviewer']
-                                ['profilePhoto'],
-                            'Date':
-                                'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                            'Usedairport': widget.singleFeedback['airline']
-                                ['name'],
-                            'Content':
-                                widget.singleFeedback['comment'] != null &&
-                                        widget.singleFeedback['comment'] != ''
-                                    ? widget.singleFeedback['comment']
-                                    : '',
-                            'rating':
-                                ((widget.singleFeedback["rating"] as List?) ??
-                                        [])
-                                    .length
-                                    .toString(),
-                          });
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        height: widget.thumbnailHeight,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/default.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.mediafullscreen,
-                          arguments: {
-                            'userId': userId,
-                            'feedbackId': widget.singleFeedback['_id'],
-                            'Images': images,
-                            'Videos': videos,
-                            'Name': widget.singleFeedback['reviewer']['name'],
-                            'Avatar': widget.singleFeedback['reviewer']
-                                ['profilePhoto'],
-                            'Date':
-                                'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                            'Usedairport': widget.singleFeedback['airport']
-                                ['name'],
-                            'Content':
-                                widget.singleFeedback['comment'] != null &&
-                                        widget.singleFeedback['comment'] != ''
-                                    ? widget.singleFeedback['comment']
-                                    : '',
-                            'rating':
-                                ((widget.singleFeedback["rating"] as List?) ??
-                                        [])
-                                    .length
-                                    .toString(),
-                          });
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        height: widget.thumbnailHeight,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/default.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+            ),
+        
           const SizedBox(height: 11),
           SizedBox(
             height: 40,
@@ -509,7 +430,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                           jsonDecode(response.body)['data']);
                                 });
                               } else {
-                                print('Failed to update reaction'); 
+                                print('Failed to update reaction');
                                 // Show error message if API call fails
                                 // ScaffoldMessenger.of(context).showSnackBar(
                                 //   SnackBar(
@@ -528,7 +449,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               : Icon(Icons.favorite_border),
                         ),
                         SizedBox(width: 8),
-                           AnimatedFlipCounter(
+                        AnimatedFlipCounter(
                           value: totalFavorites,
                           textStyle: TextStyle(
                             fontSize: 16,
