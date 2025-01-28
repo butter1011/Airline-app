@@ -25,9 +25,6 @@ class _SkipScreenState extends State<SkipScreen> {
       "Real-Time Insights"
     ];
     final List contentList = [
-      // "Explore real, verified reviews to help you make informed travel choices ",
-      // "Your voice matters! Share your experiences and help improve air travel for everyone",
-      // "Stay updated and share feedback while you're still in the moment"
       "Explore real, verified reviews to help you make informed travel choices",
       "Your voice matters! Share your experiences and help improve air travel for everyone",
       "Stay updated and share feedback while you're still in the moment"
@@ -35,143 +32,99 @@ class _SkipScreenState extends State<SkipScreen> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: screenSize.width,
-                    height: screenSize.height,
-                    // decoration: BoxDecoration(
-                    //   image: DecorationImage(
-                    //     image: AssetImage(
-                    //         'assets/images/popup_${selectedIndex + 1}.png'),
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    // ),
-                  ),
-                  Positioned(
-                      left: 87,
-                      top: 60,
-                      right: 113,
-                      child: Image.asset(
-                        'assets/images/skipscreen${selectedIndex}.png',
-                        width: 175,
-                        height: 155,
-                      )),
-                  Positioned(
-                      left: 0,
-                      top: 278,
-                      right: 0,
-                      child: Center(
-                        child: SizedBox(
-                          width: screenSize.width - 70,
-                          child: selectedIndex == 0
-                              ? _buildTextFieldFirst()
-                              : selectedIndex == 1
-                                  ? _buildTextFieldSecond()
-                                  : _buildTextFieldThird(),
-                        ),
-                      )),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: screenSize.height * 0.37,
-                      width: double.infinity,
+        body: Column(
+          children: [
+            SizedBox(height: 60),
+            Image.asset(
+              'assets/images/skipscreen${selectedIndex}.png',
+              width: 175,
+              height: 155,
+            ),
+            SizedBox(height: 63),
+            Center(
+              child: SizedBox(
+                width: screenSize.width - 70,
+                child: selectedIndex == 0
+                    ? _buildTextFieldFirst()
+                    : selectedIndex == 1
+                        ? _buildTextFieldSecond()
+                        : _buildTextFieldThird(),
+              ),
+            ),
+            Spacer(),
+            Container(
+              height: screenSize.height * 0.37,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 32,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 4,
-                              width: 32,
-                              decoration: BoxDecoration(
-                                color: Color(0xff97A09C),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 27,
-                            ),
-                            Text(
-                              titleList[selectedIndex],
-                              style: AppStyles.textStyle_24_600.copyWith(
-                                fontFamily: 'Clash Grotesk',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 42,
-                            ),
-                            Text(
-                              contentList[selectedIndex],
-                              style: AppStyles.textStyle_15_400.copyWith(
-                                color: Color(0xff38433E),
-                                fontFamily: 'Clash Grotesk',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 21,
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "1",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 0
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Image.asset(
-                                      "assets/images/baggage_black.png"),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "2",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 1
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Image.asset("assets/images/flight_black.png"),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "3",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 2
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ]),
-                          ],
-                        ),
+                        color: Color(0xff97A09C),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 27),
+                    Text(
+                      titleList[selectedIndex],
+                      style: AppStyles.textStyle_24_600.copyWith(
+                        fontFamily: 'Clash Grotesk',
+                      ),
+                    ),
+                    SizedBox(height: 42),
+                    Text(
+                      contentList[selectedIndex],
+                      style: AppStyles.textStyle_15_400.copyWith(
+                        color: Color(0xff38433E),
+                        fontFamily: 'Clash Grotesk',
+                      ),
+                    ),
+                    SizedBox(height: 21),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Text(
+                        "1",
+                        style: AppStyles.textStyle_24_600.copyWith(
+                            color: selectedIndex == 0
+                                ? Colors.black
+                                : AppStyles.mainColor,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(width: 20),
+                      Image.asset("assets/images/baggage_black.png"),
+                      SizedBox(width: 20),
+                      Text(
+                        "2",
+                        style: AppStyles.textStyle_24_600.copyWith(
+                            color: selectedIndex == 1
+                                ? Colors.black
+                                : AppStyles.mainColor,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(width: 20),
+                      Image.asset("assets/images/flight_black.png"),
+                      SizedBox(width: 20),
+                      Text(
+                        "3",
+                        style: AppStyles.textStyle_24_600.copyWith(
+                            color: selectedIndex == 2
+                                ? Colors.black
+                                : AppStyles.mainColor,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         bottomSheet: bottomSheetList[selectedIndex]);
   }
@@ -185,9 +138,7 @@ class _SkipScreenState extends State<SkipScreen> {
             height: 2,
             color: Colors.black,
           ),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
@@ -219,9 +170,7 @@ class _SkipScreenState extends State<SkipScreen> {
             height: 2,
             color: Colors.black,
           ),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
@@ -253,9 +202,7 @@ class _SkipScreenState extends State<SkipScreen> {
             height: 2,
             color: Colors.black,
           ),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: _NavigationButton(
@@ -346,7 +293,6 @@ class _SkipScreenState extends State<SkipScreen> {
             fontFamily: 'inter',
             fontWeight: FontWeight.w400,
             fontSize: 50,
-            // height: 0.7,
             color: Colors.black,
           ),
         ),
@@ -392,7 +338,6 @@ class _SkipScreenState extends State<SkipScreen> {
             fontFamily: 'inter',
             fontWeight: FontWeight.w400,
             fontSize: 65,
-            // height: 0.7,
             color: Colors.black,
           ),
         ),
@@ -424,8 +369,8 @@ class _NavigationButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 56,
-        decoration: AppStyles.buttonDecoration
-            .copyWith(color: color, borderRadius: BorderRadius.circular(28)),
+        decoration: AppStyles.buttonDecoration.copyWith(
+            color: Colors.white, borderRadius: BorderRadius.circular(28)),
         child: Center(
           child: Text(
             buttonName,
