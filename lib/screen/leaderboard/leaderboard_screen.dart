@@ -16,7 +16,6 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
-import 'package:airline_app/provider/live_feed_review_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,20 +33,11 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  int expandedItems = 5;
-  late IOWebSocketChannel _channel;
-  bool isLeaderboardLoading = true;
   final airlineController = GetAirlineAirportController();
-  final airlineScoreController = GetAirlineScoreController();
-  final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
-  List<LiveFeedItem> liveFeedItems = [];
-  double leftPadding = 24.0;
-  String filterType = 'All';
-  List<Map<String, dynamic>> leaderBoardList = [];
+  final airlineScoreController = GetAirlineScoreController();
+  final airportScoreController = GetAirportScoreController();
   Map<String, bool> buttonStates = {
     "All": true,
     "Airline": false,
@@ -65,6 +55,34 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     // "Amenities": false,
   };
 
+  int expandedItems = 5;
+  String filterType = 'All';
+  bool isLeaderboardLoading = true;
+  List<Map<String, dynamic>> leaderBoardList = [];
+  double leftPadding = 24.0;
+
+  late IOWebSocketChannel _channel;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _channel.sink.close();
+    // Cancel any pending operations before disposing
+    if (mounted) {
+      ref.invalidate(reviewsAirlineProvider);
+      ref.invalidate(airlineAirportProvider);
+    }   
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
   void toggleButton(String buttonText) {
     setState(() {
       buttonStates.updateAll((key, value) => false);
@@ -76,36 +94,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     ref
         .read(airlineAirportProvider.notifier)
         .getFilteredList(filterType, null, null, null);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    await Future.wait([
-      connectWebSocket(),
-      fetchLeaderboardData(),
-    ]);
-    setState(() {
-      isLeaderboardLoading = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _channel.sink.close();
-    // Cancel any pending operations before disposing
-    if (mounted) {
-      ref.invalidate(reviewsAirlineProvider);
-      ref.invalidate(airlineAirportProvider);
-      ref.invalidate(filterButtonProvider);
-      ref.invalidate(liveFeedProvider);
-    }
-    super.dispose();
   }
 
   Future<void> fetchLeaderboardData() async {
@@ -169,15 +157,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           final jsonData = jsonDecode(data);
           if (jsonData['type'] == 'airlineAirport') {
             final review = jsonData['review'];
-            final newFeedItem = LiveFeedItem(
-              userName: review['reviewer']['name'] ?? 'Anonymous',
-              entityName: jsonData['data'][0]['name'] ?? 'Anonymous',
-              type: jsonData['data'][0]['isAirline'] ? 'airline' : 'airport',
-              rating: review['score'] ?? 0,
-              comment: review['comment'] ?? '',
-              timeStamp: jsonData['date'] ?? DateTime.now(),
-            );
-            ref.read(liveFeedProvider.notifier).addFeedItem(newFeedItem);
             ref
                 .read(airlineAirportProvider.notifier)
                 .setData(Map<String, dynamic>.from(jsonData));
@@ -199,6 +178,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     } catch (_) {
       _isWebSocketConnected = false;
     }
+  }
+
+  Future<void> _initializeData() async {
+    await Future.wait([
+      connectWebSocket(),
+      fetchLeaderboardData(),
+    ]);
+    setState(() {
+      isLeaderboardLoading = false;
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -395,7 +384,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                                     right: 28,
                                                     child: Material(
                                                       elevation: 4,
-                                                      borderRadius: BorderRadius.circular(16),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
                                                       child: Container(
                                                         width: 300,
                                                         padding:
@@ -444,8 +435,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                                                   BoxShadow(
                                                                       color: Colors
                                                                           .black,
-                                                                      blurRadius: 0,
-                                                                      spreadRadius: 0,
+                                                                      blurRadius:
+                                                                          0,
+                                                                      spreadRadius:
+                                                                          0,
                                                                       offset:
                                                                           Offset(
                                                                               2,
@@ -507,7 +500,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                                 ],
                                               );
                                             },
-                                          );                                        },
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
@@ -627,15 +621,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 }
 
 class _AirportListSection extends StatelessWidget {
-  final List<Map<String, dynamic>> leaderBoardList;
-  final int expandedItems;
-  final VoidCallback onExpand;
-
   const _AirportListSection({
     required this.leaderBoardList,
     required this.expandedItems,
     required this.onExpand,
   });
+
+  final int expandedItems;
+  final List<Map<String, dynamic>> leaderBoardList;
+  final VoidCallback onExpand;
 
   @override
   Widget build(BuildContext context) {
