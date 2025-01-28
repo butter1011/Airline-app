@@ -202,7 +202,9 @@ class AirportList extends ConsumerWidget {
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xff97a09c),
+                 
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       (selecedFilterButton == "All" ||
                               selecedFilterButton == "Airline" ||

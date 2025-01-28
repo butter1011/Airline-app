@@ -1,21 +1,22 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class BuildQuestionHeaderForAirport extends StatelessWidget {
-  const BuildQuestionHeaderForAirport({
+class BuildQuestionHeaderForSubmit extends StatelessWidget {
+  const BuildQuestionHeaderForSubmit({
     super.key,
     required this.subTitle,
     required this.title,
+    required this.airlineName,
     required this.airportName,
     required this.logoImage,
     required this.backgroundImage,
-    required this.selecetedOfCalssLevel,
   });
   final String subTitle;
+  final String airlineName;
   final String airportName;
   final String logoImage;
   final String backgroundImage;
-  final String selecetedOfCalssLevel;
+
   final String title;
 
   @override
@@ -39,22 +40,54 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (logoImage.isNotEmpty)
-                    Container(
-                      height: 40,
-                      decoration: AppStyles.circleDecoration,
-                      child: CircleAvatar(
-                          radius: 30, backgroundImage: NetworkImage(logoImage)),
-                    ),
-                  SizedBox(height: 10),
-                  Text(
-                    airportName,
-                    style: AppStyles.oswaldTextStyle,
-                    overflow: TextOverflow.visible,
-                    softWrap: true,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (logoImage.isNotEmpty)
+                        Container(
+                          height: 40,
+                          decoration: AppStyles.circleDecoration,
+                          child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(logoImage)),
+                        ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Text(
+                          airlineName,
+                          style: AppStyles.oswaldTextStyle,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (logoImage.isNotEmpty)
+                        Container(
+                          height: 40,
+                          decoration: AppStyles.circleDecoration,
+                          child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(logoImage)),
+                        ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Text(
+                          airportName,
+                          style: AppStyles.oswaldTextStyle,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

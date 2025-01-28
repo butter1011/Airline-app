@@ -13,7 +13,7 @@ class NavPageButton extends StatefulWidget {
   final IconData icon;
 
   @override
-  _NavPageButtonState createState() => _NavPageButtonState();
+  State<NavPageButton> createState() => _NavPageButtonState();
 }
 
 class _NavPageButtonState extends State<NavPageButton> {
@@ -42,7 +42,7 @@ class _NavPageButtonState extends State<NavPageButton> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           overlayColor: AppStyles.mainColor,
-          backgroundColor: AppStyles.mainColor,
+          backgroundColor: AppStyles.backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),
