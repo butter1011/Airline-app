@@ -42,10 +42,8 @@ dependencies:
   carousel_slider: ^5.0.0
   button_animations: ^2.0.0+3
   syncfusion_flutter_datepicker: ^27.1.56
-  flutter_map: ^7.0.2
   latlong2: ^0.9.1
   http: ^1.2.2
-  geolocator: ^13.0.1
   file_picker: ^8.1.6
   image_picker: ^1.1.2
   dropdown_button2: ^2.3.9
@@ -85,6 +83,8 @@ dependencies:
   http_parser: ^4.0.2
   mime: ^2.0.0
   animated_flip_counter: ^0.3.4
+  aws_s3_api: ^2.0.0
+  flutter_dotenv: ^5.2.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
