@@ -59,10 +59,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Future<String> _uploadImages(XFile? image) async {
     if (image == null) return '';
     final _awsUploadService = AwsUploadService(
-      accessKeyId: aws_credentials.AWS_ACCESS_KEY_ID,
-      secretAccessKey: aws_credentials.AWS_SECRET_ACCESS_KEY,
-      region: aws_credentials.AWS_REGION,
-      bucketName: aws_credentials.AWS_BUCKET_NAME,
+      accessKeyId: aws_credentials.ACCESS_KEY_ID,
+      secretAccessKey: aws_credentials.SECRET_ACCESS_KEY,
+      region: aws_credentials.REGION,
+      bucketName: aws_credentials.BUCKET_NAME,
     );
 
 

@@ -162,14 +162,11 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
 
   Future<Map<String, dynamic>> _uploadImages(image) async {
     final _awsUploadService = AwsUploadService(
-      accessKeyId: aws_credentials.AWS_ACCESS_KEY_ID,
-      secretAccessKey: aws_credentials.AWS_SECRET_ACCESS_KEY,
-      region: aws_credentials.AWS_REGION,
-      bucketName: aws_credentials.AWS_BUCKET_NAME,
+      accessKeyId: aws_credentials.ACCESS_KEY_ID,
+      secretAccessKey: aws_credentials.SECRET_ACCESS_KEY,
+      region: aws_credentials.REGION,
+      bucketName: aws_credentials.BUCKET_NAME,
     );
-
-    print("--------------------");
-    print("acessKeyId: ${aws_credentials.AWS_ACCESS_KEY_ID}");
 
     try {
       Map<String, dynamic> uploadedUrls = {};

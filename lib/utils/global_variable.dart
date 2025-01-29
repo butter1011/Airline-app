@@ -6,10 +6,9 @@ const String ciriumUrl =
     "https://api.flightstats.com/flex/flightstatus/historical/rest/v3";
 const String ciriumAppId = "95773e10";
 const String ciriumAppKey = "6847f849d0848f2d1d99065b88ef4100";
+const ACCESS_KEY_ID = "AKIA45Y2RTTI6DPSMX4M";
+const SECRET_ACCESS_KEY = "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";
+const REGION = "eu-north-1";
+const BUCKET_NAME = "airsharereview";
 const backendUrl = "10.0.2.2:3000";
 const apiUrl = "http://10.0.2.2:3000";
-
-const AWS_ACCESS_KEY_ID = "AKIA45Y2RTTI6DPSMX4M";
-const AWS_SECRET_ACCESS_KEY = "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";
-const AWS_REGION = "eu-north-1";
-const AWS_BUCKET_NAME = "airsharereview";
