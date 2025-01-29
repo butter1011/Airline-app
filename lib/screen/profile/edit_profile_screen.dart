@@ -17,6 +17,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:airline_app/screen/app_widgets/aws_upload_service.dart';
+import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -29,7 +31,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   List<dynamic> airlineData = [];
-  List<dynamic> airportData = [];
   String? _selectedAirline;
   bool isLoading = false;
   final _getAirlineData = GetAirlineAirportController();
@@ -50,12 +51,31 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         airlineData = (value["data"]["data"] as List)
             .where((element) => element['isAirline'] == true)
             .toList();
-        airportData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == false)
-            .toList();
       });
       isLoading = false;
     });
+  }
+
+  Future<String> _uploadImages(XFile? image) async {
+    if (image == null) return '';
+    final _awsUploadService = AwsUploadService(
+      accessKeyId: aws_credentials.AWS_ACCESS_KEY_ID,
+      secretAccessKey: aws_credentials.AWS_SECRET_ACCESS_KEY,
+      region: aws_credentials.AWS_REGION,
+      bucketName: aws_credentials.AWS_BUCKET_NAME,
+    );
+
+
+    try {
+      final uploadedUrl =
+          await _awsUploadService.uploadFile(File(image.path), 'avatar');
+      return uploadedUrl;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload failed: $e')),
+      );
+      return '';
+    }
   }
 
   Future<void> _pickImage() async {
@@ -320,7 +340,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       width: MediaQuery.of(context).size.width * 0.87,
                       height: 56,
                       decoration: BoxDecoration(
-                          color: AppStyles.mainColor,
+                          color: Colors.white,
                           border: Border.all(
                               width: 2, color: AppStyles.littleBlackColor),
                           borderRadius: BorderRadius.circular(28),
@@ -421,26 +441,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final userData = ref.watch(userDataProvider);
 
     try {
+      String? uploadedProfilePhoto;
       if (_selectedImage != null) {
-        final url = Uri.parse('$apiUrl/api/v1/editUser/avatar');
-        final request = http.MultipartRequest('POST', url);
-
-        final file = File(_selectedImage!.path);
-        final filename = file.path.split('/').last;
-
-        request.files.add(
-          http.MultipartFile(
-            'avatar',
-            file.readAsBytes().asStream(),
-            file.lengthSync(),
-            filename: filename,
-          ),
-        );
-
-        request.fields['userId'] = userData?['userData']['_id'];
-
-        await request.send();
+        uploadedProfilePhoto = await _uploadImages(_selectedImage);
       }
+
+      print("uploadedProfilePhoto: $uploadedProfilePhoto");
 
       final userInformationResponse = await http.post(
         Uri.parse('$apiUrl/api/v1/editUser'),
@@ -452,6 +458,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           'bio': _bioController.text,
           '_id': userData?['userData']['_id'],
           'favoriteAirline': _selectedAirline,
+          'profilePhoto': uploadedProfilePhoto ?? null,
         }),
       );
 
@@ -491,7 +498,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: MediaQuery.of(context).size.height * 0.1,
-      backgroundColor: const Color.fromARGB(255, 68, 45, 45),
+      backgroundColor: Colors.white,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
         onPressed: () => Navigator.pop(context),

@@ -15,6 +15,7 @@ class MediaFullScreen extends ConsumerStatefulWidget {
 
 class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
   final Map<String, VideoPlayerController> _videoControllers = {};
+  final Map<String, Duration> _videoPositions = {};
   bool isLoading = false;
 
   @override
@@ -31,7 +32,6 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     });
   }
 
-
   Future<void> _initVideos() async {
     setState(() {
       isLoading = true;
@@ -39,26 +39,35 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
 
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final List<dynamic> videos = args?['Videos'] ?? [];
+    final List<dynamic> mediaUrls = args?['imageUrls'] ?? [];
 
-    for (var video in videos) {
-      try {
-        final controller = VideoPlayerController.networkUrl(
-          Uri.parse(video),
-          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        );
+    // Clear existing controllers first
+    await Future.forEach(_videoControllers.values, (controller) async {
+      await controller.dispose();
+    });
+    _videoControllers.clear();
 
-        await controller.initialize();
-        controller.setLooping(true);
+    for (var media in mediaUrls) {
+      if (media
+          .toString()
+          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
+        try {
+          final controller = VideoPlayerController.networkUrl(
+            Uri.parse(media),
+            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+          );
 
-        setState(() {
-          _videoControllers[video] = controller;
-        });
-      } catch (e) {
-        print('Error initializing video $video: $e');
+          await controller.initialize();
+          controller.setLooping(true);
+
+          setState(() {
+            _videoControllers[media] = controller;
+          });
+        } catch (e) {
+          print('Error initializing video $media: $e');
+        }
       }
     }
-
     setState(() {
       isLoading = false;
     });
@@ -67,27 +76,44 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
   @override
   void dispose() {
     for (var controller in _videoControllers.values) {
-      controller.pause();  // Pause before disposing
+      // Store position before disposing
+      _videoPositions[controller.dataSource] = controller.value.position;
+      controller.pause();
       controller.dispose();
+      controller.setVolume(0); // Mute before disposing
     }
-    _videoControllers.clear(); // Clear the map
+    _videoControllers.clear();
+    _videoPositions.clear(); // Clear stored positions
     super.dispose();
   }
 
   Widget _buildVideoPlayer(String videoUrl) {
     final controller = _videoControllers[videoUrl];
-    if (controller == null) return Container();
+    if (controller == null) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.grey,
+        ),
+      );
+    }
 
     if (controller.value.isInitialized) {
+      // Restore previous position if available
+      if (_videoPositions.containsKey(videoUrl)) {
+        controller.seekTo(_videoPositions[videoUrl]!);
+        _videoPositions.remove(videoUrl); // Clear after seeking
+      }
       return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: VideoPlayer(controller..play()),
       );
     }
-    
-    return Center(
-      child: CircularProgressIndicator(
-        color: Colors.grey,
+    return Container(
+      height: 594.0,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.grey,
+        ),
       ),
     );
   }
@@ -99,9 +125,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
-    final List<dynamic> imgList = args?['Images'] ?? [];
-    final List<dynamic> videoList = args?['Videos'] ?? [];
-    final List<dynamic> mediaList = [...imgList, ...videoList];
+    final List<dynamic> mediaList = args?['imageUrls'] ?? [];
 
     return Scaffold(
       body: Column(
@@ -132,7 +156,8 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   items: mediaList.map((media) {
                     return Builder(
                       builder: (BuildContext context) {
-                        if (videoList.contains(media)) {
+                        if (media.toString().contains('.mp4') ||
+                            media.toString().contains('.mov')) {
                           return Container(
                             width: MediaQuery.of(context).size.width,
                             child: _buildVideoPlayer(media),

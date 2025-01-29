@@ -24,14 +24,21 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
-  final _boardingPassController = BoardingPassController();
   bool isLoading = true;
   String selectedType = "All";
+
+  final _boardingPassController = BoardingPassController();
 
   @override
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  void onTypeSelected(String type) {
+    setState(() {
+      selectedType = type;
+    });
   }
 
   Future<void> _loadData() async {
@@ -52,12 +59,6 @@ class _ReviewsubmissionScreenState
         setState(() => isLoading = false);
       }
     }
-  }
-
-  void onTypeSelected(String type) {
-    setState(() {
-      selectedType = type;
-    });
   }
 
   Widget _buildEmptyState() {
@@ -190,15 +191,6 @@ class _ReviewsubmissionScreenState
                                       },
                                       color: Colors.white,
                                     ),
-
-                                    // NavButton(
-                                    //   text: AppLocalizations.of(context)
-                                    //       .translate('Input manually'),
-                                    //   onPressed: () {
-                                    //     Navigator.pushNamed(context, AppRoutes.manualinput);
-                                    //   },
-                                    //   color: AppStyles.mainColor,
-                                    // )
                                   ],
                                 ),
                               ),

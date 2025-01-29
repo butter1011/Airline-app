@@ -15,6 +15,7 @@ import 'package:airline_app/provider/user_data_provider.dart';
 class FeedbackCard extends ConsumerStatefulWidget {
   const FeedbackCard(
       {super.key, required this.singleFeedback, required this.thumbnailHeight});
+
   final Map<String, dynamic> singleFeedback;
   final double thumbnailHeight;
 
@@ -23,44 +24,53 @@ class FeedbackCard extends ConsumerStatefulWidget {
 }
 
 class _FeedbackCardState extends ConsumerState<FeedbackCard> {
-  int? selectedEmojiIndex;
   final CarouselSliderController buttonCarouselController =
       CarouselSliderController();
-  final Map<String, VideoPlayerController> _videoControllers = {};
+
   bool isFavorite = false;
+  int? selectedEmojiIndex;
   late int totalFavorites;
+
+  final Map<String, VideoPlayerController> _videoControllers = {};
+  final Map<String, Duration> _videoPositions = {};
+
+  @override
+  void dispose() {
+    for (var controller in _videoControllers.values) {
+      // Store position before disposing
+      _videoPositions[controller.dataSource] = controller.value.position;
+      controller.pause();
+      controller.dispose();
+    }
+    _videoControllers.clear();
+    _videoPositions.clear(); // Clear stored positions
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    for (var video in widget.singleFeedback['videos'] ?? []) {
-      _videoControllers[video] = VideoPlayerController.networkUrl(
-        Uri.parse(video),
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-      )..initialize().then((_) {
-          if (mounted) {
-            setState(() {
-              _videoControllers[video]?.setLooping(true);
-              _handleVideoState();
-            });
-          }
-        });
+    for (var media in widget.singleFeedback['imageUrls'] ?? []) {
+      if (media.toLowerCase().endsWith('.mp4') ||
+          media.toLowerCase().endsWith('.mov')) {
+        _videoControllers[media] = VideoPlayerController.networkUrl(
+          Uri.parse(media),
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        )..initialize().then((_) {
+            if (mounted) {
+              setState(() {
+                _videoControllers[media]?.setLooping(true);
+                _handleVideoState();
+              });
+            }
+          });
+      }
     }
 
     // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
     isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
     totalFavorites = (widget.singleFeedback['rating'] as List).length;
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _videoControllers.values) {
-      controller.pause(); // Pause before disposing
-      controller.dispose();
-    }
-    _videoControllers.clear(); // Clear the map
-    super.dispose();
   }
 
   void _handleVideoState() {
@@ -78,6 +88,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     if (controller == null) return Container();
 
     if (controller.value.isInitialized) {
+      // Restore previous position if available
+      if (_videoPositions.containsKey(videoUrl)) {
+        controller.seekTo(_videoPositions[videoUrl]!);
+        _videoPositions.remove(videoUrl); // Clear after seeking
+      }
       return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: VideoPlayer(controller..play()),
@@ -90,6 +105,16 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     );
   }
 
+  @override 
+  void deactivate() {
+    // Pause and clear cache when widget is not visible
+    for (var controller in _videoControllers.values) {
+      controller.pause();
+      controller.setVolume(0);
+    }
+    super.deactivate();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.singleFeedback['reviewer'] == null ||
@@ -98,8 +123,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
 
-    final List<dynamic> images = widget.singleFeedback['images'] ?? [];
-    final List<dynamic> videos = widget.singleFeedback['videos'] ?? [];
+    final List<dynamic> imageUrls = widget.singleFeedback['imageUrls'] ?? [];
 
     return SizedBox(
       child: Column(
@@ -188,7 +212,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ],
                 ),
           SizedBox(height: 11),
-          if (images.isNotEmpty || videos.isNotEmpty)
+          if (imageUrls.isNotEmpty)
             Stack(
               children: [
                 widget.singleFeedback['from'] != null
@@ -199,8 +223,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               arguments: {
                                 'userId': userId,
                                 'feedbackId': widget.singleFeedback['_id'],
-                                'Images': images,
-                                'Videos': videos,
+                                'imageUrls': imageUrls,
                                 'Name': widget.singleFeedback['reviewer']
                                     ['name'],
                                 'Avatar': widget.singleFeedback['reviewer']
@@ -224,13 +247,17 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             enableInfiniteScroll: false,
                           ),
                           carouselController: buttonCarouselController,
-                          items: [...images, ...videos].map((mediaItem) {
+                          items: imageUrls.map((mediaItem) {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: Container(
                                   height: 189,
-                                  child: videos.contains(mediaItem)
+                                  child: mediaItem
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(
+                                              RegExp(r'\.(mp4|mov|avi|wmv)$'))
                                       ? _buildVideoPlayer(mediaItem)
                                       : Container(
                                           decoration: BoxDecoration(
@@ -253,8 +280,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               arguments: {
                                 'userId': userId,
                                 'feedbackId': widget.singleFeedback['_id'],
-                                'Images': images,
-                                'Videos': videos,
+                                'imageUrls': imageUrls,
                                 'Name': widget.singleFeedback['reviewer']
                                     ['name'],
                                 'Avatar': widget.singleFeedback['reviewer']
@@ -278,13 +304,17 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             enableInfiniteScroll: false,
                           ),
                           carouselController: buttonCarouselController,
-                          items: [...images, ...videos].map((mediaItem) {
+                          items: imageUrls.map((mediaItem) {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: Container(
                                   height: 189,
-                                  child: videos.contains(mediaItem)
+                                  child: mediaItem
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains(
+                                              RegExp(r'\.(mp4|mov|avi|wmv)$'))
                                       ? _buildVideoPlayer(mediaItem)
                                       : Container(
                                           decoration: BoxDecoration(
@@ -302,28 +332,26 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       ),
               ],
             ),
-        
           const SizedBox(height: 11),
           SizedBox(
             height: 40,
             child: Text(
-              widget.singleFeedback['comment'] ?? '',
-              style: AppStyles.textStyle_14_400,
+              widget.singleFeedback['comment'] != null &&
+                      widget.singleFeedback['comment'].isNotEmpty
+                  ? widget.singleFeedback['comment']
+                  : 'No comment given',
+              style: widget.singleFeedback['comment'] != null &&
+                      widget.singleFeedback['comment'].isNotEmpty
+                  ? AppStyles.textStyle_14_400
+                  : AppStyles.textStyle_14_400
+                      .copyWith(fontStyle: FontStyle.italic),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
           ),
-          // buildEmojiRatings(uniqueRatings),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // IconButton(
-              //   onPressed: () async {
-              //     // await BottomSheetHelper.showScoreBottomSheet(context);
-              //     sharedFunction("https://airlinereviewapp.com");
-              //   },
-              //   icon: Image.asset('assets/icons/share.png'),
-              // ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [
@@ -365,12 +393,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                 });
                               } else {
                                 print('Failed to update reaction');
-                                //  Show error message if API call fails
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(
-                                //       content:
-                                //           Text('Failed to update reaction')),
-                                // );
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(

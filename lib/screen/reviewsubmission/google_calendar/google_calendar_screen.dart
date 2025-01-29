@@ -141,7 +141,7 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
                 NavButton(
                   text: AppLocalizations.of(context).translate('Fetch Events'),
                   onPressed: _fetchEvents,
-                  color: AppStyles.mainColor,
+                  color: Colors.white,
                 ),
               ],
             ),

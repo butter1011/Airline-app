@@ -29,26 +29,26 @@ class CLeaderboardScreen extends ConsumerWidget {
     final userReviews = reviewsNotifier.getReviewsByUserId(userId);
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 17.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  AppLocalizations.of(context).translate('Recent Contribution'),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              // Expanded(child: ReviewScore())
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 17.0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Padding(
+        //         padding: const EdgeInsets.only(right: 8.0),
+        //         child: Text(
+        //           AppLocalizations.of(context).translate('Recent Contribution'),
+        //           style: const TextStyle(
+        //             fontSize: 18,
+        //             fontWeight: FontWeight.bold,
+        //             color: Colors.grey,
+        //           ),
+        //         ),
+        //       ),
+        //       // Expanded(child: ReviewScore())
+        //     ],
+        //   ),
+        // ),
         if (userReviews.isEmpty)
           const Padding(
             padding: EdgeInsets.only(top: 16.0),

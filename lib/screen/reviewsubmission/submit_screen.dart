@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:airline_app/screen/app_widgets/aws_upload_service.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
@@ -27,6 +28,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:airline_app/provider/score_provider.dart';
+import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
 class SubmitScreen extends ConsumerStatefulWidget {
   const SubmitScreen({super.key});
@@ -36,167 +38,28 @@ class SubmitScreen extends ConsumerStatefulWidget {
 }
 
 class _SubmitScreenState extends ConsumerState<SubmitScreen> {
-  final List<File> _imageOfAirline = [];
-  final List<File> _imageOfAirport = [];
-  final _reviewAirlineController = GetReviewAirlineController();
-  final _reviewAirportController = GetReviewAirportController();
-  final TextEditingController _commentOfAirlineController =
-      TextEditingController();
-  final TextEditingController _commentOfAirportController =
-      TextEditingController();
-  bool _isPickingImage = false;
-
   String commentOfAirline = "";
   String commentOfAirport = "";
-  bool _isLoading = false;
   bool isSuccess = false;
+
+  final TextEditingController _commentOfAirlineController =
+      TextEditingController();
+
+  final TextEditingController _commentOfAirportController =
+      TextEditingController();
+
+  final List<File> _imageOfAirline = [];
+  final List<File> _imageOfAirport = [];
+  bool _isLoading = false;
+  bool _isPickingImage = false;
+  final _reviewAirlineController = GetReviewAirlineController();
+  final _reviewAirportController = GetReviewAirportController();
 
   @override
   void dispose() {
     _commentOfAirlineController.dispose();
     _commentOfAirportController.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final boardingPassController = BoardingPassController();
-    final flightData = ref.watch(aviationInfoProvider);
-    final reviewDataForAirline = ref.watch(reviewFeedBackProviderForAirline);
-    final reviewDataForAirport = ref.watch(reviewFeedBackProviderForAirport);
-    final userData = ref.watch(userDataProvider);
-    final index = flightData.index;
-    final from = flightData.from;
-    final to = flightData.to;
-    final airline = flightData.airline;
-    final classTravel = flightData.selectedClassOfTravel;
-    final departureArrival = reviewDataForAirline[0]["subCategory"];
-    final comfort = reviewDataForAirline[1]["subCategory"];
-    final cleanliness = reviewDataForAirline[2]["subCategory"];
-    final onboardService = reviewDataForAirline[3]["subCategory"];
-    final foodBeverageForAirline = reviewDataForAirline[4]["subCategory"];
-    final entertainmentWifi = reviewDataForAirline[5]["subCategory"];
-    final accessibility = reviewDataForAirport[0]["subCategory"];
-    final waitTimes = reviewDataForAirport[1]["subCategory"];
-    final helpfulness = reviewDataForAirport[2]["subCategory"];
-    final ambienceComfort = reviewDataForAirport[3]["subCategory"];
-    final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
-    final amenities = reviewDataForAirport[5]["subCategory"];
-
-    final airlineData = ref.watch(aviationInfoProvider);
-    final airlineName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlineData.airline);
-    final airportName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlineData.from);
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlineData.airline);
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlineData.airline);
-
-    return PopScope(
-      canPop: false, // Prevents the default pop action
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          Navigator.pushNamed(
-              context, AppRoutes.questionsecondscreenforairport);
-        }
-      },
-      child: Stack(
-        children: [
-          KeyboardDismissWidget(
-            child: Scaffold(
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeaderForSubmit(
-                  backgroundImage: backgroundImage,
-                  title: "Share your experience",
-                  subTitle: "Your feedback helps us improve!",
-                  logoImage: logoImage,
-                  airlineName: airlineName,
-                  airportName: airportName,
-                ),
-              ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildFeedbackOptions(context),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-              bottomNavigationBar: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(height: 2, color: Colors.black),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Go back',
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icons.arrow_back,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Submit',
-                            onPressed: () => _handleSubmission(
-                              context: context,
-                              userData: userData,
-                              from: from,
-                              to: to,
-                              classTravel: classTravel,
-                              airline: airline,
-                              departureArrival: departureArrival,
-                              comfort: comfort,
-                              cleanliness: cleanliness,
-                              onboardService: onboardService,
-                              foodBeverageForAirline: foodBeverageForAirline,
-                              entertainmentWifi: entertainmentWifi,
-                              index: index,
-                              boardingPassController: boardingPassController,
-                              accessibility: accessibility,
-                              waitTimes: waitTimes,
-                              helpfulness: helpfulness,
-                              ambienceComfort: ambienceComfort,
-                              foodBeverageForAirport: foodBeverageForAirport,
-                              amenities: amenities,
-                              commentOfAirline: commentOfAirline,
-                              commentOfAirport: commentOfAirport,
-                              imageOfAirline: _imageOfAirline,
-                              imageOfAirport: _imageOfAirport,
-                            ),
-                            icon: Icons.arrow_forward,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (_isLoading)
-            Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const LoadingWidget()),
-        ],
-      ),
-    );
   }
 
   Future<void> _handleSubmission({
@@ -241,6 +104,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         foodBeverage: foodBeverageForAirline,
         entertainmentWifi: entertainmentWifi,
         comment: commentOfAirline,
+        imageUrls: [],
       );
 
       final reviewForAirport = AirportReviewModel(
@@ -255,22 +119,19 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         foodBeverage: foodBeverageForAirport,
         amenities: amenities,
         comment: commentOfAirport,
+        imageUrls: [],
       );
+
+      var imageAirlineUrls = await _uploadImages(imageOfAirline);
+      var imageAirportUrls = await _uploadImages(imageOfAirport);
+
+      reviewForAirline.imageUrls = imageAirlineUrls.values.toList();
+      reviewForAirport.imageUrls = imageAirportUrls.values.toList();
 
       var resultOfAirline =
           await _reviewAirlineController.saveAirlineReview(reviewForAirline);
-      if (imageOfAirline.isNotEmpty &&
-          resultOfAirline['data']?['data']?['_id'] != null) {
-        resultOfAirline = await _uploadImages(
-            resultOfAirline['data']['data']['_id'], imageOfAirline);
-      }
       var resultOfAirport =
           await _reviewAirportController.saveAirportReview(reviewForAirport);
-      if (imageOfAirline.isNotEmpty &&
-          resultOfAirline['data']?['data']?['_id'] != null) {
-        resultOfAirline = await _uploadImages(
-            resultOfAirline['data']['data']['_id'], imageOfAirline);
-      }
 
       if (resultOfAirline['success'] && resultOfAirport['success']) {
         final updatedUserData = await _reviewAirlineController
@@ -299,46 +160,30 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     }
   }
 
-  Future<Map<String, dynamic>> _uploadImages(String reviewId, image) async {
-    final url = Uri.parse('$apiUrl/api/v1/airline-review/upload-media');
-    Map<String, dynamic> lastResponse = {'success': false};
+  Future<Map<String, dynamic>> _uploadImages(image) async {
+    final _awsUploadService = AwsUploadService(
+      accessKeyId: aws_credentials.AWS_ACCESS_KEY_ID,
+      secretAccessKey: aws_credentials.AWS_SECRET_ACCESS_KEY,
+      region: aws_credentials.AWS_REGION,
+      bucketName: aws_credentials.AWS_BUCKET_NAME,
+    );
 
-    for (var media in image) {
-      try {
-        final request = http.MultipartRequest('POST', url);
-        final filename = media.path.split('/').last;
-        final mimeType = lookupMimeType(media.path);
+    print("--------------------");
+    print("acessKeyId: ${aws_credentials.AWS_ACCESS_KEY_ID}");
 
-        // Check if file is video or image
-        final isVideo = mimeType?.startsWith('video/') ?? false;
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'files',
-            media.path,
-            filename: filename,
-            contentType: MediaType.parse(
-                mimeType ?? (isVideo ? 'video/mp4' : 'image/jpeg')),
-          ),
-        );
-        request.fields['id'] = reviewId;
-        request.fields['type'] = isVideo ? 'video' : 'image';
-
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
-
-        if (response.statusCode != 200) {
-          throw Exception('Failed to upload media: ${response.body}');
-        }
-
-        lastResponse = jsonDecode(response.body);
-      } catch (e) {
-        print('Error uploading media: $e');
-        // Continue with next file even if current one fails
-        continue;
+    try {
+      Map<String, dynamic> uploadedUrls = {};
+      for (var file in image) {
+        final uploadedUrl = await _awsUploadService.uploadFile(file, 'reviews');
+        uploadedUrls[file.path] = uploadedUrl;
       }
+      return uploadedUrls;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload failed: $e')),
+      );
+      return {};
     }
-    return lastResponse;
   }
 
   Future<void> _pickMedia(List image) async {
@@ -657,6 +502,147 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           const SizedBox(height: 12),
           Text("Choose your Airport media for upload",
               style: AppStyles.textStyle_15_600),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final boardingPassController = BoardingPassController();
+    final flightData = ref.watch(aviationInfoProvider);
+    final reviewDataForAirline = ref.watch(reviewFeedBackProviderForAirline);
+    final reviewDataForAirport = ref.watch(reviewFeedBackProviderForAirport);
+    final userData = ref.watch(userDataProvider);
+    final index = flightData.index;
+    final from = flightData.from;
+    final to = flightData.to;
+    final airline = flightData.airline;
+    final classTravel = flightData.selectedClassOfTravel;
+    final departureArrival = reviewDataForAirline[0]["subCategory"];
+    final comfort = reviewDataForAirline[1]["subCategory"];
+    final cleanliness = reviewDataForAirline[2]["subCategory"];
+    final onboardService = reviewDataForAirline[3]["subCategory"];
+    final foodBeverageForAirline = reviewDataForAirline[4]["subCategory"];
+    final entertainmentWifi = reviewDataForAirline[5]["subCategory"];
+    final accessibility = reviewDataForAirport[0]["subCategory"];
+    final waitTimes = reviewDataForAirport[1]["subCategory"];
+    final helpfulness = reviewDataForAirport[2]["subCategory"];
+    final ambienceComfort = reviewDataForAirport[3]["subCategory"];
+    final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
+    final amenities = reviewDataForAirport[5]["subCategory"];
+
+    final airlineData = ref.watch(aviationInfoProvider);
+    final airlineName = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineName(airlineData.airline);
+    final airportName = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirportName(airlineData.from);
+    final logoImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineLogoImage(airlineData.airline);
+    final backgroundImage = ref
+        .watch(airlineAirportProvider.notifier)
+        .getAirlineBackgroundImage(airlineData.airline);
+
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(
+              context, AppRoutes.questionsecondscreenforairport);
+        }
+      },
+      child: Stack(
+        children: [
+          KeyboardDismissWidget(
+            child: Scaffold(
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+                flexibleSpace: BuildQuestionHeaderForSubmit(
+                  backgroundImage: backgroundImage,
+                  title: "Share your experience",
+                  subTitle: "Your feedback helps us improve!",
+                  logoImage: logoImage,
+                  airlineName: airlineName,
+                  airportName: airportName,
+                ),
+              ),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildFeedbackOptions(context),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
+              bottomNavigationBar: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(height: 2, color: Colors.black),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: NavPageButton(
+                            text: 'Go back',
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icons.arrow_back,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: NavPageButton(
+                            text: 'Submit',
+                            onPressed: () => _handleSubmission(
+                              context: context,
+                              userData: userData,
+                              from: from,
+                              to: to,
+                              classTravel: classTravel,
+                              airline: airline,
+                              departureArrival: departureArrival,
+                              comfort: comfort,
+                              cleanliness: cleanliness,
+                              onboardService: onboardService,
+                              foodBeverageForAirline: foodBeverageForAirline,
+                              entertainmentWifi: entertainmentWifi,
+                              index: index,
+                              boardingPassController: boardingPassController,
+                              accessibility: accessibility,
+                              waitTimes: waitTimes,
+                              helpfulness: helpfulness,
+                              ambienceComfort: ambienceComfort,
+                              foodBeverageForAirport: foodBeverageForAirport,
+                              amenities: amenities,
+                              commentOfAirline: commentOfAirline,
+                              commentOfAirport: commentOfAirport,
+                              imageOfAirline: _imageOfAirline,
+                              imageOfAirport: _imageOfAirport,
+                            ),
+                            icon: Icons.arrow_forward,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_isLoading)
+            Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const LoadingWidget()),
         ],
       ),
     );

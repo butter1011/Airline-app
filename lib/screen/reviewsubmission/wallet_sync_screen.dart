@@ -346,14 +346,14 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                       text: AppLocalizations.of(context)
                           .translate('Upload Boarding Pass Screenshot'),
                       onPressed: _analyzeImageFromFile,
-                      color: AppStyles.mainColor,
+                      color: Colors.white,
                     ),
                     const SizedBox(height: 12),
                     NavButton(
                       text: AppLocalizations.of(context)
                           .translate('Move To Wallet'),
                       onPressed: _launchWallet,
-                      color: AppStyles.mainColor,
+                      color: Colors.white,
                     ),
                   ],
                 ),

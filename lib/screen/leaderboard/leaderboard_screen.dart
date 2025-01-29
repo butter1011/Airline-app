@@ -178,7 +178,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Future<void> _initializeData() async {
     await Future.wait([
       connectWebSocket(),
-      // fetchLeaderboardData(),
+      fetchLeaderboardData(),
     ]);
     setState(() {
       isLeaderboardLoading = false;

@@ -11,6 +11,7 @@ class AirlineReviewModel {
   final Map<String, dynamic> foodBeverage;
   final Map<String, dynamic> entertainmentWifi;
   final String comment;
+  List<dynamic>? imageUrls;
 
   AirlineReviewModel({
     required this.reviewer,
@@ -25,6 +26,7 @@ class AirlineReviewModel {
     required this.foodBeverage,
     required this.entertainmentWifi,
     required this.comment,
+    this.imageUrls,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,6 +43,7 @@ class AirlineReviewModel {
       'foodBeverage': foodBeverage,
       'entertainmentWifi': entertainmentWifi,
       'comment': comment,
+      'imageUrls': imageUrls,
     };
   }
 
@@ -58,6 +61,7 @@ class AirlineReviewModel {
       foodBeverage: json['foodBeverage'],
       entertainmentWifi: json['entertainmentWifi'],
       comment: json['comment'],
+      imageUrls: List<String>.from(json['imageUrls']),
     );
   }
 }
