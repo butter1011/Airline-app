@@ -109,6 +109,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       if (!mounted) return;
 
       if (futures[0]['success']) {
+        
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[0]['data']);

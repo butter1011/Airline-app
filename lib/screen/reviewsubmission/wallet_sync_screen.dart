@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -168,7 +169,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
 
     /// ref.read(userDataProvider)?['userData']['_id']
     final newPass = BoardingPass(
-      name: "6791fed3d1e4903a20400b23",
+      name: ref.read(userDataProvider)?['userData']['_id'],
       pnr: pnr,
       airlineName: airlineName,
       departureAirportCode: departureAirport['fs'],

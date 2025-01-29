@@ -1,6 +1,7 @@
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
+import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
@@ -45,7 +46,7 @@ class _ReviewsubmissionScreenState
     try {
       await Future.wait([
         _boardingPassController
-            .getBoardingPasses("6791fed3d1e4903a20400b23")
+            .getBoardingPasses(ref.read(userDataProvider)?['userData']['_id'])
             .then((boardingPasses) {
           if (mounted) {
             ref.read(boardingPassesProvider.notifier).setData(boardingPasses);

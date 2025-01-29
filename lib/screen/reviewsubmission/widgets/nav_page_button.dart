@@ -41,7 +41,7 @@ class _NavPageButtonState extends State<NavPageButton> {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          overlayColor: AppStyles.mainColor,
+          overlayColor: AppStyles.blackColor,
           backgroundColor: AppStyles.backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
