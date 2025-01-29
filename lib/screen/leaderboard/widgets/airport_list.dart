@@ -191,19 +191,19 @@ class AirportList extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        (selecedFilterButton == "All" ||
-                                selecedFilterButton == "Airline" ||
-                                selecedFilterButton == "Airport")
-                            ? 'Rate of Growth'
-                            : selecedFilterButton == "Entertainment & WiFi"
-                                ? "En.. & WiFi"
-                                : selecedFilterButton,
-                        style: AppStyles.textStyle_14_600.copyWith(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xff97a09c),
-                        ),
-                      ),
+                          (selecedFilterButton == "All" ||
+                                  selecedFilterButton == "Airline" ||
+                                  selecedFilterButton == "Airport")
+                              ? 'Rate of Growth'
+                              : selecedFilterButton.length > 13
+                                  ? "${selecedFilterButton.substring(0, 13)}..."
+                                  : selecedFilterButton,
+                          style: AppStyles.textStyle_14_600.copyWith(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff97a09c),
+                          ),
+                          overflow: TextOverflow.ellipsis),
                       (selecedFilterButton == "All" ||
                               selecedFilterButton == "Airline" ||
                               selecedFilterButton == "Airport")
