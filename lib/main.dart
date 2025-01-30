@@ -111,8 +111,8 @@ class MyApp extends ConsumerWidget {
         AppRoutes.filterscreen: (context) => const LeaderboardFilterScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        //Airlines routes     
- 
+        //Airlines routes
+
         AppRoutes.questionfirstscreenforairline: (context) =>
             QuestionFirstScreenForAirline(),
         AppRoutes.detailfirstscreenforairline: (context) =>
@@ -121,9 +121,8 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
- 
 
-        // Airports routes  
+        // Airports routes
         AppRoutes.questionfirstscreenforairport: (context) =>
             QuestionFirstScreenForAirport(),
         AppRoutes.detailfirstscreenforairport: (context) =>
@@ -132,11 +131,11 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
-   
+
         //////
         AppRoutes.submitscreen: (context) => SubmitScreen(),
         AppRoutes.completereviews: (context) => CompleteReviews(),
-        
+
         AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
