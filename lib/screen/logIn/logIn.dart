@@ -6,7 +6,6 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';

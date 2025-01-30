@@ -94,7 +94,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final num overallScore = args['overall'];
 
     final airlineReviewLists = ref
-        .watch(reviewsAirlineProvider.notifier)
+        .watch(reviewsAirlineAirportProvider.notifier)
         .getReviewsByBookMarkId(bookMarkId);
 
     if (userId != null &&
@@ -268,50 +268,48 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                 children: airlineReviewLists.asMap().entries.map((entry) {
                   final index = entry.key;
                   final singleReview = entry.value;
-                  if (singleReview != null) {
-                    final reviewer = singleReview['reviewer'];
-                    final airline = singleReview['airline'];
-                    final from = singleReview['from'];
-                    final to = singleReview['to'];
+                  final reviewer = singleReview['reviewer'];
+                  final airline = singleReview['airline'];
+                  final from = singleReview['from'];
+                  final to = singleReview['to'];
 
-                    if (reviewer != null &&
-                        airline != null &&
-                        from != null &&
-                        to != null) {
-                      return Column(
-                        children: [
+                  if (reviewer != null &&
+                      airline != null &&
+                      from != null &&
+                      to != null) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: FeedbackCard(
+                            thumbnailHeight: 189,
+                            singleFeedback: singleReview,
+                          ),
+                        ),
+                        if (index != airlineReviewLists.length - 1)
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 24.0),
-                            child: FeedbackCard(
-                              thumbnailHeight: 189,
-                              singleFeedback: singleReview,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                )
+                              ],
                             ),
                           ),
-                          if (index != airlineReviewLists.length - 1)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24.0),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Divider(
-                                    thickness: 2,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    height: 24,
-                                  )
-                                ],
-                              ),
-                            ),
-                        ],
-                      );
-                    }
+                      ],
+                    );
                   }
-                  return const SizedBox.shrink();
+                                  return const SizedBox.shrink();
                 }).toList(),
               ),
               Container(

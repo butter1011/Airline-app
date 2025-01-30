@@ -333,12 +333,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
 
     if (flyerClass != null && flyerClass != 'All') {
-      final sortKey = flyerClass == "Business"
-          ? 'businessClass'
-          : flyerClass == "Premium economy"
-              ? 'pey'
-              : 'economyClass';
-      print("here is flyerClass$flyerClass");
       filteredReviews = filteredReviews.where((item) {
         return item['classTravel'] == flyerClass;
       }).toList();
@@ -414,7 +408,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   }
 }
 
-final reviewsAirlineProvider =
+final reviewsAirlineAirportProvider =
     StateNotifierProvider<ReviewsAirlineNotifier, ReviewState>((ref) {
   return ReviewsAirlineNotifier();
 });

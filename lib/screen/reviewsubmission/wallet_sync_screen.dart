@@ -79,7 +79,6 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       final String flightNumber = match.group(3)!;
       final String julianDateAndClassOfService = match.group(4)!;
       final String departureAirport = routeOfFlight.substring(0, 3);
-      final String arrivalAirport = routeOfFlight.substring(3, 6);
       final String carrier = routeOfFlight.substring(6, 8);
       final String julianDate = julianDateAndClassOfService.substring(0, 3);
       final String classOfServiceKey =

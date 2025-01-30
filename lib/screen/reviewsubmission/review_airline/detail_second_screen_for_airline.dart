@@ -2,9 +2,10 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/subcategory_button_widget.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,16 +21,11 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
     List<dynamic> mainCategoryNames = [];
     for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);
-    }
-    String singleAspect = mainCategoryNames[singleIndex];
+    }  
 
     // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirline[singleIndex]['subCategory'];
-
-    final selectedNumberOfSubcategoryForDislike = ref
-        .watch(reviewFeedBackProviderForAirline.notifier)
-        .selectedNumberOfSubcategoryForDislike(singleIndex);
 
     final airlinData = ref.watch(aviationInfoProvider);
     final from = ref
@@ -72,7 +68,15 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
           children: [
             _buildFeedbackOptions(
                 ref, singleIndex, subCategoryList, selections),
-            _buildNavigationButtons(context),
+            BuildNavigationButtonsWidget(
+              onBackPressed: () {
+                Navigator.pop(context);
+              },
+              onNextPressed: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.questionfirstscreenforairport);
+              },
+            ),
           ],
         )));
   }
@@ -127,26 +131,6 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildNavigationButtons(context) {
-    return Column(
-      children: [
-        Container(
-          height: 2,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: NavPageButton(
-              text: 'Go back',
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icons.arrow_back),
-        ),
-      ],
     );
   }
 }

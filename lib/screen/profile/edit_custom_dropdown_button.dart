@@ -55,10 +55,7 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
                     ))
                 .toList(),
             value: selectedValue,
-            onChanged: (value) {
-              var id = widget.airlineNames
-                  .where((element) => element['name'] == value)
-                  .first['_id'];
+            onChanged: (value) {              
               setState(() {
                 selectedValue = value;
               });
