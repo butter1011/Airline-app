@@ -15,9 +15,8 @@ class BoardingPass {
   final String airlineCode;
   final String flightNumber;
   final String visitStatus;
-  final bool isFlightReviewed;
-  final bool isDepartureAirportReviewed;
-  final bool isArrivalAirportReviewed;
+  final bool isReviewed;
+
 
   BoardingPass({
     this.id = '',
@@ -36,9 +35,8 @@ class BoardingPass {
     this.airlineCode = '',
     this.flightNumber = '',
     this.visitStatus = '',
-    this.isFlightReviewed = false,
-    this.isDepartureAirportReviewed = false,
-    this.isArrivalAirportReviewed = false,
+    this.isReviewed = false,
+
   });
 
   BoardingPass copyWith({
@@ -58,9 +56,8 @@ class BoardingPass {
     String? airlineCode,
     String? flightNumber,
     String? visitStatus,
-    bool? isFlightReviewed,
-    bool? isDepartureAirportReviewed,
-    bool? isArrivalAirportReviewed,
+    bool? isReviewed,
+  
   }) {
     return BoardingPass(
       id: id ?? this.id,
@@ -79,11 +76,8 @@ class BoardingPass {
       airlineCode: airlineCode ?? this.airlineCode,
       flightNumber: flightNumber ?? this.flightNumber,
       visitStatus: visitStatus ?? this.visitStatus,
-      isFlightReviewed: isFlightReviewed ?? this.isFlightReviewed,
-      isDepartureAirportReviewed:
-          isDepartureAirportReviewed ?? this.isDepartureAirportReviewed,
-      isArrivalAirportReviewed:
-          isArrivalAirportReviewed ?? this.isArrivalAirportReviewed,
+      isReviewed: isReviewed ?? this.isReviewed,
+   
     );
   }
 
@@ -105,9 +99,8 @@ class BoardingPass {
       airlineCode: json['airlineCode'] ?? '',
       flightNumber: json['flightNumber'] ?? '',
       visitStatus: json['visitStatus'] ?? '',
-      isFlightReviewed: json['isFlightReviewed'] ?? false,
-      isDepartureAirportReviewed: json['isDepartureAirportReviewed'] ?? false,
-      isArrivalAirportReviewed: json['isArrivalAirportReviewed'] ?? false,
+      isReviewed: json['isReviewed'] ?? false,
+ 
     );
   }
 
@@ -129,9 +122,8 @@ class BoardingPass {
       'airlineCode': airlineCode,
       'flightNumber': flightNumber,
       'visitStatus': visitStatus,
-      'isFlightReviewed': isFlightReviewed,
-      'isDepartureAirportReviewed': isDepartureAirportReviewed,
-      'isArrivalAirportReviewed': isArrivalAirportReviewed,
+      'isReviewed': isReviewed,
+   
     };
   }
 }
