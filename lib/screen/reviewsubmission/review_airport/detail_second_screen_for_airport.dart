@@ -1,5 +1,6 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
@@ -9,7 +10,6 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 class DetailSecondScreenForAirport extends ConsumerWidget {
   const DetailSecondScreenForAirport({super.key});
@@ -22,7 +22,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
     List<dynamic> mainCategoryNames = [];
     for (var category in mainCategoryAndSubcategoryForAirport) {
       mainCategoryNames.add(category['mainCategory'] as String);
-    }    
+    }
     // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
@@ -58,13 +58,19 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
           children: [
             _buildFeedbackOptions(
                 ref, singleIndex, subCategoryList, selections),
-              BuildNavigationButtonsWidget(
+            BuildNavigationButtonsWidget(
               onBackPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                ref.read(aviationInfoProvider.notifier).resetState();
+                ref
+                    .read(reviewFeedBackProviderForAirline.notifier)
+                    .resetState();
+                ref
+                    .read(reviewFeedBackProviderForAirport.notifier)
+                    .resetState();
               },
               onNextPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutes.submitscreen);
+                Navigator.pop(context);
               },
             ),
           ],
@@ -123,5 +129,5 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         ),
       ),
     );
-  } 
+  }
 }
