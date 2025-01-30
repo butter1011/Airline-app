@@ -333,7 +333,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         const SizedBox(height: 24),
         _buildMediaUploadOptionForAirport(context),
         const SizedBox(height: 22),
-        if (_imageOfAirline.isNotEmpty)
+        if (_imageOfAirport.isNotEmpty)
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
