@@ -1,10 +1,8 @@
 import 'package:video_player/video_player.dart';
-import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MediaFullScreen extends ConsumerStatefulWidget {
   const MediaFullScreen({super.key});

@@ -65,7 +65,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       bucketName: aws_credentials.BUCKET_NAME,
     );
 
-
     try {
       final uploadedUrl =
           await _awsUploadService.uploadFile(File(image.path), 'avatar');
@@ -424,7 +423,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
     );
 
-    Overlay.of(context)?.insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry);
 
     // Remove the overlay after some time
     Future.delayed(Duration(seconds: 3), () {
@@ -468,9 +467,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
 // Or using a ref (if using Riverpod)
-        ref.read(reviewsAirlineProvider.notifier).setReviewUserProfileImageData(
-            userData?['userData']['_id'],
-            userData?['userData']['profilePhoto']);
+        ref
+            .read(reviewsAirlineAirportProvider.notifier)
+            .setReviewUserProfileImageData(userData?['userData']['_id'],
+                userData?['userData']['profilePhoto']);
 
         final prefs = await SharedPreferences.getInstance();
 

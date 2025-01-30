@@ -24,7 +24,7 @@ class FeedScreen extends ConsumerStatefulWidget {
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
   final TextEditingController _searchController = TextEditingController();
-    String _searchQuery = '';
+  String _searchQuery = '';
   late bool selectedAll = true;
   late bool selectedAirline = false;
   late bool selectedAirport = false;
@@ -35,7 +35,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   Map<String, bool> buttonStates = {
     "All": true,
     "Airline": false,
-    "Airport": false, 
+    "Airport": false,
   };
   void toggleButton(String buttonText) {
     setState(() {
@@ -44,9 +44,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       filterType = buttonText;
     });
     ref
-        .read(reviewsAirlineProvider.notifier)
+        .read(reviewsAirlineAirportProvider.notifier)
         .getFilteredReviews(filterType, null, null, null);
-    ref.read(reviewsAirlineProvider.notifier).getAirlineReviewsWithScore();
+    ref
+        .read(reviewsAirlineAirportProvider.notifier)
+        .getAirlineReviewsWithScore();
   }
 
   @override
@@ -64,14 +66,14 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     final airlineResult = await reviewAirlineController.getAirlineReviews();
     if (airlineResult['success']) {
       ref
-          .read(reviewsAirlineProvider.notifier)
+          .read(reviewsAirlineAirportProvider.notifier)
           .setReviewData(airlineResult['data']);
     }
     final reviewAirportController = GetReviewAirportController();
     final airportResult = await reviewAirportController.getAirportReviews();
     if (airportResult['success']) {
       ref
-          .read(reviewsAirlineProvider.notifier)
+          .read(reviewsAirlineAirportProvider.notifier)
           .setReviewData(airportResult['data']);
     }
     final airlineScoreController = GetAirlineScoreController();
@@ -79,18 +81,18 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     final airlineScore = await airlineScoreController.getAirlineScore();
     if (airlineScore['success']) {
       ref
-          .read(reviewsAirlineProvider.notifier)
+          .read(reviewsAirlineAirportProvider.notifier)
           .setAirlineScoreData(airlineScore['data']['data']);
     }
     final airportScore = await airportScoreController.getAirportScore();
     if (airportScore['success']) {
       ref
-          .read(reviewsAirlineProvider.notifier)
+          .read(reviewsAirlineAirportProvider.notifier)
           .setAirportScoreData(airportScore['data']['data']);
     }
 
     ref
-        .read(reviewsAirlineProvider.notifier)
+        .read(reviewsAirlineAirportProvider.notifier)
         .getFilteredReviews("All", null, null, null);
 
     setState(() {
@@ -101,7 +103,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
-    final reviewList = ref.watch(reviewsAirlineProvider).filteredReviews;
+    final reviewList = ref.watch(reviewsAirlineAirportProvider).filteredReviews;
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -138,20 +140,20 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                       ),
                       child: Center(
                         child: TextField(
-                          controller:_searchController,
-                             onChanged: (value) {
+                          controller: _searchController,
+                          onChanged: (value) {
                             setState(() {
                               _searchQuery = value.toLowerCase();
                             });
                             ref
-                                .read(reviewsAirlineProvider.notifier)
+                                .read(reviewsAirlineAirportProvider.notifier)
                                 .getFilteredReviews(
                                     filterType, _searchQuery, null, null);
                           },
                           decoration: const InputDecoration(
                             hintText: 'Search',
-                            hintStyle: TextStyle(
-                                fontFamily: 'inter', fontSize: 14),
+                            hintStyle:
+                                TextStyle(fontFamily: 'inter', fontSize: 14),
                             contentPadding: EdgeInsets.all(0),
                             prefixIcon: Icon(Icons.search),
                             border: InputBorder.none,
@@ -198,8 +200,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                child: Row(                
-                mainAxisAlignment: MainAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: buttonStates.keys.map((buttonText) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
@@ -212,8 +214,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   }).toList(),
                 ),
               ),
-             
-              
               const SizedBox(height: 14),
               Container(height: 4, color: AppStyles.littleBlackColor),
               Expanded(
@@ -245,55 +245,53 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                             .map((entry) {
                                             final index = entry.key;
                                             final singleReview = entry.value;
-                                            if (singleReview != null) {
-                                              final reviewer =
-                                                  singleReview['reviewer'];
-                                              final airline =
-                                                  singleReview['airline'];
+                                            final reviewer =
+                                                singleReview['reviewer'];
+                                            final airline =
+                                                singleReview['airline'];
 
-                                              if (reviewer != null &&
-                                                  airline != null) {
-                                                return Column(
-                                                  children: [
+                                            if (reviewer != null &&
+                                                airline != null) {
+                                              return Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 24.0),
+                                                    child: FeedbackCard(
+                                                      thumbnailHeight: 260,
+                                                      singleFeedback:
+                                                          singleReview,
+                                                    ),
+                                                  ),
+                                                  if (index !=
+                                                      reviewList.length - 1)
                                                     Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 24.0),
-                                                      child: FeedbackCard(
-                                                        thumbnailHeight: 260,
-                                                        singleFeedback:
-                                                            singleReview,
+                                                      padding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                                  24.0),
+                                                      child: Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 9,
+                                                          ),
+                                                          Divider(
+                                                            thickness: 2,
+                                                            color:
+                                                                Colors.black,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 24,
+                                                          )
+                                                        ],
                                                       ),
                                                     ),
-                                                    if (index !=
-                                                        reviewList.length - 1)
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal:
-                                                                    24.0),
-                                                        child: Column(
-                                                          children: [
-                                                            SizedBox(
-                                                              height: 9,
-                                                            ),
-                                                            Divider(
-                                                              thickness: 2,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 24,
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                  ],
-                                                );
-                                              }
+                                                ],
+                                              );
                                             }
-                                            return const SizedBox.shrink();
+                                                                                      return const SizedBox.shrink();
                                           }).toList(),
                                   ),
                                   SizedBox(

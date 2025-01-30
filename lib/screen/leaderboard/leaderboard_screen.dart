@@ -2,7 +2,6 @@ import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
-import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
@@ -109,9 +108,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       if (!mounted) return;
 
       if (futures[0]['success']) {
-        
         ref
-            .read(reviewsAirlineProvider.notifier)
+            .read(reviewsAirlineAirportProvider.notifier)
             .setReviewData(futures[0]['data']);
       }
       if (futures[1]['success']) {
@@ -129,7 +127,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       }
       if (futures[4]['success']) {
         ref
-            .read(reviewsAirlineProvider.notifier)
+            .read(reviewsAirlineAirportProvider.notifier)
             .setReviewData(futures[4]['data']);
       }
 
@@ -152,7 +150,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         (data) {
           final jsonData = jsonDecode(data);
           if (jsonData['type'] == 'airlineAirport') {
-            final review = jsonData['review'];
             ref
                 .read(airlineAirportProvider.notifier)
                 .setData(Map<String, dynamic>.from(jsonData));
@@ -219,7 +216,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   @override
   Widget build(BuildContext context) {
     final trendingreviews =
-        ref.watch(reviewsAirlineProvider.notifier).getTopFiveReviews();
+        ref.watch(reviewsAirlineAirportProvider.notifier).getTopFiveReviews();
     final selectedFilterButton = ref.watch(filterButtonProvider);
 
     return WillPopScope(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   ///Color style
@@ -7,8 +6,8 @@ class AppStyles {
   static Color warnningColor= const Color(0xF7E74C4C);
   static Color notifyColor=  Colors.lightBlue;
   static Color littleBlackColor = const Color(0xff181818);
-  static Color backgroundColor =  Color(0xFFf5f5f5);
-  static Color blackColor = Color(0xFF000000);
+  static Color backgroundColor = const Color(0xFFf5f5f5);
+  static Color blackColor = const Color(0xFF000000);
 
   ///Text style
   static TextStyle textStyle_12_600 = const TextStyle(
