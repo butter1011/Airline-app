@@ -4,7 +4,6 @@ class AviationInfoState {
   final String from;
   final String to;
   final String airline;
-  final String airport;
   final String selectedClassOfTravel;
   // final String? selectedSynchronize;
   final List<dynamic> dateRange;
@@ -14,7 +13,6 @@ class AviationInfoState {
     this.from = '',
     this.to = '',
     this.airline = '',
-    this.airport = '',
     this.selectedClassOfTravel = '',
     // this.selectedSynchronize = '',
     this.dateRange = const [],
@@ -37,7 +35,6 @@ class AviationInfoState {
       from: from ?? this.from,
       to: to ?? this.to,
       airline: airline ?? this.airline,
-      airport: airport ?? this.airport,
       selectedClassOfTravel:
           selectedClassOfTravel ?? this.selectedClassOfTravel,
       // selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
@@ -45,25 +42,6 @@ class AviationInfoState {
       index: index ?? this.index,
       isDeparture: isDeparture ?? this.isDeparture,
     );
-  }
-
-  bool isValidForAirline() {
-    return from.isNotEmpty &&
-        to.isNotEmpty &&
-        airline.isNotEmpty &&
-        selectedClassOfTravel.isNotEmpty &&
-        // selectedSynchronize != null &&
-        // selectedSynchronize!.isNotEmpty &&
-        dateRange.isNotEmpty;
-  }
-
-  bool isValidForAirport() {
-    return airline.isNotEmpty &&
-        airport.isNotEmpty &&
-        selectedClassOfTravel.isNotEmpty &&
-        // selectedSynchronize != null &&
-        // selectedSynchronize!.isNotEmpty &&
-        dateRange.isNotEmpty;
   }
 }
 
@@ -108,14 +86,6 @@ class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
 
   void resetState() {
     state = AviationInfoState();
-  }
-
-  bool isAirlineValid() {
-    return state.isValidForAirline();
-  }
-
-  bool isAirportValid() {
-    return state.isValidForAirport();
   }
 }
 

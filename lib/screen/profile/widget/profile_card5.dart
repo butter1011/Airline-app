@@ -1,5 +1,3 @@
-import 'package:airline_app/utils/app_styles.dart';
-
 import 'package:flutter/material.dart';
 
 class ProfileCard5 extends StatefulWidget {
@@ -36,9 +34,7 @@ class _ProfileCardState extends State<ProfileCard5> {
               offset: Offset(2, 2),
             ),
           ],
-          color: widget.isActive
-              ? AppStyles.mainColor
-              : Colors.white, // Change color based on active state
+          color: Colors.white, // Change color based on active state
           borderRadius: BorderRadius.circular(36),
         ),
         child: Center(

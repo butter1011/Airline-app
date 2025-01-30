@@ -1,17 +1,14 @@
-import 'dart:io';
-
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/review_airport_card.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/type_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -28,9 +25,10 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
-  final _boardingPassController = BoardingPassController();
   bool isLoading = true;
   String selectedType = "All";
+
+  final _boardingPassController = BoardingPassController();
 
   @override
   void initState() {
@@ -38,12 +36,17 @@ class _ReviewsubmissionScreenState
     _loadData();
   }
 
+  void onTypeSelected(String type) {
+    setState(() {
+      selectedType = type;
+    });
+  }
+
   Future<void> _loadData() async {
     try {
       await Future.wait([
         _boardingPassController
-            .getBoardingPasses(
-                ref.read(userDataProvider)?['userData']?['_id'] ?? '')
+            .getBoardingPasses(ref.read(userDataProvider)?['userData']['_id'])
             .then((boardingPasses) {
           if (mounted) {
             ref.read(boardingPassesProvider.notifier).setData(boardingPasses);
@@ -57,12 +60,6 @@ class _ReviewsubmissionScreenState
         setState(() => isLoading = false);
       }
     }
-  }
-
-  void onTypeSelected(String type) {
-    setState(() {
-      selectedType = type;
-    });
   }
 
   Widget _buildEmptyState() {
@@ -80,46 +77,6 @@ class _ReviewsubmissionScreenState
     ]);
   }
 
-  Widget _buildTypeSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 24),
-          child: Text(
-            AppLocalizations.of(context).translate('Type'),
-            style: AppStyles.textStyle_18_600,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TypeButton(
-              text: "All",
-              isSelected: selectedType == "All",
-              onTap: () => onTypeSelected("All"),
-            ),
-            const SizedBox(width: 8),
-            TypeButton(
-              text: "Flights",
-              isSelected: selectedType == "Flights",
-              onTap: () => onTypeSelected("Flights"),
-            ),
-            const SizedBox(width: 8),
-            TypeButton(
-              text: "Airports",
-              isSelected: selectedType == "Airports",
-              onTap: () => onTypeSelected("Airports"),
-            ),
-          ],
-        ),
-        const SizedBox(height: 26),
-        const Divider(color: Colors.black, thickness: 2),
-      ],
-    );
-  }
-
   Widget _buildCardWidget(BoardingPass singleBoardingPass) {
     final index = ref.watch(boardingPassesProvider).indexOf(singleBoardingPass);
 
@@ -133,38 +90,6 @@ class _ReviewsubmissionScreenState
               index: index,
               isReviewed: singleBoardingPass.isFlightReviewed,
             ),
-          if ((selectedType == "All" || selectedType == "Airports") &&
-              (selectedType != "Flights"))
-            Column(
-              children: [
-                if (selectedType == "All") const SizedBox(height: 10),
-                ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.departureAirportCode,
-                  time: singleBoardingPass.departureTime,
-                  isDeparture: true,
-                  isReviewed: singleBoardingPass.isDepartureAirportReviewed,
-                  classOfTravel: singleBoardingPass.classOfTravel,
-                  countryCode: singleBoardingPass.departureCountryCode,
-                  airportName: singleBoardingPass.departureCity,
-                ),
-                const SizedBox(height: 10),
-                ReviewAirportCard(
-                  index: index,
-                  status: singleBoardingPass.visitStatus,
-                  airlineCode: singleBoardingPass.airlineCode,
-                  airportCode: singleBoardingPass.arrivalAirportCode,
-                  time: singleBoardingPass.arrivalTime,
-                  isDeparture: false,
-                  isReviewed: singleBoardingPass.isArrivalAirportReviewed,
-                  classOfTravel: singleBoardingPass.classOfTravel,
-                  countryCode: singleBoardingPass.arrivalCountryCode,
-                  airportName: singleBoardingPass.arrivalCity,
-                ),
-              ],
-            ),
         ],
       ),
     );
@@ -173,32 +98,19 @@ class _ReviewsubmissionScreenState
   @override
   Widget build(BuildContext context) {
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
-    final screenSize = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-        return false;
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
       },
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: screenSize.height * 0.08,
-          backgroundColor: Colors.white,
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back_ios_sharp),
-          //   onPressed: () => Navigator.pop(context),
-          // ),
-          centerTitle: true,
-          title: Text(
-            AppLocalizations.of(context).translate('Reviews'),
-            style: AppStyles.textStyle_16_600,
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(4.0),
-            child: Container(
-              color: Colors.black,
-              height: 4.0,
-            ),
-          ),
+        appBar: AppbarWidget(
+          title: "Reviews",
+          onBackPressed: () {
+            Navigator.pop(context);
+          },
         ),
         body: isLoading
             ? const Center(child: LoadingWidget())
@@ -208,8 +120,8 @@ class _ReviewsubmissionScreenState
                     ? _buildEmptyState()
                     : ListView(
                         children: [
-                          _buildTypeSelector(),
-                          const SizedBox(height: 12),
+                          // _buildTypeSelector(),
+                          const SizedBox(height: 24),
                           ...boardingPasses.map(_buildCardWidget),
                         ],
                       ),
@@ -218,60 +130,78 @@ class _ReviewsubmissionScreenState
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 2,
-              color: Colors.black,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  NavButton(
-                    text: AppLocalizations.of(context)
-                        .translate('Sync from Your Wallet'),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const WalletSyncScreen(),
-                        ),
-                      );
-                    },
-                    color: Colors.white,
-                  ),
                   const SizedBox(height: 12),
                   NavButton(
-                    text: AppLocalizations.of(context)
-                        .translate('Sync from Google Calendar'),
+                    text: AppLocalizations.of(context).translate('Next'),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => GoogleCalendarScreen(),
-                        ),
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 16),
+                                child: Column(
+                                  children: [
+                                    NavButton(
+                                      text: AppLocalizations.of(context)
+                                          .translate('Sync from Your Wallet'),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const WalletSyncScreen(),
+                                          ),
+                                        );
+                                      },
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    NavButton(
+                                      text: AppLocalizations.of(context)
+                                          .translate(
+                                              'Sync from Google Calendar'),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                GoogleCalendarScreen(),
+                                          ),
+                                        );
+                                      },
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    NavButton(
+                                      text: AppLocalizations.of(context)
+                                          .translate('Scan'),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ScannerScreen(),
+                                          ),
+                                        );
+                                      },
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 12),
-                  NavButton(
-                    text: AppLocalizations.of(context).translate('Scan'),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ScannerScreen(),
-                        ),
-                      );
-                    },
-                    color: Colors.white,
-                  ),
-                  // const SizedBox(height: 12),
-                  // NavButton(
-                  //   text: AppLocalizations.of(context)
-                  //       .translate('Input manually'),
-                  //   onPressed: () {
-                  //     Navigator.pushNamed(context, AppRoutes.manualinput);
-                  //   },
-                  //   color: AppStyles.mainColor,
-                  // )
+                    color: AppStyles.backgroundColor,
+                  )
                 ],
               ),
             ),

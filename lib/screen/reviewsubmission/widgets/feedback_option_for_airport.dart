@@ -9,13 +9,13 @@ class FeedbackOptionForAirport extends StatelessWidget {
   final int label;
   final int selectedNumberOfSubcategoryForLike;
 
-  const FeedbackOptionForAirport(
-      {super.key,
-      required this.numForIdentifyOfParent,
-      required this.iconUrl,
-      required this.label,
-      required this.selectedNumberOfSubcategoryForLike,
-});
+  const FeedbackOptionForAirport({
+    super.key,
+    required this.numForIdentifyOfParent,
+    required this.iconUrl,
+    required this.label,
+    required this.selectedNumberOfSubcategoryForLike,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,9 @@ class FeedbackOptionForAirport extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.detailfirstscreenforairport,
               arguments: {'singleAspect': label});
         } else if (numForIdentifyOfParent == 2) {
-       
           Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
               arguments: {'singleAspect': label});
         }
-   
       }, // Change color on tap
       child: Stack(
         children: [
@@ -45,7 +43,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.41,
             decoration: AppStyles.cardDecoration.copyWith(
               color: selectedNumberOfSubcategoryForLike > 0
-                  ? AppStyles.mainColor
+                  ? AppStyles.blackColor
                   : Colors.white, // Change color based on click state
             ),
             padding: EdgeInsets.only(
@@ -57,9 +55,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
                   height: 48,
                   width: 48,
                   decoration: AppStyles.cardDecoration.copyWith(
-                    color: selectedNumberOfSubcategoryForLike > 0
-                        ? Colors.white
-                        : AppStyles.mainColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(iconUrl, height: 40),
@@ -68,7 +64,11 @@ class FeedbackOptionForAirport extends StatelessWidget {
                 Text(
                   labelName,
                   textAlign: TextAlign.center,
-                  style: AppStyles.textStyle_14_600, // Optional styling
+                  style: AppStyles.textStyle_14_600.copyWith(
+                    color: selectedNumberOfSubcategoryForLike > 0
+                        ? Colors.white
+                        : AppStyles.blackColor, // Change text color based on click state
+                  ), // Optional styling
                 ),
               ],
             ),

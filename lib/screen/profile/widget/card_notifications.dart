@@ -58,7 +58,6 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 6),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Row(
@@ -103,6 +102,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           child: BasicLanguageButton(
                             mywidth: 155,
                             myheight: 56,
+                            myTextColor: Colors.black,
                             myColor: Colors.white,
                             btntext: AppLocalizations.of(context)
                                 .translate("Cancel"),
@@ -127,7 +127,8 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           child: BasicLanguageButton(
                             mywidth: 155,
                             myheight: 56,
-                            myColor: AppStyles.mainColor,
+                            myTextColor: Colors.white,
+                            myColor: Colors.black,
                             btntext: AppLocalizations.of(context)
                                 .translate("Sign Out"),
                           ),
@@ -163,7 +164,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Notifications (5)'),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -251,7 +252,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Edit Profile'),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -280,7 +281,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Help & FAQs'),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -309,7 +310,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate("About the app"),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -338,7 +339,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('Terms of Service'),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -352,6 +353,9 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             ),
           ),
         ),
+        SizedBox(
+          height: 45,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
           child: InkWell(
@@ -361,7 +365,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 Text(
                   AppLocalizations.of(context).translate('App Language'),
                   style: TextStyle(
-                      fontFamily: 'inter',
+                      fontFamily: 'Clash Grotesk',
                       fontSize: 20,
                       color: Color(0xFF181818),
                       fontWeight: FontWeight.w600),
@@ -383,8 +387,11 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
+                    myTextColor: _selectedLanguage == 'English'
+                        ? Colors.white
+                        : Colors.black,
                     myColor: _selectedLanguage == 'English'
-                        ? AppStyles.mainColor
+                        ? Colors.black
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("English")),
               ),
@@ -393,8 +400,11 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
+                    myTextColor: _selectedLanguage == 'Chinese'
+                        ? Colors.white
+                        : Colors.black,
                     myColor: _selectedLanguage == 'Chinese'
-                        ? AppStyles.mainColor
+                        ? Colors.black
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Chinese")),
               ),
@@ -403,8 +413,11 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                 child: BasicButtonEnglish(
                     mywidth: 103,
                     myheight: 40,
+                    myTextColor: _selectedLanguage == 'Spanish'
+                        ? Colors.white
+                        : Colors.black,
                     myColor: _selectedLanguage == 'Spanish'
-                        ? AppStyles.mainColor
+                        ? Colors.black
                         : Colors.white,
                     btntext: AppLocalizations.of(context).translate("Spanish")),
               ),
@@ -520,6 +533,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           child: BasicLanguageButton(
                             mywidth: 155,
                             myheight: 56,
+                            myTextColor: Colors.black,
                             myColor: Colors.white,
                             btntext: AppLocalizations.of(context)
                                 .translate("No, leave"),
@@ -551,7 +565,8 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
                           child: BasicLanguageButton(
                             mywidth: 155,
                             myheight: 56,
-                            myColor: AppStyles.mainColor,
+                            myTextColor: Colors.white,
+                            myColor: Colors.black,
                             btntext: AppLocalizations.of(context)
                                 .translate("Yes, change"),
                           ),

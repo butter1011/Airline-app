@@ -4,12 +4,13 @@ class BasicButtonEnglish extends StatelessWidget {
   final double mywidth;
   final double myheight;
   final Color myColor;
-
+  final Color myTextColor;
   final String btntext;
 
   const BasicButtonEnglish(
       {Key? key,
       required this.mywidth,
+      required this.myTextColor,
       required this.myheight,
       required this.myColor,
       required this.btntext})
@@ -39,9 +40,10 @@ class BasicButtonEnglish extends StatelessWidget {
             Center(
           child: Text(
             '$btntext',
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: 'inter',
                 fontSize: 14,
+                color: myTextColor,
                 fontWeight: FontWeight.bold),
           ),
         ),

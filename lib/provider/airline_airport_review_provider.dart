@@ -327,7 +327,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
           ...getAirportReviewsWithScore().where(checkContinent),
         ];
     }
-    print("here is filteredReviews🧵🧵$filteredReviews");
+
     if (flyerClass != null && flyerClass != 'All') {
       final sortKey = flyerClass == "Business"
           ? 'businessClass'

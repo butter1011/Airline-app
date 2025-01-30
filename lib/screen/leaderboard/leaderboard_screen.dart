@@ -16,13 +16,13 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
-import 'package:airline_app/provider/live_feed_review_provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
+
 bool _isWebSocketConnected = false;
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
@@ -33,36 +33,50 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  int expandedItems = 5;
-  late IOWebSocketChannel _channel;
-  bool isLeaderboardLoading = true;
   final airlineController = GetAirlineAirportController();
-  final airlineScoreController = GetAirlineScoreController();
-  final airportScoreController = GetAirportScoreController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
-  List<LiveFeedItem> liveFeedItems = [];
-  double leftPadding = 24.0;
-  String filterType = 'All';
-  List<Map<String, dynamic>> leaderBoardList = [];
+  final airlineScoreController = GetAirlineScoreController();
+  final airportScoreController = GetAirportScoreController();
   Map<String, bool> buttonStates = {
     "All": true,
     "Airline": false,
     "Airport": false,
-    "Flight Experience": false,
-    "Comfort": false,
-    "Cleanliness": false,
-    "Onboard": false,
-    "Food & Beverage": false,
-    "Entertainment & WiFi": false,
-    "Accessibility": false,
-    "Wait Times": false,
-    "Helpfulness": false,
-    "Ambience": false,
-    "Amenities": false,
+    // "Flight Experience": false,
+    // "Comfort": false,
+    // "Cleanliness": false,
+    // "Onboard": false,
+    // "Food & Beverage": false,
+    // "Entertainment & WiFi": false,
+    // "Accessibility": false,
+    // "Wait Times": false,
+    // "Helpfulness": false,
+    // "Ambience": false,
+    // "Amenities": false,
   };
+
+  int expandedItems = 5;
+  String filterType = 'All';
+  bool isLeaderboardLoading = true;
+  List<Map<String, dynamic>> leaderBoardList = [];
+  double leftPadding = 24.0;
+
+  late IOWebSocketChannel _channel;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _channel.sink.close();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
 
   void toggleButton(String buttonText) {
     setState(() {
@@ -75,36 +89,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     ref
         .read(airlineAirportProvider.notifier)
         .getFilteredList(filterType, null, null, null);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    await Future.wait([
-      connectWebSocket(),
-      fetchLeaderboardData(),
-    ]);
-    setState(() {
-      isLeaderboardLoading = false;
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _channel.sink.close();
-    // Cancel any pending operations before disposing
-    if (mounted) {
-      ref.invalidate(reviewsAirlineProvider);
-      ref.invalidate(airlineAirportProvider);
-      ref.invalidate(filterButtonProvider);
-      ref.invalidate(liveFeedProvider);
-    }
-    super.dispose();
   }
 
   Future<void> fetchLeaderboardData() async {
@@ -125,6 +109,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       if (!mounted) return;
 
       if (futures[0]['success']) {
+        
         ref
             .read(reviewsAirlineProvider.notifier)
             .setReviewData(futures[0]['data']);
@@ -153,7 +138,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       ref
           .read(airlineAirportProvider.notifier)
           .getFilteredList("All", null, null, null);
-
     } catch (e) {
       print('Error fetching leaderboard data: $e');
     }
@@ -169,15 +153,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           final jsonData = jsonDecode(data);
           if (jsonData['type'] == 'airlineAirport') {
             final review = jsonData['review'];
-            final newFeedItem = LiveFeedItem(
-              userName: review['reviewer']['name'] ?? 'Anonymous',
-              entityName: jsonData['data'][0]['name'] ?? 'Anonymous',
-              type: jsonData['data'][0]['isAirline'] ? 'airline' : 'airport',
-              rating: review['score'] ?? 0,
-              comment: review['comment'] ?? '',
-              timeStamp: jsonData['date'] ?? DateTime.now(),
-            );
-            ref.read(liveFeedProvider.notifier).addFeedItem(newFeedItem);
             ref
                 .read(airlineAirportProvider.notifier)
                 .setData(Map<String, dynamic>.from(jsonData));
@@ -199,6 +174,16 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     } catch (_) {
       _isWebSocketConnected = false;
     }
+  }
+
+  Future<void> _initializeData() async {
+    await Future.wait([
+      connectWebSocket(),
+      fetchLeaderboardData(),
+    ]);
+    setState(() {
+      isLeaderboardLoading = false;
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -329,9 +314,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   ],
                 ),
               ),
-              SingleChildScrollView(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: buttonStates.keys.map((buttonText) {
                     return Padding(
@@ -365,12 +349,157 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    AppLocalizations.of(context).translate(
-                                        'Trending Airlines & Airports'),
-                                    style: AppStyles.textStyle_16_600.copyWith(
-                                      color: Color(0xff38433E),
-                                    ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('Top Ranked  Airlines'),
+                                        style:
+                                            AppStyles.textStyle_16_600.copyWith(
+                                          color: Color(0xff38433E),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.info_outline),
+                                        onPressed: () {
+                                          final RenderBox button = context
+                                              .findRenderObject() as RenderBox;
+                                          final Offset offset =
+                                              button.localToGlobal(Offset.zero);
+
+                                          showDialog(
+                                            context: context,
+                                            barrierColor: Colors.transparent,
+                                            builder: (BuildContext context) {
+                                              return Stack(
+                                                children: [
+                                                  Positioned(
+                                                    top: offset.dy + 100,
+                                                    right: 28,
+                                                    child: Material(
+                                                      elevation: 4,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
+                                                      child: Container(
+                                                        width: 300,
+                                                        padding:
+                                                            EdgeInsets.all(16),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(16),
+                                                          border: Border.all(
+                                                              width: 2,
+                                                              color:
+                                                                  Colors.black),
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                                color: Colors
+                                                                    .black,
+                                                                blurRadius: 0,
+                                                                spreadRadius: 0,
+                                                                offset: Offset(
+                                                                    2, 2))
+                                                          ],
+                                                        ),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                border: Border.all(
+                                                                    width: 2,
+                                                                    color: Colors
+                                                                        .black),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      blurRadius:
+                                                                          0,
+                                                                      spreadRadius:
+                                                                          0,
+                                                                      offset:
+                                                                          Offset(
+                                                                              2,
+                                                                              2))
+                                                                ],
+                                                              ),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Text(
+                                                                    'How The scoring works',
+                                                                    style: AppStyles
+                                                                        .textStyle_14_500
+                                                                        .copyWith(
+                                                                            color:
+                                                                                Colors.black),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 4),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .check_outlined,
+                                                                      color: Colors
+                                                                          .green,
+                                                                      size: 20),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 18),
+                                                            Text(
+                                                              'Realtime updates',
+                                                              style: AppStyles
+                                                                  .textStyle_15_600,
+                                                            ),
+                                                            SizedBox(height: 8),
+                                                            Text(
+                                                              'score changes are calculated by analyzing the difference in sentiment scores submitted by users within a set timeframe (e.g, 24 hours or 7 days), reflecting the net improvement or decline in performance of the airline or airport.',
+                                                              style: AppStyles
+                                                                  .textStyle_14_500
+                                                                  .copyWith(
+                                                                color: Color(
+                                                                    0xff38433E),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                   _AirportListSection(
                                     leaderBoardList: ref
@@ -382,7 +511,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                         expandedItems += 5;
                                       });
                                     },
-                                  ),                             
+                                  ),
                                   SizedBox(height: 28),
                                   Text(
                                     AppLocalizations.of(context)
@@ -488,15 +617,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 }
 
 class _AirportListSection extends StatelessWidget {
-  final List<Map<String, dynamic>> leaderBoardList;
-  final int expandedItems;
-  final VoidCallback onExpand;
-
   const _AirportListSection({
     required this.leaderBoardList,
     required this.expandedItems,
     required this.onExpand,
   });
+
+  final int expandedItems;
+  final List<Map<String, dynamic>> leaderBoardList;
+  final VoidCallback onExpand;
 
   @override
   Widget build(BuildContext context) {

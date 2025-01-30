@@ -2,6 +2,7 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -21,13 +22,13 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
 
     final airportname = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.airport);
+        .getAirportName(airlinData.from);
     final logoImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportLogoImage(airlinData.airport);
+        .getAirportLogoImage(airlinData.from);
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
-        .getAirportBackgroundImage(airlinData.airport);
+        .getAirportBackgroundImage(airlinData.from);
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
 
@@ -42,7 +43,8 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: BuildQuestionHeaderForAirport(
             airportName: airportname,
-            subTitle: "What could be improved?",
+            title: "Lets go into more detail about this?",
+            subTitle: "Your feedback helps make every journey better!",
             logoImage: logoImage,
             backgroundImage: backgroundImage,
             selecetedOfCalssLevel: selectedClassOfTravel,
@@ -54,7 +56,12 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
               _buildFeedbackOptions(
                 selections,
               ),
-              _buildNavigationButtons(context),
+              BuildNavigationButtonsWidget(onBackPressed: () {
+                Navigator.pop(context);
+              }, onNextPressed: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.submitscreen);
+              })
             ],
           ),
         ),
@@ -113,24 +120,5 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
     );
   }
 
-  Widget _buildNavigationButtons(context) {
-    return Column(
-      children: [
-        Container(
-          height: 2,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: NavPageButton(
-              text: 'Next',
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutes.questionthirdscreenforairport);
-              },
-              icon: Icons.arrow_forward),
-        ),
-      ],
-    );
-  }
+
 }

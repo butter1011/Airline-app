@@ -132,7 +132,7 @@ class AirportList extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   SizedBox(
-                    width: 120,
+                    width: 140,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -141,22 +141,12 @@ class AirportList extends ConsumerWidget {
                           style: AppStyles.textStyle_14_600,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(
-                          airportData['isAirline'] ? 'Airline' : 'Airport',
-                          style: AppStyles.textStyle_14_600.copyWith(
-                              fontSize: 13, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          'Score ${airportData['overall'].toStringAsFixed(1)}',
-                          style: AppStyles.textStyle_14_600.copyWith(
-                              fontSize: 13, fontWeight: FontWeight.w500),
-                        )
                       ],
                     ),
                   ),
                   const Spacer(),
                   SizedBox(
-                    width: 80, // Fixed width for the graph
+                    width: 50, // Fixed width for the graph
                     height: 40,
                     child: LineChart(
                       LineChartData(
@@ -169,14 +159,14 @@ class AirportList extends ConsumerWidget {
                             isCurved: true,
                             color: airportData['isIncreasing']
                                 ? Color(0xFF3FEA9C)
-                                : Color(0xFFFF4961),
+                                : Color(0xFFFFA500),
                             barWidth: 2,
                             dotData: FlDotData(show: false),
                             belowBarData: BarAreaData(
-                              show: true,
+                              show: false,
                               color: (airportData['isIncreasing']
                                       ? Color(0xFF3FEA9C)
-                                      : Color(0xFFFF4961))
+                                      : Color(0xFFFFA500))
                                   .withOpacity(0.1),
                             ),
                             showingIndicators: [],
@@ -191,41 +181,15 @@ class AirportList extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                          (selecedFilterButton == "All" ||
-                                  selecedFilterButton == "Airline" ||
-                                  selecedFilterButton == "Airport")
-                              ? 'Rate of Growth'
-                              : selecedFilterButton.length > 13
-                                  ? "${selecedFilterButton.substring(0, 13)}..."
-                                  : selecedFilterButton,
-                          style: AppStyles.textStyle_14_600.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xff97a09c),
-                          ),
-                          overflow: TextOverflow.ellipsis),
-                      (selecedFilterButton == "All" ||
-                              selecedFilterButton == "Airline" ||
-                              selecedFilterButton == "Airport")
-                          ? Text(
-                              changeValue >= 0
-                                  ? "+${changeValue.toStringAsFixed(1)}"
-                                  : changeValue.toStringAsFixed(1),
-                              style: AppStyles.textStyle_14_600.copyWith(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            )
-                          : Text(
-                              getCategoryScore(selecedFilterButton)
-                                  .toStringAsFixed(1),
-                              style: AppStyles.textStyle_14_600.copyWith(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
+                        'Score ${airportData['overall'].toStringAsFixed(1)}',
+                        style: AppStyles.textStyle_14_600.copyWith(
+                            fontSize: 14, fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        '${airportData['totalReviews']} reviews',
+                        style: AppStyles.textStyle_14_600.copyWith(
+                            fontSize: 13, fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ],

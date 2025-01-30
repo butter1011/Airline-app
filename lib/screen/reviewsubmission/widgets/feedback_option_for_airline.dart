@@ -42,7 +42,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.41,
             decoration: AppStyles.cardDecoration.copyWith(
               color: selectedNumberOfSubcategoryForLike > 0
-                  ? AppStyles.mainColor
+                  ? AppStyles.blackColor
                   : Colors.white, // Change color based on click state
             ),
             padding: EdgeInsets.only(
@@ -54,9 +54,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
                   height: 48,
                   width: 48,
                   decoration: AppStyles.cardDecoration.copyWith(
-                    color: selectedNumberOfSubcategoryForLike > 0
-                        ? Colors.white
-                        : AppStyles.mainColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(iconUrl, height: 40),
@@ -65,7 +63,11 @@ class FeedbackOptionForAirline extends StatelessWidget {
                 Text(
                   labelName,
                   textAlign: TextAlign.center,
-                  style: AppStyles.textStyle_14_600, // Optional styling
+                  style: AppStyles.textStyle_14_600.copyWith(
+                    color: selectedNumberOfSubcategoryForLike > 0
+                        ? Colors.white
+                        : Colors.black,
+                  ), // Optional styling
                 ),
               ],
             ),
