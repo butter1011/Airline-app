@@ -84,7 +84,7 @@ dependencies:
   mime: ^2.0.0
   animated_flip_counter: ^0.3.4
   aws_s3_api: ^2.0.0
-  flutter_dotenv: ^5.2.1
+
 
 flutter_launcher_icons:
   android: "launcher_icon"

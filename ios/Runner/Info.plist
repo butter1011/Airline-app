@@ -61,10 +61,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR and access for video capture</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background to show your current location on the map.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open and in the background to provide relevant flight information and reviews based on your current location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when in use to show your current location on the map.</string>
+	<string>This app needs access to location when open to provide relevant flight information and reviews based on your current location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for video playback</string>
 	<key>NSPhotoLibraryUsageDescription</key>
