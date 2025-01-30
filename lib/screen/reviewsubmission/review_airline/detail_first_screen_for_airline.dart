@@ -1,6 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/subcategory_button_widget.dart';
@@ -69,11 +70,17 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
                 ref, singleIndex, subCategoryList, selections),
             BuildNavigationButtonsWidget(
                 onBackPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                ref.read(aviationInfoProvider.notifier).resetState();
+                ref
+                    .read(reviewFeedBackProviderForAirline.notifier)
+                    .resetState();
+                ref
+                    .read(reviewFeedBackProviderForAirport.notifier)
+                    .resetState();
                 },
                 onNextPressed: () {
-                  Navigator.pushNamed(
-                      context, AppRoutes.questionsecondscreenforairline);
+                  Navigator.pop(context);
                 },
               ),
           ],
