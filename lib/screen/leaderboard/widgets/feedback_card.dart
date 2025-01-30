@@ -389,7 +389,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               if (response.statusCode == 200) {
                                 setState(() {
                                   ref
-                                      .read(reviewsAirlineProvider.notifier)
+                                      .read(reviewsAirlineAirportProvider
+                                          .notifier)
                                       .updateReview(
                                           jsonDecode(response.body)['data']);
                                 });
@@ -449,7 +450,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               if (response.statusCode == 200) {
                                 setState(() {
                                   ref
-                                      .read(reviewsAirlineProvider.notifier)
+                                      .read(reviewsAirlineAirportProvider
+                                          .notifier)
                                       .updateReview(
                                           jsonDecode(response.body)['data']);
                                 });

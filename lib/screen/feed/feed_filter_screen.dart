@@ -125,7 +125,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         }
       }
     });
-    ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
+    ref.read(reviewsAirlineAirportProvider.notifier).getFilteredReviews(
           selectedAirType,
           null,
           selectedFlyerClass,
@@ -153,7 +153,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
       }
     });
 
-    ref.read(reviewsAirlineProvider.notifier).getFilteredReviews(
+    ref.read(reviewsAirlineAirportProvider.notifier).getFilteredReviews(
           selectedAirType,
           null,
           selectedFlyerClass == "All" ? null : selectedFlyerClass,

@@ -1,10 +1,10 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
+import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -17,10 +17,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selections = ref.watch(reviewFeedBackProviderForAirline);
-
-    final (numberOfFirstSelectedAspects, numberOfSecondSelectedAspects) = ref
-        .watch(reviewFeedBackProviderForAirline.notifier)
-        .numberOfSelectedAspects();
     final airlineData = ref.watch(aviationInfoProvider);
     final from = ref
         .watch(airlineAirportProvider.notifier)
@@ -69,7 +65,15 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
               _buildFeedbackOptions(selections),
               BuildNavigationButtonsWidget(
                 onBackPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                      context, AppRoutes.reviewsubmissionscreen);
+                                      ref.read(aviationInfoProvider.notifier).resetState();
+                  ref
+                      .read(reviewFeedBackProviderForAirline.notifier)
+                      .resetState();
+                  ref
+                      .read(reviewFeedBackProviderForAirport.notifier)
+                      .resetState();
                 },
                 onNextPressed: () {
                   Navigator.pushNamed(

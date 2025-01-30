@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:airline_app/screen/app_widgets/aws_upload_service.dart';
 import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
@@ -15,7 +14,6 @@ import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -23,10 +21,7 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:airline_app/utils/global_variable.dart';
 import 'package:mime/mime.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
@@ -274,10 +269,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required BoardingPassController boardingPassController,
   }) async {
     ref
-        .read(reviewsAirlineProvider.notifier)
+        .read(reviewsAirlineAirportProvider.notifier)
         .addReview(resultOfAirline['data']['data']);
     ref
-        .read(reviewsAirlineProvider.notifier)
+        .read(reviewsAirlineAirportProvider.notifier)
         .addReview(resultOfAirport['data']['data']);
 
     if (index != null) {
@@ -333,7 +328,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         const SizedBox(height: 24),
         _buildMediaUploadOptionForAirport(context),
         const SizedBox(height: 22),
-        if (_imageOfAirline.isNotEmpty)
+        if (_imageOfAirport.isNotEmpty)
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
@@ -592,7 +587,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                         Expanded(
                           child: NavPageButton(
                             text: 'Go back',
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pushNamed(
+                                context, AppRoutes.reviewsubmissionscreen),
                             icon: Icons.arrow_back,
                           ),
                         ),
