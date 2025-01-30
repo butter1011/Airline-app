@@ -380,7 +380,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
               ),
               decoration: AppStyles.cardDecoration,
               child: TextFormField(
-                onChanged: (value) => setState(() => commentOfAirline = value),
+                onChanged: (value) => setState(() => commentOfAirport = value),
                 controller: _commentOfAirportController,
                 maxLines: null,
                 decoration: const InputDecoration(
