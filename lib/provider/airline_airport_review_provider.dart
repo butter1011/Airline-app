@@ -69,12 +69,16 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
 
   void setReviewUserProfileImageData(String id, String image) {
     final updatedProfileImageReviews = state.reviews.map((review) {
-      if (review['id'] == id) {
-        // Create a new map with the updated profile photo
-        return {
-          ...review,
-          'reviewer': {...review['reviewer'], 'profilePhoto': image}
-        };
+      if (review['reviewer']['_id'] == id) {
+        // Create a deep copy of the review object
+        var updatedReview = Map<String, dynamic>.from(review);
+        var updatedReviewer = Map<String, dynamic>.from(review['reviewer']);
+        
+        // Update the profilePhoto
+        updatedReviewer['profilePhoto'] = image;
+        updatedReview['reviewer'] = updatedReviewer;
+        
+        return updatedReview;
       }
       return review;
     }).toList();

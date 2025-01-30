@@ -28,12 +28,13 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
   List<dynamic> airlineData = [];
-  String? _selectedAirline;
   bool isLoading = false;
+
+  final TextEditingController _bioController = TextEditingController();
   final _getAirlineData = GetAirlineAirportController();
+  final TextEditingController _nameController = TextEditingController();
+  String? _selectedAirline;
   XFile? _selectedImage;
 
   @override
@@ -56,6 +57,77 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
+  void reloadProfileImage() {
+    setState(() {
+      // Clear image cache to force reload
+      final imageCache = PaintingBinding.instance.imageCache;
+      imageCache.clear();
+      imageCache.clearLiveImages();
+    });
+  }
+
+  void showCustomSnackbar(BuildContext context) {
+    OverlayEntry overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 45, // Position from top
+        left: 24,
+        right: 24,
+
+        child: Material(
+          // elevation: 4.0,
+          child: ClipRect(
+            child: Stack(children: [
+              Container(
+                height: 60,
+                decoration: AppStyles.buttonDecoration.copyWith(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                // padding: EdgeInsets.all(16),
+                // color: Colors.green,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/icons/alert.png',
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Successfully saved!',
+                        style: AppStyles.textStyle_16_600.copyWith(
+                            fontSize: 20, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Image.asset(
+                    "assets/icons/closeButton.png",
+                    width: 32,
+                    height: 32,
+                  ))
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context)?.insert(overlayEntry);
+
+    // Remove the overlay after some time
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+
   Future<String> _uploadImages(XFile? image) async {
     if (image == null) return '';
     final _awsUploadService = AwsUploadService(
@@ -64,7 +136,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       region: aws_credentials.REGION,
       bucketName: aws_credentials.BUCKET_NAME,
     );
-
 
     try {
       final uploadedUrl =
@@ -113,13 +184,80 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
-  void reloadProfileImage() {
+  void _editProfileFunction() async {
     setState(() {
-      // Clear image cache to force reload
-      final imageCache = PaintingBinding.instance.imageCache;
-      imageCache.clear();
-      imageCache.clearLiveImages();
+      isLoading = true; // Show loading indicator
     });
+
+    reloadProfileImage();
+    final userData = ref.watch(userDataProvider);
+
+    try {
+      String uploadedProfilePhoto = userData?['userData']['profilePhoto'] ?? '';
+      if (_selectedImage != null) {
+        uploadedProfilePhoto = await _uploadImages(_selectedImage) ?? '';
+      }
+
+      final userInformationResponse = await http.post(
+        Uri.parse('$apiUrl/api/v1/editUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'name': _nameController.text,
+          'bio': _bioController.text,
+          '_id': userData?['userData']['_id'],
+          'favoriteAirline': _selectedAirline,
+          'profilePhoto': uploadedProfilePhoto,
+        }),
+      );
+
+      if (userInformationResponse.statusCode == 200) {
+        final responseData = jsonDecode(userInformationResponse.body);
+
+        ref.read(userDataProvider.notifier).setUserData(responseData);
+        ref.read(reviewsAirlineProvider.notifier).setReviewUserProfileImageData(
+            userData?['userData']['_id'], uploadedProfilePhoto);
+
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString('userData', json.encode(responseData));
+        setState(() {
+          isLoading = false; // Hide loading indicator
+        });
+
+        Navigator.pushNamed(context, AppRoutes.profilescreen);
+        showCustomSnackbar(context);
+      } else {
+        setState(() {
+          isLoading = false; // Hide loading indicator on error
+        });
+        print('Failed to update user profile: ${userInformationResponse.body}');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Hide loading indicator on error
+      });
+      print('Error updating profile: $e');
+    }
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+      centerTitle: true,
+      title: Text(AppLocalizations.of(context).translate('Edit Profile'),
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(4.0),
+        child: Container(color: Colors.black, height: 4.0),
+      ),
+    );
   }
 
   @override
@@ -367,149 +505,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               color: Colors.black.withOpacity(0.5),
               child: const LoadingWidget()),
       ],
-    );
-  }
-
-  void showCustomSnackbar(BuildContext context) {
-    OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 45, // Position from top
-        left: 24,
-        right: 24,
-
-        child: Material(
-          // elevation: 4.0,
-          child: ClipRect(
-            child: Stack(children: [
-              Container(
-                height: 60,
-                decoration: AppStyles.buttonDecoration.copyWith(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                // padding: EdgeInsets.all(16),
-                // color: Colors.green,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'assets/icons/alert.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Successfully saved!',
-                        style: AppStyles.textStyle_16_600.copyWith(
-                            fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Image.asset(
-                    "assets/icons/closeButton.png",
-                    width: 32,
-                    height: 32,
-                  ))
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context)?.insert(overlayEntry);
-
-    // Remove the overlay after some time
-    Future.delayed(Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }
-
-  void _editProfileFunction() async {
-    setState(() {
-      isLoading = true; // Show loading indicator
-    });
-
-    reloadProfileImage();
-    final userData = ref.watch(userDataProvider);
-
-    try {
-      String? uploadedProfilePhoto;
-      if (_selectedImage != null) {
-        uploadedProfilePhoto = await _uploadImages(_selectedImage);
-      }
-
-      print("uploadedProfilePhoto: $uploadedProfilePhoto");
-
-      final userInformationResponse = await http.post(
-        Uri.parse('$apiUrl/api/v1/editUser'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({
-          'name': _nameController.text,
-          'bio': _bioController.text,
-          '_id': userData?['userData']['_id'],
-          'favoriteAirline': _selectedAirline,
-          'profilePhoto': uploadedProfilePhoto ?? null,
-        }),
-      );
-
-      if (userInformationResponse.statusCode == 200) {
-        final responseData = jsonDecode(userInformationResponse.body);
-
-        ref.read(userDataProvider.notifier).setUserData(responseData);
-
-// Or using a ref (if using Riverpod)
-        ref.read(reviewsAirlineProvider.notifier).setReviewUserProfileImageData(
-            userData?['userData']['_id'],
-            userData?['userData']['profilePhoto']);
-
-        final prefs = await SharedPreferences.getInstance();
-
-        await prefs.setString('userData', json.encode(responseData));
-        setState(() {
-          isLoading = false; // Hide loading indicator
-        });
-
-        Navigator.pushNamed(context, AppRoutes.profilescreen);
-        showCustomSnackbar(context);
-      } else {
-        setState(() {
-          isLoading = false; // Hide loading indicator on error
-        });
-        print('Failed to update user profile: ${userInformationResponse.body}');
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false; // Hide loading indicator on error
-      });
-      print('Error updating profile: $e');
-    }
-  }
-
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
-      backgroundColor: Colors.white,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-      centerTitle: true,
-      title: Text(AppLocalizations.of(context).translate('Edit Profile'),
-          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(4.0),
-        child: Container(color: Colors.black, height: 4.0),
-      ),
     );
   }
 }
