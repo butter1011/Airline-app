@@ -88,7 +88,7 @@ class _ReviewsubmissionScreenState
             ReviewFlightCard(
               singleBoardingPass: singleBoardingPass,
               index: index,
-              isReviewed: singleBoardingPass.isFlightReviewed,
+              isReviewed: singleBoardingPass.isReviewed,
             ),
         ],
       ),

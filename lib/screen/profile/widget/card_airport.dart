@@ -2,7 +2,6 @@ import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
-import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CLeaderboardScreen extends ConsumerWidget {
@@ -11,7 +10,7 @@ class CLeaderboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userDataProvider);
-    final reviewsNotifier = ref.watch(reviewsAirlineProvider.notifier);
+    final reviewsNotifier = ref.watch(reviewsAirlineAirportProvider.notifier);
 
     if (userData == null) {
       return const Center(child: CircularProgressIndicator());
@@ -60,39 +59,37 @@ class CLeaderboardScreen extends ConsumerWidget {
             children: userReviews.asMap().entries.map((entry) {
               final index = entry.key;
               final singleReview = entry.value;
-              if (singleReview != null) {
-                final reviewer = singleReview['reviewer'];
-                final airline = singleReview['airline'];
+              final reviewer = singleReview['reviewer'];
+              final airline = singleReview['airline'];
 
-                if (reviewer != null && airline != null) {
-                  return Column(
-                    children: [
+              if (reviewer != null && airline != null) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: FeedbackCard(
+                        thumbnailHeight: 260,
+                        singleFeedback: singleReview,
+                      ),
+                    ),
+                    if (index != userReviews.length - 1)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: FeedbackCard(
-                          thumbnailHeight: 260,
-                          singleFeedback: singleReview,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 9),
+                            Divider(
+                              thickness: 2,
+                              color: Colors.black,
+                            ),
+                            SizedBox(height: 24),
+                          ],
                         ),
                       ),
-                      if (index != userReviews.length - 1)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 9),
-                              Divider(
-                                thickness: 2,
-                                color: Colors.black,
-                              ),
-                              SizedBox(height: 24),
-                            ],
-                          ),
-                        ),
-                    ],
-                  );
-                }
+                  ],
+                );
               }
-              return const SizedBox.shrink();
+                          return const SizedBox.shrink();
             }).toList(),
           ),
       ],

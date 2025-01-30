@@ -1,4 +1,3 @@
-import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +94,6 @@ class AirportList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (spots, changeValue) = _getSpots();
-    final String selecedFilterButton = ref.watch(filterButtonProvider);
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, AppRoutes.detailairport,

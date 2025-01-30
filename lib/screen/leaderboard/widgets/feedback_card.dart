@@ -40,6 +40,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       // Store position before disposing
       _videoPositions[controller.dataSource] = controller.value.position;
       controller.pause();
+      // Clear video buffer before disposing
+      controller.setVolume(0);
+      controller.removeListener(() {});
       controller.dispose();
     }
     _videoControllers.clear();
@@ -122,7 +125,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       return Container();
     }
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
-
     final List<dynamic> imageUrls = widget.singleFeedback['imageUrls'] ?? [];
 
     return SizedBox(
@@ -387,7 +389,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               if (response.statusCode == 200) {
                                 setState(() {
                                   ref
-                                      .read(reviewsAirlineProvider.notifier)
+                                      .read(reviewsAirlineAirportProvider
+                                          .notifier)
                                       .updateReview(
                                           jsonDecode(response.body)['data']);
                                 });
@@ -447,7 +450,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               if (response.statusCode == 200) {
                                 setState(() {
                                   ref
-                                      .read(reviewsAirlineProvider.notifier)
+                                      .read(reviewsAirlineAirportProvider
+                                          .notifier)
                                       .updateReview(
                                           jsonDecode(response.body)['data']);
                                 });

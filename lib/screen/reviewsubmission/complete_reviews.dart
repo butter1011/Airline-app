@@ -1,8 +1,6 @@
-import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_score_icon.dart';
-import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +13,6 @@ class CompleteReviews extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userData = ref.watch(userDataProvider);
-    final points = userData?["userData"]["points"];
     final screenSize = MediaQuery.of(context).size;
     final scores = ref.watch(scoreProvider);
 

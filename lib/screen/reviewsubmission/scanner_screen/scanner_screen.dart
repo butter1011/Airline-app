@@ -107,7 +107,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
       final pnr = match.group(1)!;
       final routeOfFlight = match.group(2)!;
       final departureAirport = routeOfFlight.substring(0, 3);
-      final arrivalAirport = routeOfFlight.substring(3, 6);
       final carrier = routeOfFlight.substring(6, 8);
       final flightNumber = match.group(3)!;
       final julianDateAndClassOfService = match.group(4)!;

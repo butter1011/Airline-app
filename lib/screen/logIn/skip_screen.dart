@@ -264,7 +264,7 @@ class _SkipScreenState extends State<SkipScreen> {
                   Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
                 },
                 buttonName: "Get Started",
-                color: AppStyles.mainColor),
+                color: AppStyles.backgroundColor),
           )
         ],
       ),

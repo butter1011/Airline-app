@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:aws_s3_api/s3-2006-03-01.dart';
-import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
 class AwsUploadService {

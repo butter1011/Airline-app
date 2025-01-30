@@ -69,12 +69,16 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
 
   void setReviewUserProfileImageData(String id, String image) {
     final updatedProfileImageReviews = state.reviews.map((review) {
-      if (review['id'] == id) {
-        // Create a new map with the updated profile photo
-        return {
-          ...review,
-          'reviewer': {...review['reviewer'], 'profilePhoto': image}
-        };
+      if (review['reviewer']['_id'] == id) {
+        // Create a deep copy of the review object
+        var updatedReview = Map<String, dynamic>.from(review);
+        var updatedReviewer = Map<String, dynamic>.from(review['reviewer']);
+        
+        // Update the profilePhoto
+        updatedReviewer['profilePhoto'] = image;
+        updatedReview['reviewer'] = updatedReviewer;
+        
+        return updatedReview;
       }
       return review;
     }).toList();
@@ -329,12 +333,6 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
     }
 
     if (flyerClass != null && flyerClass != 'All') {
-      final sortKey = flyerClass == "Business"
-          ? 'businessClass'
-          : flyerClass == "Premium economy"
-              ? 'pey'
-              : 'economyClass';
-      print("here is flyerClass$flyerClass");
       filteredReviews = filteredReviews.where((item) {
         return item['classTravel'] == flyerClass;
       }).toList();
@@ -410,7 +408,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
   }
 }
 
-final reviewsAirlineProvider =
+final reviewsAirlineAirportProvider =
     StateNotifierProvider<ReviewsAirlineNotifier, ReviewState>((ref) {
   return ReviewsAirlineNotifier();
 });
