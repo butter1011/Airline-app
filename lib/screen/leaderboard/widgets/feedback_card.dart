@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -7,6 +8,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
@@ -116,6 +118,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       controller.setVolume(0);
     }
     super.deactivate();
+  }
+
+  void sharedFunction(String url) {
+    Share.share(url);
   }
 
   @override
@@ -310,7 +316,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
+                                child: SizedBox(
                                   height: 189,
                                   child: mediaItem
                                           .toString()
@@ -352,8 +358,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              IconButton(
+                onPressed: () async {
+                  // await BottomSheetHelper.showScoreBottomSheet(context);
+                  Share.share("airlineapp://feedback/${widget.singleFeedback['_id']}", subject: 'Flight Review');
+                },
+                icon: Image.asset('assets/icons/share.png'),
+              ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [

@@ -1,5 +1,5 @@
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/nav_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -51,7 +51,7 @@ class StartReviews extends StatelessWidget {
                 Text(
                   "Verify your flight. Share what you like and dislike about your journey—it's as simple as that. Let us handle the rest.",
                   style: AppStyles.textStyle_15_400
-                      .copyWith(color: Color(0xFFff676767)),
+                      .copyWith(color: Color(0xFF676767)),
                 )
               ],
             )),
