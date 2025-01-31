@@ -91,6 +91,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     if (controller == null) return Container();
 
     if (controller.value.isInitialized) {
+      // Set volume to 0 for mute
+      controller.setVolume(0);
+
       // Restore previous position if available
       if (_videoPositions.containsKey(videoUrl)) {
         controller.seekTo(_videoPositions[videoUrl]!);
