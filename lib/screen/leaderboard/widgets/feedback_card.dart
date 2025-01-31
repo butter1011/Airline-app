@@ -54,8 +54,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   void initState() {
     super.initState();
     for (var media in widget.singleFeedback['imageUrls'] ?? []) {
-      if (media.toLowerCase().endsWith('.mp4') ||
-          media.toLowerCase().endsWith('.mov')) {
+      if (media
+          .toString()
+          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         _videoControllers[media] = VideoPlayerController.networkUrl(
           Uri.parse(media),
           videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
