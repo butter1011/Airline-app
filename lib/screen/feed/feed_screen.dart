@@ -33,7 +33,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   bool isLoading = false;
   String filterType = 'All';
   Map<String, bool> buttonStates = {
-    "All": true,
+    // "All": true,
     "Airline": false,
     "Airport": false,
   };
