@@ -38,7 +38,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   final airlineScoreController = GetAirlineScoreController();
   final airportScoreController = GetAirportScoreController();
   Map<String, bool> buttonStates = {
-    "All": true,
+    // "All": true,
     "Airline": false,
     "Airport": false,
     // "Flight Experience": false,

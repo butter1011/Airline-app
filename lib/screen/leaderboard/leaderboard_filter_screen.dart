@@ -1,5 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
+import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -128,21 +130,6 @@ class _LeaderboardFilterScreenState
         }
       }
     });
-    if (selectedCategory.isEmpty) {
-      ref.read(filterButtonProvider.notifier).setFilterType(selectedAirType);
-    } else {
-      ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
-    }
-    ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
-    ref.read(airlineAirportProvider.notifier).getFilteredList(
-          selectedAirType,
-          null,
-          selectedFlyerClass,
-          selectedCategory,
-          selectedContinents[0] == "All"
-              ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-              : selectedContinents,
-        );
   }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
@@ -164,22 +151,7 @@ class _LeaderboardFilterScreenState
         selectedCategory = currentCategories[index];
       }
     });
-
     // Update the filtered list after selection
-    if (selectedCategory.isEmpty) {
-      ref.read(filterButtonProvider.notifier).setFilterType(selectedAirType);
-    } else {
-      ref.read(filterButtonProvider.notifier).setFilterType(selectedCategory);
-    }
-    ref.read(airlineAirportProvider.notifier).getFilteredList(
-          selectedAirType,
-          null,
-          selectedFlyerClass == "All" ? null : selectedFlyerClass,
-          selectedCategory,
-          selectedContinents.isEmpty || selectedContinents[0] == "All"
-              ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-              : selectedContinents,
-        );
   }
 
   Widget _buildTypeCategory() {
@@ -365,46 +337,6 @@ class _LeaderboardFilterScreenState
     );
   }
 
-  Widget _buildApplyButton() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 4,
-          color: AppStyles.littleBlackColor,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.87,
-              height: 56,
-              decoration: BoxDecoration(
-                  color: Colors.white,                              
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-                  ]),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context).translate('Apply'),
-                  style:
-                      AppStyles.textStyle_15_600.copyWith(color: Colors.black),
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -436,54 +368,45 @@ class _LeaderboardFilterScreenState
             const SizedBox(height: 17),
             _buildCategoryLeaderboards(),
             const SizedBox(height: 17),
-            _buildContinentLeaderboards(),
-            const SizedBox(height: 85),
+            if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
           ],
         ),
       ),
-      bottomSheet: _buildApplyButton(),
-    );
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-    required this.text,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final bool isSelected;
-  final VoidCallback onTap;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: IntrinsicWidth(
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: isSelected ? Colors.black : Colors.white,
-                border: Border(
-                  top: BorderSide(color: Colors.black, width: 2),
-                  left: BorderSide(color: Colors.black, width: 2),
-                  bottom: BorderSide(color: Colors.black, width: 4),
-                  right: BorderSide(color: Colors.black, width: 4),
-                )),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: Text(text,
-                    style: AppStyles.textStyle_14_600.copyWith(
-                      color: isSelected ? Colors.white : Colors.black,
-                    )),
-              ),
-            ),
+      bottomSheet: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 4,
+            color: AppStyles.littleBlackColor,
           ),
-        ));
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            child: NavButton(
+              text: AppLocalizations.of(context).translate('Apply'),
+              onPressed: () {          
+                // print("selectedAirType: $selectedAirType");
+                // print("selectedFlyerClass: $selectedFlyerClass");
+                // print("selectedCategory: $selectedCategory");
+                // print("selectedContinents: $selectedContinents");
+                ref
+                    .read(filterButtonProvider.notifier)
+                    .setFilterType(selectedAirType);
+                ref.read(airlineAirportProvider.notifier).getFilteredList(
+                      selectedAirType,
+                      null,
+                      selectedFlyerClass,
+                      selectedCategory,
+                      selectedContinents.isEmpty || selectedContinents[0] == "All"
+                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                          : selectedContinents,
+                    );
+                Navigator.pop(context);
+              },
+              color: AppStyles.backgroundColor,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

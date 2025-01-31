@@ -7,7 +7,7 @@ import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/nav_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
