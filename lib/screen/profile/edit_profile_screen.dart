@@ -120,7 +120,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
     );
 
-    Overlay.of(context)?.insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry);
 
     // Remove the overlay after some time
     Future.delayed(Duration(seconds: 3), () {
@@ -195,7 +195,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     try {
       String uploadedProfilePhoto = userData?['userData']['profilePhoto'] ?? '';
       if (_selectedImage != null) {
-        uploadedProfilePhoto = await _uploadImages(_selectedImage) ?? '';
+        uploadedProfilePhoto = await _uploadImages(_selectedImage);
       }
 
       final userInformationResponse = await http.post(
@@ -216,8 +216,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         final responseData = jsonDecode(userInformationResponse.body);
 
         ref.read(userDataProvider.notifier).setUserData(responseData);
-        ref.read(reviewsAirlineAirportProvider.notifier).setReviewUserProfileImageData(
-            userData?['userData']['_id'], uploadedProfilePhoto);
+        ref
+            .read(reviewsAirlineAirportProvider.notifier)
+            .setReviewUserProfileImageData(
+                userData?['userData']['_id'], uploadedProfilePhoto);
 
         final prefs = await SharedPreferences.getInstance();
 

@@ -154,6 +154,7 @@ class _ReviewsubmissionScreenState
                                       text: AppLocalizations.of(context)
                                           .translate('Sync from Your Wallet'),
                                       onPressed: () {
+                                        Navigator.pop(context);
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
@@ -169,6 +170,7 @@ class _ReviewsubmissionScreenState
                                           .translate(
                                               'Sync from Google Calendar'),
                                       onPressed: () {
+                                        Navigator.pop(context);
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
@@ -183,6 +185,7 @@ class _ReviewsubmissionScreenState
                                       text: AppLocalizations.of(context)
                                           .translate('Scan'),
                                       onPressed: () {
+                                        Navigator.pop(context);
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>

@@ -26,13 +26,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
     // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
-
-    final selectedNumberOfSubcategoryForDislike = ref
-        .watch(reviewFeedBackProviderForAirport.notifier)
-        .selectedNumberOfSubcategoryForDislike(singleIndex);
-
     final airlinData = ref.watch(aviationInfoProvider);
-
     final airportname = ref
         .watch(airlineAirportProvider.notifier)
         .getAirportName(airlinData.from);
