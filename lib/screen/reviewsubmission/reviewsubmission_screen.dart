@@ -109,7 +109,7 @@ class _ReviewsubmissionScreenState
         appBar: AppbarWidget(
           title: "Reviews",
           onBackPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
         ),
         body: isLoading
