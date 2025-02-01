@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -7,6 +8,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
@@ -54,8 +56,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   void initState() {
     super.initState();
     for (var media in widget.singleFeedback['imageUrls'] ?? []) {
-      if (media.toLowerCase().endsWith('.mp4') ||
-          media.toLowerCase().endsWith('.mov')) {
+      if (media
+          .toString()
+          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         _videoControllers[media] = VideoPlayerController.networkUrl(
           Uri.parse(media),
           videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
@@ -91,6 +94,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     if (controller == null) return Container();
 
     if (controller.value.isInitialized) {
+      // Set volume to 0 for mute
+      controller.setVolume(0);
+
       // Restore previous position if available
       if (_videoPositions.containsKey(videoUrl)) {
         controller.seekTo(_videoPositions[videoUrl]!);
@@ -116,6 +122,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       controller.setVolume(0);
     }
     super.deactivate();
+  }
+
+  void sharedFunction(String url) {
+    Share.share(url);
   }
 
   @override
@@ -310,7 +320,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
+                                child: SizedBox(
                                   height: 189,
                                   child: mediaItem
                                           .toString()
@@ -352,8 +362,16 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              IconButton(
+                onPressed: () async {
+                  Share.share(
+                      "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
+                      subject: 'Join me on Airshiare - Your Travel Companion!');
+                },
+                icon: Image.asset('assets/icons/share.png'),
+              ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [

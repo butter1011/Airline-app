@@ -1,5 +1,5 @@
-// const apiUrl = "https://airlinereview-b835007a0bbc.herokuapp.com";
-// const backendUrl = "airlinereview-b835007a0bbc.herokuapp.com";
+const apiUrl = "https://airlinereview-b835007a0bbc.herokuapp.com";
+const backendUrl = "airlinereview-b835007a0bbc.herokuapp.com";
 const String appId = "bzpl0offchgcjrm8a4sj";
 const chatbotUrl = "https://airline-chatbot-ae62e84c30ae.herokuapp.com";
 const String ciriumUrl =
@@ -10,5 +10,3 @@ const ACCESS_KEY_ID = "AKIA45Y2RTTI5X67AEXX";
 const SECRET_ACCESS_KEY = "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";
 const REGION = "eu-north-1";
 const BUCKET_NAME = "airsharereview";
-const backendUrl = "10.0.2.2:3000";
-const apiUrl = "http://10.0.2.2:3000";

@@ -154,8 +154,9 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                   items: mediaList.map((media) {
                     return Builder(
                       builder: (BuildContext context) {
-                        if (media.toString().contains('.mp4') ||
-                            media.toString().contains('.mov')) {
+                        if (media.toString().contains(RegExp(
+                            r'\.(mp4|mov|avi|wmv)',
+                            caseSensitive: false))) {
                           return Container(
                             width: MediaQuery.of(context).size.width,
                             child: _buildVideoPlayer(media),
