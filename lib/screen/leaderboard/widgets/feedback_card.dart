@@ -56,8 +56,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   void initState() {
     super.initState();
     for (var media in widget.singleFeedback['imageUrls'] ?? []) {
-      if (media.toLowerCase().endsWith('.mp4') ||
-          media.toLowerCase().endsWith('.mov')) {
+      if (media
+          .toString()
+          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         _videoControllers[media] = VideoPlayerController.networkUrl(
           Uri.parse(media),
           videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
@@ -93,6 +94,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     if (controller == null) return Container();
 
     if (controller.value.isInitialized) {
+      // Set volume to 0 for mute
+      controller.setVolume(0);
+
       // Restore previous position if available
       if (_videoPositions.containsKey(videoUrl)) {
         controller.seekTo(_videoPositions[videoUrl]!);
@@ -362,8 +366,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             children: [
               IconButton(
                 onPressed: () async {
-                  // await BottomSheetHelper.showScoreBottomSheet(context);
-                  Share.share("airlineapp://feedback/${widget.singleFeedback['_id']}", subject: 'Flight Review');
+                  Share.share(
+                      "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
+                      subject: 'Join me on Airshiare - Your Travel Companion!');
                 },
                 icon: Image.asset('assets/icons/share.png'),
               ),
