@@ -17,14 +17,21 @@ class BuildNavigationButtonsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 2,
-          color: Colors.black,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(75),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Row(
             children: [
               Expanded(
@@ -34,18 +41,18 @@ class BuildNavigationButtonsWidget extends StatelessWidget {
                   icon: Icons.arrow_back,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: NavPageButton(
                   text: nextButtonText,
                   onPressed: onNextPressed,
                   icon: Icons.arrow_forward,
                 ),
-              )
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

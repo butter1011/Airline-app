@@ -4,8 +4,11 @@ import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
+import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/search_field.dart';
 
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
@@ -111,111 +114,25 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       },
       child: KeyboardDismissWidget(
         child: Scaffold(
+          appBar: CustomSearchAppBar(
+            searchController: _searchController,
+            filterType: filterType,
+            onSearchChanged: (value) {
+              setState(() {
+                _searchQuery = value.toLowerCase();
+              });
+              ref
+                  .read(reviewsAirlineAirportProvider.notifier)
+                  .getFilteredReviews(filterType, _searchQuery, null, null);
+            },
+            buttonStates: buttonStates,
+            onButtonToggle: toggleButton,
+            selectedFilterButton: filterType,
+          ),
           backgroundColor: Colors.white,
           bottomNavigationBar: BottomNavBar(currentIndex: 1),
           body: Column(
             children: [
-              SizedBox(
-                height: 44,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 271,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: Center(
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value.toLowerCase();
-                            });
-                            ref
-                                .read(reviewsAirlineAirportProvider.notifier)
-                                .getFilteredReviews(
-                                    filterType, _searchQuery, null, null);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            hintStyle:
-                                TextStyle(fontFamily: 'inter', fontSize: 14),
-                            contentPadding: EdgeInsets.all(0),
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, AppRoutes.feedfilterscreen);
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(width: 2, color: Colors.black),
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: Image.asset('assets/icons/setting.png'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)
-                          .translate('Filter by category'),
-                      style: AppStyles.textStyle_15_500
-                          .copyWith(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: buttonStates.keys.map((buttonText) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: MainButton(
-                        text: buttonText,
-                        isSelected: buttonStates[buttonText]!,
-                        onTap: () => toggleButton(buttonText),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(height: 4, color: AppStyles.littleBlackColor),
               Expanded(
                   child: isLoading
                       ? const LoadingWidget()
@@ -224,7 +141,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 0),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -267,11 +184,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                   if (index !=
                                                       reviewList.length - 1)
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal:
-                                                                  24.0),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 24.0),
                                                       child: Column(
                                                         children: [
                                                           SizedBox(
@@ -279,8 +194,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                           ),
                                                           Divider(
                                                             thickness: 2,
-                                                            color:
-                                                                Colors.black,
+                                                            color: Colors.black,
                                                           ),
                                                           SizedBox(
                                                             height: 24,
@@ -291,7 +205,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                 ],
                                               );
                                             }
-                                                                                      return const SizedBox.shrink();
+                                            return const SizedBox.shrink();
                                           }).toList(),
                                   ),
                                   SizedBox(

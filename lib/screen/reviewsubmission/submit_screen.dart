@@ -309,84 +309,86 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
   }
 
   Widget _buildFeedbackOptions(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Share your experience with other users (Optional)',
-            style: AppStyles.textStyle_14_600),
-        const SizedBox(height: 19),
-        _buildMediaUploadOptionForAirline(context),
-        const SizedBox(height: 22),
-        if (_imageOfAirline.isNotEmpty)
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: _imageOfAirline
-                .map((file) => _buildImageTile(file, _imageOfAirline))
-                .toList(),
-          ),
-        const SizedBox(height: 24),
-        _buildMediaUploadOptionForAirport(context),
-        const SizedBox(height: 22),
-        if (_imageOfAirport.isNotEmpty)
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: _imageOfAirport
-                .map((file) => _buildImageTile(file, _imageOfAirport))
-                .toList(),
-          ),
-        const SizedBox(height: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Airline Comments (Optional)",
-                style: AppStyles.textStyle_14_600),
-            const SizedBox(height: 6),
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.08,
-              ),
-              decoration: AppStyles.cardDecoration,
-              child: TextFormField(
-                onChanged: (value) => setState(() => commentOfAirline = value),
-                controller: _commentOfAirlineController,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: "Some comment here",
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildMediaUploadOptionForAirline(context),
+          const SizedBox(height: 22),
+          if (_imageOfAirline.isNotEmpty)
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: _imageOfAirline
+                  .map((file) => _buildImageTile(file, _imageOfAirline))
+                  .toList(),
+            ),
+          const SizedBox(height: 24),
+          _buildMediaUploadOptionForAirport(context),
+          const SizedBox(height: 22),
+          if (_imageOfAirport.isNotEmpty)
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: _imageOfAirport
+                  .map((file) => _buildImageTile(file, _imageOfAirport))
+                  .toList(),
+            ),
+          const SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Airline Comments (Optional)",
+                  style: AppStyles.textStyle_14_600),
+              const SizedBox(height: 6),
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.08,
+                ),
+                decoration: AppStyles.cardDecoration,
+                child: TextFormField(
+                  onChanged: (value) =>
+                      setState(() => commentOfAirline = value),
+                  controller: _commentOfAirlineController,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    hintText: "Some comment here",
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Airport Comments (Optional)",
-                style: AppStyles.textStyle_14_600),
-            const SizedBox(height: 6),
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.08,
-              ),
-              decoration: AppStyles.cardDecoration,
-              child: TextFormField(
-                onChanged: (value) => setState(() => commentOfAirport = value),
-                controller: _commentOfAirportController,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: "Some comment here",
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
+            ],
+          ),
+          SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Airport Comments (Optional)",
+                  style: AppStyles.textStyle_14_600),
+              const SizedBox(height: 6),
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.08,
+                ),
+                decoration: AppStyles.cardDecoration,
+                child: TextFormField(
+                  onChanged: (value) =>
+                      setState(() => commentOfAirport = value),
+                  controller: _commentOfAirportController,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    hintText: "Some comment here",
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
                 ),
               ),
-            ),
-          ],
-        )
-      ],
+            ],
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 
@@ -564,13 +566,19 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                 ),
               ),
               body: SafeArea(
-                child: SingleChildScrollView(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildFeedbackOptions(context),
-                      const SizedBox(height: 20),
+                      Text('Share your experience with other users',
+                          style: AppStyles.textStyle_18_600),
+                      Divider(thickness: 3, color: Colors.grey.withAlpha(51)),
+                      SizedBox(height: 8),
+                      Expanded(                        
+                        child: _buildFeedbackOptions(context),
+                      ),
+                      
                     ],
                   ),
                 ),
@@ -578,54 +586,71 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
               bottomNavigationBar: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(height: 2, color: Colors.black),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Go back',
-                            onPressed: () => Navigator.pushNamed(
-                                context, AppRoutes.reviewsubmissionscreen),
-                            icon: Icons.arrow_back,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Submit',
-                            onPressed: () => _handleSubmission(
-                              context: context,
-                              userData: userData,
-                              from: from,
-                              to: to,
-                              classTravel: classTravel,
-                              airline: airline,
-                              departureArrival: departureArrival,
-                              comfort: comfort,
-                              cleanliness: cleanliness,
-                              onboardService: onboardService,
-                              foodBeverageForAirline: foodBeverageForAirline,
-                              entertainmentWifi: entertainmentWifi,
-                              index: index,
-                              boardingPassController: boardingPassController,
-                              accessibility: accessibility,
-                              waitTimes: waitTimes,
-                              helpfulness: helpfulness,
-                              ambienceComfort: ambienceComfort,
-                              foodBeverageForAirport: foodBeverageForAirport,
-                              amenities: amenities,
-                              commentOfAirline: commentOfAirline,
-                              commentOfAirport: commentOfAirport,
-                              imageOfAirline: _imageOfAirline,
-                              imageOfAirport: _imageOfAirport,
-                            ),
-                            icon: Icons.arrow_forward,
-                          ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(75),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, -2),
                         ),
                       ],
+                    ),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: NavPageButton(
+                                text: 'Go back',
+                                onPressed: () => Navigator.pushNamed(
+                                    context, AppRoutes.reviewsubmissionscreen),
+                                icon: Icons.arrow_back,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: NavPageButton(
+                                text: 'Submit',
+                                onPressed: () => _handleSubmission(
+                                  context: context,
+                                  userData: userData,
+                                  from: from,
+                                  to: to,
+                                  classTravel: classTravel,
+                                  airline: airline,
+                                  departureArrival: departureArrival,
+                                  comfort: comfort,
+                                  cleanliness: cleanliness,
+                                  onboardService: onboardService,
+                                  foodBeverageForAirline:
+                                      foodBeverageForAirline,
+                                  entertainmentWifi: entertainmentWifi,
+                                  index: index,
+                                  boardingPassController:
+                                      boardingPassController,
+                                  accessibility: accessibility,
+                                  waitTimes: waitTimes,
+                                  helpfulness: helpfulness,
+                                  ambienceComfort: ambienceComfort,
+                                  foodBeverageForAirport:
+                                      foodBeverageForAirport,
+                                  amenities: amenities,
+                                  commentOfAirline: commentOfAirline,
+                                  commentOfAirport: commentOfAirport,
+                                  imageOfAirline: _imageOfAirline,
+                                  imageOfAirport: _imageOfAirport,
+                                ),
+                                icon: Icons.arrow_forward,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -634,7 +659,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           ),
           if (_isLoading)
             Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withOpacity(0.50),
                 child: const LoadingWidget()),
         ],
       ),

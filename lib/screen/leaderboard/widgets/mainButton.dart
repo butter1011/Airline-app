@@ -19,14 +19,14 @@ class MainButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 48,
+        height: 40,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(width: 2, color: Colors.black),
-          boxShadow: const [
-            BoxShadow(color: Colors.black, offset: Offset(2, 2))
-          ],
+          borderRadius: BorderRadius.circular(20),
+          color: isSelected ?AppStyles.mainColor: Colors.grey.shade200,
+      
+          // boxShadow: const [
+          //   BoxShadow(color: Colors.black54, offset: Offset(1, 1), blurRadius: 1)
+          // ],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -34,7 +34,7 @@ class MainButton extends StatelessWidget {
             child: Text(
               AppLocalizations.of(context).translate('${text}'),
               style: AppStyles.textStyle_14_600.copyWith(
-                color: isSelected ? Colors.white : Colors.black,
+                color: isSelected ? Colors.grey.shade900:Colors.grey.shade700  ,
               ),
             ),
           ),

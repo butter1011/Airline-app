@@ -1,13 +1,19 @@
+import 'dart:ffi';
+
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
+import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/search_field.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
+import 'package:airline_app/screen/leaderboard/widgets/scoring_info_dialog.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -38,20 +44,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   final airlineScoreController = GetAirlineScoreController();
   final airportScoreController = GetAirportScoreController();
   Map<String, bool> buttonStates = {
-    // "All": true,
     "Airline": false,
     "Airport": false,
-    // "Flight Experience": false,
-    // "Comfort": false,
-    // "Cleanliness": false,
-    // "Onboard": false,
-    // "Food & Beverage": false,
-    // "Entertainment & WiFi": false,
-    // "Accessibility": false,
-    // "Wait Times": false,
-    // "Helpfulness": false,
-    // "Ambience": false,
-    // "Amenities": false,
   };
 
   int expandedItems = 5;
@@ -217,123 +211,34 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final trendingreviews =
         ref.watch(reviewsAirlineAirportProvider.notifier).getTopFiveReviews();
-    final selectedFilterButton = ref.watch(filterButtonProvider);
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        appBar: CustomSearchAppBar(
+          searchController: _searchController,
+          filterType: filterType,
+          onSearchChanged: (value) {
+            setState(() {
+              _searchQuery = value.toLowerCase();
+            });
+            ref
+                .read(airlineAirportProvider.notifier)
+                .getFilteredList(filterType, _searchQuery, null, null);
+          },
+          buttonStates: buttonStates,
+          onButtonToggle: toggleButton,
+          selectedFilterButton: ref.watch(filterButtonProvider),
+        ),
         backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavBar(
+        bottomNavigationBar: const BottomNavBar(
           currentIndex: 0,
         ),
         body: KeyboardDismissWidget(
           child: Column(
             children: [
-              SizedBox(
-                height: 44,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 271,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: Center(
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value.toLowerCase();
-                            });
-                            ref
-                                .read(airlineAirportProvider.notifier)
-                                .getFilteredList(
-                                    filterType, _searchQuery, null, null);
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            hintStyle:
-                                TextStyle(fontFamily: 'inter', fontSize: 14),
-                            contentPadding: EdgeInsets.all(0),
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.filterscreen);
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(width: 2, color: Colors.black),
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: Image.asset('assets/icons/setting.png'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)
-                          .translate('Filter by category'),
-                      style: AppStyles.textStyle_15_500
-                          .copyWith(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
-                child: Row(
-                  children: buttonStates.keys.map((buttonText) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: MainButton(
-                        text: buttonText,
-                        isSelected: buttonText == selectedFilterButton,
-                        onTap: () => toggleButton(buttonText),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 14),
-              Container(
-                height: 5,
-                decoration: BoxDecoration(color: AppStyles.littleBlackColor),
-              ),
               Expanded(
                 child: isLeaderboardLoading
-                    ? Center(
+                    ? const Center(
                         child: LoadingWidget(),
                       )
                     : SingleChildScrollView(
@@ -341,8 +246,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 24),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -355,143 +260,22 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                             .translate('Top Ranked  Airlines'),
                                         style:
                                             AppStyles.textStyle_16_600.copyWith(
-                                          color: Color(0xff38433E),
+                                          color: const Color(0xff38433E),
                                         ),
                                       ),
                                       IconButton(
-                                        icon: Icon(Icons.info_outline),
+                                        icon: const Icon(Icons.info_outline),
                                         onPressed: () {
                                           final RenderBox button = context
                                               .findRenderObject() as RenderBox;
                                           final Offset offset =
                                               button.localToGlobal(Offset.zero);
-
                                           showDialog(
                                             context: context,
                                             barrierColor: Colors.transparent,
                                             builder: (BuildContext context) {
-                                              return Stack(
-                                                children: [
-                                                  Positioned(
-                                                    top: offset.dy + 100,
-                                                    right: 28,
-                                                    child: Material(
-                                                      elevation: 4,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
-                                                      child: Container(
-                                                        width: 300,
-                                                        padding:
-                                                            EdgeInsets.all(16),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(16),
-                                                          border: Border.all(
-                                                              width: 2,
-                                                              color:
-                                                                  Colors.black),
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                                color: Colors
-                                                                    .black,
-                                                                blurRadius: 0,
-                                                                spreadRadius: 0,
-                                                                offset: Offset(
-                                                                    2, 2))
-                                                          ],
-                                                        ),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                border: Border.all(
-                                                                    width: 2,
-                                                                    color: Colors
-                                                                        .black),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            16),
-                                                                boxShadow: const [
-                                                                  BoxShadow(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      blurRadius:
-                                                                          0,
-                                                                      spreadRadius:
-                                                                          0,
-                                                                      offset:
-                                                                          Offset(
-                                                                              2,
-                                                                              2))
-                                                                ],
-                                                              ),
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          10,
-                                                                      vertical:
-                                                                          2),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  Text(
-                                                                    'How The scoring works',
-                                                                    style: AppStyles
-                                                                        .textStyle_14_500
-                                                                        .copyWith(
-                                                                            color:
-                                                                                Colors.black),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 4),
-                                                                  Icon(
-                                                                      Icons
-                                                                          .check_outlined,
-                                                                      color: Colors
-                                                                          .green,
-                                                                      size: 20),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                                height: 18),
-                                                            Text(
-                                                              'Realtime updates',
-                                                              style: AppStyles
-                                                                  .textStyle_15_600,
-                                                            ),
-                                                            SizedBox(height: 8),
-                                                            Text(
-                                                              'score changes are calculated by analyzing the difference in sentiment scores submitted by users within a set timeframe (e.g, 24 hours or 7 days), reflecting the net improvement or decline in performance of the airline or airport.',
-                                                              style: AppStyles
-                                                                  .textStyle_14_500
-                                                                  .copyWith(
-                                                                color: Color(
-                                                                    0xff38433E),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
+                                              return ScoringInfoDialog(
+                                                  offset: offset);
                                             },
                                           );
                                         },
@@ -509,15 +293,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                       });
                                     },
                                   ),
-                                  SizedBox(height: 28),
+                                  const SizedBox(height: 28),
                                   Text(
                                     AppLocalizations.of(context)
                                         .translate('Trending Feedback'),
                                     style: AppStyles.textStyle_16_600.copyWith(
-                                      color: Color(0xff38433E),
+                                      color: const Color(0xff38433E),
                                     ),
                                   ),
-                                  SizedBox(height: 17),
+                                  const SizedBox(height: 17),
                                 ],
                               ),
                             ),
@@ -549,22 +333,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                           child: Container(
                                             width: 299,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                  8), // Adjust the border radius as needed
-                                              boxShadow: [
-                                                // BoxShadow(
-                                                //   color: Colors.black
-                                                //       .withOpacity(0.1),
-                                                //   spreadRadius: 2,
-                                                //   blurRadius: 4,
-                                                //   offset: Offset(0,
-                                                //       2), // changes position of shadow
-                                                // ),
-                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(
-                                                  8), // Adjust the border radius as needed
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                               child: FeedbackCard(
                                                 thumbnailHeight: 189,
                                                 singleFeedback: singleFeedback,
@@ -578,7 +352,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 18,
                             ),
                             InkWell(
@@ -594,11 +368,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                         .translate('See all feedback'),
                                     style: AppStyles.textStyle_15_600,
                                   ),
-                                  Icon(Icons.arrow_forward)
+                                  const Icon(Icons.arrow_forward)
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                           ],

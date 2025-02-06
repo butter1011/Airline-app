@@ -24,7 +24,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
 
-    // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirline[singleIndex]['subCategory'];
     final airlinData = ref.watch(aviationInfoProvider);
@@ -61,7 +60,8 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
             airlineName: airline,
             from: from,
             to: to,
-          ), // Assuming this method exists
+            parent: 1,
+          ),
         ),
         body: SafeArea(
             child: Column(
@@ -104,9 +104,9 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
                 child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.3,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+                childAspectRatio: 1.2,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
               ),
               itemCount: subCategoryList.length, // Use the length of the list
               itemBuilder: (context, index) {

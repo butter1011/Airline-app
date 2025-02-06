@@ -69,7 +69,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
     },
   },
   {
-    'mainCategory': 'Food & Beverage',
+    'mainCategory': 'Airline Food',
     'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Choice': null,
@@ -110,7 +110,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     },
   },
   {
-    'mainCategory': 'Helpfulness/Ease of Travel',
+    'mainCategory': 'Helpfulness/Easy Travel',
     'iconUrl': 'assets/icons/review_icon_help.png',
     'subCategory': {
       'Helpfulness of Airport Staff': null,
@@ -128,7 +128,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     },
   },
   {
-    'mainCategory': 'Food & Beverage and Shopping',
+    'mainCategory': 'Airport Food and Shopping',
     'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Value of Shops': null,

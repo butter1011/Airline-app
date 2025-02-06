@@ -253,11 +253,11 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       children: [
         Scaffold(
           appBar: AppbarWidget(
-              title: "Sync from Your Wallet",
-              onBackPressed: () {
-                Navigator.pop(context);
-              }, 
-              ),
+            title: "Sync from Your Wallet",
+            onBackPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -346,14 +346,14 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                       text: AppLocalizations.of(context)
                           .translate('Upload Boarding Pass Screenshot'),
                       onPressed: _analyzeImageFromFile,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                     const SizedBox(height: 12),
                     NavButton(
                       text: AppLocalizations.of(context)
                           .translate('Move To Wallet'),
                       onPressed: _launchWallet,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                   ],
                 ),

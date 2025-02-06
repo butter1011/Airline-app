@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -13,29 +14,40 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(   
+    return AppBar(
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
-      leading: onBackPressed != null ? IconButton(
-        icon: const Icon(Icons.arrow_back_ios_sharp),
-        onPressed: onBackPressed,
-      ) : null,
+      flexibleSpace: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   colors: [Colors.blue.shade100, Colors.white],
+          // ),\
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 5,
+              blurRadius: 15,
+            ),
+          ]
+        ),
+      ),
+      leading: onBackPressed != null
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back_ios_sharp),
+              onPressed: onBackPressed,
+            )
+          : null,
       centerTitle: true,
       title: Text(
         title,
-        style: AppStyles.textStyle_16_600,
-      ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(4.0),
-        child: Container(
-          color: Colors.black,
-          height: 4.0,
-        ),
+        style: AppStyles.textStyle_18_600,
       ),
     );
   }
- 
+
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight*1.2
-  );
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight * 1.2);
 }

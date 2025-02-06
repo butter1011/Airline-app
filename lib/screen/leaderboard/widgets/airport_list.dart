@@ -72,7 +72,7 @@ class AirportList extends ConsumerWidget {
         return airportData['cleanliness'];
       case "Onboard":
         return airportData['onboardService'];
-      case "Food & Beverage":
+      case "Airline Food":
         return airportData['foodBeverage'];
       case "Entertainment & WiFi":
         return airportData['entertainmentWifi'];
@@ -84,6 +84,8 @@ class AirportList extends ConsumerWidget {
         return airportData['helpfulness'];
       case "Ambience":
         return airportData['ambienceComfort'];
+      case "Airport Food":
+        return airportData['foodBeverage'];
       case "Amenities":
         return airportData['amenities'];
       default:
@@ -194,8 +196,9 @@ class AirportList extends ConsumerWidget {
               ),
             ),
             Divider(
-              thickness: 2,
-              color: AppStyles.littleBlackColor,
+              indent: 50,
+              thickness: 1,
+              color: Colors.grey.shade300,
             )
           ],
         ),

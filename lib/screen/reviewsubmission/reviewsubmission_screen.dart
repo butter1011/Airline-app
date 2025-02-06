@@ -109,7 +109,7 @@ class _ReviewsubmissionScreenState
         appBar: AppbarWidget(
           title: "Reviews",
           onBackPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
         ),
         body: isLoading
@@ -161,7 +161,7 @@ class _ReviewsubmissionScreenState
                                           ),
                                         );
                                       },
-                                      color: Colors.white,
+                                      // color: Colors.white,
                                     ),
                                     const SizedBox(height: 12),
                                     NavButton(
@@ -176,7 +176,7 @@ class _ReviewsubmissionScreenState
                                           ),
                                         );
                                       },
-                                      color: Colors.white,
+                                      // color: Colors.white,
                                     ),
                                     const SizedBox(height: 12),
                                     NavButton(
@@ -190,7 +190,7 @@ class _ReviewsubmissionScreenState
                                           ),
                                         );
                                       },
-                                      color: Colors.white,
+                                      // color: Colors.white,
                                     ),
                                   ],
                                 ),
@@ -200,7 +200,7 @@ class _ReviewsubmissionScreenState
                         },
                       );
                     },
-                    color: AppStyles.backgroundColor,
+                    // color: AppStyles.backgroundColor,
                   )
                 ],
               ),

@@ -1,4 +1,6 @@
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/filter_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -24,7 +26,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     "Comfort",
     "Cleanliness",
     "Onboard Service",
-    "Food & Beverage",
+    "Airline Food",
     "Entertainment & WiFi"
   ];
 
@@ -33,7 +35,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     "Wait Times",
     "Helpfulness",
     "Ambience",
-    "Food & Beverage",
+    "Airport Food",
     "Amenities and Facilities"
   ];
 
@@ -391,44 +393,11 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: openedSearchTextField
-            ? TextField(
-                decoration: InputDecoration(
-                  hintStyle: AppStyles.textStyle_14_400
-                      .copyWith(color: Color(0xff38433E)),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color:
-                        Color(0xff38433E), // Set the color of the search icon
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        openedSearchTextField = false;
-                      });
-                    },
-                    icon: Image.asset('assets/icons/icon_cancel.png'),
-                  ),
-                ),
-              )
-            : Text(
-                AppLocalizations.of(context).translate('Filters'),
-                textAlign: TextAlign.center,
-                style: AppStyles.textStyle_16_600,
-              ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(color: Colors.black, height: 4.0),
-        ),
+      appBar: AppbarWidget(
+        title: 'Filter',
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        }
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -447,49 +416,5 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
       ),
       bottomSheet: _buildApplyButton(),
     );
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  const FilterButton({
-    super.key,
-    required this.text,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final bool isSelected;
-  final VoidCallback onTap;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: IntrinsicWidth(
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: isSelected ? Colors.black : Colors.white,
-                border: Border(
-                  top: BorderSide(color: Colors.black, width: 2),
-                  left: BorderSide(color: Colors.black, width: 2),
-                  bottom: BorderSide(color: Colors.black, width: 4),
-                  right: BorderSide(color: Colors.black, width: 4),
-                )),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                child: Text(
-                  text,
-                  style: AppStyles.textStyle_14_600.copyWith(
-                    color: isSelected ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ));
   }
 }

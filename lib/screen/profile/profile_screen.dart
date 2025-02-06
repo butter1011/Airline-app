@@ -1,5 +1,6 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
 import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
 import 'package:airline_app/screen/profile/widget/card_chart.dart';
@@ -234,10 +235,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     SizedBox(
                       height: 22,
                     ),
-                    const Divider(
-                      thickness: 4,
-                      color: Colors.black,
-                    ),
+                    DividerWidget(),
                     SizedBox(
                       height: 28,
                     ),
@@ -286,4 +284,3 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 }
- 

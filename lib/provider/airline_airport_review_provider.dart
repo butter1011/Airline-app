@@ -73,11 +73,11 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         // Create a deep copy of the review object
         var updatedReview = Map<String, dynamic>.from(review);
         var updatedReviewer = Map<String, dynamic>.from(review['reviewer']);
-        
+
         // Update the profilePhoto
         updatedReviewer['profilePhoto'] = image;
         updatedReview['reviewer'] = updatedReviewer;
-        
+
         return updatedReview;
       }
       return review;
@@ -299,7 +299,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
       case 'Onboard':
         filteredReviews = getAirlineReviewsSorted("onboardService").toList();
         break;
-      case 'Food & Beverage':
+      case 'Airline Food':
         filteredReviews.addAll(getAirlineReviewsSorted("foodBeverage"));
         break;
       case 'Entertainment & WiFi':
@@ -320,6 +320,10 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
       case 'Ambience':
         filteredReviews.addAll(
             getAirportReviewsSorted("ambienceComfort").where(checkContinent));
+        break;
+      case 'Airport Food':
+        filteredReviews.addAll(
+            getAirportReviewsSorted("foodBeverage").where(checkContinent));
         break;
       case 'Amenities':
         filteredReviews
@@ -353,7 +357,7 @@ class ReviewsAirlineNotifier extends StateNotifier<ReviewState> {
         "Comfort" => 'comfort',
         "Cleanliness" => 'cleanliness',
         "Onboard Service" => 'onboardService',
-        "Food & Beverage" => 'foodBeverage',
+        "Airline Food" => 'foodBeverage',
         "Entertainment & WiFi" => 'entertainmentWifi',
         "Accessibility" => 'accessibility',
         "Wait Times" => 'waitTimes',

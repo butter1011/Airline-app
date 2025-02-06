@@ -52,6 +52,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
               logoImage: logoImage,
               backgroundImage: backgroundImage,
               selecetedOfCalssLevel: selectedClassOfTravel,
+              parent: 2,
             )),
         body: SafeArea(
             child: Column(
@@ -94,7 +95,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
                 child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.3,
+                childAspectRatio: 1.2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
               ),
