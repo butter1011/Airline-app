@@ -26,17 +26,18 @@ class NavButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey[800],
-          foregroundColor: Colors.grey[100],
+          backgroundColor: Colors.grey[50],
+          foregroundColor: Colors.black,
           elevation: 3,
-          shadowColor: Colors.grey[900]?.withOpacity(0.3),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(height / 4),
-            side: BorderSide(
-              color: Colors.grey[700]!.withOpacity(0.2),
-              width: 1.0,
-            ),
-          ),
+          
+          // shadowColor: Colors.grey[900]?.withOpacity(0.3),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(height / 4),
+          //   side: BorderSide(
+          //     color: Colors.grey[700]!.withOpacity(0.2),
+          //     width: 1.0,
+          //   ),
+          // ),
           padding: const EdgeInsets.symmetric(horizontal: 24),
         ),
         child: AnimatedSwitcher(

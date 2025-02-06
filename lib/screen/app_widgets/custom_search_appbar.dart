@@ -33,14 +33,14 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
       elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 5,
-              blurRadius: 15,
-            ),
-          ],
+          color:  Colors.grey.shade100,
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.1),
+          //     spreadRadius: 5,
+          //     blurRadius: 15,
+          //   ),
+          // ],
         ),
       ),
       title: Column(

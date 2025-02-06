@@ -65,17 +65,17 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.4),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -2),
+        //   ),
+        // ],
       ),
       child: ConvexAppBar(
         style: TabStyle.react,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         color: Colors.grey.shade500,
         activeColor: Colors.black,      
         elevation: 0,
