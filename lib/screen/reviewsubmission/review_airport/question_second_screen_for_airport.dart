@@ -48,6 +48,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
             logoImage: logoImage,
             backgroundImage: backgroundImage,
             selecetedOfCalssLevel: selectedClassOfTravel,
+            parent: 2,
           ),
         ),
         body: SafeArea(
@@ -96,7 +97,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
           children: [
             Text(
               'Select negative aspects',
-              style: AppStyles.textStyle_14_600,
+              style: AppStyles.textStyle_18_600,
             ),
             SizedBox(height: 16),
             Expanded(
@@ -113,7 +114,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
                   numForIdentifyOfParent: 2,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  selectedNumberOfSubcategoryForLike: selections[index]
+                  selectedNumberOfSubcategory: selections[index]
                           ['subCategory']
                       .values
                       .where((s) => s == false)

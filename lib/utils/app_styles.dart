@@ -118,19 +118,19 @@ class AppStyles {
       shape: BoxShape.circle,
       color: Colors.white, // Border color
       border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 4.0),
-        right: BorderSide(color: Colors.black, width: 4.0),
+        top: BorderSide(color: Colors.black, width: 1.0),
+        left: BorderSide(color: Colors.black, width: 1.0),
+        bottom: BorderSide(color: Colors.black, width: 2.0),
+        right: BorderSide(color: Colors.black, width: 2.0),
       ));
   static BoxDecoration notificationDecoration = BoxDecoration(
     shape: BoxShape.rectangle,
     color: Colors.white, // Border color
     border: Border(
-      top: BorderSide(color: Colors.black, width: 2.0),
-      left: BorderSide(color: Colors.black, width: 2.0),
-      bottom: BorderSide(color: Colors.black, width: 4.0),
-      right: BorderSide(color: Colors.black, width: 4.0),
+      top: BorderSide(color: Colors.black, width: 1.0),
+      left: BorderSide(color: Colors.black, width: 1.0),
+      bottom: BorderSide(color: Colors.black, width: 2.0),
+      right: BorderSide(color: Colors.black, width: 2.0),
     ),
     borderRadius: BorderRadius.circular(24),
   );
@@ -138,35 +138,35 @@ class AppStyles {
       color: Colors.white, // Border color
       borderRadius: BorderRadius.circular(24),
       border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 4.0),
-        right: BorderSide(color: Colors.black, width: 4.0),
+        top: BorderSide(color: Colors.black, width: 1.0),
+        left: BorderSide(color: Colors.black, width: 1.0),
+        bottom: BorderSide(color: Colors.black, width: 2.0),
+        right: BorderSide(color: Colors.black, width: 2.0),
       ));
   static BoxDecoration buttonDecoration = BoxDecoration(
       color: Color(0xFF3FEA9C),
       border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 4.0),
-        right: BorderSide(color: Colors.black, width: 4.0),
+        top: BorderSide(color: Colors.black, width: 1.0),
+        left: BorderSide(color: Colors.black, width: 1.0),
+        bottom: BorderSide(color: Colors.black, width: 2.0),
+        right: BorderSide(color: Colors.black, width: 2.0),
       ));
   static BoxDecoration iconDecoration = BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10),
       border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 3.0),
-        right: BorderSide(color: Colors.black, width: 3.0),
+        top: BorderSide(color: Colors.black, width: 1.0),
+        left: BorderSide(color: Colors.black, width: 1.0),
+        bottom: BorderSide(color: Colors.black, width: 2.0),
+        right: BorderSide(color: Colors.black, width: 2.0),
       ));
   static BoxDecoration badgeDecoration = BoxDecoration(
       shape: BoxShape.circle,
       color: Colors.white,
       border: Border(
-        top: BorderSide(color: Colors.black, width: 2.0),
-        left: BorderSide(color: Colors.black, width: 2.0),
-        bottom: BorderSide(color: Colors.black, width: 3.0),
-        right: BorderSide(color: Colors.black, width: 3.0),
+        top: BorderSide(color: Colors.black, width: 1.0),
+        left: BorderSide(color: Colors.black, width: 1.0),
+        bottom: BorderSide(color: Colors.black, width: 2.0),
+        right: BorderSide(color: Colors.black, width: 2.0),
       ));
 }

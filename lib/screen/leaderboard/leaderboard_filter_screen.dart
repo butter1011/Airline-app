@@ -1,5 +1,7 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/filter_button.dart';
 import 'package:airline_app/screen/app_widgets/nav_button.dart';
 import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -29,7 +31,7 @@ class _LeaderboardFilterScreenState
     "Comfort",
     "Cleanliness",
     "Onboard",
-    "Food & Beverage",
+    "Airline Food",
     "Entertainment & WiFi"
   ];
 
@@ -38,7 +40,7 @@ class _LeaderboardFilterScreenState
     "Wait Times",
     "Helpfulness",
     "Ambience",
-    "Food & Beverage",
+    "Airport Food",
     "Amenities"
   ];
 
@@ -341,22 +343,9 @@ class _LeaderboardFilterScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: Text(
-          AppLocalizations.of(context).translate('Filters'),
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(color: Colors.black, height: 4.0),
-        ),
+      appBar: AppbarWidget(
+        title: "Filter",
+        onBackPressed: () => Navigator.pop(context),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -383,11 +372,8 @@ class _LeaderboardFilterScreenState
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: NavButton(
               text: AppLocalizations.of(context).translate('Apply'),
-              onPressed: () {          
-                // print("selectedAirType: $selectedAirType");
-                // print("selectedFlyerClass: $selectedFlyerClass");
-                // print("selectedCategory: $selectedCategory");
-                // print("selectedContinents: $selectedContinents");
+              onPressed: () {
+          
                 ref
                     .read(filterButtonProvider.notifier)
                     .setFilterType(selectedAirType);
@@ -396,7 +382,8 @@ class _LeaderboardFilterScreenState
                       null,
                       selectedFlyerClass,
                       selectedCategory,
-                      selectedContinents.isEmpty || selectedContinents[0] == "All"
+                      selectedContinents.isEmpty ||
+                              selectedContinents[0] == "All"
                           ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
                           : selectedContinents,
                     );

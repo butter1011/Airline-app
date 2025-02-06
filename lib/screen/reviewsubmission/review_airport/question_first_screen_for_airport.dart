@@ -51,6 +51,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
             logoImage: logoImage,
             backgroundImage: backgroundImage,
             selecetedOfCalssLevel: selectedClassOfTravel,
+            parent: 1,
           ),
         ),
         body: SafeArea(
@@ -97,7 +98,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
           children: [
             Text(
               'Select positive aspects',
-              style: AppStyles.textStyle_14_600,
+              style: AppStyles.textStyle_18_600,
             ),
             SizedBox(height: 16),
             Expanded(
@@ -114,7 +115,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  selectedNumberOfSubcategoryForLike: selections[index]
+                  selectedNumberOfSubcategory: selections[index]
                           ['subCategory']
                       .values
                       .where((s) => s == true)

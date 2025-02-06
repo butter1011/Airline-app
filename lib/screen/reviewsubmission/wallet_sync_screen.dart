@@ -253,11 +253,11 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       children: [
         Scaffold(
           appBar: AppbarWidget(
-              title: "Sync from Your Wallet",
-              onBackPressed: () {
-                Navigator.pop(context);
-              }, 
-              ),
+            title: "Sync from Your Wallet",
+            onBackPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),

@@ -382,26 +382,35 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
       case 'Onboard':
         filteredList.addAll(getAirlineDataSorted("onboardService"));
         break;
-      case 'Food & Beverage':
+      case 'Airline Food':
         filteredList.addAll(getAirlineDataSorted("foodBeverage"));
         break;
       case 'Entertainment & WiFi':
         filteredList.addAll(getAirlineDataSorted("entertainmentWifi"));
         break;
       case 'Accessibility':
-        filteredList.addAll(getAirportDataSorted("accessibility").where(checkContinent));
+        filteredList.addAll(
+            getAirportDataSorted("accessibility").where(checkContinent));
         break;
       case 'Wait Times':
-        filteredList.addAll(getAirportDataSorted("waitTimes").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("waitTimes").where(checkContinent));
         break;
       case 'Helpfulness':
-        filteredList.addAll(getAirportDataSorted("helpfulness").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("helpfulness").where(checkContinent));
         break;
       case 'Ambience':
-        filteredList.addAll(getAirportDataSorted("ambienceComfort").where(checkContinent));
+        filteredList.addAll(
+            getAirportDataSorted("ambienceComfort").where(checkContinent));
+        break;
+      case 'Airport Food':
+        filteredList.addAll(
+            getAirportDataSorted("foodBeverage").where(checkContinent));
         break;
       case 'Amenities':
-        filteredList.addAll(getAirportDataSorted("amenities").where(checkContinent));
+        filteredList
+            .addAll(getAirportDataSorted("amenities").where(checkContinent));
         break;
       default:
         filteredList.addAll(getAirlineDataWithScore());
@@ -421,12 +430,13 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
         "Comfort" => 'comfort',
         "Cleanliness" => 'cleanliness',
         "Onboard Service" => 'onboardService',
-        "Food & Beverage" => 'foodBeverage',
+        "Airline Food" => 'foodBeverage',
         "Entertainment & WiFi" => 'entertainmentWifi',
         "Accessibility" => 'accessibility',
         "Wait Times" => 'waitTimes',
         "Helpfulness" => 'helpfulness',
         "Ambience" => 'ambienceComfort',
+        "Airport Food" => 'foodBeverage',
         "Amenities and Facilities" => 'amenities',
         _ => 'departureArrival'
       };

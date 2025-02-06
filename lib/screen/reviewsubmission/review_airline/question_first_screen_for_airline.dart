@@ -2,9 +2,10 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -16,7 +17,8 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selections = ref.watch(reviewFeedBackProviderForAirline);
+    final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline);
+    final selectionsForAirport = ref.watch(reviewFeedBackProviderForAirport);
     final airlineData = ref.watch(aviationInfoProvider);
     final from = ref
         .watch(airlineAirportProvider.notifier)
@@ -48,7 +50,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           automaticallyImplyLeading: false,
-          flexibleSpace: BuildQuestionHeaderForAirline(
+          flexibleSpace: BuildQuestionHeader(
             backgroundImage: backgroundImage,
             title: "Lets go into more detail about this?",
             subTitle: "Your feedback helps make every journey better!",
@@ -57,12 +59,13 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
             airlineName: airline,
             from: from,
             to: to,
+            parent:1,
           ),
         ),
         body: SafeArea(
           child: Column(
             children: [
-              _buildFeedbackOptions(selections),
+              _buildFeedbackOptions(selectionsForAirline, selectionsForAirport),
               BuildNavigationButtonsWidget(
                 onBackPressed: () {
                   Navigator.pushNamed(
@@ -88,50 +91,70 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
   }
 
   Widget _buildFeedbackOptions(
-    selections,
+    selectionsForAirline, selectionsForAirport
   ) {
-    final List<Map<String, dynamic>> feedbackOptions =
+    final List<Map<String, dynamic>> feedbackOptionsForAirline = 
         mainCategoryAndSubcategoryForAirline;
 
-    List<dynamic> mainCategoryNames = [];
-
-    for (var category in mainCategoryAndSubcategoryForAirline) {
-      mainCategoryNames.add(category['mainCategory'] as String);
-    }
+           final List<Map<String, dynamic>> feedbackOptionsForAirport =
+        mainCategoryAndSubcategoryForAirport;
 
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Select positive aspects',
-              style: AppStyles.textStyle_14_600,
+              style: AppStyles.textStyle_18_600,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 8),
+            Divider(height: 1, color: Colors.grey.withOpacity(0.2)),            
             Expanded(
-                child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1.3,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+              child: SingleChildScrollView(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        spacing: 1,
+                        children: List.generate(
+                          feedbackOptionsForAirline.length,
+                          (index) => FeedbackOptionForAirline(
+                            numForIdentifyOfParent: 1,
+                            iconUrl: feedbackOptionsForAirline[index]['iconUrl'],
+                            label: index,
+                            selectedNumberOfSubcategoryForLike: selectionsForAirline[index]
+                                    ['subCategory']
+                                .values
+                                .where((s) => s == true)
+                                .length,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                         spacing: 1,
+                        children: List.generate(
+                          feedbackOptionsForAirport.length,
+                          (index) => FeedbackOptionForAirport(
+                            numForIdentifyOfParent: 1,
+                            iconUrl: feedbackOptionsForAirport[index]['iconUrl'],
+                            label: index,
+                            selectedNumberOfSubcategory: selectionsForAirport[index]
+                                    ['subCategory']
+                                .values
+                                .where((s) => s == true)
+                                .length,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              itemCount: feedbackOptions.length, // Use the length of the list
-              itemBuilder: (context, index) {
-                return FeedbackOptionForAirline(
-                  numForIdentifyOfParent: 1,
-                  iconUrl: feedbackOptions[index]['iconUrl'],
-                  label: index,
-                  selectedNumberOfSubcategoryForLike: selections[index]
-                          ['subCategory']
-                      .values
-                      .where((s) => s == true)
-                      .length,
-                );
-              },
-            )),
+            ),
           ],
         ),
       ),

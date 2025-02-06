@@ -24,11 +24,18 @@ class FilterButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: isSelected ? Colors.black : Colors.white,
                 border: Border(
-                  top: BorderSide(color: Colors.black, width: 2),
-                  left: BorderSide(color: Colors.black, width: 2),
-                  bottom: BorderSide(color: Colors.black, width: 4),
-                  right: BorderSide(color: Colors.black, width: 4),
-                )),
+                  top: BorderSide(color: Colors.black, width: 1),
+                  left: BorderSide(color: Colors.black, width: 1),
+                  bottom: BorderSide(color: Colors.black, width: 2),
+                  right: BorderSide(color: Colors.black, width: 2),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black,
+                    offset: Offset(1, 1),
+                    blurRadius: 2,
+                  ),]
+                ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Center(

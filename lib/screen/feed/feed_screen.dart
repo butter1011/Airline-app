@@ -4,8 +4,10 @@ import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/search_field.dart';
 
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
@@ -125,41 +127,18 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 271,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: Center(
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value.toLowerCase();
-                            });
-                            ref
-                                .read(reviewsAirlineAirportProvider.notifier)
-                                .getFilteredReviews(
-                                    filterType, _searchQuery, null, null);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            hintStyle:
-                                TextStyle(fontFamily: 'inter', fontSize: 14),
-                            contentPadding: EdgeInsets.all(0),
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
+                    SearchBarWidget(
+                      searchController: _searchController,
+                      filterType: filterType,
+                      onSearchChanged: (value) {
+                        setState(() {
+                          _searchQuery = value.toLowerCase();
+                        });
+                        ref
+                            .read(reviewsAirlineAirportProvider.notifier)
+                            .getFilteredReviews(
+                                filterType, _searchQuery, null, null);
+                      },
                     ),
                     GestureDetector(
                       onTap: () {
@@ -214,8 +193,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 14),
-              Container(height: 4, color: AppStyles.littleBlackColor),
+              DividerWidget(),
               Expanded(
                   child: isLoading
                       ? const LoadingWidget()
@@ -267,11 +245,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                   if (index !=
                                                       reviewList.length - 1)
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal:
-                                                                  24.0),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 24.0),
                                                       child: Column(
                                                         children: [
                                                           SizedBox(
@@ -279,8 +255,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                           ),
                                                           Divider(
                                                             thickness: 2,
-                                                            color:
-                                                                Colors.black,
+                                                            color: Colors.black,
                                                           ),
                                                           SizedBox(
                                                             height: 24,
@@ -291,7 +266,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                 ],
                                               );
                                             }
-                                                                                      return const SizedBox.shrink();
+                                            return const SizedBox.shrink();
                                           }).toList(),
                                   ),
                                   SizedBox(

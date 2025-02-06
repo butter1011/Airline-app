@@ -29,6 +29,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
 
     final airlinData = ref.watch(aviationInfoProvider);
+    print("dfasdfadsfads======${airlinData.from}");
 
     final airportname = ref
         .watch(airlineAirportProvider.notifier)
@@ -54,6 +55,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
               logoImage: logoImage,
               backgroundImage: backgroundImage,
               selecetedOfCalssLevel: selectedClassOfTravel,
+              parent: 1,
             )),
         body: SafeArea(
             child: Column(
@@ -96,7 +98,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
                 child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.3,
+                childAspectRatio: 1.2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
               ),

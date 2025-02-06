@@ -1,6 +1,5 @@
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
-import 'package:airline_app/utils/app_localizations.dart';
+import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -18,65 +17,84 @@ class StartReviews extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         },
       ),
-      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.12),
-          child: Container(
-            width: screenSize.width * 0.3,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/plane.png"),
-                    fit: BoxFit.cover)),
-            height: screenSize.width * 0.3, // Add a specific height
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Image.asset("assets/images/step_progress_indicator_default.png"),
-     
-
-        Padding(
-            padding: const EdgeInsets.only(right: 32, left: 32, top: 27),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+            },
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  "Welcome to your feedback Quest",
-                  style: AppStyles.textStyle_24_600,
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: EdgeInsets.symmetric(vertical: screenSize.height * 0.08),
+                  width: screenSize.width * 0.35,
+                  height: screenSize.width * 0.35,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                    image: const DecorationImage(
+                      image: AssetImage("assets/images/plane.png"),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-                SizedBox(
-                  height: 24,
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Image.asset(
+                    "assets/images/step_progress_indicator_default.png",
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                Text(
-                  "Verify your flight. Share what you like and dislike about your journey—it's as simple as that. Let us handle the rest.",
-                  style: AppStyles.textStyle_15_400
-                      .copyWith(color: Color(0xFF676767)),
-                )
-              ],
-            )),
-      ]),
-      bottomNavigationBar: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 12),
-                NavButton(
-                  text: AppLocalizations.of(context).translate('Next'),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context, AppRoutes.reviewsubmissionscreen);
-                  },
-                  color: AppStyles.backgroundColor,
-                )
+                Container(
+                  margin: const EdgeInsets.fromLTRB(32, 40, 32, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome to your feedback Quest",
+                        style: AppStyles.textStyle_24_600.copyWith(
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey[200]!,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          "Verify your flight. Share what you like and dislike about your journey—it's as simple as that. Let us handle the rest.",
+                          style: AppStyles.textStyle_15_400.copyWith(
+                            color: const Color(0xFF676767),
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ],
+        ),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        currentIndex: 2,
       ),
     );
   }

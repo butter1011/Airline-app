@@ -2,8 +2,8 @@ import 'package:airline_app/screen/reviewsubmission/widgets/emphasize_widget.dar
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class BuildQuestionHeaderForAirline extends StatelessWidget {
-  const BuildQuestionHeaderForAirline(
+class BuildQuestionHeader extends StatelessWidget {
+  const BuildQuestionHeader(
       {super.key,
       required this.title,
       required this.subTitle,
@@ -12,7 +12,8 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
       required this.classes,
       required this.from,
       required this.backgroundImage,
-      required this.to, required this.parent});
+      required this.to,
+      required this.parent});
   final String subTitle;
   final String logoImage;
   final String backgroundImage;
@@ -29,7 +30,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/images/airline.jpg",
+            "assets/images/header.jpg",
             fit: BoxFit.cover,
           ),
         ),
@@ -125,21 +126,18 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  parent == 1
-                      ? EmphasizeWidget(number: 1)
-                      : Text("1",
-                          style: AppStyles.textStyle_18_600
-                              .copyWith(color: Colors.white)),
+                  parent == 1?EmphasizeWidget(number: 1):
+                  Text("1",
+                      style: AppStyles.textStyle_18_600
+                          .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_flight.png",
                     width: screenSize.width * 0.3,
                     fit: BoxFit.fitWidth,
                   ),
-                  parent == 2
-                      ? EmphasizeWidget(number: 2)
-                      : Text("2",
-                          style: AppStyles.textStyle_18_600
-                              .copyWith(color: Colors.white)),
+                  parent == 2?EmphasizeWidget(number: 2):Text("2",
+                      style: AppStyles.textStyle_18_600
+                          .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_trunk.png",
                     width: screenSize.width * 0.3,
@@ -149,8 +147,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                       style: AppStyles.textStyle_18_600
                           .copyWith(color: Colors.white)),
                 ],
-              ),
-              
+              ),              
               SizedBox(
                 height: 5,
               ),

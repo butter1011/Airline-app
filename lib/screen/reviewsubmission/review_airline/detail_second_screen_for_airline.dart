@@ -62,6 +62,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
             airlineName: airline,
             from: from,
             to: to,
+            parent: 2,
           ), // Assuming this method exists
         ),
         body: SafeArea(
@@ -105,7 +106,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
                 child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.3,
+                childAspectRatio: 1.2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
               ),
