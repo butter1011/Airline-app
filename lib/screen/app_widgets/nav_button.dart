@@ -26,14 +26,14 @@ class NavButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF2C3E50),
-          foregroundColor: Colors.white,
+          backgroundColor: Colors.grey[800],
+          foregroundColor: Colors.grey[100],
           elevation: 3,
-          shadowColor: const Color(0xFF2C3E50).withOpacity(0.3),
+          shadowColor: Colors.grey[900]?.withOpacity(0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(height / 4),
             side: BorderSide(
-              color: const Color(0xFF2C3E50).withOpacity(0.2),
+              color: Colors.grey[700]!.withOpacity(0.2),
               width: 1.0,
             ),
           ),
@@ -56,7 +56,8 @@ class NavButton extends StatelessWidget {
                   height: 18,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.0,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.grey[100]!),
                   ),
                 )
               : Row(
