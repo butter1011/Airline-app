@@ -9,80 +9,140 @@ class StartReviews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppbarWidget(
         title: "Reviews",
         onBackPressed: () {
           Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         },
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-            },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, const Color(0xFFF5F9FF)],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(vertical: screenSize.height * 0.08),
-                  width: screenSize.width * 0.35,
-                  height: screenSize.width * 0.35,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                    image: const DecorationImage(
-                      image: AssetImage("assets/images/plane.png"),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Image.asset(
-                    "assets/images/step_progress_indicator_default.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(32, 40, 32, 0),
+                  margin: const EdgeInsets.fromLTRB(24, 40, 24, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Welcome to your feedback Quest",
+                        "Share Your Travel Experience",
                         style: AppStyles.textStyle_24_600.copyWith(
-                          letterSpacing: -0.5,
+                          letterSpacing: -0.3,
+                          color: const Color(0xFF1A1A1A),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 12),
+                      Text(
+                        "Your feedback helps improve travel for everyone",
+                        style: AppStyles.textStyle_15_400.copyWith(
+                          color: const Color(0xFF666666),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.grey[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey[200]!,
-                            width: 1,
-                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              spreadRadius: 4,
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          "Verify your flight. Share what you like and dislike about your journey—it's as simple as that. Let us handle the rest.",
-                          style: AppStyles.textStyle_15_400.copyWith(
-                            color: const Color(0xFF676767),
-                            height: 1.5,
-                          ),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                "assets/images/start_review.jpg",
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              children: [
+                                Icon(Icons.star_rounded, 
+                                     color: Colors.amber[600], 
+                                     size: 28),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    "Rate your experience and help others make informed decisions",
+                                    style: AppStyles.textStyle_15_400.copyWith(
+                                      color: const Color(0xFF4A4A4A),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Icon(Icons.verified_user_rounded, 
+                                     color: Colors.green[600], 
+                                     size: 28),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    "Your review will be verified for authenticity",
+                                    style: AppStyles.textStyle_15_400.copyWith(
+                                      color: const Color(0xFF4A4A4A),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 32),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                padding: const EdgeInsets.symmetric(vertical: 18),
+                                minimumSize: const Size(double.infinity, 56),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                elevation: 2,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.rate_review_rounded, 
+                                           color: Colors.white),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    "Begin Your Review",
+                                    style: AppStyles.textStyle_15_400.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

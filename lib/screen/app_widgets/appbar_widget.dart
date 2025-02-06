@@ -17,6 +17,23 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
+      flexibleSpace: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   colors: [Colors.blue.shade100, Colors.white],
+          // ),\
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 5,
+              blurRadius: 15,
+            ),
+          ]
+        ),
+      ),
       leading: onBackPressed != null
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios_sharp),
@@ -27,10 +44,6 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: AppStyles.textStyle_18_600,
-      ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(4.0),
-        child: DividerWidget(),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:airline_app/controller/get_airline_score_controller.dart';
 import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
@@ -210,92 +211,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final trendingreviews =
         ref.watch(reviewsAirlineAirportProvider.notifier).getTopFiveReviews();
-    final selectedFilterButton = ref.watch(filterButtonProvider);
-    final screenSize = MediaQuery.of(context).size;
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.grey.withOpacity(0.2),
-              //     spreadRadius: 2,
-              //     blurRadius: 2,
-              //     offset: const Offset(0, 2),
-              //   ),
-              // ],
-            ),
-          ),
-          title: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SearchBarWidget(
-                    searchController: _searchController,
-                    filterType: filterType,
-                    onSearchChanged: (value) {
-                      setState(() {
-                        _searchQuery = value.toLowerCase();
-                      });
-                      ref.read(airlineAirportProvider.notifier).getFilteredList(
-                          filterType, _searchQuery, null, null);
-                    },
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.filterscreen);
-                    },
-                    child: CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Colors.green,
-                        child: Icon(
-                          Icons.format_align_left_sharp,
-                          color: Colors.white,
-                          size: 20,
-                        )),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: screenSize.height * 0.02,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate('Filter by category'),
-                    style: AppStyles.textStyle_15_500
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: screenSize.height * 0.02,
-                  ),
-                  Row(
-                    children: buttonStates.keys.map((buttonText) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: MainButton(
-                          text: buttonText,
-                          isSelected: buttonText == selectedFilterButton,
-                          onTap: () => toggleButton(buttonText),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          toolbarHeight: screenSize.height * 0.18,
+        appBar: CustomSearchAppBar(
+          searchController: _searchController,
+          filterType: filterType,
+          onSearchChanged: (value) {
+            setState(() {
+              _searchQuery = value.toLowerCase();
+            });
+            ref
+                .read(airlineAirportProvider.notifier)
+                .getFilteredList(filterType, _searchQuery, null, null);
+          },
+          buttonStates: buttonStates,
+          onButtonToggle: toggleButton,
+          selectedFilterButton: ref.watch(filterButtonProvider),
         ),
         backgroundColor: Colors.white,
         bottomNavigationBar: const BottomNavBar(

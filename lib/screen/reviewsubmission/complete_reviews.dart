@@ -112,7 +112,7 @@ class CompleteReviews extends ConsumerWidget {
                     context,
                     AppRoutes.leaderboardscreen,
                   ),
-                  color: Colors.white,
+                  // color: Colors.white,
                 ),
               ),
             ],

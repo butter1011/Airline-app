@@ -361,7 +361,7 @@ class _LeaderboardFilterScreenState
           ],
         ),
       ),
-      bottomSheet: Column(
+      bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -373,7 +373,6 @@ class _LeaderboardFilterScreenState
             child: NavButton(
               text: AppLocalizations.of(context).translate('Apply'),
               onPressed: () {
-          
                 ref
                     .read(filterButtonProvider.notifier)
                     .setFilterType(selectedAirType);
@@ -389,7 +388,7 @@ class _LeaderboardFilterScreenState
                     );
                 Navigator.pop(context);
               },
-              color: AppStyles.backgroundColor,
+              // color: AppStyles.backgroundColor,
             ),
           )
         ],

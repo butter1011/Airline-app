@@ -18,31 +18,49 @@ class SearchBarWidget extends ConsumerWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return Container(
-      width: screenSize.width * 0.65,
-      height: 40,
+      width: screenSize.width * 0.7,
+      height: 48,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         color: Colors.white,
-         border: Border(
-          top: BorderSide(color: Colors.white, width: 1),
-          left: BorderSide(color: Colors.white, width: 1),
-          bottom: BorderSide(color: Colors.white, width: 2),
-          right: BorderSide(color: Colors.white, width: 2),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.2),
+          width: 1,
         ),
         boxShadow: [
-          BoxShadow(color: Colors.black, offset: Offset(1, 1), blurRadius:1)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            offset: Offset(0, 4),
+            blurRadius: 12,
+            spreadRadius: 0,
+          ),
         ],
       ),
       child: Center(
         child: TextField(
           controller: searchController,
           onChanged: onSearchChanged,
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontSize: 16,
+            color: Colors.black87,
+          ),
           decoration: InputDecoration(
-            hintText: 'Search',
-            hintStyle: TextStyle(fontFamily: 'inter', fontSize: 14),
-            contentPadding: EdgeInsets.all(0),
-            prefixIcon: Icon(Icons.search),
+            hintText: 'Search...',
+            hintStyle: TextStyle(
+              fontFamily: 'inter',
+              fontSize: 16,
+              color: Colors.grey.withOpacity(0.7),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.grey.withOpacity(0.7),
+              size: 22,
+            ),
             border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
           ),
         ),
       ),

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 class AppStyles {
   ///Color style
-  static Color mainColor = const Color(0xFF3FEA9C);
+  static Color mainColor = const Color(0xFFB3FFB5);
   static Color warnningColor= const Color(0xF7E74C4C);
   static Color notifyColor=  Colors.lightBlue;
   static Color littleBlackColor = const Color(0xff181818);
   static Color backgroundColor = const Color(0xFFf5f5f5);
   static Color blackColor = const Color(0xFF000000);
+  static Color mainButtonColor = const Color(0xFF2C3E50);
 
   ///Text style
   static TextStyle textStyle_12_600 = const TextStyle(
