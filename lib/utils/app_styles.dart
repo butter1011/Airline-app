@@ -160,15 +160,7 @@ class AppStyles {
   );
   static BoxDecoration cardDecoration = BoxDecoration(
     color: Colors.grey.shade50,
-    borderRadius: BorderRadius.circular(12),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withAlpha(50),
-        spreadRadius: 1,
-        blurRadius: 1,
-        offset: const Offset(0, 1),
-      ),
-    ],
+    borderRadius: BorderRadius.circular(12),   
     border: Border.all(
       color: Colors.grey.shade100,
       width: 2,

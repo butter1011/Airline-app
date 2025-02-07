@@ -37,11 +37,9 @@ class CLeaderboardScreen extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: userReviews.asMap().entries.map((entry) {
-              final index = entry.key;
               final singleReview = entry.value;
               final reviewer = singleReview['reviewer'];
               final airline = singleReview['airline'];
-              print("This is the single review: $singleReview");
 
               if (reviewer != null && airline != null) {
                 return Column(

@@ -12,7 +12,7 @@ class HelpFaq extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarWidget(
-        title: AppLocalizations.of(context).translate("HelpFaq"),
+        title: AppLocalizations.of(context).translate("Help FAQ"),
         onBackPressed: () => Navigator.pop(context),
       ),
       body: ListView(

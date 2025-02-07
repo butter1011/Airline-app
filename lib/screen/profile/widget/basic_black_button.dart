@@ -30,7 +30,7 @@ class BasicBlackButton extends StatelessWidget {
         child: Center(
           child: Text(
             btntext,
-            style: AppStyles.textStyle_14_600,
+            style: AppStyles.textStyle_14_600.copyWith(color: Colors.white),
           ),
         ),
         // ),

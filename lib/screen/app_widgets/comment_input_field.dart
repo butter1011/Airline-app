@@ -6,35 +6,33 @@ class CommentInputField extends StatelessWidget {
   final String title;
   final ValueChanged<String> onChange;
   final String hintText;
-  final double? height;
   const CommentInputField(
       {super.key,
       required this.commentController,
       required this.title,
       required this.onChange,
-      required this.hintText,
-      this.height = 0.08});
+      required this.hintText});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppStyles.textStyle_16_600),
+        Text(title, style: AppStyles.textStyle_14_600),
         const SizedBox(height: 6),
         Container(
           width: double.infinity,
           constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height * (height ?? 0.08),
+            minHeight: MediaQuery.of(context).size.height * 0.08,
           ),
           decoration: AppStyles.cardDecoration.copyWith(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withAlpha(51),
+                color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 1,
-                blurRadius: 1,
-                offset: const Offset(0, 1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
               ),
             ],
           ),

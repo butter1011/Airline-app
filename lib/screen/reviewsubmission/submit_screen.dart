@@ -351,7 +351,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           const SizedBox(height: 20),
           CommentInputField(
               commentController: _commentOfAirlineController,
-              title: "Airline",
+              title: "Airline Comments (Optional)",
+              hintText: "Share your experience with airline...",
               onChange: (value) {
                 setState(() {
                   commentOfAirline = value;
@@ -360,7 +361,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           SizedBox(height: 20),
           CommentInputField(
               commentController: _commentOfAirportController,
-              title: "Airport",
+              title: "Airport Comments (Optional)",
+              hintText: "Share your experience with airport...",
               onChange: (value) {
                 setState(() {
                   commentOfAirport = value;

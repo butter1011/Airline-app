@@ -35,7 +35,7 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.labelText, style: AppStyles.textStyle_14_600),
+        Text(widget.labelText, style: AppStyles.textStyle_16_600),
         const SizedBox(height: 8),
         DropdownButtonHideUnderline(
           child: DropdownButton2<String>(

@@ -3,9 +3,13 @@ import 'dart:async';
 import 'dart:io';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/profile/edit_custom_dropdown_button.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/comment_input_field.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:airline_app/controller/get_airline_controller.dart';
@@ -244,24 +248,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
-      backgroundColor: Colors.white,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-      centerTitle: true,
-      title: Text(AppLocalizations.of(context).translate('Edit Profile'),
-          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(4.0),
-        child: Container(color: Colors.black, height: 4.0),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final UserData = ref.watch(userDataProvider);
@@ -276,185 +262,65 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               onBackPressed: () => Navigator.pop(context),
             ),
             body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: Offset(3, 3),
-                              blurRadius: 4,
-                            )
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage: _selectedImage != null
-                              ? FileImage(File(_selectedImage!.path))
-                              : UserData?['userData']['profilePhoto'] != null
-                                  ? NetworkImage(
-                                      UserData?['userData']['profilePhoto'])
-                                  : AssetImage("assets/images/avatar_1.png")
-                                      as ImageProvider,
-                          radius: 48,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black, width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                offset: Offset(2, 2),
-                                blurRadius: 3,
-                              )
-                            ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(18),
-                              onTap: _pickImage,
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 20,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    "Change Photo",
-                    style: AppStyles.textStyle_15_600,
-                  ),
-                  SizedBox(
-                    height: 22,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Stack(
                       children: [
-                        Text(
-                          "Name & Surname",
-                          style: AppStyles.textStyle_14_600,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: AppStyles.avatarDecoration,
+                          child: CircleAvatar(
+                            backgroundImage: _selectedImage != null
+                                ? FileImage(File(_selectedImage!.path))
+                                : UserData?['userData']['profilePhoto'] != null
+                                    ? NetworkImage(
+                                        UserData?['userData']['profilePhoto'])
+                                    : AssetImage("assets/images/avatar_1.png")
+                                        as ImageProvider,
+                            radius: 48,
+                          ),
                         ),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CustomIconButton(
+                                onTap: _pickImage, icon: Icons.camera_alt)),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                    SizedBox(
+                      height: 12,
                     ),
-                    child: Container(
-                      height: 40, // Increased height for better visibility
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            20), // Adjusted for new height
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            offset: Offset(2, 2),
-                          )
-                        ],
-                      ),
-                      child: Center(
-                        // Added Center widget
-                        child: TextField(
-                          controller: _nameController,
-                          textAlignVertical: TextAlignVertical
-                              .center, // Centers text vertically
-                          style: AppStyles
-                              .textStyle_15_500, // Adjust font size as needed
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 16),
-                            border: InputBorder.none,
-                            isCollapsed: true, // Removes the default padding
-                          ),
-                        ),
-                      ),
+                    Text(
+                      "Change Photo",
+                      style: AppStyles.textStyle_15_600,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Bio",
-                          style: AppStyles.textStyle_14_600,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 32,
                     ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                    CommentInputField(
+                        commentController: _nameController,
+                        title: "Name & Surname",
+                        onChange: (value) {},
+                        hintText: "",
+                        height: 0.06),
+                    SizedBox(
+                      height: 22,
                     ),
-                    child: Container(
-                      height: 122,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(27),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              offset: Offset(2, 2),
-                            )
-                          ]),
-                      child: TextField(
-                        style: AppStyles.textStyle_14_500,
-                        controller: _bioController,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12)),
-                        maxLines: null,
-                      ),
+                    CommentInputField(
+                        commentController: _bioController,
+                        title: "Bio",
+                        onChange: (value) {},
+                        hintText: ""),
+                    SizedBox(
+                      height: 32,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // FavoriteAirlineDropdown(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: EditCustomDropdownButton(
+                    EditCustomDropdownButton(
                       labelText: "Your Favorite Airline",
                       hintText: "${UserData?['userData']['favoriteairlines']}",
                       onChanged: (value) => setState(() {
@@ -462,52 +328,21 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       }),
                       airlineNames: airlineData,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 4, // Set the height to match the thickness you want
-                  color: AppStyles.littleBlackColor, // Use your desired color
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: InkWell(
-                    onTap: () {
+            bottomNavigationBar: BottomButtonBar(
+                child: MainButton(
+                    text: AppLocalizations.of(context).translate('Save'),
+                    onPressed: () {
                       _editProfileFunction();
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.87,
-                      height: 56,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                              width: 2, color: AppStyles.littleBlackColor),
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                                color: AppStyles.littleBlackColor,
-                                offset: Offset(2, 2))
-                          ]),
-                      child: Center(
-                        child: Text(
-                          "Save Changes",
-                          style: AppStyles.textStyle_15_600,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+                    })),
           ),
         ),
         if (isLoading)
           Container(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withAlpha(127),
               child: const LoadingWidget()),
       ],
     );

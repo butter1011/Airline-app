@@ -69,7 +69,9 @@ class MainButton extends StatelessWidget {
                     ],
                     Text(
                       text,
-                      style: AppStyles.textStyle_15_500,
+                      style: AppStyles.textStyle_15_500.copyWith(
+                        color: Colors.white,
+                      )
                     ),
                   ],
                 ),

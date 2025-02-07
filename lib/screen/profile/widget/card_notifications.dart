@@ -121,7 +121,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 22),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(

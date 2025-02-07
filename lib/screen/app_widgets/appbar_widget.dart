@@ -49,8 +49,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: AppStyles.textStyle_18_600,
-      ),
+        style: AppStyles.textStyle_18_600.copyWith(fontWeight:FontWeight.w700 )    ),
     );
   }
 

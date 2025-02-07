@@ -130,7 +130,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '   ${userData?['userData']['bio']}',
+                        '         ${userData?['userData']['bio']}',
                         style: AppStyles.textStyle_14_400,
                       ),
                     ),
@@ -154,24 +154,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 16,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
                         width: 227,
-                        height: 32,
-                        decoration: AppStyles.cardDecoration,
+                        height: 40,
+                        decoration: AppStyles.cardDecoration.copyWith(borderRadius: BorderRadius.circular(24), color: Colors.white),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  'assets/icons/Lead Icon.png',
-                                  height: 20,
-                                  width: 20,
-                                ),
+                                Icon(Icons.rocket_sharp),
+                                SizedBox(width: 4,),
                                 Expanded(
                                   child: Text(
                                     '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
