@@ -1,11 +1,10 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
-import 'package:airline_app/screen/app_widgets/divider_widget.dart';
+import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
 import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
 import 'package:airline_app/screen/profile/widget/card_chart.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
-import 'package:airline_app/screen/profile/widget/profile_card5.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -33,14 +32,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);
-    final List<dynamic> iconPaths = [
-      "assets/icons/text.png",
-      "assets/icons/pin.png",
-      "assets/icons/trophy.png",
-      "assets/icons/alt.png",
-      "assets/icons/gear.png",
-    ];
-    final List<Widget> PCardList = [
+    final screenSize = MediaQuery.of(context).size;
+    final List<Widget> cardList = [
       SingleChildScrollView(child: CLeaderboardScreen()),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -67,218 +60,185 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     ];
 
     final userData = ref.watch(userDataProvider);
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavBar(currentIndex: 3),
-        body: Stack(children: [
-          ListView(children: [
-            Column(
-              children: [
-                Column(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(screenSize.height * 0.3),
+          child: Stack(children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: AppStyles.appBarColor,
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.0,
+                    ),
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: toggleEditIcon,
+                          child: Container(
+                            decoration: AppStyles.avatarDecoration,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              backgroundImage:
+                                  userData?['userData']['profilePhoto'] != null
+                                      ? NetworkImage(
+                                          userData?['userData']['profilePhoto'],
+                                        )
+                                      : const AssetImage(
+                                          "assets/images/avatar_1.png",
+                                        ) as ImageProvider,
+                            ),
+                          ),
+                        ),
+                        CustomIconButton(
+                          onTap: () {
+                            ref.read(selectedIndexProvider.notifier).state = 4;
+                          },
+                          icon: Icons.settings,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 21,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${userData?['userData']['name']}',
+                        style: AppStyles.textStyle_24_600,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '   ${userData?['userData']['bio']}',
+                        style: AppStyles.textStyle_14_400,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
                         children: [
-                          const SizedBox(
-                            height: 28,
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('My favorite Airline is'),
+                            style: AppStyles.textStyle_15_400,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: toggleEditIcon,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      border: Border.all(width: 2),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black,
-                                            offset: Offset(4, 4)),
-                                      ]),
-                                  child: CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: userData?['userData']
-                                                ['profilePhoto'] !=
-                                            null
-                                        ? NetworkImage(
-                                            userData?['userData']
-                                                ['profilePhoto'],
-                                          )
-                                        : const AssetImage(
-                                            "assets/images/avatar_1.png",
-                                          ) as ImageProvider,
-                                  ),
-                                ),
-                              ),
-                              ProfileCard5(
-                                count: 4,
-                                iconPath: iconPaths[4],
-                                isActive: selectedIndex == 4,
-                                myfun: () => ref
-                                    .read(selectedIndexProvider.notifier)
-                                    .state = 4,
-                              ),
-                            ],
+                          Text(
+                            ' ${userData?['userData']['favoriteAirlines']}',
+                            style: AppStyles.textStyle_15_600,
                           ),
-                          const SizedBox(
-                            height: 21,
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${userData?['userData']['name']}',
-                              style: const TextStyle(
-                                fontFamily: 'clash Grotesk',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '${userData?['userData']['bio']}',
-                              style: const TextStyle(
-                                fontFamily: 'Clash Grotesk',
-                                letterSpacing: 0.6,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 14,
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 227,
+                        height: 32,
+                        decoration: AppStyles.cardDecoration,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
                             child: Row(
                               children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('My favorite Airline is'),
-                                  style: const TextStyle(
-                                    fontFamily: 'inter',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                Image.asset(
+                                  'assets/icons/Lead Icon.png',
+                                  height: 20,
+                                  width: 20,
                                 ),
-                                Text(
-                                  ' ${userData?['userData']['favoriteAirlines']}',
-                                  style: const TextStyle(
-                                    fontFamily: 'inter',
-                                    letterSpacing: 0.3,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
+                                Expanded(
+                                  child: Text(
+                                    '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
+                                    style: AppStyles.textStyle_15_500,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 19,
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              width: 227,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 2),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(27),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black,
-                                    offset: Offset(2, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 1),
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/icons/Lead Icon.png',
-                                        height: 20,
-                                        width: 20,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',
-                                          style: TextStyle(
-                                              fontFamily: 'inter',
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      height: 22,
-                    ),
-                    DividerWidget(),
-                    SizedBox(
-                      height: 28,
-                    ),
-                    if (selectedIndex < PCardList.length)
-                      PCardList[selectedIndex]
-                    else
-                      PCardList[0]
                   ],
-                ),
-              ],
-            ),
-          ]),
-          if (showEditIcon)
-            Positioned(
-              top: 100,
-              left: 70,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.eidtprofilescreen);
-                  toggleEditIcon();
-                },
-                child: Container(
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
                 ),
               ),
             ),
+            if (showEditIcon)
+              Positioned(
+                top: screenSize.height * 0.12,
+                left: screenSize.width * 0.21,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.eidtprofilescreen);
+                    toggleEditIcon();
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyles.customIconColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+          ]),
+        ),
+        bottomNavigationBar: BottomNavBar(currentIndex: 3),
+        body: ListView(children: [
+          Column(
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    height: 28,
+                  ),
+                  if (selectedIndex < cardList.length)
+                    cardList[selectedIndex]
+                  else
+                    cardList[0]
+                ],
+              ),
+            ],
+          ),
         ]),
       ),
     );

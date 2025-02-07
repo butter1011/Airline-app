@@ -11,6 +11,7 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
     required this.airportName,
     required this.logoImage,
     required this.backgroundImage,
+    required this.parent,
   });
   final String subTitle;
   final String airlineName;
@@ -18,6 +19,7 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
   final String logoImage;
   final String backgroundImage;
   final String title;
+  final int parent;
 
   @override
   Widget build(BuildContext context) {
@@ -47,29 +49,34 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
                 margin: EdgeInsets.only(
                     left: screenSize.width * 0.05,
                     right: screenSize.width * 0.05),
+                padding:
+                    EdgeInsets.symmetric(vertical: screenSize.height * 0.01),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (logoImage.isNotEmpty)
                             Container(
-                              height: 40,
+                              height: 36,
+                              width: 36,
                               decoration: AppStyles.circleDecoration,
                               child: CircleAvatar(
-                                radius: 30,
+                                radius: 18,
                                 backgroundColor: Colors.white,
                                 backgroundImage: NetworkImage(logoImage),
                               ),
                             ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               airlineName,
-                              style: AppStyles.oswaldTextStyle.copyWith(
+                              style: AppStyles.italicTextStyle.copyWith(
                                 color: Colors.white,
                                 shadows: [
                                   Shadow(
@@ -90,23 +97,25 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (logoImage.isNotEmpty)
                             Container(
-                              height: 40,
+                              height: 36,
+                              width: 36,
                               decoration: AppStyles.circleDecoration,
                               child: CircleAvatar(
-                                radius: 30,
+                                radius: 18,
                                 backgroundColor: Colors.white,
                                 backgroundImage: NetworkImage(logoImage),
                               ),
                             ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               airportName,
-                              style: AppStyles.oswaldTextStyle.copyWith(
+                              style: AppStyles.italicTextStyle.copyWith(
                                 color: Colors.white,
                                 shadows: [
                                   Shadow(
@@ -127,7 +136,7 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 16),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
@@ -170,23 +179,31 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("1",
-                      style: AppStyles.textStyle_18_600
-                          .copyWith(color: Colors.white)),
+                  parent == 0
+                      ? EmphasizeWidget(number: 1)
+                      : Text("1",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_flight.png",
                     width: screenSize.width * 0.3,
                     fit: BoxFit.fitWidth,
                   ),
-                  Text("2",
-                      style: AppStyles.textStyle_18_600
-                          .copyWith(color: Colors.white)),
+                  parent == 1
+                      ? EmphasizeWidget(number: 2)
+                      : Text("2",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_trunk.png",
                     width: screenSize.width * 0.3,
                     fit: BoxFit.fitWidth,
                   ),
-                  EmphasizeWidget(number: 3),
+                  parent == 2
+                      ? EmphasizeWidget(number: 3)
+                      : Text("3",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
                 ],
               ),
               SizedBox(

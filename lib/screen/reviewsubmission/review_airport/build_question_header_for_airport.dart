@@ -63,7 +63,7 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
                     ),
                     child: Text(
                       airportName,
-                      style: AppStyles.oswaldTextStyle.copyWith(
+                      style: AppStyles.italicTextStyle.copyWith(
                         color: Colors.white,
                         shadows: [
                           Shadow(

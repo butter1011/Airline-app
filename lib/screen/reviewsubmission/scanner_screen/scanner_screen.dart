@@ -246,16 +246,16 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
-      return const Text(
+      return Text(
         'Scan a boarding pass!',
         overflow: TextOverflow.fade,
-        style: TextStyle(color: Colors.white),
+        style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
       );
     }
     return Text(
       'Scanned: ${value.format}',
       overflow: TextOverflow.fade,
-      style: const TextStyle(color: Colors.white),
+      style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
     );
   }
 

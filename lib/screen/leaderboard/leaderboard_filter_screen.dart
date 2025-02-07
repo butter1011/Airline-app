@@ -1,8 +1,9 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/filter_button.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -342,57 +343,45 @@ class _LeaderboardFilterScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppbarWidget(
-        title: "Filter",
-        onBackPressed: () => Navigator.pop(context),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            _buildTypeCategory(),
-            const SizedBox(height: 17),
-            _buildFlyerClassLeaderboards(),
-            const SizedBox(height: 17),
-            _buildCategoryLeaderboards(),
-            const SizedBox(height: 17),
-            if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
-          ],
+        resizeToAvoidBottomInset: false,
+        appBar: AppbarWidget(
+          title: "Filter",
+          onBackPressed: () => Navigator.pop(context),
         ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 4,
-            color: AppStyles.littleBlackColor,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              _buildTypeCategory(),
+              const SizedBox(height: 17),
+              _buildFlyerClassLeaderboards(),
+              const SizedBox(height: 17),
+              _buildCategoryLeaderboards(),
+              const SizedBox(height: 17),
+              if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            child: NavButton(
-              text: AppLocalizations.of(context).translate('Apply'),
-              onPressed: () {
-                ref
-                    .read(filterButtonProvider.notifier)
-                    .setFilterType(selectedAirType);
-                ref.read(airlineAirportProvider.notifier).getFilteredList(
-                      selectedAirType,
-                      null,
-                      selectedFlyerClass,
-                      selectedCategory,
-                      selectedContinents.isEmpty ||
-                              selectedContinents[0] == "All"
-                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-                          : selectedContinents,
-                    );
-                Navigator.pop(context);
-              },
-              // color: AppStyles.backgroundColor,
-            ),
-          )
-        ],
-      ),
-    );
+        ),
+        bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+            text: AppLocalizations.of(context).translate('Apply'),
+            onPressed: () {
+              ref
+                  .read(filterButtonProvider.notifier)
+                  .setFilterType(selectedAirType);
+              ref.read(airlineAirportProvider.notifier).getFilteredList(
+                    selectedAirType,
+                    null,
+                    selectedFlyerClass,
+                    selectedCategory,
+                    selectedContinents.isEmpty || selectedContinents[0] == "All"
+                        ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                        : selectedContinents,
+                  );
+              Navigator.pop(context);
+            },
+            // color: AppStyles.backgroundColor,
+          ),
+        ));
   }
 }

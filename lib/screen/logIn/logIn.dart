@@ -197,22 +197,13 @@ class _LoginState extends ConsumerState<Login> {
                 //   height: 18,
                 // ),
                 Text("Exp.aero",
-                    style: TextStyle(
-                        fontFamily: 'ArialBlack',
-                        fontWeight: FontWeight.w900,
-                        fontSize: 60,
-                        height: 0.8,
-                        color: Colors.black)),
+                    style: AppStyles.textStyle_40_700.copyWith(fontSize: 60)),
                 SizedBox(
                   height: 214,
                 ),
                 Text(
                   "Let's get flying",
-                  style: TextStyle(
-                      fontFamily: 'inter',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 40,
-                      color: Colors.black),
+                  style: AppStyles.textStyle_40_700,
                 ),
               ]),
             ),
@@ -250,11 +241,7 @@ class _LoginState extends ConsumerState<Login> {
                             child: Center(
                               child: Text(
                                 "   Tap here to signin   ",
-                                style: TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
+                                style: AppStyles.textStyle_14_600,
                                 selectionColor: Colors.black,
                               ),
                             ),

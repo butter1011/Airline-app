@@ -103,19 +103,14 @@ class _SkipScreenState extends State<SkipScreen> {
                             ),
                             Text(
                               titleList[selectedIndex],
-                              style: AppStyles.textStyle_24_600.copyWith(
-                                fontFamily: 'Clash Grotesk',
-                              ),
+                              style: AppStyles.textStyle_24_600,
                             ),
                             SizedBox(
                               height: 42,
                             ),
                             Text(
                               contentList[selectedIndex],
-                              style: AppStyles.textStyle_15_400.copyWith(
-                                color: Color(0xff38433E),
-                                fontFamily: 'Clash Grotesk',
-                              ),
+                              style: AppStyles.textStyle_15_400,
                             ),
                             SizedBox(
                               height: 21,
@@ -275,43 +270,32 @@ class _SkipScreenState extends State<SkipScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Exp Feedback',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
-            fontSize: selectedIndex == 0
-                ? 40
-                : selectedIndex == 1
-                    ? 50
-                    : 65,
-            color: Colors.black,
-          ),
-        ),
+        Text('Exp Feedback',
+            style: AppStyles.textStyle_40_700.copyWith(
+              fontSize: selectedIndex == 0
+                  ? 40
+                  : selectedIndex == 1
+                      ? 50
+                      : 65,
+            )),
         Text(
           'that takes',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w400,
+          style: AppStyles.textStyle_40_700.copyWith(
             fontSize: selectedIndex == 0
                 ? 40
                 : selectedIndex == 1
                     ? 50
                     : 65,
-            color: Colors.black,
           ),
         ),
         Text(
           'Flight',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
+          style: AppStyles.textStyle_40_700.copyWith(
             fontSize: selectedIndex == 0
                 ? 40
                 : selectedIndex == 1
                     ? 50
                     : 65,
-            color: Colors.black,
           ),
         )
       ],
@@ -324,41 +308,17 @@ class _SkipScreenState extends State<SkipScreen> {
       children: [
         Text(
           'Exp',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
-            fontSize: 50,
-            color: Colors.black,
-          ),
+          style: AppStyles.textStyle_14_400.copyWith(fontSize: 50),
         ),
         Text(
           'Feedback',
-          style: TextStyle(
-              fontFamily: 'inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 50,
-              color: Colors.black,
-              height: 0.7),
+          style: AppStyles.textStyle_14_400.copyWith(fontSize: 50),
         ),
-        Text(
-          'that takes',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w400,
-            fontSize: 50,
-            // height: 0.7,
-            color: Colors.black,
-          ),
-        ),
+        Text('that takes',
+            style: AppStyles.textStyle_14_400.copyWith(fontSize: 50)),
         Text(
           'Flight',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
-            fontSize: 50,
-            height: 0.7,
-            color: Colors.black,
-          ),
+          style: AppStyles.textStyle_40_700.copyWith(fontSize: 50),
         )
       ],
     );
@@ -370,42 +330,13 @@ class _SkipScreenState extends State<SkipScreen> {
       children: [
         Text(
           'Exp',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
-            fontSize: 65,
-            color: Colors.black,
-          ),
+          style: AppStyles.textStyle_40_700.copyWith(fontSize: 65),
         ),
-        Text(
-          'Feedback',
-          style: TextStyle(
-              fontFamily: 'inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 65,
-              color: Colors.black,
-              height: 0.7),
-        ),
-        Text(
-          'that takes',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w400,
-            fontSize: 65,
-            // height: 0.7,
-            color: Colors.black,
-          ),
-        ),
-        Text(
-          'Flight',
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w700,
-            fontSize: 65,
-            height: 0.7,
-            color: Colors.black,
-          ),
-        )
+        Text('Feedback',
+            style: AppStyles.textStyle_40_700.copyWith(fontSize: 65)),
+        Text('that takes',
+            style: AppStyles.textStyle_14_400.copyWith(fontSize: 65)),
+        Text('Flight', style: AppStyles.textStyle_40_700.copyWith(fontSize: 65))
       ],
     );
   }
@@ -424,7 +355,7 @@ class _NavigationButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 56,
-        decoration: AppStyles.buttonDecoration
+        decoration: AppStyles.cardDecoration
             .copyWith(color: color, borderRadius: BorderRadius.circular(28)),
         child: Center(
           child: Text(

@@ -2,8 +2,9 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
@@ -24,10 +25,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         .watch(airlineAirportProvider.notifier)
         .getAirportName(airlineData.from);
 
-    final to = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlineData.to);
-
     final airline = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineName(airlineData.airline);
@@ -36,41 +33,114 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         .watch(airlineAirportProvider.notifier)
         .getAirlineLogoImage(airlineData.airline);
 
-    final selectedClassOfTravel = airlineData.selectedClassOfTravel;
     final backgroundImage = ref
         .watch(airlineAirportProvider.notifier)
         .getAirlineBackgroundImage(airlineData.airline);
+    final List<Map<String, dynamic>> feedbackOptionsForAirline =
+        mainCategoryAndSubcategoryForAirline;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.flightinput);
-        return false;
+    final List<Map<String, dynamic>> feedbackOptionsForAirport =
+        mainCategoryAndSubcategoryForAirport;
+
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           automaticallyImplyLeading: false,
-          flexibleSpace: BuildQuestionHeader(
+          flexibleSpace: BuildQuestionHeaderForSubmit(
             backgroundImage: backgroundImage,
             title: "Lets go into more detail about this?",
             subTitle: "Your feedback helps make every journey better!",
             logoImage: logoImage,
-            classes: selectedClassOfTravel,
             airlineName: airline,
-            from: from,
-            to: to,
-            parent:1,
+            parent: 0,
+            airportName: from,
           ),
         ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildFeedbackOptions(selectionsForAirline, selectionsForAirport),
-              BuildNavigationButtonsWidget(
-                onBackPressed: () {
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Select positive aspects',
+                    style: AppStyles.textStyle_18_600,
+                  ),
+                  SizedBox(height: 8),
+                  Divider(height: 1, color: Colors.grey.withAlpha(51)),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: SingleChildScrollView(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          spacing: 1,
+                          children: List.generate(
+                            feedbackOptionsForAirline.length,
+                            (index) => FeedbackOptionForAirline(
+                              numForIdentifyOfParent: 1,
+                              iconUrl: feedbackOptionsForAirline[index]
+                                  ['iconUrl'],
+                              label: index,
+                              selectedNumberOfSubcategoryForLike:
+                                  selectionsForAirline[index]['subCategory']
+                                      .values
+                                      .where((s) => s == true)
+                                      .length,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          spacing: 1,
+                          children: List.generate(
+                            feedbackOptionsForAirport.length,
+                            (index) => FeedbackOptionForAirport(
+                              numForIdentifyOfParent: 1,
+                              iconUrl: feedbackOptionsForAirport[index]
+                                  ['iconUrl'],
+                              label: index,
+                              selectedNumberOfSubcategory:
+                                  selectionsForAirport[index]['subCategory']
+                                      .values
+                                      .where((s) => s == true)
+                                      .length,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomButtonBar(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: MainButton(
+                text: "Back",
+                onPressed: () {
                   Navigator.pushNamed(
                       context, AppRoutes.reviewsubmissionscreen);
-                                      ref.read(aviationInfoProvider.notifier).resetState();
+                  ref.read(aviationInfoProvider.notifier).resetState();
                   ref
                       .read(reviewFeedBackProviderForAirline.notifier)
                       .resetState();
@@ -78,85 +148,20 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                       .read(reviewFeedBackProviderForAirport.notifier)
                       .resetState();
                 },
-                onNextPressed: () {
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: MainButton(
+                text: "Next",
+                onPressed: () {
                   Navigator.pushNamed(
                       context, AppRoutes.questionsecondscreenforairline);
                 },
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeedbackOptions(
-    selectionsForAirline, selectionsForAirport
-  ) {
-    final List<Map<String, dynamic>> feedbackOptionsForAirline = 
-        mainCategoryAndSubcategoryForAirline;
-
-           final List<Map<String, dynamic>> feedbackOptionsForAirport =
-        mainCategoryAndSubcategoryForAirport;
-
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Select positive aspects',
-              style: AppStyles.textStyle_18_600,
-            ),
-            SizedBox(height: 8),
-            Divider(height: 1, color: Colors.grey.withOpacity(0.2)),            
-            Expanded(
-              child: SingleChildScrollView(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        spacing: 1,
-                        children: List.generate(
-                          feedbackOptionsForAirline.length,
-                          (index) => FeedbackOptionForAirline(
-                            numForIdentifyOfParent: 1,
-                            iconUrl: feedbackOptionsForAirline[index]['iconUrl'],
-                            label: index,
-                            selectedNumberOfSubcategoryForLike: selectionsForAirline[index]
-                                    ['subCategory']
-                                .values
-                                .where((s) => s == true)
-                                .length,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                         spacing: 1,
-                        children: List.generate(
-                          feedbackOptionsForAirport.length,
-                          (index) => FeedbackOptionForAirport(
-                            numForIdentifyOfParent: 1,
-                            iconUrl: feedbackOptionsForAirport[index]['iconUrl'],
-                            label: index,
-                            selectedNumberOfSubcategory: selectionsForAirport[index]
-                                    ['subCategory']
-                                .values
-                                .where((s) => s == true)
-                                .length,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
-        ),
+        )),
       ),
     );
   }

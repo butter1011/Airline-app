@@ -48,9 +48,7 @@ class _EditCustomDropdownButtonState extends State<EditCustomDropdownButton> {
                       value: item['name'],
                       child: Text(
                         item['name'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
+                        style: AppStyles.textStyle_14_600,
                       ),
                     ))
                 .toList(),

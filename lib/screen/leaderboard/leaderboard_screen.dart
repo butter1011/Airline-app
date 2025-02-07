@@ -6,13 +6,10 @@ import 'package:airline_app/controller/get_airport_score_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
-import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/app_widgets/search_field.dart';
+import 'package:airline_app/screen/leaderboard/widgets/airline_airport_list_widget.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
-import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/scoring_info_dialog.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -211,8 +208,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Widget build(BuildContext context) {
     final trendingreviews =
         ref.watch(reviewsAirlineAirportProvider.notifier).getTopFiveReviews();
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _onWillPop;
+        }
+      },      
       child: Scaffold(
         appBar: CustomSearchAppBar(
           searchController: _searchController,
@@ -282,7 +284,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                       ),
                                     ],
                                   ),
-                                  _AirportListSection(
+                                  AirlineAirportListWidget(
                                     leaderBoardList: ref
                                         .watch(airlineAirportProvider)
                                         .filteredList,
@@ -384,72 +386,5 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         ),
       ),
     );
-  }
-}
-
-class _AirportListSection extends StatelessWidget {
-  const _AirportListSection({
-    required this.leaderBoardList,
-    required this.expandedItems,
-    required this.onExpand,
-  });
-
-  final int expandedItems;
-  final List<Map<String, dynamic>> leaderBoardList;
-  final VoidCallback onExpand;
-
-  @override
-  Widget build(BuildContext context) {
-    return leaderBoardList.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Center(
-              child: Text(
-                'Nothing to show here',
-                style: AppStyles.textStyle_14_600,
-              ),
-            ),
-          )
-        : Column(
-            children: [
-              Column(
-                children: leaderBoardList.asMap().entries.map((entry) {
-                  int index = entry.key;
-
-                  Map<String, dynamic> singleAirport = entry.value;
-                  if (index < expandedItems) {
-                    return AirportList(
-                      airportData: {
-                        ...singleAirport,
-                        'index': index,
-                      },
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }).toList(),
-              ),
-              SizedBox(height: 19),
-              if (expandedItems < leaderBoardList.length)
-                Center(
-                  child: GestureDetector(
-                    onTap: onExpand,
-                    child: IntrinsicWidth(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              AppLocalizations.of(context)
-                                  .translate('Expand more'),
-                              style: AppStyles.textStyle_18_600
-                                  .copyWith(fontSize: 15)),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_downward),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          );
   }
 }

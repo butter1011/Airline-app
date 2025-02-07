@@ -66,7 +66,7 @@ class BuildQuestionHeader extends StatelessWidget {
                     ),
                     child: Text(
                       airlineName,
-                      style: AppStyles.oswaldTextStyle.copyWith(
+                      style: AppStyles.italicTextStyle.copyWith(
                         color: Colors.white,
                         shadows: [
                           Shadow(
@@ -126,18 +126,21 @@ class BuildQuestionHeader extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  parent == 1?EmphasizeWidget(number: 1):
-                  Text("1",
-                      style: AppStyles.textStyle_18_600
-                          .copyWith(color: Colors.white)),
+                  parent == 1
+                      ? EmphasizeWidget(number: 1)
+                      : Text("1",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_flight.png",
                     width: screenSize.width * 0.3,
                     fit: BoxFit.fitWidth,
                   ),
-                  parent == 2?EmphasizeWidget(number: 2):Text("2",
-                      style: AppStyles.textStyle_18_600
-                          .copyWith(color: Colors.white)),
+                  parent == 2
+                      ? EmphasizeWidget(number: 2)
+                      : Text("2",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
                   Image.asset(
                     "assets/images/progress_trunk.png",
                     width: screenSize.width * 0.3,
@@ -147,7 +150,7 @@ class BuildQuestionHeader extends StatelessWidget {
                       style: AppStyles.textStyle_18_600
                           .copyWith(color: Colors.white)),
                 ],
-              ),              
+              ),
               SizedBox(
                 height: 5,
               ),

@@ -129,11 +129,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           Expanded(
                             child: Text(
                               notification['title'] ?? '',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
+                              style: AppStyles.textStyle_16_600,
                             ),
                           ),
                           Icon(
@@ -153,11 +149,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           notification['description'] ?? '',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            height: 1.4,
-                          ),
+                          style: AppStyles.textStyle_14_600.copyWith(color: Colors.grey[600]),
                         ),
                       ),
                     ),

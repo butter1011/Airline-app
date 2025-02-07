@@ -3,11 +3,12 @@ import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -100,7 +101,7 @@ class _ReviewsubmissionScreenState
     final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
     return PopScope(
       canPop: false, // Prevents the default pop action
-       onPopInvokedWithResult: (didPop, result) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
         }
@@ -126,86 +127,74 @@ class _ReviewsubmissionScreenState
                         ],
                       ),
               ),
-        bottomNavigationBar: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  NavButton(
-                    text: AppLocalizations.of(context).translate('Next'),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 16),
-                                child: Column(
-                                  children: [
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate('Sync from Your Wallet'),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const WalletSyncScreen(),
-                                          ),
-                                        );
-                                      },
-                                      // color: Colors.white,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate(
-                                              'Sync from Google Calendar'),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                GoogleCalendarScreen(),
-                                          ),
-                                        );
-                                      },
-                                      // color: Colors.white,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate('Scan'),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ScannerScreen(),
-                                          ),
-                                        );
-                                      },
-                                      // color: Colors.white,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    // color: AppStyles.backgroundColor,
-                  )
-                ],
-              ),
-            ),
-          ],
+        bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+            text: AppLocalizations.of(context).translate('Next'),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
+                        child: Column(
+                          children: [
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Sync from Your Wallet'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const WalletSyncScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                            const SizedBox(height: 12),
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Sync from Google Calendar'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        GoogleCalendarScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                            const SizedBox(height: 12),
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Scan'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ScannerScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

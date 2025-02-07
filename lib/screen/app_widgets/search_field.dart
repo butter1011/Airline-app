@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,23 +41,14 @@ class SearchBarWidget extends ConsumerWidget {
         child: TextField(
           controller: searchController,
           onChanged: onSearchChanged,
-          style: TextStyle(
-            fontFamily: 'inter',
-            fontSize: 16,
-            color: Colors.black87,
-          ),
+          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black87),
           decoration: InputDecoration(
             hintText: 'Search...',
-            hintStyle: TextStyle(
-              fontFamily: 'inter',
-              fontSize: 16,
-              color: Colors.grey.withOpacity(0.7),
-            ),
+            hintStyle: AppStyles.textStyle_16_600.copyWith(color: Colors.grey.withAlpha(179)),
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             prefixIcon: Icon(
               Icons.search,
-              color: Colors.grey.withOpacity(0.7),
-              size: 22,
+              color: Colors.grey.withAlpha(179),              size: 22,
             ),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,

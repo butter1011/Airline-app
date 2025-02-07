@@ -21,6 +21,7 @@ class SubcategoryButtonWidget extends StatelessWidget {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         width: MediaQuery.of(context).size.width * 0.41,
+        height: MediaQuery.of(context).size.width * 0.33,
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(

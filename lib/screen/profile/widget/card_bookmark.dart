@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +96,6 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
             children: [
               InkWell(
                 onTap: () {
-           
                   Navigator.pushNamed(context, AppRoutes.bookmarkprofilescreen,
                       arguments: {
                         'continentAirlineList': entry.value,
@@ -108,11 +108,7 @@ class _CardBookMarkState extends ConsumerState<CardBookMark> {
                   children: [
                     Text(
                       ' ${entry.key} (${entry.value.length})',
-                      style: TextStyle(
-                          fontFamily: 'inter',
-                          fontSize: 20,
-                          color: Color(0xFF181818),
-                          fontWeight: FontWeight.w600),
+                      style: AppStyles.textStyle_18_600,
                     ),
                     Image.asset(
                       'assets/icons/rightarrow.png',

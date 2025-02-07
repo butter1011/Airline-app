@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +79,8 @@ class StartReviews extends StatelessWidget {
                             const SizedBox(height: 24),
                             Row(
                               children: [
-                                Icon(Icons.star_rounded, 
-                                     color: Colors.amber[600], 
-                                     size: 28),
+                                Icon(Icons.star_rounded,
+                                    color: Colors.amber[600], size: 28),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
@@ -96,9 +96,8 @@ class StartReviews extends StatelessWidget {
                             const SizedBox(height: 16),
                             Row(
                               children: [
-                                Icon(Icons.verified_user_rounded, 
-                                     color: Colors.green[600], 
-                                     size: 28),
+                                Icon(Icons.verified_user_rounded,
+                                    color: Colors.green[600], size: 28),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
@@ -112,36 +111,48 @@ class StartReviews extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 32),
-                            ElevatedButton(
+                            MainButton(
+                              text: "Begin Your Review",
                               onPressed: () {
-                                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.reviewsubmissionscreen);
                               },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                padding: const EdgeInsets.symmetric(vertical: 18),
-                                minimumSize: const Size(double.infinity, 56),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                elevation: 2,
+                              icon: Icon(
+                                Icons.rate_review_rounded,
+                                color: Colors.white,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.rate_review_rounded, 
-                                           color: Colors.white),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    "Begin Your Review",
-                                    style: AppStyles.textStyle_15_400.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            )
+
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                            //   },
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.grey,
+                            //     padding: const EdgeInsets.symmetric(vertical: 18),
+                            //     minimumSize: const Size(double.infinity, 56),
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(14),
+                            //     ),
+                            //     elevation: 2,
+                            //   ),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       const Icon(Icons.rate_review_rounded,
+                            //                color: Colors.white),
+                            //       const SizedBox(width: 12),
+                            //       Text(
+                            //         "Begin Your Review",
+                            //         style: AppStyles.textStyle_15_400.copyWith(
+                            //           color: Colors.white,
+                            //           fontWeight: FontWeight.w600,
+                            //           fontSize: 16,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

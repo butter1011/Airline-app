@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/profile/edit_custom_dropdown_button.dart';
@@ -21,7 +22,7 @@ import 'package:airline_app/screen/app_widgets/aws_upload_service.dart';
 import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
 class EditProfileScreen extends ConsumerStatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -30,7 +31,6 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   List<dynamic> airlineData = [];
   bool isLoading = false;
-
   final TextEditingController _bioController = TextEditingController();
   final _getAirlineData = GetAirlineAirportController();
   final TextEditingController _nameController = TextEditingController();
@@ -79,7 +79,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             child: Stack(children: [
               Container(
                 height: 60,
-                decoration: AppStyles.buttonDecoration.copyWith(
+                decoration: AppStyles.cardDecoration.copyWith(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white),
                 // padding: EdgeInsets.all(16),
@@ -271,7 +271,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       children: [
         KeyboardDismissWidget(
           child: Scaffold(
-            appBar: _buildAppBar(context),
+            appBar: AppbarWidget(
+              title: AppLocalizations.of(context).translate('Edit Profile'),
+              onBackPressed: () => Navigator.pop(context),
+            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [

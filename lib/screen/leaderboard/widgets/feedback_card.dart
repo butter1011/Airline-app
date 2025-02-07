@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -6,6 +5,7 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
@@ -365,13 +365,18 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                onPressed: () async {
-                  Share.share(
-                      "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
-                      subject: 'Join me on Airshiare - Your Travel Companion!');
-                },
-                icon: Image.asset('assets/icons/share.png'),
-              ),
+                  onPressed: () async {
+                    Share.share(
+                        "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
+                        subject:
+                            'Join me on Airshiare - Your Travel Companion!');
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/icons/share.svg',
+                  )
+
+                  // Image.asset('assets/icons/share.svg'),
+                  ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [
@@ -428,10 +433,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         SizedBox(width: 8),
                         AnimatedFlipCounter(
                           value: totalFavorites,
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                          textStyle: AppStyles.textStyle_16_600,
                         ),
                       ],
                     )
@@ -495,10 +497,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         SizedBox(width: 8),
                         AnimatedFlipCounter(
                           value: totalFavorites,
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                          textStyle: AppStyles.textStyle_16_600,
                         ),
                       ],
                     ),

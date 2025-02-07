@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class DetailButton extends StatelessWidget {
@@ -44,11 +45,7 @@ class DetailButton extends StatelessWidget {
                       width: 3,
                     ),
                     Text("$text $score/10",
-                        style: TextStyle(
-                          fontFamily: 'Arial',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.2),
+                        style: AppStyles.textStyle_15_600,
                         textAlign: TextAlign.center),
                   ],                ),
               ),
