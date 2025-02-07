@@ -3,11 +3,13 @@ import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/filter_button.dart';
 import 'package:airline_app/screen/app_widgets/nav_button.dart';
-import 'package:airline_app/screen/feed/feed_filter_screen.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/controller/leaderboard_service.dart';
+import 'package:airline_app/provider/leaderboard_filter_provider.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
 class LeaderboardFilterScreen extends ConsumerStatefulWidget {
   const LeaderboardFilterScreen({super.key});
@@ -20,6 +22,7 @@ class LeaderboardFilterScreen extends ConsumerStatefulWidget {
 class _LeaderboardFilterScreenState
     extends ConsumerState<LeaderboardFilterScreen> {
   // Declare continents and selectedStates as instance variables
+  final LeaderboardService _leaderboardService = LeaderboardService();
   final List<dynamic> airType = [
     "All",
     "Airport",
@@ -372,23 +375,64 @@ class _LeaderboardFilterScreenState
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             child: NavButton(
               text: AppLocalizations.of(context).translate('Apply'),
-              onPressed: () {
-                ref
-                    .read(filterButtonProvider.notifier)
-                    .setFilterType(selectedAirType);
-                ref.read(airlineAirportProvider.notifier).getFilteredList(
-                      selectedAirType,
-                      null,
-                      selectedFlyerClass,
-                      selectedCategory,
-                      selectedContinents.isEmpty ||
-                              selectedContinents[0] == "All"
-                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-                          : selectedContinents,
-                    );
-                Navigator.pop(context);
+              onPressed: () async {
+                try {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const Center(child: LoadingWidget()),
+                  );
+
+                  // Save filter options and reset page to 1
+                  ref.read(leaderboardFilterProvider.notifier).setFilters(
+                        airType: selectedAirType,
+                        flyerClass: selectedFlyerClass == "All"
+                            ? null
+                            : selectedFlyerClass,
+                        category:
+                            selectedCategory.isEmpty ? null : selectedCategory,
+                        continents: selectedContinents.isEmpty ||
+                                selectedContinents[0] == "All"
+                            ? [
+                                "Africa",
+                                "Asia",
+                                "Europe",
+                                "Americas",
+                                "Oceania"
+                              ]
+                            : selectedContinents.cast<String>(),
+                      );
+
+                  final result =
+                      await _leaderboardService.getFilteredLeaderboard(
+                    airType: selectedAirType,
+                    flyerClass:
+                        selectedFlyerClass == "All" ? null : selectedFlyerClass,
+                    category:
+                        selectedCategory.isEmpty ? null : selectedCategory,
+                    continents: selectedContinents.isEmpty ||
+                            selectedContinents[0] == "All"
+                        ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                        : selectedContinents.cast<String>(),
+                    page: 1,
+                  );
+
+                  ref
+                      .read(filterButtonProvider.notifier)
+                      .setFilterType(selectedAirType);
+                  ref.read(airlineAirportProvider.notifier).setData(result);
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                } catch (e) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            'Failed to fetch filtered data: ${e.toString()}')),
+                  );
+                }
               },
-              // color: AppStyles.backgroundColor,
             ),
           )
         ],

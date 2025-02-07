@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_buttons_widget.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
 import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
@@ -93,9 +92,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
 
-    final airlineReviewLists = ref
-        .watch(reviewsAirlineAirportProvider.notifier)
-        .getReviewsByBookMarkId(bookMarkId);
+    final airlineReviewLists = [];
 
     if (userId != null &&
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {

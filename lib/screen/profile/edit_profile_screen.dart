@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/profile/edit_custom_dropdown_button.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -32,7 +30,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   bool isLoading = false;
 
   final TextEditingController _bioController = TextEditingController();
-  final _getAirlineData = GetAirlineAirportController();
   final TextEditingController _nameController = TextEditingController();
   String? _selectedAirline;
   XFile? _selectedImage;
@@ -47,14 +44,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _getAirlineData.getAirlineAirport().then((value) {
-      setState(() {
-        airlineData = (value["data"]["data"] as List)
-            .where((element) => element['isAirline'] == true)
-            .toList();
-      });
-      isLoading = false;
-    });
   }
 
   void reloadProfileImage() {
@@ -216,10 +205,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         final responseData = jsonDecode(userInformationResponse.body);
 
         ref.read(userDataProvider.notifier).setUserData(responseData);
-        ref
-            .read(reviewsAirlineAirportProvider.notifier)
-            .setReviewUserProfileImageData(
-                userData?['userData']['_id'], uploadedProfilePhoto);
 
         final prefs = await SharedPreferences.getInstance();
 

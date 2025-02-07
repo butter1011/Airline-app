@@ -1,9 +1,4 @@
-import 'dart:ffi';
-
 import 'package:airline_app/controller/get_review_airport_controller.dart';
-import 'package:airline_app/controller/get_airline_score_controller.dart';
-import 'package:airline_app/controller/get_airport_score_controller.dart';
-import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/divider_widget.dart';
@@ -22,11 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/io.dart';
-import 'package:airline_app/controller/get_airline_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/controller/get_review_airline_controller.dart';
+import 'package:airline_app/provider/filter_button_provider.dart';
+import 'package:airline_app/provider/leaderboard_filter_provider.dart';
+import 'package:airline_app/controller/leaderboard_service.dart';
 
 bool _isWebSocketConnected = false;
 
@@ -38,11 +34,10 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
-  final airlineController = GetAirlineAirportController();
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
-  final airlineScoreController = GetAirlineScoreController();
-  final airportScoreController = GetAirportScoreController();
+  bool hasMore = true;
+  bool isLoading = false;
   Map<String, bool> buttonStates = {
     "Airline": false,
     "Airport": false,
@@ -61,7 +56,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   @override
   void dispose() {
     _searchController.dispose();
-    _channel.sink.close();
+    // _channel.sink.close();
     super.dispose();
   }
 
@@ -78,98 +73,94 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       filterType = buttonText;
       expandedItems = 5;
     });
+
+    // Update filter type in providers
     ref.read(filterButtonProvider.notifier).setFilterType(buttonText);
-    ref
-        .read(airlineAirportProvider.notifier)
-        .getFilteredList(filterType, null, null, null);
+    ref.read(leaderboardFilterProvider.notifier).setFilters(
+          airType: buttonText,
+          flyerClass: ref.read(leaderboardFilterProvider).flyerClass,
+          category: ref.read(leaderboardFilterProvider).category,
+          continents: ref.read(leaderboardFilterProvider).continents,
+        );
+
+    // Fetch new data with updated filter
+    fetchLeaderboardData(page: 1);
   }
 
-  Future<void> fetchLeaderboardData() async {
-    if (!mounted) return;
-
-    final airlineReviewController = GetReviewAirlineController();
-    final airportReviewController = GetReviewAirportController();
-
-    try {
-      final futures = await Future.wait([
-        airlineReviewController.getAirlineReviews(),
-        airlineController.getAirlineAirport(),
-        airlineScoreController.getAirlineScore(),
-        airportScoreController.getAirportScore(),
-        airportReviewController.getAirportReviews(),
-      ]);
-
-      if (!mounted) return;
-
-      if (futures[0]['success']) {
-        ref
-            .read(reviewsAirlineAirportProvider.notifier)
-            .setReviewData(futures[0]['data']);
-      }
-      if (futures[1]['success']) {
-        ref.read(airlineAirportProvider.notifier).setData(futures[1]['data']);
-      }
-      if (futures[2]['success']) {
-        ref
-            .read(airlineAirportProvider.notifier)
-            .setAirlineScoreData(futures[2]['data']['data']);
-      }
-      if (futures[3]['success']) {
-        ref
-            .read(airlineAirportProvider.notifier)
-            .setAirportScoreData(futures[3]['data']['data']);
-      }
-      if (futures[4]['success']) {
-        ref
-            .read(reviewsAirlineAirportProvider.notifier)
-            .setReviewData(futures[4]['data']);
-      }
-
-      if (!mounted) return;
-
-      ref
-          .read(airlineAirportProvider.notifier)
-          .getFilteredList("All", null, null, null);
-    } catch (e) {
-      print('Error fetching leaderboard data: $e');
-    }
-  }
-
-  Future<void> connectWebSocket() async {
-    if (_isWebSocketConnected) return;
+  Future<void> fetchLeaderboardData({int? page}) async {
+    setState(() {
+      isLoading = true;
+    });
+    final LeaderboardService _leaderboardService = LeaderboardService();
+    final filterState = ref.read(leaderboardFilterProvider);
 
     try {
-      _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
-      _channel.stream.listen(
-        (data) {
-          final jsonData = jsonDecode(data);
-          if (jsonData['type'] == 'airlineAirport') {
-            ref
-                .read(airlineAirportProvider.notifier)
-                .setData(Map<String, dynamic>.from(jsonData));
-            ref
-                .read(airlineAirportProvider.notifier)
-                .getFilteredList(filterType, _searchQuery, null, null);
-
-            setState(() {});
-          }
-        },
-        onError: (_) {
-          _isWebSocketConnected = false;
-        },
-        onDone: () {
-          _isWebSocketConnected = false;
-        },
+      final result = await _leaderboardService.getFilteredLeaderboard(
+        airType: filterState.airType,
+        flyerClass: filterState.flyerClass,
+        category: filterState.category,
+        continents: filterState.continents,
+        page: page ?? filterState.currentPage, // Use page from provider
       );
-      _isWebSocketConnected = true;
-    } catch (_) {
-      _isWebSocketConnected = false;
+
+      if (page == 1) {
+        ref.read(airlineAirportProvider.notifier).setData(result);
+      } else {
+        ref.read(airlineAirportProvider.notifier).appendData(result);
+      }
+
+      setState(() {
+        hasMore = result['hasMore'];
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error fetching leaderboard data: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
+
+  // Handle load more data
+  void loadMoreData() {
+    if (hasMore) {
+      // Increment page in provider
+      ref.read(leaderboardFilterProvider.notifier).incrementPage();
+      fetchLeaderboardData();
+    }
+  }
+
+  // Future<void> connectWebSocket() async {
+  //   if (_isWebSocketConnected) return;
+
+  //   try {
+  //     _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
+  //     _channel.stream.listen(
+  //       (data) {
+  //         final jsonData = jsonDecode(data);
+  //         if (jsonData['type'] == 'airlineAirport') {
+  //           ref
+  //               .read(airlineAirportProvider.notifier)
+  //               .setData(Map<String, dynamic>.from(jsonData));
+  //           setState(() {});
+  //         }
+  //       },
+  //       onError: (_) {
+  //         _isWebSocketConnected = false;
+  //       },
+  //       onDone: () {
+  //         _isWebSocketConnected = false;
+  //       },
+  //     );
+  //     _isWebSocketConnected = true;
+  //   } catch (_) {
+  //     _isWebSocketConnected = false;
+  //   }
+  // }
 
   Future<void> _initializeData() async {
     await Future.wait([
-      connectWebSocket(),
+      // connectWebSocket(),
       fetchLeaderboardData(),
     ]);
     setState(() {
@@ -209,8 +200,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final trendingreviews =
-        ref.watch(reviewsAirlineAirportProvider.notifier).getTopFiveReviews();
+    final trendingreviews = [];
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -221,9 +212,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             setState(() {
               _searchQuery = value.toLowerCase();
             });
-            ref
-                .read(airlineAirportProvider.notifier)
-                .getFilteredList(filterType, _searchQuery, null, null);
           },
           buttonStates: buttonStates,
           onButtonToggle: toggleButton,
@@ -233,154 +221,176 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         bottomNavigationBar: const BottomNavBar(
           currentIndex: 0,
         ),
-        body: KeyboardDismissWidget(
-          child: Column(
-            children: [
-              Expanded(
-                child: isLeaderboardLoading
-                    ? const Center(
-                        child: LoadingWidget(),
-                      )
-                    : SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+        body: Stack(
+          children: [
+            KeyboardDismissWidget(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: isLeaderboardLoading
+                        ? const Center(
+                            child: LoadingWidget(),
+                          )
+                        : SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)
+                                                .translate(
+                                                    'Top Ranked  Airlines'),
+                                            style: AppStyles.textStyle_16_600
+                                                .copyWith(
+                                              color: const Color(0xff38433E),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon:
+                                                const Icon(Icons.info_outline),
+                                            onPressed: () {
+                                              final RenderBox button =
+                                                  context.findRenderObject()
+                                                      as RenderBox;
+                                              final Offset offset = button
+                                                  .localToGlobal(Offset.zero);
+                                              showDialog(
+                                                context: context,
+                                                barrierColor:
+                                                    Colors.transparent,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return ScoringInfoDialog(
+                                                      offset: offset);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      _AirportListSection(
+                                        leaderBoardList: ref
+                                            .watch(airlineAirportProvider)
+                                            .allData,
+                                        expandedItems: expandedItems,
+                                        onExpand: () {
+                                          setState(() {
+                                            expandedItems += 5;
+                                          });
+                                        },
+                                        hasMore: hasMore,
+                                        loadMoreData: loadMoreData,
+                                      ),
+                                      const SizedBox(height: 28),
                                       Text(
                                         AppLocalizations.of(context)
-                                            .translate('Top Ranked  Airlines'),
+                                            .translate('Trending Feedback'),
                                         style:
                                             AppStyles.textStyle_16_600.copyWith(
                                           color: const Color(0xff38433E),
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: const Icon(Icons.info_outline),
-                                        onPressed: () {
-                                          final RenderBox button = context
-                                              .findRenderObject() as RenderBox;
-                                          final Offset offset =
-                                              button.localToGlobal(Offset.zero);
-                                          showDialog(
-                                            context: context,
-                                            barrierColor: Colors.transparent,
-                                            builder: (BuildContext context) {
-                                              return ScoringInfoDialog(
-                                                  offset: offset);
-                                            },
-                                          );
-                                        },
-                                      ),
+                                      const SizedBox(height: 17),
                                     ],
                                   ),
-                                  _AirportListSection(
-                                    leaderBoardList: ref
-                                        .watch(airlineAirportProvider)
-                                        .filteredList,
-                                    expandedItems: expandedItems,
-                                    onExpand: () {
+                                ),
+                                NotificationListener<ScrollNotification>(
+                                  onNotification: (scrollNotification) {
+                                    if (scrollNotification
+                                        is ScrollUpdateNotification) {
                                       setState(() {
-                                        expandedItems += 5;
+                                        leftPadding =
+                                            scrollNotification.metrics.pixels >
+                                                    0
+                                                ? 0
+                                                : 24.0;
                                       });
-                                    },
-                                  ),
-                                  const SizedBox(height: 28),
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('Trending Feedback'),
-                                    style: AppStyles.textStyle_16_600.copyWith(
-                                      color: const Color(0xff38433E),
+                                    }
+                                    return true;
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: leftPadding),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: trendingreviews.map(
+                                          (singleFeedback) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 16),
+                                              child: Container(
+                                                width: 299,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: FeedbackCard(
+                                                    thumbnailHeight: 189,
+                                                    singleFeedback:
+                                                        singleFeedback,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 17),
-                                ],
-                              ),
-                            ),
-                            NotificationListener<ScrollNotification>(
-                              onNotification: (scrollNotification) {
-                                if (scrollNotification
-                                    is ScrollUpdateNotification) {
-                                  setState(() {
-                                    leftPadding =
-                                        scrollNotification.metrics.pixels > 0
-                                            ? 0
-                                            : 24.0;
-                                  });
-                                }
-                                return true;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(left: leftPadding),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
+                                ),
+                                const SizedBox(
+                                  height: 18,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.feedscreen);
+                                  },
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: trendingreviews.map(
-                                      (singleFeedback) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 16),
-                                          child: Container(
-                                            width: 299,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: FeedbackCard(
-                                                thumbnailHeight: 189,
-                                                singleFeedback: singleFeedback,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ).toList(),
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('See all feedback'),
+                                        style: AppStyles.textStyle_15_600,
+                                      ),
+                                      const Icon(Icons.arrow_forward)
+                                    ],
                                   ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.feedscreen);
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('See all feedback'),
-                                    style: AppStyles.textStyle_15_600,
-                                  ),
-                                  const Icon(Icons.arrow_forward)
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            if (isLoading)
+              Container(
+                color: Colors.grey.withOpacity(0.2),
+                child: const Center(
+                  child: LoadingWidget(),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -392,64 +402,47 @@ class _AirportListSection extends StatelessWidget {
     required this.leaderBoardList,
     required this.expandedItems,
     required this.onExpand,
+    required this.hasMore,
+    required this.loadMoreData,
   });
 
   final int expandedItems;
   final List<Map<String, dynamic>> leaderBoardList;
   final VoidCallback onExpand;
+  final bool hasMore;
+  final VoidCallback loadMoreData;
 
   @override
   Widget build(BuildContext context) {
-    return leaderBoardList.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Center(
-              child: Text(
-                'Nothing to show here',
-                style: AppStyles.textStyle_14_600,
+    return Column(
+      children: [
+        Column(
+          children: leaderBoardList.map((singleAirport) {
+            return AirportList(
+              airportData: singleAirport,
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 19),
+        if (hasMore)
+          Center(
+            child: GestureDetector(
+              onTap: loadMoreData,
+              child: IntrinsicWidth(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppLocalizations.of(context).translate('Expand more'),
+                        style:
+                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.arrow_downward),
+                  ],
+                ),
               ),
             ),
-          )
-        : Column(
-            children: [
-              Column(
-                children: leaderBoardList.asMap().entries.map((entry) {
-                  int index = entry.key;
-
-                  Map<String, dynamic> singleAirport = entry.value;
-                  if (index < expandedItems) {
-                    return AirportList(
-                      airportData: {
-                        ...singleAirport,
-                        'index': index,
-                      },
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }).toList(),
-              ),
-              SizedBox(height: 19),
-              if (expandedItems < leaderBoardList.length)
-                Center(
-                  child: GestureDetector(
-                    onTap: onExpand,
-                    child: IntrinsicWidth(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              AppLocalizations.of(context)
-                                  .translate('Expand more'),
-                              style: AppStyles.textStyle_18_600
-                                  .copyWith(fontSize: 15)),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_downward),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          );
+          ),
+      ],
+    );
   }
 }

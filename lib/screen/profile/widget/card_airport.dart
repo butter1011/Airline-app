@@ -1,7 +1,6 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:flutter/material.dart';
 
 class CLeaderboardScreen extends ConsumerWidget {
@@ -10,7 +9,6 @@ class CLeaderboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userDataProvider);
-    final reviewsNotifier = ref.watch(reviewsAirlineAirportProvider.notifier);
 
     if (userData == null) {
       return const Center(child: CircularProgressIndicator());
@@ -25,7 +23,7 @@ class CLeaderboardScreen extends ConsumerWidget {
       );
     }
 
-    final userReviews = reviewsNotifier.getReviewsByUserId(userId);
+    final userReviews = [];
     return Column(
       children: [
         // Padding(

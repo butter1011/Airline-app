@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
@@ -405,13 +404,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-                                setState(() {
-                                  ref
-                                      .read(reviewsAirlineAirportProvider
-                                          .notifier)
-                                      .updateReview(
-                                          jsonDecode(response.body)['data']);
-                                });
+
                               } else {
                                 print('Failed to update reaction');
                               }
@@ -466,21 +459,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-                                setState(() {
-                                  ref
-                                      .read(reviewsAirlineAirportProvider
-                                          .notifier)
-                                      .updateReview(
-                                          jsonDecode(response.body)['data']);
-                                });
+
                               } else {
                                 print('Failed to update reaction');
-                                // Show error message if API call fails
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(
-                                //       content:
-                                //           Text('Failed to update reaction')),
-                                // );
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(

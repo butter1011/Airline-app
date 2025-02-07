@@ -11,7 +11,6 @@ import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
@@ -22,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
-import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
 class SubmitScreen extends ConsumerStatefulWidget {
@@ -131,12 +129,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
       if (resultOfAirline['success'] && resultOfAirport['success']) {
         final updatedUserData = await _reviewAirlineController
             .increaseUserPoints(userData['userData']['_id'], 500);
-        ref
-            .read(scoreProvider.notifier)
-            .updateAirlineScore(resultOfAirline['data']['data']['score']);
-        ref
-            .read(scoreProvider.notifier)
-            .updateAirportScore(resultOfAirport['data']['data']['score']);
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);
@@ -268,13 +260,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required int? index,
     required BoardingPassController boardingPassController,
   }) async {
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .addReview(resultOfAirline['data']['data']);
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .addReview(resultOfAirport['data']['data']);
-
     if (index != null) {
       final updatedBoardingPass =
           ref.read(boardingPassesProvider.notifier).markFlightAsReviewed(index);

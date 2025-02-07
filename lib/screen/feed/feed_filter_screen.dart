@@ -1,4 +1,3 @@
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/filter_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -127,15 +126,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         }
       }
     });
-    ref.read(reviewsAirlineAirportProvider.notifier).getFilteredReviews(
-          selectedAirType,
-          null,
-          selectedFlyerClass,
-          selectedCategory,
-          selectedContinents[0] == "All"
-              ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-              : selectedContinents,
-        );
   }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
@@ -154,16 +144,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         selectedCategory = currentCategories[index];
       }
     });
-
-    ref.read(reviewsAirlineAirportProvider.notifier).getFilteredReviews(
-          selectedAirType,
-          null,
-          selectedFlyerClass == "All" ? null : selectedFlyerClass,
-          selectedCategory,
-          selectedContinents.isEmpty || selectedContinents[0] == "All"
-              ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-              : selectedContinents,
-        );
   }
 
   Widget _buildTypeCategory() {

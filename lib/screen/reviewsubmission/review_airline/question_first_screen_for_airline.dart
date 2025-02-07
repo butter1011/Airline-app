@@ -117,7 +117,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Column(
-                        spacing: 1,
                         children: List.generate(
                           feedbackOptionsForAirline.length,
                           (index) => FeedbackOptionForAirline(
@@ -135,7 +134,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                     ),
                     Expanded(
                       child: Column(
-                         spacing: 1,
                         children: List.generate(
                           feedbackOptionsForAirport.length,
                           (index) => FeedbackOptionForAirport(

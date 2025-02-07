@@ -5,7 +5,6 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/score_provider.dart';
 
 class CompleteReviews extends ConsumerWidget {
   const CompleteReviews({super.key});
@@ -13,7 +12,6 @@ class CompleteReviews extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
-    final scores = ref.watch(scoreProvider);
 
     return WillPopScope(
       onWillPop: () async {
@@ -55,7 +53,8 @@ class CompleteReviews extends ConsumerWidget {
               ),
               const SizedBox(height: 40),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -70,12 +69,10 @@ class CompleteReviews extends ConsumerWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      "Thank You for Your Feedback!",
-                      style: AppStyles.textStyle_24_600.copyWith(
-                        color: Colors.blue.shade600,
-                      )
-                    ),
+                    Text("Thank You for Your Feedback!",
+                        style: AppStyles.textStyle_24_600.copyWith(
+                          color: Colors.blue.shade600,
+                        )),
                     const SizedBox(height: 10),
                     Text(
                       "Your valuable insights help us create better travel experiences for everyone",
@@ -89,13 +86,12 @@ class CompleteReviews extends ConsumerWidget {
                       children: [
                         _buildScoreCard(
                           "Airline Score",
-                          (scores['airlineScore'] ?? 0).toStringAsFixed(1),
+                          (0).toStringAsFixed(1),
                           Icons.flight,
                         ),
-
                         _buildScoreCard(
                           "Airport Score",
-                          (scores['airportScore'] ?? 0).toStringAsFixed(1),
+                          (0).toStringAsFixed(1),
                           Icons.airplane_ticket,
                         ),
                       ],
@@ -136,15 +132,9 @@ class CompleteReviews extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                title,
-                style: AppStyles.textStyle_16_600
-              ),
+              Text(title, style: AppStyles.textStyle_16_600),
               const SizedBox(height: 5),
-              Text(
-                score,
-                style: AppStyles.textStyle_16_600
-              ),
+              Text(score, style: AppStyles.textStyle_16_600),
             ],
           ),
         ],

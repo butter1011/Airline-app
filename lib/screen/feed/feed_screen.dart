@@ -1,8 +1,5 @@
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
-import 'package:airline_app/controller/get_airline_score_controller.dart';
-import 'package:airline_app/controller/get_airport_score_controller.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/divider_widget.dart';
@@ -46,12 +43,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       buttonStates[buttonText] = true;
       filterType = buttonText;
     });
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getFilteredReviews(filterType, null, null, null);
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getAirlineReviewsWithScore();
   }
 
   @override
@@ -60,53 +51,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     _initPrefs();
   }
 
-  Future<void> _initPrefs() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final reviewAirlineController = GetReviewAirlineController();
-    final airlineResult = await reviewAirlineController.getAirlineReviews();
-    if (airlineResult['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setReviewData(airlineResult['data']);
-    }
-    final reviewAirportController = GetReviewAirportController();
-    final airportResult = await reviewAirportController.getAirportReviews();
-    if (airportResult['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setReviewData(airportResult['data']);
-    }
-    final airlineScoreController = GetAirlineScoreController();
-    final airportScoreController = GetAirportScoreController();
-    final airlineScore = await airlineScoreController.getAirlineScore();
-    if (airlineScore['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setAirlineScoreData(airlineScore['data']['data']);
-    }
-    final airportScore = await airportScoreController.getAirportScore();
-    if (airportScore['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setAirportScoreData(airportScore['data']['data']);
-    }
-
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getFilteredReviews("All", null, null, null);
-
-    setState(() {
-      isLoading = false;
-    });
-  }
+  Future<void> _initPrefs() async {}
 
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
-    final reviewList = ref.watch(reviewsAirlineAirportProvider).filteredReviews;
+    final reviewList = [];
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -121,9 +71,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               setState(() {
                 _searchQuery = value.toLowerCase();
               });
-              ref
-                  .read(reviewsAirlineAirportProvider.notifier)
-                  .getFilteredReviews(filterType, _searchQuery, null, null);
             },
             buttonStates: buttonStates,
             onButtonToggle: toggleButton,
