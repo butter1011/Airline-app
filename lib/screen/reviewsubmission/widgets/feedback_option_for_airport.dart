@@ -7,14 +7,14 @@ class FeedbackOptionForAirport extends StatelessWidget {
   final int numForIdentifyOfParent;
   final String iconUrl;
   final int label;
-  final int selectedNumberOfSubcategoryForLike;
+  final int selectedNumberOfSubcategory;
 
   const FeedbackOptionForAirport({
     super.key,
     required this.numForIdentifyOfParent,
     required this.iconUrl,
     required this.label,
-    required this.selectedNumberOfSubcategoryForLike,
+    required this.selectedNumberOfSubcategory,
   });
 
   @override
@@ -25,7 +25,6 @@ class FeedbackOptionForAirport extends StatelessWidget {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     final labelName = mainCategoryNames[label];
-    print("This si ++++++++ $selectedNumberOfSubcategoryForLike");
     return GestureDetector(
       onTap: () {
         if (numForIdentifyOfParent == 1) {
@@ -35,60 +34,123 @@ class FeedbackOptionForAirport extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.detailsecondscreenforairport,
               arguments: {'singleAspect': label});
         }
-      }, // Change color on tap
-      child: Stack(
-        children: [
-          Container(
-            height: 126,
-            width: MediaQuery.of(context).size.width * 0.41,
-            decoration: AppStyles.cardDecoration.copyWith(
-              color: selectedNumberOfSubcategoryForLike > 0
-                  ? AppStyles.blackColor
-                  : Colors.white, // Change color based on click state
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Material(
+          elevation: selectedNumberOfSubcategory > 0 ? 4 : 2,
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            height: 70,
+            width: MediaQuery.of(context).size.width * 0.45,
+            decoration: BoxDecoration(
+              gradient: selectedNumberOfSubcategory > 0
+                  ? LinearGradient(
+                      colors: [AppStyles.blackColor, Color(0xFF2C2C2C)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              color: selectedNumberOfSubcategory > 0 ? null : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: selectedNumberOfSubcategory > 0
+                    ? Colors.transparent
+                    : Colors.grey.shade300,
+                width: 1.5,
+              ),
+              boxShadow: selectedNumberOfSubcategory > 0
+                  ? [
+                      BoxShadow(
+                        color: AppStyles.blackColor.withOpacity(0.51),
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
+                    ]
+                  : null,
             ),
-            padding: EdgeInsets.only(
-                bottom: 10, top: 16), // Add padding for better spacing
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                Container(
-                  height: 48,
-                  width: 48,
-                  decoration: AppStyles.cardDecoration.copyWith(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                Row(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        color: selectedNumberOfSubcategory > 0
+                            ? Colors.white
+                            : Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Image.asset(
+                          iconUrl,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        labelName,
+                        style: AppStyles.textStyle_14_600.copyWith(
+                          color: selectedNumberOfSubcategory > 0
+                              ? Colors.white
+                              : Colors.black87,
+                          fontSize: 15,
+                          letterSpacing: 0.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                if (selectedNumberOfSubcategory > 0)
+                  Positioned(
+                    top: -10,
+                    right: -10,
+                    child: Container(
+                      height: 24,
+                      width: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.38),
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "$selectedNumberOfSubcategory",
+                          style: AppStyles.textStyle_12_600.copyWith(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Image.asset(iconUrl, height: 40),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  labelName,
-                  textAlign: TextAlign.center,
-                  style: AppStyles.textStyle_14_600.copyWith(
-                    color: selectedNumberOfSubcategoryForLike > 0
-                        ? Colors.white
-                        : AppStyles.blackColor, // Change text color based on click state
-                  ), // Optional styling
-                ),
               ],
             ),
           ),
-          if (selectedNumberOfSubcategoryForLike > 0)
-            Positioned(
-                top: 12,
-                right: 16,
-                child: Container(
-                  height: 20,
-                  width: 20,
-                  decoration: AppStyles.badgeDecoration,
-                  child: Center(
-                    child: Text(
-                      "$selectedNumberOfSubcategoryForLike",
-                      style: AppStyles.textStyle_12_600,
-                    ),
-                  ),
-                ))
-        ],
+        ),
       ),
     );
   }

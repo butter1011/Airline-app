@@ -14,7 +14,6 @@ import 'package:airline_app/screen/profile/edit_profile_screen.dart';
 import 'package:airline_app/screen/profile/help_faq.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
-import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/complete_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
@@ -23,8 +22,6 @@ import 'package:airline_app/screen/reviewsubmission/review_airline/question_firs
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_second_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_second_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/start_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/submit_screen.dart';
@@ -38,7 +35,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main() async {  
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final String languageCode = prefs.getString('selectedLanguageSym') ?? 'en';
@@ -120,22 +117,14 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
-
-        // Airports routes
-        AppRoutes.questionfirstscreenforairport: (context) =>
-            QuestionFirstScreenForAirport(),
         AppRoutes.detailfirstscreenforairport: (context) =>
             DetailFirstScreenForAirport(),
-        AppRoutes.questionsecondscreenforairport: (context) =>
-            QuestionSecondScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
 
         //////
         AppRoutes.submitscreen: (context) => SubmitScreen(),
         AppRoutes.completereviews: (context) => CompleteReviews(),
-
-        AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),

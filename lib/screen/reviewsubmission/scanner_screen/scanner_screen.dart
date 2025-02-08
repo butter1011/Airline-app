@@ -122,9 +122,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
       if (pnrExists) {
         _showSnackBar(
             'Boarding pass has already been reviewed', AppStyles.mainColor);
-            Navigator.pop(context);
-
-        
+        Navigator.pop(context);
       }
 
       Map<String, dynamic> flightInfo = await _fetchFlightInfo.fetchFlightInfo(
@@ -154,9 +152,10 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar('Unable to process boarding pass. Please try scanning again.',
+      _showSnackBar(
+          'Unable to process boarding pass. Please try scanning again.',
           AppStyles.notifyColor);
-          Navigator.pop(context);
+      Navigator.pop(context);
     } finally {
       if (mounted) {
         setState(() {
@@ -247,16 +246,16 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
-      return const Text(
+      return Text(
         'Scan a boarding pass!',
         overflow: TextOverflow.fade,
-        style: TextStyle(color: Colors.white),
+        style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
       );
     }
     return Text(
       'Scanned: ${value.format}',
       overflow: TextOverflow.fade,
-      style: const TextStyle(color: Colors.white),
+      style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
     );
   }
 

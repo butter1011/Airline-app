@@ -11,13 +11,13 @@ import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 class WalletSyncScreen extends ConsumerStatefulWidget {
-  const WalletSyncScreen({Key? key}) : super(key: key);
+  const WalletSyncScreen({super.key});
 
   @override
   ConsumerState<WalletSyncScreen> createState() => _WalletSyncScreenState();
@@ -295,7 +295,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                             const TextSpan(text: "Please click on "),
                             TextSpan(
                               text: "Upload Boarding Pass Screenshot",
-                              style: TextStyle(color: AppStyles.mainColor),
+                              style: TextStyle(color: Colors.green),
                             ),
                             const TextSpan(
                               text:
@@ -307,7 +307,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                             ),
                             TextSpan(
                               text: "Move To Wallet",
-                              style: TextStyle(color: AppStyles.mainColor),
+                              style: TextStyle(color: Colors.green),
                             ),
                             const TextSpan(
                               text: " button to retrieve it.\n\n",
@@ -334,26 +334,27 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 2,
-                color: Colors.black,
+                height: 1,
+                color: Colors.grey.shade300,
               ),
               Padding(
+                
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
                   children: [
-                    NavButton(
+                    MainButton(
                       text: AppLocalizations.of(context)
                           .translate('Upload Boarding Pass Screenshot'),
                       onPressed: _analyzeImageFromFile,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                     const SizedBox(height: 12),
-                    NavButton(
+                    MainButton(
                       text: AppLocalizations.of(context)
                           .translate('Move To Wallet'),
                       onPressed: _launchWallet,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                   ],
                 ),

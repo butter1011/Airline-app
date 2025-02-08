@@ -3,7 +3,7 @@ import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -66,11 +66,11 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
         print("Creator: ${event.creator?.email}");
         print("Created: ${event.created}");
         print("Updated: ${event.updated}");
-        print("Status: ${event.status}");    
+        print("Status: ${event.status}");
         print("Event Keys:");
         event.toJson().keys.forEach((key) {
           print(key);
-        });   
+        });
       }
     } catch (e) {
       setState(() {
@@ -138,10 +138,10 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
               children: [
-                NavButton(
+                MainButton(
                   text: AppLocalizations.of(context).translate('Fetch Events'),
                   onPressed: _fetchEvents,
-                  color: Colors.white,
+                  // color: Colors.white,
                 ),
               ],
             ),

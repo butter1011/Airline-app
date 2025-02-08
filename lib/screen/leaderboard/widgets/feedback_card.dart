@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
 import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -6,12 +5,12 @@ import 'package:airline_app/utils/global_variable.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 
 class FeedbackCard extends ConsumerStatefulWidget {
@@ -37,6 +36,31 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   final Map<String, Duration> _videoPositions = {};
 
   @override
+  void initState() {
+    super.initState();
+    initializeVideoPlayer();
+  }
+
+  @override
+  void didUpdateWidget(FeedbackCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Re-initialize video players when feedback data changes
+    if (oldWidget.singleFeedback != widget.singleFeedback) {
+      // Clean up old video controllers
+      for (var controller in _videoControllers.values) {
+        controller.pause();
+        controller.dispose();
+      }
+      _videoControllers.clear();
+      _videoPositions.clear();
+
+      // Initialize new video controllers
+      initializeVideoPlayer();
+    }
+  }
+
+  @override
   void dispose() {
     for (var controller in _videoControllers.values) {
       // Store position before disposing
@@ -52,31 +76,37 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    for (var media in widget.singleFeedback['imageUrls'] ?? []) {
-      if (media
-          .toString()
-          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
-        _videoControllers[media] = VideoPlayerController.networkUrl(
-          Uri.parse(media),
-          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        )..initialize().then((_) {
-            if (mounted) {
-              setState(() {
-                _videoControllers[media]?.setLooping(true);
-                _handleVideoState();
-              });
-            }
-          });
+  void initializeVideoPlayer() {
+    if (widget.singleFeedback['imageUrls'] == null) return;
+
+    for (var media in widget.singleFeedback['imageUrls']) {
+      if (media != null &&
+          media
+              .toString()
+              .toLowerCase()
+              .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
+        try {
+          _videoControllers[media] = VideoPlayerController.network(
+            media,
+            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+          )..initialize().then((_) {
+              if (mounted) {
+                setState(() {
+                  _videoControllers[media]?.setLooping(true);
+                  _handleVideoState();
+                });
+              }
+            });
+        } catch (e) {
+          debugPrint('Error creating video controller: $e');
+        }
       }
     }
 
-    // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
-    isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
-    totalFavorites = (widget.singleFeedback['rating'] as List).length;
+    final ratingList = widget.singleFeedback['rating'] as List?;
+    isFavorite = ratingList?.contains(userId) ?? false;
+    totalFavorites = ratingList?.length ?? 0;
   }
 
   void _handleVideoState() {
@@ -365,13 +395,18 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                onPressed: () async {
-                  Share.share(
-                      "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
-                      subject: 'Join me on Airshiare - Your Travel Companion!');
-                },
-                icon: Image.asset('assets/icons/share.png'),
-              ),
+                  onPressed: () async {
+                    Share.share(
+                        "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
+                        subject:
+                            'Join me on Airshiare - Your Travel Companion!');
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/icons/share.svg',
+                  )
+
+                  // Image.asset('assets/icons/share.svg'),
+                  ),
               widget.singleFeedback['from'] != null
                   ? Row(
                       children: [
@@ -405,13 +440,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-                                setState(() {
-                                  ref
-                                      .read(reviewsAirlineAirportProvider
-                                          .notifier)
-                                      .updateReview(
-                                          jsonDecode(response.body)['data']);
-                                });
                               } else {
                                 print('Failed to update reaction');
                               }
@@ -428,10 +456,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         SizedBox(width: 8),
                         AnimatedFlipCounter(
                           value: totalFavorites,
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                          textStyle: AppStyles.textStyle_16_600,
                         ),
                       ],
                     )
@@ -466,21 +491,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-                                setState(() {
-                                  ref
-                                      .read(reviewsAirlineAirportProvider
-                                          .notifier)
-                                      .updateReview(
-                                          jsonDecode(response.body)['data']);
-                                });
                               } else {
                                 print('Failed to update reaction');
-                                // Show error message if API call fails
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(
-                                //       content:
-                                //           Text('Failed to update reaction')),
-                                // );
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -495,10 +507,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                         SizedBox(width: 8),
                         AnimatedFlipCounter(
                           value: totalFavorites,
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                          textStyle: AppStyles.textStyle_16_600,
                         ),
                       ],
                     ),

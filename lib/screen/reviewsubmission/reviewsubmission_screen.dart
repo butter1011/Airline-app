@@ -3,11 +3,12 @@ import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/reviewsubmission/google_calendar/google_calendar_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/scanner_screen/scanner_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/wallet_sync_screen.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/review_flight_card.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -26,7 +27,6 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
   bool isLoading = true;
-  String selectedType = "All";
 
   final _boardingPassController = BoardingPassController();
 
@@ -34,12 +34,6 @@ class _ReviewsubmissionScreenState
   void initState() {
     super.initState();
     _loadData();
-  }
-
-  void onTypeSelected(String type) {
-    setState(() {
-      selectedType = type;
-    });
   }
 
   Future<void> _loadData() async {
@@ -84,12 +78,11 @@ class _ReviewsubmissionScreenState
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
         children: [
-          if (selectedType == "All" || selectedType == "Flights")
-            ReviewFlightCard(
-              singleBoardingPass: singleBoardingPass,
-              index: index,
-              isReviewed: singleBoardingPass.isReviewed,
-            ),
+          ReviewFlightCard(
+            singleBoardingPass: singleBoardingPass,
+            index: index,
+            isReviewed: singleBoardingPass.isReviewed,
+          ),
         ],
       ),
     );
@@ -109,7 +102,7 @@ class _ReviewsubmissionScreenState
         appBar: AppbarWidget(
           title: "Reviews",
           onBackPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
           },
         ),
         body: isLoading
@@ -126,89 +119,74 @@ class _ReviewsubmissionScreenState
                         ],
                       ),
               ),
-        bottomNavigationBar: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  NavButton(
-                    text: AppLocalizations.of(context).translate('Next'),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 16),
-                                child: Column(
-                                  children: [
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate('Sync from Your Wallet'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const WalletSyncScreen(),
-                                          ),
-                                        );
-                                      },
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate(
-                                              'Sync from Google Calendar'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                GoogleCalendarScreen(),
-                                          ),
-                                        );
-                                      },
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    NavButton(
-                                      text: AppLocalizations.of(context)
-                                          .translate('Scan'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ScannerScreen(),
-                                          ),
-                                        );
-                                      },
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    color: AppStyles.backgroundColor,
-                  )
-                ],
-              ),
-            ),
-          ],
+        bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+            text: AppLocalizations.of(context).translate('Next'),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
+                        child: Column(
+                          children: [
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Sync from Your Wallet'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const WalletSyncScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                            const SizedBox(height: 12),
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Sync from Google Calendar'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        GoogleCalendarScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                            const SizedBox(height: 12),
+                            MainButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('Scan'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ScannerScreen(),
+                                  ),
+                                );
+                              },
+                              // color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class BasicBlackButton extends StatelessWidget {
@@ -26,15 +27,10 @@ class BasicBlackButton extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),
-        child:
-            Center(
+        child: Center(
           child: Text(
             btntext,
-            style: const TextStyle(
-                fontFamily: 'inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.white),
+            style: AppStyles.textStyle_14_600.copyWith(color: Colors.white),
           ),
         ),
         // ),

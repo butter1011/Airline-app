@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/reviewsubmission/widgets/emphasize_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -8,15 +9,15 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
     required this.title,
     required this.airportName,
     required this.logoImage,
-    required this.backgroundImage,
     required this.selecetedOfCalssLevel,
+    required this.parent,
   });
   final String subTitle;
   final String airportName;
   final String logoImage;
-  final String backgroundImage;
   final String selecetedOfCalssLevel;
   final String title;
+  final int parent;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +26,12 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/images/airport.png",
+            "assets/images/airport.jpg",
             fit: BoxFit.cover,
           ),
         ),
         Container(
-          color:
-              Color(0xff181818).withOpacity(0.95), // Black overlay with opacity
+          color: Colors.black.withOpacity(0.3),
         ),
         Padding(
           padding:
@@ -47,51 +47,116 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
                       height: 40,
                       decoration: AppStyles.circleDecoration,
                       child: CircleAvatar(
-                          radius: 30, backgroundImage: NetworkImage(logoImage)),
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        backgroundImage: NetworkImage(logoImage),
+                      ),
                     ),
                   SizedBox(height: 10),
-                  Text(
-                    airportName,
-                    style: AppStyles.oswaldTextStyle,
-                    overflow: TextOverflow.visible,
-                    softWrap: true,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      airportName,
+                      style: AppStyles.italicTextStyle.copyWith(
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 3.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                      overflow: TextOverflow.visible,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ],
               ),
               SizedBox(height: 32),
-              Text(
-                title,
-                style: AppStyles.textStyle_18_600
-                    .copyWith(color: Color(0xffF9F9F9)),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      title,
+                      style: AppStyles.textStyle_18_600.copyWith(
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 2.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      subTitle,
+                      style: AppStyles.textStyle_15_600.copyWith(
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 2.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                subTitle,
-                style: AppStyles.textStyle_15_600
-                    .copyWith(color: Color(0xffC1C7C4)),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  parent == 1
+                      ? EmphasizeWidget(number: 1)
+                      : Text("1",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
+                  Image.asset(
+                    "assets/images/progress_flight.png",
+                    width: screenSize.width * 0.3,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  parent == 2
+                      ? EmphasizeWidget(number: 2)
+                      : Text("2",
+                          style: AppStyles.textStyle_18_600
+                              .copyWith(color: Colors.white)),
+                  Image.asset(
+                    "assets/images/progress_trunk.png",
+                    width: screenSize.width * 0.3,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Text("3",
+                      style: AppStyles.textStyle_18_600
+                          .copyWith(color: Colors.white)),
+                ],
               ),
               SizedBox(
-                height: 32,
+                height: 5,
               ),
-              Image.asset(
-                "assets/images/step_progress_indicator_white.png",
-                width: screenSize.width * 0.8,
-                fit: BoxFit.fitWidth,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Spacer(), // This will push the following container to the bottom
               Container(
                 height: 24,
                 width: double.infinity,
-
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(24),
                         topLeft: Radius.circular(24))),
-
-                // Center text inside the container
               ),
             ],
           ),

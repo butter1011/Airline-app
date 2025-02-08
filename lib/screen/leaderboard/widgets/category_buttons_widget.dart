@@ -1,13 +1,16 @@
 import 'package:airline_app/screen/leaderboard/widgets/category_rating_options.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:airline_app/utils/global_variable.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
 class CategoryButtonsWidget extends StatefulWidget {
-  final bool isAirline;
-  final Map airportData;
-
   const CategoryButtonsWidget(
       {super.key, required this.isAirline, required this.airportData});
+
+  final Map airportData;
+  final bool isAirline;
 
   @override
   State<CategoryButtonsWidget> createState() => _CategoryButtonsWidgetState();
@@ -15,6 +18,42 @@ class CategoryButtonsWidget extends StatefulWidget {
 
 class _CategoryButtonsWidgetState extends State<CategoryButtonsWidget> {
   bool isExpanded = false;
+  bool isLoading = true;
+  Map<String, dynamic> response = {};
+
+  final Dio _dio = Dio();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategoryRatings();
+  }
+
+  Future<void> fetchCategoryRatings() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final result = await _dio.get(
+        '$apiUrl/api/v2/category-ratings',
+        queryParameters: {
+          'type': widget.isAirline ? 'airline' : 'airport',
+          'id': widget.airportData['_id'],
+        },
+      );
+
+      setState(() {
+        response = result.data['data'];
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error fetching category ratings: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   Widget buildCategoryRow(String iconUrl, String label, String badgeScore) {
     return Expanded(
@@ -28,118 +67,139 @@ class _CategoryButtonsWidgetState extends State<CategoryButtonsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                widget.isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_boarding.png',
-                        'Boarding and\nArrival Experience',
-                        widget.airportData['departureArrival']
-                            .round()
-                            .toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_access.png',
-                        'Accessibility',
-                        widget.airportData['accessibility'].round().toString()),
-                const SizedBox(width: 16),
-                widget.isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_comfort.png',
-                        'Comfort',
-                        widget.airportData['comfort'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_wait.png',
-                        'Wait Times',
-                        widget.airportData['waitTimes'].round().toString()),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                widget.isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_cleanliness.png',
-                        'Cleanliness',
-                        widget.airportData['cleanliness'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_help.png',
-                        'Helpfulness/Ease of Travel',
-                        widget.airportData['helpfulness'].round().toString()),
-                const SizedBox(width: 16),
-                widget.isAirline
-                    ? buildCategoryRow(
-                        'assets/icons/review_icon_onboard.png',
-                        'Onboard Service',
-                        widget.airportData['onboardService'].round().toString())
-                    : buildCategoryRow(
-                        'assets/icons/review_icon_ambience.png',
-                        'Ambience/Comfort',
-                        widget.airportData['ambienceComfort']
-                            .round()
-                            .toString()),
-              ],
-            ),
-            if (isExpanded) ...[
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  widget.isAirline
-                      ? buildCategoryRow(
-                          'assets/icons/review_icon_food.png',
-                          'Food & Beverage',
-                          widget.airportData['foodBeverage'].round().toString())
-                      : buildCategoryRow(
-                          'assets/icons/review_icon_food.png',
-                          'Food & Beverage and Shopping',
-                          widget.airportData['foodBeverage']
-                              .round()
-                              .toString()),
-                  const SizedBox(width: 16),
-                  widget.isAirline
-                      ? buildCategoryRow(
-                          'assets/icons/review_icon_entertainment.png',
-                          'In-Flight\nEntertainment',
-                          widget.airportData['entertainmentWifi']
-                              .round()
-                              .toString())
-                      : buildCategoryRow(
-                          'assets/icons/review_icon_entertainment.png',
-                          'Amenities and Facilities',
-                          widget.airportData['amenities'].round().toString()),
-                ],
-              ),
-            ],
-            const SizedBox(height: 19),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  isExpanded = !isExpanded;
-                });
-              },
-              child: IntrinsicWidth(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
                   children: [
-                    Text(
-                        isExpanded
-                            ? "Show less categories"
-                            : "Show more categories",
-                        style:
-                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
-                    const SizedBox(width: 8),
-                    Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
+                    widget.isAirline
+                        ? buildCategoryRow(
+                            'assets/icons/review_icon_boarding.png',
+                            'Boarding and\nArrival Experience',
+                            response['departureArrival']?.round()?.toString() ??
+                                '0')
+                        : buildCategoryRow(
+                            'assets/icons/review_icon_access.png',
+                            'Accessibility',
+                            response['accessibility']?.round()?.toString() ??
+                                '0'),
+                    const SizedBox(width: 16),
+                    widget.isAirline
+                        ? buildCategoryRow(
+                            'assets/icons/review_icon_comfort.png',
+                            'Comfort',
+                            response['comfort']?.round()?.toString() ?? '0')
+                        : buildCategoryRow(
+                            'assets/icons/review_icon_wait.png',
+                            'Wait Times',
+                            response['waitTimes']?.round()?.toString() ?? '0'),
                   ],
                 ),
-              ),
-            )
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    widget.isAirline
+                        ? buildCategoryRow(
+                            'assets/icons/review_icon_cleanliness.png',
+                            'Cleanliness',
+                            response['cleanliness']?.round()?.toString() ?? '0')
+                        : buildCategoryRow(
+                            'assets/icons/review_icon_help.png',
+                            'Helpfulness/Easy Travel',
+                            response['helpfulness']?.round()?.toString() ??
+                                '0'),
+                    const SizedBox(width: 16),
+                    widget.isAirline
+                        ? buildCategoryRow(
+                            'assets/icons/review_icon_onboard.png',
+                            'Onboard Service',
+                            response['onboardService']?.round()?.toString() ??
+                                '0')
+                        : buildCategoryRow(
+                            'assets/icons/review_icon_ambience.png',
+                            'Ambience/Comfort',
+                            response['ambienceComfort']?.round()?.toString() ??
+                                '0'),
+                  ],
+                ),
+                if (isExpanded) ...[
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      widget.isAirline
+                          ? buildCategoryRow(
+                              'assets/icons/review_icon_food.png',
+                              'Airline Food',
+                              widget.airportData['foodBeverage']
+                                      ?.round()
+                                      ?.toString() ??
+                                  '0')
+                          : buildCategoryRow(
+                              'assets/icons/review_icon_food.png',
+                              'Airport Food and Shopping',
+                              widget.airportData['foodBeverage']
+                                      ?.round()
+                                      ?.toString() ??
+                                  '0'),
+                      const SizedBox(width: 16),
+                      widget.isAirline
+                          ? buildCategoryRow(
+                              'assets/icons/review_icon_entertainment.png',
+                              'In-Flight\nEntertainment',
+                              widget.airportData['entertainmentWifi']
+                                      ?.round()
+                                      ?.toString() ??
+                                  '0')
+                          : buildCategoryRow(
+                              'assets/icons/review_icon_entertainment.png',
+                              'Amenities and Facilities',
+                              widget.airportData['amenities']
+                                      ?.round()
+                                      ?.toString() ??
+                                  '0'),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: 19),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            isExpanded
+                                ? "Show less categories"
+                                : "Show more categories",
+                            style: AppStyles.textStyle_18_600
+                                .copyWith(fontSize: 15)),
+                        const SizedBox(width: 8),
+                        Icon(
+                            isExpanded ? Icons.expand_less : Icons.expand_more),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
+        if (isLoading)
+          Container(
+            color: Colors.grey.withOpacity(0.2),
+            child: const Center(
+              child: LoadingWidget(),
+            ),
+          ),
       ],
     );
   }

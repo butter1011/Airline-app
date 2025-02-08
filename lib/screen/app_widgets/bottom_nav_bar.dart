@@ -4,7 +4,8 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key, required this.currentIndex});
@@ -25,209 +26,125 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
   }
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return; // Prevent re-navigation to same screen
+
     setState(() {
       _selectedIndex = index;
     });
-    switch (_selectedIndex) {
-      case 0:
-        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-      // case 1:
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text('This feature is currently under development'),
-      //       duration: Duration(seconds: 2),
-      //     ),
-      //   );
-      case 1:
-        Navigator.pushNamed(context, AppRoutes.feedscreen);
 
+    switch (index) {
+      case 0:
+        if (ModalRoute.of(context)?.settings.name !=
+            AppRoutes.leaderboardscreen) {
+          Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+        }
+        break;
+      case 1:
+        if (ModalRoute.of(context)?.settings.name != AppRoutes.feedscreen) {
+          Navigator.pushReplacementNamed(context, AppRoutes.feedscreen);
+        }
+        break;
       case 2:
-        Navigator.pushNamed(context, AppRoutes.startreviews);
+        if (ModalRoute.of(context)?.settings.name != AppRoutes.startreviews) {
+          Navigator.pushReplacementNamed(context, AppRoutes.startreviews);
+        }
+        break;
       case 3:
-        {
-          Navigator.pushNamed(context, AppRoutes.profilescreen);
+        if (ModalRoute.of(context)?.settings.name != AppRoutes.profilescreen) {
+          Navigator.pushReplacementNamed(context, AppRoutes.profilescreen);
           ref.read(selectedIndexProvider.notifier).state = 0;
         }
         break;
-      default:
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userDataProvider);
+    final theme = Theme.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 2,
-          color: Colors.black,
-        ),
-        BottomNavigationBar(
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Container(
-                width: 50,
-                height: 50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: SvgPicture.string(
-                        '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 18H18M8 14.6667V12.1667C8 11.2462 7.25381 10.5 6.33333 10.5H4.66667C3.74619 10.5 3 11.2462 3 12.1667V13C3 13.9205 3.74619 14.6667 4.66667 14.6667H8ZM8 14.6667H13M8 14.6667V8.83333C8 7.91286 8.74619 7.16667 9.66667 7.16667H11.3333C12.2538 7.16667 13 7.91286 13 8.83333V14.6667M13 14.6667H16.3333C17.2538 14.6667 18 13.9205 18 13V4.66667C18 3.74619 17.2538 3 16.3333 3H14.6667C13.7462 3 13 3.74619 13 4.66667V14.6667Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ''',
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Text(
-                      'Ranking',
-                      style: AppStyles.textStyle_12_600.copyWith(
-                        color: _selectedIndex == 0
-                            ? Color(0xFF646464)
-                            : Color(0xFFB0B0B0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              label: 'Leaderboard',
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade300,
+            width: 1.0,
+          ),
+        )
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.4),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -2),
+        //   ),
+        // ],
+      ),
+      child: ConvexAppBar(
+        style: TabStyle.react,
+        backgroundColor: AppStyles.appBarColor,
+        color: Colors.grey.shade500,
+        activeColor: Colors.black,
+        elevation: 0,
+        height: 70,
+        curveSize: 100,
+        top: -20,
+        items: [
+          TabItem(
+            icon: Icon(
+              Icons.leaderboard,
+              color: _selectedIndex == 0
+                  ? Colors.black
+                  : theme.colorScheme.onSurface.withOpacity(0.6),
             ),
-            BottomNavigationBarItem(
-              icon: Container(
-                width: 50,
-                height: 50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: SvgPicture.string(
-                        '''<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.16602 7.83366C6.61373 7.83366 6.16602 8.28137 6.16602 8.83366C6.16602 9.38594 6.61373 9.83366 7.16602 9.83366V7.83366ZM13.8327 9.83366C14.385 9.83366 14.8327 9.38594 14.8327 8.83366C14.8327 8.28137 14.385 7.83366 13.8327 7.83366V9.83366ZM7.16602 11.167C6.61373 11.167 6.16602 11.6147 6.16602 12.167C6.16602 12.7193 6.61373 13.167 7.16602 13.167V11.167ZM10.4993 13.167C11.0516 13.167 11.4993 12.7193 11.4993 12.167C11.4993 11.6147 11.0516 11.167 10.4993 11.167V13.167ZM3.07603 16.152L3.53002 15.261H3.53002L3.07603 16.152ZM2.34767 15.4236L1.45667 15.8776H1.45667L2.34767 15.4236ZM18.651 15.4236L19.542 15.8776L19.542 15.8776L18.651 15.4236ZM17.9227 16.152L18.3767 17.043H18.3767L17.9227 16.152ZM17.9227 4.84865L18.3767 3.95764L18.3767 3.95764L17.9227 4.84865ZM18.651 5.57701L19.542 5.12302L19.542 5.12302L18.651 5.57701ZM3.07603 4.84865L3.53002 5.73965H3.53002L3.07603 4.84865ZM2.34767 5.57701L3.23868 6.031V6.031L2.34767 5.57701ZM6.16602 18.3337L6.76602 19.1337H6.76602L6.16602 18.3337ZM8.12157 16.867L8.72157 17.667L8.72157 17.667L8.12157 16.867ZM9.06848 16.3646L9.26034 17.346L9.26034 17.346L9.06848 16.3646ZM8.66262 16.4999L8.22725 15.5997L8.22725 15.5997L8.66262 16.4999ZM7.16602 9.83366H13.8327V7.83366H7.16602V9.83366ZM7.16602 13.167H10.4993V11.167H7.16602V13.167ZM4.83268 5.66699H16.166V3.66699H4.83268V5.66699ZM17.8327 7.33366V13.667H19.8327V7.33366H17.8327ZM3.16602 13.667V7.33366H1.16602V13.667H3.16602ZM4.83268 15.3337C4.34947 15.3337 4.0472 15.3329 3.81945 15.3143C3.60337 15.2966 3.54381 15.268 3.53002 15.261L2.62204 17.043C2.96477 17.2176 3.31683 17.2799 3.65659 17.3076C3.98467 17.3344 4.38247 17.3337 4.83268 17.3337V15.3337ZM1.16602 13.667C1.16602 14.1172 1.16524 14.515 1.19204 14.8431C1.2198 15.1828 1.28204 15.5349 1.45667 15.8776L3.23868 14.9697C3.23165 14.9559 3.20306 14.8963 3.1854 14.6802C3.16679 14.4525 3.16602 14.1502 3.16602 13.667H1.16602ZM3.53002 15.261C3.40458 15.1971 3.30259 15.0951 3.23868 14.9697L1.45667 15.8776C1.71233 16.3794 2.12027 16.7873 2.62204 17.043L3.53002 15.261ZM17.8327 13.667C17.8327 14.1502 17.8319 14.4525 17.8133 14.6802C17.7956 14.8963 17.767 14.9559 17.76 14.9697L19.542 15.8776C19.7167 15.5349 19.7789 15.1828 19.8067 14.8431C19.8335 14.515 19.8327 14.1172 19.8327 13.667H17.8327ZM16.166 17.3337C16.6162 17.3337 17.014 17.3344 17.3421 17.3076C17.6819 17.2799 18.0339 17.2176 18.3767 17.043L17.4687 15.261C17.4549 15.268 17.3953 15.2966 17.1792 15.3143C16.9515 15.3329 16.6492 15.3337 16.166 15.3337V17.3337ZM17.76 14.9697C17.6961 15.0951 17.5941 15.1971 17.4687 15.261L18.3767 17.043C18.8784 16.7873 19.2864 16.3794 19.542 15.8776L17.76 14.9697ZM16.166 5.66699C16.6492 5.66699 16.9515 5.66777 17.1792 5.68638C17.3953 5.70403 17.4549 5.73263 17.4687 5.73965L18.3767 3.95764C18.0339 3.78301 17.6819 3.72078 17.3421 3.69302C17.014 3.66621 16.6162 3.66699 16.166 3.66699V5.66699ZM19.8327 7.33366C19.8327 6.88345 19.8335 6.48565 19.8067 6.15756C19.7789 5.8178 19.7167 5.46575 19.542 5.12302L17.76 6.031C17.767 6.04479 17.7956 6.10435 17.8133 6.32043C17.8319 6.54818 17.8327 6.85045 17.8327 7.33366H19.8327ZM17.4687 5.73965C17.5941 5.80357 17.6961 5.90556 17.76 6.031L19.542 5.12302C19.2864 4.62125 18.8784 4.2133 18.3767 3.95764L17.4687 5.73965ZM4.83268 3.66699C4.38247 3.66699 3.98467 3.66621 3.65659 3.69302C3.31683 3.72078 2.96477 3.78301 2.62204 3.95764L3.53002 5.73965C3.54381 5.73263 3.60337 5.70403 3.81945 5.68638C4.0472 5.66777 4.34947 5.66699 4.83268 5.66699V3.66699ZM3.16602 7.33366C3.16602 6.85045 3.16679 6.54818 3.1854 6.32043C3.20306 6.10435 3.23165 6.04479 3.23868 6.031L1.45666 5.12302C1.28204 5.46575 1.2198 5.8178 1.19204 6.15756C1.16524 6.48565 1.16602 6.88345 1.16602 7.33366H3.16602ZM2.62204 3.95764C2.12028 4.2133 1.71233 4.62125 1.45666 5.12302L3.23868 6.031C3.30259 5.90556 3.40458 5.80357 3.53002 5.73965L2.62204 3.95764ZM4.49935 17.0003V18.0003H6.49935V17.0003H4.49935ZM16.166 15.3337H9.72157V17.3337H16.166V15.3337ZM6.76602 19.1337L8.72157 17.667L7.52157 16.067L5.56602 17.5337L6.76602 19.1337ZM9.72157 15.3337C9.42977 15.3337 9.15195 15.3294 8.87663 15.3832L9.26034 17.346C9.30177 17.3379 9.35376 17.3337 9.72157 17.3337V15.3337ZM8.72157 17.667C9.01582 17.4463 9.05998 17.4185 9.09799 17.4002L8.22725 15.5997C7.9747 15.7218 7.75501 15.8919 7.52157 16.067L8.72157 17.667ZM8.87663 15.3832C8.65177 15.4272 8.43351 15.4999 8.22725 15.5997L9.09799 17.4002C9.14956 17.3752 9.20412 17.357 9.26034 17.346L8.87663 15.3832ZM4.49935 18.0003C4.49935 19.1677 5.8321 19.8341 6.76602 19.1337L5.56602 17.5337C5.95057 17.2452 6.49935 17.5196 6.49935 18.0003H4.49935ZM4.83268 17.3337C4.64859 17.3337 4.49935 17.1844 4.49935 17.0003H6.49935C6.49935 16.0799 5.75316 15.3337 4.83268 15.3337V17.3337Z" fill="black"/>
-                            </svg>
-                            ''',
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Text(
-                      'Feed',
-                      style: AppStyles.textStyle_12_600.copyWith(
-                        color: _selectedIndex == 1
-                            ? Color(0xFF646464)
-                            : Color(0xFFB0B0B0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              label: 'Home',
+            title: 'Ranking',
+          ),
+          TabItem(
+            icon: Icon(
+              Icons.feed,
+              color: _selectedIndex == 1
+                  ? Colors.black
+                  : theme.colorScheme.onSurface.withOpacity(0.6),
             ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                          width: 2, color: AppStyles.littleBlackColor),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        "+",
-                        style: TextStyle(
-                          fontSize: 24,
-                          height: 1,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Text(
-                    'Review',
-                    style: AppStyles.textStyle_12_600.copyWith(
-                      color: _selectedIndex == 2
-                          ? Color(0xFF646464)
-                          : Color(0xFFB0B0B0),
-                    ),
-                  ),
-                ],
+            title: 'Feed',
+          ),
+          TabItem(
+            icon: Container(
+              decoration: BoxDecoration(
+                color: _selectedIndex == 2
+                    ? Colors.black
+                    : theme.colorScheme.onSurface.withOpacity(0.6),
+                shape: BoxShape.circle,
               ),
-              label: 'Review',
-            ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                          width: 2, color: AppStyles.littleBlackColor),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppStyles.littleBlackColor,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 12,
-                      backgroundImage: userData?['userData']['profilePhoto'] !=
-                              null
-                          ? NetworkImage(userData?['userData']['profilePhoto'])
-                          : const AssetImage("assets/images/avatar_1.png")
-                              as ImageProvider,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Text(
-                    'Profile',
-                    style: AppStyles.textStyle_12_600.copyWith(
-                      color: _selectedIndex == 3
-                          ? Color(0xFF646464)
-                          : Color(0xFFB0B0B0),
-                    ),
-                  ),
-                ],
+              child: Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
               ),
-              label: 'Profile',
             ),
-          ],
-          currentIndex: _selectedIndex,
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
-          onTap: _onItemTapped,
-        ),
-      ],
+            title: 'Review',
+          ),
+          TabItem(
+            icon: Container(
+              decoration: 
+              AppStyles.avatarDecoration.copyWith(
+                border: Border.all(width: 2, color: Colors.white),                
+              ),
+              child: CircleAvatar(
+                radius: 13,
+                backgroundColor: Colors.white,
+                backgroundImage: userData?['userData']['profilePhoto'] != null
+                    ? NetworkImage(userData?['userData']['profilePhoto'])
+                    : const AssetImage("assets/images/avatar_1.png")
+                        as ImageProvider,
+              ),
+            ),
+            title: 'Profile',
+          ),
+        ],
+        initialActiveIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

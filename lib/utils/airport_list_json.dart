@@ -23,13 +23,6 @@ Map<String, dynamic> airportList = {
     'Polynesia'
   ]
 };
-List<Map<String, dynamic>> socialList = [
-  {'Name': 'Linkedin', 'Avatar': 'assets/icons/linkedin.png'},
-  {'Name': 'Telegram', 'Avatar': 'assets/icons/telegram.png'},
-  {'Name': 'Discord', 'Avatar': 'assets/icons/discord.png'},
-  {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
-  {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
-];
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
     'mainCategory': 'Boarding and Arrival Experience',
@@ -69,7 +62,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
     },
   },
   {
-    'mainCategory': 'Food & Beverage',
+    'mainCategory': 'Airline Food',
     'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Choice': null,
@@ -110,7 +103,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     },
   },
   {
-    'mainCategory': 'Helpfulness/Ease of Travel',
+    'mainCategory': 'Helpfulness/Easy Travel',
     'iconUrl': 'assets/icons/review_icon_help.png',
     'subCategory': {
       'Helpfulness of Airport Staff': null,
@@ -128,7 +121,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     },
   },
   {
-    'mainCategory': 'Food & Beverage and Shopping',
+    'mainCategory': 'Airport Food and Shopping',
     'iconUrl': 'assets/icons/review_icon_food.png',
     'subCategory': {
       'Value of Shops': null,

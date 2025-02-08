@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/profile/utils/about_app.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -5,29 +6,16 @@ import 'package:airline_app/utils/app_localizations.dart';
 
 class AboutApp extends StatelessWidget {
   const AboutApp({super.key});
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      toolbarHeight: MediaQuery.of(context).size.height * 0.1,
-      backgroundColor: Colors.white,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-      centerTitle: true,
-      title: Text(AppLocalizations.of(context).translate('About the app'),
-          style: AppStyles.textStyle_16_600.copyWith(color: Colors.black)),
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(4.0),
-        child: Container(color: Colors.black, height: 4.0),
-      ),
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildAppBar(context),
+      appBar: AppbarWidget(
+        title: AppLocalizations.of(context).translate("About App"),
+        onBackPressed: () => Navigator.pop(context),
+      ),
       body: ListView(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [

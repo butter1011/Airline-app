@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -34,11 +35,11 @@ class ScannerErrorWidget extends StatelessWidget {
             ),
             Text(
               errorMessage,
-              style: const TextStyle(color: Colors.white),
+              style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
             ),
             Text(
               error.errorDetails?.message ?? '',
-              style: const TextStyle(color: Colors.white),
+              style: AppStyles.textStyle_15_500.copyWith(color: Colors.white),
             ),
           ],
         ),

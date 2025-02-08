@@ -18,32 +18,74 @@ class SubcategoryButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 126,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
         width: MediaQuery.of(context).size.width * 0.41,
-        decoration: AppStyles.cardDecoration.copyWith(
-          color: isSelected ? AppStyles.blackColor : Colors.white,
+        height: MediaQuery.of(context).size.width * 0.33,
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppStyles.blackColor,
+                    Color(0xFF2C2C2C),
+                  ],
+                )
+              : null,
+          color: isSelected ? null : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
-        padding: EdgeInsets.only(bottom: 10, top: 16),
+        margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        padding: EdgeInsets.only(bottom: 5, top: 16, right: 5, left: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration.copyWith(
-                color:  Colors.white,
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              height: 52,
+              width: 52,
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: isSelected
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Image.asset(imagePath, height: 40),
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  imagePath,
+                  height: 40,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
-            SizedBox(height: 6),
+            SizedBox(height: 12),
             Text(
               labelName,
               textAlign: TextAlign.center,
               style: AppStyles.textStyle_14_600.copyWith(
                 color: isSelected ? Colors.white : AppStyles.blackColor,
+                letterSpacing: 0.5,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

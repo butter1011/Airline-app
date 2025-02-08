@@ -5,24 +5,24 @@ import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
 import 'package:airline_app/models/airport_review_model.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/nav_page_button.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/comment_input_field.dart';
+import 'package:airline_app/screen/reviewsubmission/widgets/media_upload_widget.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
-import 'package:airline_app/provider/score_provider.dart';
 import 'package:airline_app/utils/global_variable.dart' as aws_credentials;
 
 class SubmitScreen extends ConsumerStatefulWidget {
@@ -131,12 +131,9 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
       if (resultOfAirline['success'] && resultOfAirport['success']) {
         final updatedUserData = await _reviewAirlineController
             .increaseUserPoints(userData['userData']['_id'], 500);
-        ref
-            .read(scoreProvider.notifier)
-            .updateAirlineScore(resultOfAirline['data']['data']['score']);
-        ref
-            .read(scoreProvider.notifier)
-            .updateAirportScore(resultOfAirport['data']['data']['score']);
+
+        final double airlineScore = resultOfAirline['data']['data']['score'];
+        final double airportScore = resultOfAirport['data']['data']['score'];
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);
@@ -146,6 +143,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           resultOfAirport: resultOfAirport,
           index: index,
           boardingPassController: boardingPassController,
+          airlineScore: airlineScore,
+          airportScore: airportScore,
         );
       } else {
         _handleFailedSubmission(context);
@@ -267,14 +266,9 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required Map<String, dynamic> resultOfAirport,
     required int? index,
     required BoardingPassController boardingPassController,
+    required double airlineScore,
+    required double airportScore,
   }) async {
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .addReview(resultOfAirline['data']['data']);
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .addReview(resultOfAirport['data']['data']);
-
     if (index != null) {
       final updatedBoardingPass =
           ref.read(boardingPassesProvider.notifier).markFlightAsReviewed(index);
@@ -289,7 +283,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
 
     if (!mounted) return;
 
-    Navigator.pushNamed(context, AppRoutes.completereviews);
+    Navigator.pushNamed(context, AppRoutes.completereviews, arguments: {
+      airlineScore: airlineScore,
+      airportScore: airportScore,
+    });
   }
 
   void _handleFailedSubmission(BuildContext context) {
@@ -309,84 +306,65 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
   }
 
   Widget _buildFeedbackOptions(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Share your experience with other users (Optional)',
-            style: AppStyles.textStyle_14_600),
-        const SizedBox(height: 19),
-        _buildMediaUploadOptionForAirline(context),
-        const SizedBox(height: 22),
-        if (_imageOfAirline.isNotEmpty)
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: _imageOfAirline
-                .map((file) => _buildImageTile(file, _imageOfAirline))
-                .toList(),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          MediaUploadWidget(
+            onTap: () {
+              _pickMedia(_imageOfAirline);
+            },
+            title: 'Airline',
           ),
-        const SizedBox(height: 24),
-        _buildMediaUploadOptionForAirport(context),
-        const SizedBox(height: 22),
-        if (_imageOfAirport.isNotEmpty)
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: _imageOfAirport
-                .map((file) => _buildImageTile(file, _imageOfAirport))
-                .toList(),
+          const SizedBox(height: 22),
+          if (_imageOfAirline.isNotEmpty)
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: _imageOfAirline
+                  .map((file) => _buildImageTile(file, _imageOfAirline))
+                  .toList(),
+            ),
+          const SizedBox(height: 24),
+          MediaUploadWidget(
+            onTap: () {
+              _pickMedia(_imageOfAirport);
+            },
+            title: 'Airport',
           ),
-        const SizedBox(height: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Airline Comments (Optional)",
-                style: AppStyles.textStyle_14_600),
-            const SizedBox(height: 6),
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.08,
-              ),
-              decoration: AppStyles.cardDecoration,
-              child: TextFormField(
-                onChanged: (value) => setState(() => commentOfAirline = value),
-                controller: _commentOfAirlineController,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: "Some comment here",
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                ),
-              ),
+          const SizedBox(height: 22),
+          if (_imageOfAirport.isNotEmpty)
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: _imageOfAirport
+                  .map((file) => _buildImageTile(file, _imageOfAirport))
+                  .toList(),
             ),
-          ],
-        ),
-        SizedBox(height: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Airport Comments (Optional)",
-                style: AppStyles.textStyle_14_600),
-            const SizedBox(height: 6),
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.08,
-              ),
-              decoration: AppStyles.cardDecoration,
-              child: TextFormField(
-                onChanged: (value) => setState(() => commentOfAirport = value),
-                controller: _commentOfAirportController,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: "Some comment here",
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
+          const SizedBox(height: 20),
+          CommentInputField(
+              commentController: _commentOfAirlineController,
+              title: "Airline Comments (Optional)",
+              hintText: "Share your experience with airline...",
+              onChange: (value) {
+                setState(() {
+                  commentOfAirline = value;
+                });
+              }),
+          SizedBox(height: 20),
+          CommentInputField(
+              commentController: _commentOfAirportController,
+              title: "Airport Comments (Optional)",
+              hintText: "Share your experience with airport...",
+              onChange: (value) {
+                setState(() {
+                  commentOfAirport = value;
+                });
+              }),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 
@@ -400,7 +378,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         Container(
           height: 50,
           width: 50,
-          decoration: AppStyles.buttonDecoration.copyWith(
+          decoration: AppStyles.cardDecoration.copyWith(
             borderRadius: BorderRadius.circular(8),
           ),
           child: isVideo
@@ -445,72 +423,22 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     );
   }
 
-  Widget _buildMediaUploadOptionForAirline(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.17,
-      decoration: AppStyles.cardDecoration
-          .copyWith(borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => _pickMedia(_imageOfAirline),
-            child: Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration
-                  .copyWith(borderRadius: BorderRadius.circular(16)),
-              child: const Icon(Icons.file_upload_outlined),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text("Choose your Airline media for upload",
-              style: AppStyles.textStyle_15_600),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMediaUploadOptionForAirport(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.17,
-      decoration: AppStyles.cardDecoration
-          .copyWith(borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () => _pickMedia(_imageOfAirport),
-            child: Container(
-              height: 48,
-              width: 48,
-              decoration: AppStyles.cardDecoration
-                  .copyWith(borderRadius: BorderRadius.circular(16)),
-              child: const Icon(Icons.file_upload_outlined),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text("Choose your Airport media for upload",
-              style: AppStyles.textStyle_15_600),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final boardingPassController = BoardingPassController();
-    final flightData = ref.watch(aviationInfoProvider);
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final airlineData = boardingPassDetail.airlineData;
+    final departureData = boardingPassDetail.departureData;
+    final arrivalData = boardingPassDetail.arrivalData;
+
     final reviewDataForAirline = ref.watch(reviewFeedBackProviderForAirline);
     final reviewDataForAirport = ref.watch(reviewFeedBackProviderForAirport);
     final userData = ref.watch(userDataProvider);
-    final index = flightData.index;
-    final from = flightData.from;
-    final to = flightData.to;
-    final airline = flightData.airline;
-    final classTravel = flightData.selectedClassOfTravel;
+    final index = boardingPassDetail.index;
+    final from = departureData["_id"];
+    final to = arrivalData["_id"];
+    final airline = airlineData["_id"];
+    final classTravel = boardingPassDetail.selectedClassOfTravel;
     final departureArrival = reviewDataForAirline[0]["subCategory"];
     final comfort = reviewDataForAirline[1]["subCategory"];
     final cleanliness = reviewDataForAirline[2]["subCategory"];
@@ -524,19 +452,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
     final amenities = reviewDataForAirport[5]["subCategory"];
 
-    final airlineData = ref.watch(aviationInfoProvider);
-    final airlineName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlineData.airline);
-    final airportName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlineData.from);
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlineData.airline);
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlineData.airline);
+    final airlineName = airlineData["name"]??"";
+    final airportName = departureData["name"]??"";
+    final logoImage = airlineData["logoImage"]??"";
+
 
     return PopScope(
       canPop: false, // Prevents the default pop action
@@ -550,91 +469,86 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         children: [
           KeyboardDismissWidget(
             child: Scaffold(
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                flexibleSpace: BuildQuestionHeaderForSubmit(
-                  backgroundImage: backgroundImage,
-                  title: "Share your experience",
-                  subTitle: "Your feedback helps us improve!",
-                  logoImage: logoImage,
-                  airlineName: airlineName,
-                  airportName: airportName,
-                ),
-              ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildFeedbackOptions(context),
-                      const SizedBox(height: 20),
-                    ],
+                resizeToAvoidBottomInset: true,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+                  flexibleSpace: BuildQuestionHeaderForSubmit(              
+                    title: "Share your experience",
+                    subTitle: "Your feedback helps us improve!",
+                    logoImage: logoImage,
+                    airlineName: airlineName,
+                    airportName: airportName,
+                    parent: 2,
                   ),
                 ),
-              ),
-              bottomNavigationBar: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(height: 2, color: Colors.black),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Row(
+                body: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text('Share your experience with other users',
+                            style: AppStyles.textStyle_18_600),
+                        Divider(height: 1, color: Colors.grey.withOpacity(0.2)),
                         Expanded(
-                          child: NavPageButton(
-                            text: 'Go back',
-                            onPressed: () => Navigator.pushNamed(
-                                context, AppRoutes.reviewsubmissionscreen),
-                            icon: Icons.arrow_back,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: NavPageButton(
-                            text: 'Submit',
-                            onPressed: () => _handleSubmission(
-                              context: context,
-                              userData: userData,
-                              from: from,
-                              to: to,
-                              classTravel: classTravel,
-                              airline: airline,
-                              departureArrival: departureArrival,
-                              comfort: comfort,
-                              cleanliness: cleanliness,
-                              onboardService: onboardService,
-                              foodBeverageForAirline: foodBeverageForAirline,
-                              entertainmentWifi: entertainmentWifi,
-                              index: index,
-                              boardingPassController: boardingPassController,
-                              accessibility: accessibility,
-                              waitTimes: waitTimes,
-                              helpfulness: helpfulness,
-                              ambienceComfort: ambienceComfort,
-                              foodBeverageForAirport: foodBeverageForAirport,
-                              amenities: amenities,
-                              commentOfAirline: commentOfAirline,
-                              commentOfAirport: commentOfAirport,
-                              imageOfAirline: _imageOfAirline,
-                              imageOfAirport: _imageOfAirport,
-                            ),
-                            icon: Icons.arrow_forward,
-                          ),
+                          child: _buildFeedbackOptions(context),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
+                ),
+                bottomNavigationBar: BottomButtonBar(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: MainButton(
+                        text: "Back",
+                        onPressed: () => Navigator.pushNamed(
+                            context, AppRoutes.reviewsubmissionscreen),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: MainButton(
+                        text: "Submit",
+                        onPressed: () => _handleSubmission(
+                          context: context,
+                          userData: userData,
+                          from: from,
+                          to: to,
+                          classTravel: classTravel,
+                          airline: airline,
+                          departureArrival: departureArrival,
+                          comfort: comfort,
+                          cleanliness: cleanliness,
+                          onboardService: onboardService,
+                          foodBeverageForAirline: foodBeverageForAirline,
+                          entertainmentWifi: entertainmentWifi,
+                          index: index,
+                          boardingPassController: boardingPassController,
+                          accessibility: accessibility,
+                          waitTimes: waitTimes,
+                          helpfulness: helpfulness,
+                          ambienceComfort: ambienceComfort,
+                          foodBeverageForAirport: foodBeverageForAirport,
+                          amenities: amenities,
+                          commentOfAirline: commentOfAirline,
+                          commentOfAirport: commentOfAirport,
+                          imageOfAirline: _imageOfAirline,
+                          imageOfAirport: _imageOfAirport,
+                        ),
+                      ),
+                    )
+                  ],
+                ))),
           ),
           if (_isLoading)
             Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withOpacity(0.50),
                 child: const LoadingWidget()),
         ],
       ),

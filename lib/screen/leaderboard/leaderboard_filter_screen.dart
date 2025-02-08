@@ -1,11 +1,16 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
-import 'package:airline_app/screen/feed/feed_filter_screen.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/filter_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/controller/leaderboard_service.dart';
+import 'package:airline_app/provider/leaderboard_filter_provider.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
 class LeaderboardFilterScreen extends ConsumerStatefulWidget {
   const LeaderboardFilterScreen({super.key});
@@ -18,10 +23,10 @@ class LeaderboardFilterScreen extends ConsumerStatefulWidget {
 class _LeaderboardFilterScreenState
     extends ConsumerState<LeaderboardFilterScreen> {
   // Declare continents and selectedStates as instance variables
+  final LeaderboardService _leaderboardService = LeaderboardService();
   final List<dynamic> airType = [
-    "All",
-    "Airport",
     "Airline",
+    "Airport",
   ];
 
   final List airlineCategory = [
@@ -29,7 +34,7 @@ class _LeaderboardFilterScreenState
     "Comfort",
     "Cleanliness",
     "Onboard",
-    "Food & Beverage",
+    "Airline Food",
     "Entertainment & WiFi"
   ];
 
@@ -38,13 +43,12 @@ class _LeaderboardFilterScreenState
     "Wait Times",
     "Helpfulness",
     "Ambience",
-    "Food & Beverage",
+    "Airport Food",
     "Amenities"
   ];
 
   bool categoryIsExpanded = true;
   final List<dynamic> continent = [
-    "All",
     "Africa",
     "Asia",
     "Europe",
@@ -55,20 +59,19 @@ class _LeaderboardFilterScreenState
   bool continentIsExpanded = true;
   List<String> currentCategories = [];
   final List<dynamic> flyerClass = [
-    "All",
     "Business",
-    "Premium economy",
+    "Premium Economy",
     "Economy",
   ];
 
   bool flyerClassIsExpanded = true;
-  String selectedAirType = "All";
+  String selectedAirType = "Airline";
   late List<bool> selectedAirTypeStates;
   String selectedCategory = "";
   late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
   List<dynamic> selectedContinents = [];
-  String selectedFlyerClass = "";
+  String selectedFlyerClass = "Business";
   late List<bool> selectedFlyerClassStates;
   bool typeIsExpanded = true;
 
@@ -340,73 +343,77 @@ class _LeaderboardFilterScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios, size: 24)),
-        title: Text(
-          AppLocalizations.of(context).translate('Filters'),
-          textAlign: TextAlign.center,
-          style: AppStyles.textStyle_16_600,
+        resizeToAvoidBottomInset: false,
+        appBar: AppbarWidget(
+          title: "Filter",
+          onBackPressed: () => Navigator.pop(context),
         ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(color: Colors.black, height: 4.0),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            _buildTypeCategory(),
-            const SizedBox(height: 17),
-            _buildFlyerClassLeaderboards(),
-            const SizedBox(height: 17),
-            _buildCategoryLeaderboards(),
-            const SizedBox(height: 17),
-            if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
-          ],
-        ),
-      ),
-      bottomSheet: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 4,
-            color: AppStyles.littleBlackColor,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              _buildTypeCategory(),
+              const SizedBox(height: 17),
+              _buildFlyerClassLeaderboards(),
+              const SizedBox(height: 17),
+              // _buildCategoryLeaderboards(),
+              // const SizedBox(height: 17),
+              // if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            child: NavButton(
-              text: AppLocalizations.of(context).translate('Apply'),
-              onPressed: () {          
-                // print("selectedAirType: $selectedAirType");
-                // print("selectedFlyerClass: $selectedFlyerClass");
-                // print("selectedCategory: $selectedCategory");
-                // print("selectedContinents: $selectedContinents");
+        ),
+        bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+            text: AppLocalizations.of(context).translate('Apply'),
+            onPressed: () async {
+              try {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const Center(child: LoadingWidget()),
+                );
+
+                // Save filter options and reset page to 1
+                ref.read(leaderboardFilterProvider.notifier).setFilters(
+                      airType: selectedAirType,
+                      flyerClass: selectedFlyerClass ?? "Business",
+                      category:
+                          selectedCategory.isEmpty ? null : selectedCategory,
+                      continents: selectedContinents.isEmpty ||
+                              selectedContinents[0] == "All"
+                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                          : selectedContinents.cast<String>(),
+                    );
+
+                final result = await _leaderboardService.getFilteredLeaderboard(
+                  airType: selectedAirType,
+                  flyerClass: selectedFlyerClass,
+                  category: selectedCategory.isEmpty ? null : selectedCategory,
+                  continents: selectedContinents.isEmpty ||
+                          selectedContinents[0] == "All"
+                      ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                      : selectedContinents.cast<String>(),
+                  page: 1,
+                );
+
                 ref
                     .read(filterButtonProvider.notifier)
                     .setFilterType(selectedAirType);
-                ref.read(airlineAirportProvider.notifier).getFilteredList(
-                      selectedAirType,
-                      null,
-                      selectedFlyerClass,
-                      selectedCategory,
-                      selectedContinents.isEmpty || selectedContinents[0] == "All"
-                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-                          : selectedContinents,
-                    );
+                ref.read(airlineAirportProvider.notifier).setData(result);
+
                 Navigator.pop(context);
-              },
-              color: AppStyles.backgroundColor,
-            ),
-          )
-        ],
-      ),
-    );
+                Navigator.pop(context);
+              } catch (e) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Failed to fetch filtered data: ${e.toString()}')),
+                );
+              }
+            },
+            // color: AppStyles.backgroundColor,
+          ),
+        ));
   }
 }

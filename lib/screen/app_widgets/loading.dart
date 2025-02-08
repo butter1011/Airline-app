@@ -9,10 +9,10 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: SizedBox(
-      width: 80,
-      height: 80,
+      width: 30,
+      height: 30,
       child: LoadingIndicator(
-        indicatorType: Indicator.ballSpinFadeLoader,
+        indicatorType: Indicator.lineSpinFadeLoader,
         colors: [AppStyles.blackColor],
         strokeWidth: 1,
         backgroundColor: Colors.transparent,
