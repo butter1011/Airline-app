@@ -63,7 +63,6 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
               CustomIconButton(icon:Icons.tune_rounded, onTap: (){
                 Navigator.pushNamed(context, AppRoutes.filterscreen);
               }),
-              
             ],
           ),
           Column(

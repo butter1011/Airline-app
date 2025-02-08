@@ -1,8 +1,5 @@
 import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
-import 'package:airline_app/controller/get_airline_score_controller.dart';
-import 'package:airline_app/controller/get_airport_score_controller.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
@@ -12,6 +9,10 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/feed_data_provider.dart';
+import 'package:airline_app/provider/feed_filter_provider.dart';
+import 'package:airline_app/controller/feed_service.dart';
+import 'package:airline_app/provider/review_filter_button_provider.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -21,78 +22,112 @@ class FeedScreen extends ConsumerStatefulWidget {
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  late bool selectedAll = true;
-  late bool selectedAirline = false;
-  late bool selectedAirport = false;
-  late bool selectedCleanliness = false;
-  late bool selectedOnboard = false;
-  bool isLoading = false;
-  String filterType = 'All';
+  final ScrollController _scrollController = ScrollController();
   Map<String, bool> buttonStates = {
     // "All": true,
-    "Airline": false,
+    "Airline": true,
     "Airport": false,
   };
+
+  String filterType = 'Airline';
+  bool hasMore = true;
+  bool isLoading = false;
+  late bool selectedAirline = false;
+  late bool selectedAirport = false;
+  late bool selectedAll = true;
+  late bool selectedCleanliness = false;
+  late bool selectedOnboard = false;
+
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void toggleButton(String buttonText) {
     setState(() {
       buttonStates.updateAll((key, value) => false);
       buttonStates[buttonText] = true;
       filterType = buttonText;
     });
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getFilteredReviews(filterType, null, null, null);
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getAirlineReviewsWithScore();
+
+    // Update filter type in providers
+    ref.read(reviewFilterButtonProvider.notifier).setFilterType(buttonText);
+    ref.read(feedFilterProvider.notifier).setFilters(
+          airType: buttonText,
+          flyerClass: ref.read(feedFilterProvider).flyerClass,
+          category: ref.read(feedFilterProvider).category,
+          continents: ref.read(feedFilterProvider).continents,
+        );
+
+    // Fetch new data with updated filter
+    fetchFeedData(page: 1);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _initPrefs();
-  }
-
-  Future<void> _initPrefs() async {
+  Future<void> fetchFeedData({int? page}) async {
     setState(() {
       isLoading = true;
     });
 
-    final reviewAirlineController = GetReviewAirlineController();
-    final airlineResult = await reviewAirlineController.getAirlineReviews();
-    if (airlineResult['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setReviewData(airlineResult['data']);
-    }
-    final reviewAirportController = GetReviewAirportController();
-    final airportResult = await reviewAirportController.getAirportReviews();
-    if (airportResult['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setReviewData(airportResult['data']);
-    }
-    final airlineScoreController = GetAirlineScoreController();
-    final airportScoreController = GetAirportScoreController();
-    final airlineScore = await airlineScoreController.getAirlineScore();
-    if (airlineScore['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setAirlineScoreData(airlineScore['data']['data']);
-    }
-    final airportScore = await airportScoreController.getAirportScore();
-    if (airportScore['success']) {
-      ref
-          .read(reviewsAirlineAirportProvider.notifier)
-          .setAirportScoreData(airportScore['data']['data']);
-    }
+    final FeedService _feedService = FeedService();
+    final filterState = ref.read(feedFilterProvider);
 
-    ref
-        .read(reviewsAirlineAirportProvider.notifier)
-        .getFilteredReviews("All", null, null, null);
+    try {
+      final result = await _feedService.getFilteredFeed(
+        airType: filterState.airType,
+        flyerClass: filterState.flyerClass,
+        category: filterState.category,
+        continents: filterState.continents,
+        page: page ?? filterState.currentPage,
+      );
 
+      if (page == 1) {
+        ref.read(feedDataProvider.notifier).setData(result);
+      } else {
+        ref.read(feedDataProvider.notifier).appendData(result);
+      }
+
+      setState(() {
+        hasMore = result['hasMore'] ?? true;
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error fetching feed data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void loadMoreData() {
+    if (hasMore) {
+      final currentPosition = _scrollController.position.pixels;
+
+      ref.read(feedFilterProvider.notifier).incrementPage();
+      fetchFeedData().then((_) {
+        // After new data is loaded, restore scroll position
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.jumpTo(currentPosition);
+        });
+      });
+    }
+  }
+
+  Future<void> _initializeData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await Future.wait([
+      fetchFeedData(page: 1),
+    ]);
     setState(() {
       isLoading = false;
     });
@@ -118,23 +153,22 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               setState(() {
                 _searchQuery = value.toLowerCase();
               });
-              ref
-                  .read(reviewsAirlineAirportProvider.notifier)
-                  .getFilteredReviews(filterType, _searchQuery, null, null);
             },
             buttonStates: buttonStates,
             onButtonToggle: toggleButton,
-            selectedFilterButton: filterType,
+            selectedFilterButton: ref.watch(reviewFilterButtonProvider),
           ),
           backgroundColor: Colors.white,
           bottomNavigationBar: BottomNavBar(currentIndex: 1),
-          body: Column(
+          body: Stack(
             children: [
-              Expanded(
-                  child: isLoading
-                      ? const LoadingWidget()
-                      : SingleChildScrollView(
-                          child: Column(
+              KeyboardDismissWidget(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
@@ -146,14 +180,15 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                     height: 24,
                                   ),
                                   Column(
-                                    children: reviewList.isEmpty
+                                    children: feedState.allData.isEmpty
                                         ? [
-                                            Text(
-                                              "No reviews available",
-                                              style: AppStyles.textStyle_14_600,
-                                            )
+                                            Text("No reviews available",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500))
                                           ]
-                                        : reviewList
+                                        : feedState.allData
                                             .asMap()
                                             .entries
                                             .map((entry) {
@@ -174,7 +209,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                         singleReview,
                                                   ),
                                                   if (index !=
-                                                      reviewList.length - 1)
+                                                      feedState.allData.length -
+                                                          1)
                                                     Padding(
                                                       padding: const EdgeInsets
                                                           .symmetric(
@@ -204,11 +240,50 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                   SizedBox(
                                     height: 18,
                                   ),
+                                  if (feedState.hasMore)
+                                    Center(
+                                      child: GestureDetector(
+                                        onTap: loadMoreData,
+                                        child: IntrinsicWidth(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('Expand more'),
+                                                  style: AppStyles
+                                                      .textStyle_18_600
+                                                      .copyWith(fontSize: 15)),
+                                              const SizedBox(width: 8),
+                                              const Icon(Icons.arrow_downward),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(
+                                    height: 18,
+                                  ),
                                 ],
                               ),
                             ),
                           ],
-                        )))
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (isLoading)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.1),
+                    child: const Center(
+                      child: LoadingWidget(),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

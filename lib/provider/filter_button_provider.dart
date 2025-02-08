@@ -6,7 +6,7 @@ final filterButtonProvider =
 });
 
 class FilterButtonNotifier extends StateNotifier<String> {
-  FilterButtonNotifier() : super('All'); // Default value is 'All'
+  FilterButtonNotifier() : super('Airline'); // Default value is 'All'
 
   void setFilterType(String buttonText) {
     state = buttonText;

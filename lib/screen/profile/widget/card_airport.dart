@@ -1,34 +1,74 @@
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:airline_app/controller/get_user_review_controller.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
 
-class CLeaderboardScreen extends ConsumerWidget {
+class CLeaderboardScreen extends ConsumerStatefulWidget {
   const CLeaderboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CLeaderboardScreen> createState() => _CLeaderboardScreenState();
+}
+
+class _CLeaderboardScreenState extends ConsumerState<CLeaderboardScreen> {
+  bool isLoading = true;
+  List<dynamic> userReviews = [];
+  bool _mounted = true;
+
+  final UserReviewService _userReviewService = UserReviewService();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
+  }
+
+  Future<void> _initializeData() async {
+    final userData = ref.read(userDataProvider);
+    if (userData != null) {
+      final userId = userData['userData']['_id'].toString();
+      if (userId != null) {
+        try {
+          final reviews = await _userReviewService.getUserReviews(userId);
+          if (_mounted) {
+            setState(() {
+              userReviews = reviews;
+              isLoading = false;
+            });
+          }
+        } catch (e) {
+          debugPrint('Error fetching user reviews: $e');
+          if (_mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final userData = ref.watch(userDataProvider);
-    final reviewsNotifier = ref.watch(reviewsAirlineAirportProvider.notifier);
 
     if (userData == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: LoadingWidget());
     }
 
-    final userId = userData['userData']['_id'];
-
-    if (userId == null) {
-      return const Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Center(child: Text("User ID not found")),
-      );
-    }
-
-    final userReviews = reviewsNotifier.getReviewsByUserId(userId);
     return Column(
       children: [
-        if (userReviews.isEmpty)
+        if (isLoading)
+          const Center(child: LoadingWidget())
+        else if (userReviews.isEmpty)
           const Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: Center(child: Text("No reviews found")),
@@ -36,8 +76,7 @@ class CLeaderboardScreen extends ConsumerWidget {
         else
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: userReviews.asMap().entries.map((entry) {
-              final singleReview = entry.value;
+            children: userReviews.map((singleReview) {
               final reviewer = singleReview['reviewer'];
               final airline = singleReview['airline'];
 

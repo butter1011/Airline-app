@@ -6,7 +6,6 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:airline_app/provider/score_provider.dart';
 
 class CompleteReviews extends ConsumerWidget {
   const CompleteReviews({super.key});
@@ -14,7 +13,6 @@ class CompleteReviews extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
-    final scores = ref.watch(scoreProvider);
 
     return PopScope(
       canPop: false, // Prevents the default pop action
