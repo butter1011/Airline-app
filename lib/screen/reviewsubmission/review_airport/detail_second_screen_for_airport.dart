@@ -26,20 +26,11 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
     }
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final airportname = boardingPassDetail.departureData["name"];
+    final logoImage = boardingPassDetail.departureData["logoImage"]??"";
+    final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
 
-    final airlinData = ref.watch(aviationInfoProvider);
-
-    final airportname = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.from);
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportLogoImage(airlinData.from);
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportBackgroundImage(airlinData.from);
-
-    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -50,7 +41,6 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
           title: "Tell us about your airport experience",
           subTitle: "What did you dislike about your experience?",
           logoImage: logoImage,
-          backgroundImage: backgroundImage,
           selecetedOfCalssLevel: selectedClassOfTravel,
           parent: 1,
         ),
@@ -116,7 +106,8 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
               child: MainButton(
                 text: "Back",
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                  Navigator.pushNamed(
+                      context, AppRoutes.reviewsubmissionscreen);
                   ref.read(aviationInfoProvider.notifier).resetState();
                   ref
                       .read(reviewFeedBackProviderForAirline.notifier)

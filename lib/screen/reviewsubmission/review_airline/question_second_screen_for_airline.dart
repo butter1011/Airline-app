@@ -1,12 +1,8 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
@@ -23,26 +19,11 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline);
     final selectionsForAirport = ref.watch(reviewFeedBackProviderForAirport);
-    final airlinData = ref.watch(aviationInfoProvider);
-    final from = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.from);
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final String from = boardingPassDetail.departureData["name"]??"";
+    final String airline = boardingPassDetail.airlineData["name"]??"";
+    final logoImage = boardingPassDetail.airlineData["logoImage"]??"";
 
-    final to = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.to);
-
-    final airline = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlinData.airline);
-
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlinData.airline);
-    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlinData.airline);
 
     final List<Map<String, dynamic>> feedbackOptionsForAirline =
         mainCategoryAndSubcategoryForAirline;
@@ -61,7 +42,6 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
             automaticallyImplyLeading: false,
             toolbarHeight: MediaQuery.of(context).size.height * 0.3,
             flexibleSpace: BuildQuestionHeaderForSubmit(
-              backgroundImage: backgroundImage,
               title: "Lets go into more detail about this?",
               subTitle: "Your feedback helps make every journey better!",
               logoImage: logoImage,

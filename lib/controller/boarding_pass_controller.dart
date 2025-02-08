@@ -70,11 +70,11 @@ class BoardingPassController {
       return false;
     }
   }
-  
+
   Future<bool> checkPnrExists(String pnr) async {
     try {
       final response = await http.get(
-        Uri.parse('$apiUrl/api/v2/check-pnr?pnr=$pnr'),
+        Uri.parse('$apiUrl/api/v2/boarding-pass/check-pnr?pnr=$pnr'),
       );
 
       if (response.statusCode == 200) {
@@ -87,6 +87,27 @@ class BoardingPassController {
     } catch (e) {
       print('Error checking PNR: $e');
       return false;
+    }
+  }
+
+  Future<Map<String, dynamic>> getBoardingPassDetails(
+      String airlineCode, departureAirportCode, arrivalAirportCode) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$apiUrl/api/v2/boarding-pass/details?airline=$airlineCode&departure=$departureAirportCode&arrival=$arrivalAirportCode'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data;
+      } else {
+        print('Error: ${response.statusCode}');
+        return {};
+      }
+    } catch (e) {
+      print('Error fetching boarding pass details: $e');
+      return {};
     }
   }
 }

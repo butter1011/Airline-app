@@ -1,87 +1,58 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AviationInfoState {
-  final String from;
-  final String to;
-  final String airline;
+  final Map<String, dynamic> airlineData;
+  final Map<String, dynamic> departureData;
+  final Map<String, dynamic> arrivalData;
   final String selectedClassOfTravel;
-  // final String? selectedSynchronize;
-  final List<dynamic> dateRange;
-  final int? index; // Add this field
-  final bool? isDeparture;
+  final int? index;
+
   AviationInfoState({
-    this.from = '',
-    this.to = '',
-    this.airline = '',
+    this.airlineData = const {},
+    this.departureData = const {},
+    this.arrivalData = const {},
     this.selectedClassOfTravel = '',
-    // this.selectedSynchronize = '',
-    this.dateRange = const [],
-    this.index, // Initialize as nullable
-    this.isDeparture,
+    this.index,
   });
 
   AviationInfoState copyWith({
-    String? from,
-    String? to,
-    String? airline,
-    String? airport,
+    Map<String, dynamic>? airlineData,
+    Map<String, dynamic>? departureData,
+    Map<String, dynamic>? arrivalData,
     String? selectedClassOfTravel,
-    String? selectedSynchronize,
-    List<dynamic>? dateRange,
     int? index,
-    bool? isDeparture,
   }) {
     return AviationInfoState(
-      from: from ?? this.from,
-      to: to ?? this.to,
-      airline: airline ?? this.airline,
-      selectedClassOfTravel:
-          selectedClassOfTravel ?? this.selectedClassOfTravel,
-      // selectedSynchronize: selectedSynchronize ?? this.selectedSynchronize,
-      dateRange: dateRange ?? this.dateRange,
+      airlineData: airlineData ?? this.airlineData,
+      departureData: departureData ?? this.departureData,
+      arrivalData: arrivalData ?? this.arrivalData,
+      selectedClassOfTravel: selectedClassOfTravel ?? this.selectedClassOfTravel,
       index: index ?? this.index,
-      isDeparture: isDeparture ?? this.isDeparture,
     );
   }
 }
 
-class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
-  AirlineInfoNorifier() : super(AviationInfoState());
+class AirlineInfoNotifier extends StateNotifier<AviationInfoState> {
+  AirlineInfoNotifier() : super(AviationInfoState());
 
-  void updateFrom(String value) {
-    state = state.copyWith(from: value);
+  void updateAirlineData(Map<String, dynamic> data) {
+    state = state.copyWith(airlineData: data);
   }
 
-  void updateTo(String value) {
-    state = state.copyWith(to: value);
+  void updateDepartureData(Map<String, dynamic> data) {
+    state = state.copyWith(departureData: data);
   }
 
-  void updateAirline(String value) {
-    state = state.copyWith(airline: value);
-  }
-
-  void updateAirport(String value) {
-    state = state.copyWith(airport: value);
+  void updateArrivalData(Map<String, dynamic> data) {
+    state = state.copyWith(arrivalData: data);
   }
 
   void updateClassOfTravel(String value) {
     state = state.copyWith(selectedClassOfTravel: value);
   }
 
-  void updateSynchronize(String value) {
-    state = state.copyWith(selectedSynchronize: value);
-  }
-
-  void updateDateRange(List<dynamic> value) {
-    state = state.copyWith(dateRange: value);
-  }
-
   void updateIndex(int value) {
     state = state.copyWith(index: value);
-  }
-
-  void updateIsDeparture(bool value) {
-    state = state.copyWith(isDeparture: value);
   }
 
   void resetState() {
@@ -89,8 +60,7 @@ class AirlineInfoNorifier extends StateNotifier<AviationInfoState> {
   }
 }
 
-// Provider for the AirlineInfoNorifier
 final aviationInfoProvider =
-    StateNotifierProvider<AirlineInfoNorifier, AviationInfoState>((ref) {
-  return AirlineInfoNorifier();
+    StateNotifierProvider<AirlineInfoNotifier, AviationInfoState>((ref) {
+  return AirlineInfoNotifier();
 });

@@ -122,37 +122,6 @@ class StartReviews extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             )
-
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-                            //   },
-                            //   style: ElevatedButton.styleFrom(
-                            //     backgroundColor: Colors.grey,
-                            //     padding: const EdgeInsets.symmetric(vertical: 18),
-                            //     minimumSize: const Size(double.infinity, 56),
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(14),
-                            //     ),
-                            //     elevation: 2,
-                            //   ),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.center,
-                            //     children: [
-                            //       const Icon(Icons.rate_review_rounded,
-                            //                color: Colors.white),
-                            //       const SizedBox(width: 12),
-                            //       Text(
-                            //         "Begin Your Review",
-                            //         style: AppStyles.textStyle_15_400.copyWith(
-                            //           color: Colors.white,
-                            //           fontWeight: FontWeight.w600,
-                            //           fontSize: 16,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),

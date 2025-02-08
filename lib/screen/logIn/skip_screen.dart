@@ -1,3 +1,4 @@
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -11,359 +12,256 @@ class SkipScreen extends StatefulWidget {
 
 class _SkipScreenState extends State<SkipScreen> {
   int selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  final List<String> titleList = [
+    "Unbiased Reviews",
+    "Shared Flight Feedback",
+    "Real-Time Insights"
+  ];
+
+  final List<String> contentList = [
+    "Explore real, verified reviews to help you make informed travel choices",
+    "Your voice matters! Share your experiences and help improve air travel for everyone",
+    "Stay updated and share feedback while you're still in the moment"
+  ];
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final List bottomSheetList = [
-      _firstBottomSheet(),
-      _secondBottomSheet(),
-      _thirdBottomSheet(),
-    ];
-    final List titleList = [
-      "Unbiased Reviews",
-      "Shareed Flight Feedback",
-      "Real-Time Insights"
-    ];
-    final List contentList = [
-      // "Explore real, verified reviews to help you make informed travel choices ",
-      // "Your voice matters! Share your experiences and help improve air travel for everyone",
-      // "Stay updated and share feedback while you're still in the moment"
-      "Explore real, verified reviews to help you make informed travel choices",
-      "Your voice matters! Share your experiences and help improve air travel for everyone",
-      "Stay updated and share feedback while you're still in the moment"
-    ];
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: screenSize.width,
-                    height: screenSize.height,
-                    // decoration: BoxDecoration(
-                    //   image: DecorationImage(
-                    //     image: AssetImage(
-                    //         'assets/images/popup_${selectedIndex + 1}.png'),
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    // ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) => setState(() => selectedIndex = index),
+            itemCount: 3,
+            itemBuilder: (context, index) => _buildPage(index, screenSize),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: _buildBottomSheet(screenSize),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPage(int index, Size screenSize) {
+    return Stack(
+      children: [
+        Container(
+          width: screenSize.width,
+          height: screenSize.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/skipscreen$index.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.5),
+                BlendMode.darken,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black.withOpacity(0.5),
+              ],
+              stops: const [0.5, 1.0],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 35,
+          top: screenSize.height * 0.15,
+          child: SizedBox(
+            width: screenSize.width - 70,
+            child: _buildHeaderText(index),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomSheet(Size screenSize) {
+    return Container(
+      height: screenSize.height * 0.35,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 20,
+            offset: const Offset(0, -8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 28),
+            child: Column(
+              children: [
+                Container(
+                  height: 4,
+                  width: 45,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff97A09C),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  Positioned(
-                      left: 87,
-                      top: 60,
-                      right: 113,
-                      child: Image.asset(
-                        'assets/images/skipscreen${selectedIndex}.png',
-                        width: 175,
-                        height: 155,
-                      )),
-                  Positioned(
-                      left: 0,
-                      top: 278,
-                      right: 0,
-                      child: Center(
-                        child: SizedBox(
-                          width: screenSize.width - 70,
-                          child: selectedIndex == 0
-                              ? _buildTextFieldFirst()
-                              : selectedIndex == 1
-                                  ? _buildTextFieldSecond()
-                                  : _buildTextFieldThird(),
-                        ),
-                      )),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: screenSize.height * 0.37,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 4,
-                              width: 32,
-                              decoration: BoxDecoration(
-                                color: Color(0xff97A09C),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 27,
-                            ),
-                            Text(
-                              titleList[selectedIndex],
-                              style: AppStyles.textStyle_24_600,
-                            ),
-                            SizedBox(
-                              height: 42,
-                            ),
-                            Text(
-                              contentList[selectedIndex],
-                              style: AppStyles.textStyle_15_400,
-                            ),
-                            SizedBox(
-                              height: 21,
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "1",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 0
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Image.asset(
-                                      "assets/images/baggage_black.png"),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "2",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 1
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Image.asset("assets/images/flight_black.png"),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "3",
-                                    style: AppStyles.textStyle_24_600.copyWith(
-                                        color: selectedIndex == 2
-                                            ? Colors.black
-                                            : AppStyles.mainColor,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ]),
-                          ],
-                        ),
-                      ),
-                    ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  titleList[selectedIndex],
+                  style: AppStyles.textStyle_24_600.copyWith(
+                    letterSpacing: 1.0,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
                   ),
-                ],
+                ),
+                const SizedBox(height: 22),
+                Text(
+                  contentList[selectedIndex],
+                  style: AppStyles.textStyle_15_400.copyWith(
+                    height: 1.6,
+                    fontSize: 17,
+                    color: Colors.black87,
+                    letterSpacing: 0.3,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25),
+                _buildPageIndicator(),
+              ],
+            ),
+          ),
+          const Spacer(),
+          _buildNavigationButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPageIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        3,
+        (index) => AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          height: 6,
+          width: selectedIndex == index ? 32 : 6,
+          decoration: BoxDecoration(
+            color: selectedIndex == index ? AppStyles.mainColor : Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: selectedIndex == index
+                ? [
+                    BoxShadow(
+                      color: AppStyles.mainColor.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    )
+                  ]
+                : null,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavigationButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      child: MainButton(
+        text: selectedIndex == 2 ? "Get Started" : "Next",
+        onPressed: () {
+          if (selectedIndex < 2) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+            );
+          } else {
+            Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildHeaderText(int index) {
+    const baseStyle = TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      height: 1.1,
+      shadows: [
+        Shadow(
+          offset: Offset(2, 2),
+          blurRadius: 8,
+          color: Colors.black45,
+        ),
+      ],
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Experience',
+          style: baseStyle.copyWith(
+            fontSize: 54,
+            letterSpacing: 0.5,
+          ),
+        ),
+        Text(
+          'Feedback',
+          style: baseStyle.copyWith(
+            fontSize: 54,
+            letterSpacing: 0.8,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'that takes',
+          style: baseStyle.copyWith(
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.3,
+          ),
+        ),
+        Text(
+          'Flight',
+          style: baseStyle.copyWith(
+            fontSize: 64,
+            letterSpacing: 3,
+            fontWeight: FontWeight.w900,
+            shadows: const [
+              Shadow(
+                offset: Offset(3, 3),
+                blurRadius: 10,
+                color: Colors.black54,
               ),
             ],
           ),
         ),
-        bottomSheet: bottomSheetList[selectedIndex]);
-  }
-
-  Widget _firstBottomSheet() {
-    return SizedBox(
-      height: 88,
-      child: Column(
-        children: [
-          Container(
-            height: 2,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                    child: _NavigationButton(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = (selectedIndex + 1) % 3;
-                          });
-                        },
-                        buttonName: "Next",
-                        color: Colors.white))
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _secondBottomSheet() {
-    return SizedBox(
-      height: 88,
-      child: Column(
-        children: [
-          Container(
-            height: 2,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                    child: _NavigationButton(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = (selectedIndex + 1) % 3;
-                          });
-                        },
-                        buttonName: "Next",
-                        color: Colors.white))
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _thirdBottomSheet() {
-    return SizedBox(
-      height: 88,
-      child: Column(
-        children: [
-          Container(
-            height: 2,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: _NavigationButton(
-                onTap: () {
-                  selectedIndex = (selectedIndex + 1) % 3;
-                  Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-                },
-                buttonName: "Get Started",
-                color: AppStyles.backgroundColor),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextFieldFirst() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Exp Feedback',
-            style: AppStyles.textStyle_40_700.copyWith(
-              fontSize: selectedIndex == 0
-                  ? 40
-                  : selectedIndex == 1
-                      ? 50
-                      : 65,
-            )),
-        Text(
-          'that takes',
-          style: AppStyles.textStyle_40_700.copyWith(
-            fontSize: selectedIndex == 0
-                ? 40
-                : selectedIndex == 1
-                    ? 50
-                    : 65,
-          ),
-        ),
-        Text(
-          'Flight',
-          style: AppStyles.textStyle_40_700.copyWith(
-            fontSize: selectedIndex == 0
-                ? 40
-                : selectedIndex == 1
-                    ? 50
-                    : 65,
-          ),
-        )
       ],
-    );
-  }
-
-  Widget _buildTextFieldSecond() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Exp',
-          style: AppStyles.textStyle_14_400.copyWith(fontSize: 50),
-        ),
-        Text(
-          'Feedback',
-          style: AppStyles.textStyle_14_400.copyWith(fontSize: 50),
-        ),
-        Text('that takes',
-            style: AppStyles.textStyle_14_400.copyWith(fontSize: 50)),
-        Text(
-          'Flight',
-          style: AppStyles.textStyle_40_700.copyWith(fontSize: 50),
-        )
-      ],
-    );
-  }
-
-  Widget _buildTextFieldThird() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Exp',
-          style: AppStyles.textStyle_40_700.copyWith(fontSize: 65),
-        ),
-        Text('Feedback',
-            style: AppStyles.textStyle_40_700.copyWith(fontSize: 65)),
-        Text('that takes',
-            style: AppStyles.textStyle_14_400.copyWith(fontSize: 65)),
-        Text('Flight', style: AppStyles.textStyle_40_700.copyWith(fontSize: 65))
-      ],
-    );
-  }
-}
-
-class _NavigationButton extends StatelessWidget {
-  const _NavigationButton(
-      {required this.onTap, required this.buttonName, required this.color});
-  final VoidCallback onTap;
-  final String buttonName;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        decoration: AppStyles.cardDecoration
-            .copyWith(color: color, borderRadius: BorderRadius.circular(28)),
-        child: Center(
-          child: Text(
-            buttonName,
-            style: AppStyles.textStyle_15_600,
-          ),
-        ),
-      ),
     );
   }
 }

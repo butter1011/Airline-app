@@ -11,12 +11,11 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
       required this.airlineName,
       required this.classes,
       required this.from,
-      required this.backgroundImage,
       required this.to,
       required this.parent});
   final String subTitle;
   final String logoImage;
-  final String backgroundImage;
+
   final String airlineName;
   final String classes;
   final String from;

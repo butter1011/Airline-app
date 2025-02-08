@@ -1,4 +1,4 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
+
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -20,22 +20,10 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline);
     final selectionsForAirport = ref.watch(reviewFeedBackProviderForAirport);
-    final airlineData = ref.watch(aviationInfoProvider);
-    final from = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlineData.from);
-
-    final airline = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlineData.airline);
-
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlineData.airline);
-
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlineData.airline);
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final String from = boardingPassDetail.departureData["name"] ?? "";
+    final String airline = boardingPassDetail.airlineData["name"] ?? "";
+    final String logoImage = boardingPassDetail.airlineData["logoImage"] ?? "";
     final List<Map<String, dynamic>> feedbackOptionsForAirline =
         mainCategoryAndSubcategoryForAirline;
 
@@ -53,8 +41,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           automaticallyImplyLeading: false,
-          flexibleSpace: BuildQuestionHeaderForSubmit(
-            backgroundImage: backgroundImage,
+          flexibleSpace: BuildQuestionHeaderForSubmit(  
             title: "Lets go into more detail about this?",
             subTitle: "Your feedback helps make every journey better!",
             logoImage: logoImage,
@@ -163,4 +150,5 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
       ),
     );
   }
+
 }
