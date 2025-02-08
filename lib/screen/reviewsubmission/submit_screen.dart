@@ -132,8 +132,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         final updatedUserData = await _reviewAirlineController
             .increaseUserPoints(userData['userData']['_id'], 500);
 
-        final double airlineScore = resultOfAirline['data']['data']['score'];
-        final double airportScore = resultOfAirport['data']['data']['score'];
+        final airlineScore = resultOfAirline['data']['data']['score'];
+        final airportScore = resultOfAirport['data']['data']['score'];
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);
@@ -285,8 +285,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     if (!mounted) return;
 
     Navigator.pushNamed(context, AppRoutes.completereviews, arguments: {
-      airlineScore: airlineScore,
-      airportScore: airportScore,
+      "airlineScore": airlineScore,
+      "airportScore": airportScore,
     });
   }
 
