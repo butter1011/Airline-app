@@ -117,7 +117,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
     );
 
-    Overlay.of(context)?.insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry);
 
     // Remove the overlay after some time
     Future.delayed(Duration(seconds: 3), () {

@@ -28,7 +28,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final airportname = boardingPassDetail.departureData["name"];
-    final logoImage = boardingPassDetail.departureData["logoImage"]??"";
+    final logoImage = boardingPassDetail.departureData["logoImage"] ?? "";
     final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
 
     return Scaffold(
@@ -53,7 +53,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
             children: [
               Text(
                 "${selections[singleIndex]['mainCategory']}",
-                style: AppStyles.textStyle_14_600,
+                style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),
             ],

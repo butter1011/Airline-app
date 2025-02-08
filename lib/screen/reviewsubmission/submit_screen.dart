@@ -278,6 +278,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
 
     ref.read(aviationInfoProvider.notifier).resetState();
     ref.read(reviewFeedBackProviderForAirline.notifier).resetState();
+    ref.read(reviewFeedBackProviderForAirport.notifier).resetState();
 
     setState(() => _isLoading = false);
 
@@ -452,10 +453,9 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
     final amenities = reviewDataForAirport[5]["subCategory"];
 
-    final airlineName = airlineData["name"]??"";
-    final airportName = departureData["name"]??"";
-    final logoImage = airlineData["logoImage"]??"";
-
+    final airlineName = airlineData["name"] ?? "";
+    final airportName = departureData["name"] ?? "";
+    final logoImage = airlineData["logoImage"] ?? "";
 
     return PopScope(
       canPop: false, // Prevents the default pop action
@@ -473,7 +473,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                  flexibleSpace: BuildQuestionHeaderForSubmit(              
+                  flexibleSpace: BuildQuestionHeaderForSubmit(
                     title: "Share your experience",
                     subTitle: "Your feedback helps us improve!",
                     logoImage: logoImage,

@@ -35,7 +35,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-void main() async {  
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final String languageCode = prefs.getString('selectedLanguageSym') ?? 'en';
@@ -107,8 +107,8 @@ class MyApp extends ConsumerWidget {
         AppRoutes.filterscreen: (context) => const LeaderboardFilterScreen(),
         AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
-        //Airlines routes     
- 
+        //Airlines routes
+
         AppRoutes.questionfirstscreenforairline: (context) =>
             QuestionFirstScreenForAirline(),
         AppRoutes.detailfirstscreenforairline: (context) =>
@@ -117,19 +117,14 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
- 
-
-        // Airports routes  
-
         AppRoutes.detailfirstscreenforairport: (context) =>
             DetailFirstScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
-   
+
         //////
         AppRoutes.submitscreen: (context) => SubmitScreen(),
         AppRoutes.completereviews: (context) => CompleteReviews(),
-        
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),

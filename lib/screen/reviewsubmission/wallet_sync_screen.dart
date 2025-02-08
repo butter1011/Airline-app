@@ -338,9 +338,8 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
                 color: Colors.grey.shade300,
               ),
               Padding(
-                
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: Column(
                   children: [
                     MainButton(
