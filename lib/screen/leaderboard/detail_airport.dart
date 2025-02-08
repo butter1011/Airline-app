@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/leaderboard/widgets/category_buttons_widget.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/reviewStatus.dart';
-import 'package:airline_app/screen/leaderboard/widgets/share_to_social.dart';
-import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
+import 'package:airline_app/screen/leaderboard/widgets/review_status.dart';
+import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DetailAirport extends ConsumerStatefulWidget {
   const DetailAirport({super.key});
@@ -125,16 +129,34 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
               background: Stack(
                 children: [
                   Positioned.fill(
-                      child: backgroundImage.isNotEmpty
-                          ? Image.network(
-                              backgroundImage,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
+                    child: backgroundImage.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: backgroundImage,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Image.asset(
+                                    'assets/images/loading_image.jpg',
+                                    fit: BoxFit.cover,
+                                    opacity: const AlwaysStoppedAnimation(0.6),
+                                  ),
+                                ),
+                                const Center(
+                                  child: LoadingWidget(),
+                                ),
+                              ],
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
                               'assets/images/airline_background.jpg',
                               fit: BoxFit.cover,
-                            )),
-                  Positioned(
+                            ),
+                          )
+                        : Image.asset(
+                            'assets/images/airline_background.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                  ),                  Positioned(
                     child: Container(
                       height: 120,
                       decoration: BoxDecoration(
@@ -142,17 +164,12 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            // No color at the top
                             Colors.black.withOpacity(0.8),
                             Colors.transparent,
                           ],
-                          stops: const [
-                            0.1,
-                            1
-                          ], // Adjust stops to control where the gradient starts and ends
+                          stops: const [0.1, 1],
                         ),
                       ),
-                      // Start the gradient 30px from the top
                     ),
                   ),
                   Positioned(
@@ -161,11 +178,16 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     child: Column(
                       children: [
                         IconButton(
-                            onPressed: () async {
-                              await BottomSheetHelper.showScoreBottomSheet(
-                                  context);
-                            },
-                            icon: Image.asset('assets/icons/share_white.png')),
+                          onPressed: () async {
+                            Share.share(
+                                "Hey! 👋 Check out this amazing app that helps you discover and share travel experiences!\nJoin me on Airshiare and let's explore together! 🌟✈️\n\nDownload now: https://beta.itunes.apple.com/v1/app/6739448029",
+                                subject:
+                                    'Join me on Airshiare - Your Travel Companion!');
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/share_white.svg',
+                          ),
+                        ),
                         IconButton(
                           onPressed: () {},
                           icon: IconButton(
@@ -277,8 +299,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                     return Column(
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 24.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: FeedbackCard(
                             thumbnailHeight: 189,
                             singleFeedback: singleReview,
@@ -306,68 +327,23 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                       ],
                     );
                   }
-                                  return const SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }).toList(),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.black.withOpacity(0.8),
-                      width: 2,
-                    ),
-                  ),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ReviewsubmissionScreen(),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
-                    child: Container(
-                      height: 56,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                        border: Border.all(width: 2, color: Colors.black),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black, offset: Offset(2, 2))
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Leave a review",
-                                style: GoogleFonts.schibstedGrotesk(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Image.asset('assets/icons/edit.png')
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
             ]),
           )
         ],
       ),
+      bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+        text: "Leave a review",
+        onPressed: () =>
+            Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen),
+        icon: Icon(
+          Icons.edit_outlined,
+          color: Colors.white,
+        ),
+      )),
     );
   }
 }

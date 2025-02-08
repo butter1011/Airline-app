@@ -90,15 +90,11 @@ class _CLeaderboardScreenState extends ConsumerState<CLeaderboardScreen> {
                         singleFeedback: singleReview,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 9),
-                          Divider(thickness: 2, color: Colors.black),
-                          SizedBox(height: 24),
-                        ],
-                      ),
+                    Divider(
+                      indent: 24,
+                      endIndent: 24,
+                      thickness: 2,
+                      color: Colors.grey.shade100,
                     ),
                   ],
                 );

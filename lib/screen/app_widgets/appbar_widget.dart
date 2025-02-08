@@ -1,4 +1,3 @@
-import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -18,20 +17,27 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       flexibleSpace: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        decoration: BoxDecoration(
+          color: AppStyles.appBarColor,
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
+            ),
+          ),
+
           // gradient: LinearGradient(
           //   begin: Alignment.topCenter,
           //   end: Alignment.bottomCenter,
           //   colors: [Colors.blue.shade100, Colors.white],
           // ),\
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 5,
-              blurRadius: 15,
-            ),
-          ]
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.1),
+          //     spreadRadius: 5,
+          //     blurRadius: 15,
+          //   ),
+          // ]
         ),
       ),
       leading: onBackPressed != null
@@ -43,8 +49,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: AppStyles.textStyle_18_600,
-      ),
+        style: AppStyles.textStyle_18_600.copyWith(fontWeight:FontWeight.w700 )    ),
     );
   }
 

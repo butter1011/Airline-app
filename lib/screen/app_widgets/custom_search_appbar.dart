@@ -1,10 +1,11 @@
+import 'package:airline_app/screen/app_widgets/filter_button.dart';
+import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/screen/app_widgets/search_field.dart';
-import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 
 class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final TextEditingController searchController;
@@ -33,14 +34,20 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
       elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 5,
-              blurRadius: 15,
+          color: AppStyles.appBarColor,
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
             ),
-          ],
+          )
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.1),
+          //     spreadRadius: 5,
+          //     blurRadius: 15,
+          //   ),
+          // ],
         ),
       ),
       title: Column(
@@ -53,36 +60,9 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 filterType: filterType,
                 onSearchChanged: onSearchChanged,
               ),
-              Material(
-                elevation: 4,
-                borderRadius: BorderRadius.circular(20),
-                child: InkWell(
-                  onTap: () {
-                    if (ModalRoute.of(context)?.settings.name ==
-                        AppRoutes.leaderboardscreen) {
-                      Navigator.pushNamed(context, AppRoutes.filterscreen);
-                    } else if (ModalRoute.of(context)?.settings.name ==
-                        AppRoutes.feedscreen) {
-                      Navigator.pushNamed(context, AppRoutes.feedfilterscreen);
-                    }
-                  },
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.green.shade400, Colors.green.shade600],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.tune_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ),
+              CustomIconButton(icon:Icons.tune_rounded, onTap: (){
+                Navigator.pushNamed(context, AppRoutes.filterscreen);
+              }),
             ],
           ),
           Column(
@@ -91,14 +71,14 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
               SizedBox(height: screenSize.height * 0.02),
               Text(
                 AppLocalizations.of(context).translate('Filter by category'),
-                style: AppStyles.textStyle_18_600.copyWith(color: Colors.black),
+                style: AppStyles.textStyle_18_600,
               ),
               SizedBox(height: screenSize.height * 0.015),
               Row(
                 children: buttonStates.keys.map((buttonText) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: MainButton(
+                    child: FilterButton(
                       text: buttonText,
                       isSelected: buttonText == selectedFilterButton,
                       onTap: () => onButtonToggle(buttonText),

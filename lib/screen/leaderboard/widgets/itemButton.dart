@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class ItemButton extends StatelessWidget {
@@ -26,11 +27,7 @@ class ItemButton extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  // letterSpacing: 0.7,
-                  color: color == Colors.white ? Colors.black : Colors.white),
+              style: AppStyles.textStyle_14_600.copyWith(color: color == Colors.white ? Colors.black : Colors.white),
             ),
           ),
         ),

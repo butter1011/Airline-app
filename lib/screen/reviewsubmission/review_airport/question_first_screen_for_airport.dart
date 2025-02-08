@@ -35,10 +35,12 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
 
     final selectedClassOfTravel = airlineData.selectedClassOfTravel;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.airportinput);
-        return false;
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -65,7 +67,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                 ref
                     .read(reviewFeedBackProviderForAirline.notifier)
                     .resetState();
-                    ref
+                ref
                     .read(reviewFeedBackProviderForAirport.notifier)
                     .resetState();
               }, onNextPressed: () {
@@ -115,8 +117,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                   numForIdentifyOfParent: 1,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  selectedNumberOfSubcategory: selections[index]
-                          ['subCategory']
+                  selectedNumberOfSubcategory: selections[index]['subCategory']
                       .values
                       .where((s) => s == true)
                       .length,

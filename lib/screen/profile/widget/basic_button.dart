@@ -1,3 +1,4 @@
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class BasicButton extends StatelessWidget {
@@ -38,10 +39,7 @@ class BasicButton extends StatelessWidget {
             Center(
           child: Text(
             '$btntext',
-            style: const TextStyle(
-                fontFamily: 'inter',
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+            style: AppStyles.textStyle_14_600,
           ),
         ),
         // ),

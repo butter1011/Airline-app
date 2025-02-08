@@ -2,14 +2,9 @@ import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
-import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/app_widgets/search_field.dart';
-
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
-import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -141,11 +136,13 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
-    final feedState = ref.watch(feedDataProvider);
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
-        return false;
+    final reviewList = ref.watch(reviewsAirlineAirportProvider).filteredReviews;
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
+        }
       },
       child: KeyboardDismissWidget(
         child: Scaffold(
@@ -175,7 +172,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 24),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -206,15 +203,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                 airline != null) {
                                               return Column(
                                                 children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 24.0),
-                                                    child: FeedbackCard(
-                                                      thumbnailHeight: 260,
-                                                      singleFeedback:
-                                                          singleReview,
-                                                    ),
+                                                  FeedbackCard(
+                                                    thumbnailHeight: 260,
+                                                    singleFeedback:
+                                                        singleReview,
                                                   ),
                                                   if (index !=
                                                       feedState.allData.length -
@@ -229,8 +221,9 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                             height: 9,
                                                           ),
                                                           Divider(
-                                                            thickness: 2,
-                                                            color: Colors.black,
+                                                            thickness: 1,
+                                                            color: Colors
+                                                                .grey.shade300,
                                                           ),
                                                           SizedBox(
                                                             height: 24,

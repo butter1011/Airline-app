@@ -12,7 +12,8 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
       required this.classes,
       required this.from,
       required this.backgroundImage,
-      required this.to, required this.parent});
+      required this.to,
+      required this.parent});
   final String subTitle;
   final String logoImage;
   final String backgroundImage;
@@ -65,7 +66,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                     ),
                     child: Text(
                       airlineName,
-                      style: AppStyles.oswaldTextStyle.copyWith(
+                      style: AppStyles.italicTextStyle.copyWith(
                         color: Colors.white,
                         shadows: [
                           Shadow(
@@ -82,9 +83,9 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
                 decoration: BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(12),
@@ -125,7 +126,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  parent == 1
+                  parent == 0
                       ? EmphasizeWidget(number: 1)
                       : Text("1",
                           style: AppStyles.textStyle_18_600
@@ -135,7 +136,7 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                     width: screenSize.width * 0.3,
                     fit: BoxFit.fitWidth,
                   ),
-                  parent == 2
+                  parent == 1
                       ? EmphasizeWidget(number: 2)
                       : Text("2",
                           style: AppStyles.textStyle_18_600
@@ -150,7 +151,6 @@ class BuildQuestionHeaderForAirline extends StatelessWidget {
                           .copyWith(color: Colors.white)),
                 ],
               ),
-              
               SizedBox(
                 height: 5,
               ),

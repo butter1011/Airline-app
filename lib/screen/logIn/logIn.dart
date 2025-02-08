@@ -2,15 +2,18 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -182,85 +185,125 @@ class _LoginState extends ConsumerState<Login> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Background Image
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 200),
-              child: Column(children: [
-                Image.asset(
-                  'assets/icon/logoIcon.png',
-                  width: screenSize.width * 0.5,
-                  // height: screenSize.width * 0.5,
-                  // fit: BoxFit.cover,
-                ),
-                // SizedBox(
-                //   height: 18,
-                // ),
-                Text("Exp.aero",
-                    style: TextStyle(
-                        fontFamily: 'ArialBlack',
-                        fontWeight: FontWeight.w900,
-                        fontSize: 60,
-                        height: 0.8,
-                        color: Colors.black)),
-                SizedBox(
-                  height: 214,
-                ),
-                Text(
-                  "Let's get flying",
-                  style: TextStyle(
-                      fontFamily: 'inter',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 40,
-                      color: Colors.black),
-                ),
-              ]),
+          ShaderMask(
+            shaderCallback: (bounds) {
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.1)
+                ],
+              ).createShader(bounds);
+            },
+            blendMode: BlendMode.srcATop,
+            child: Image.asset(
+              'assets/images/flying_plane.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
             ),
           ),
-
-          // Existing Content
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 120),
+              child: Column(
+                children: [
+                  Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.05),
+                        ],
+                      ),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 10),
+                    child: SvgPicture.asset(
+                      'assets/icons/logo.svg',
+                      width: 100,
+                      height: 100,
+                      colorFilter: ColorFilter.mode(
+                        Colors.white.withOpacity(0.9),
+                        BlendMode.srcIn,
+                      ),
+                    )
+                  ),
+                  Text(
+                    "Exp.aero",
+                    style: AppStyles.textStyle_24_600.copyWith(
+                      letterSpacing: 1.5,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.4),
+                  Text(
+                    "Let's get flying",
+                    style: AppStyles.textStyle_40_700.copyWith(
+                      letterSpacing: 1.2,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.6),
+                          offset: const Offset(2, 3),
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           isLoading
               ? const LoadingWidget()
               : Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          _openLoginPage();
-                        },
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(bottom: 68, right: 24, left: 24),
-                          child: Container(
-                            height: 56,
-                            decoration: BoxDecoration(
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenSize.width * 0.1,
+                            vertical: screenSize.height * 0.08),
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.white.withOpacity(0.5),
+                          highlightColor: Colors.white.withOpacity(0.9),
+                          child: InkWell(
+                            onTap: () {
+                              _openLoginPage();
+                            },
+                            child: Text(
+                              "Tap here to sign in",
+                              style: AppStyles.textStyle_24_600.copyWith(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: Offset(2, 2),
-                                  )
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    offset: const Offset(1, 1),
+                                    blurRadius: 2,
+                                  ),
                                 ],
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 2,
-                                )),
-                            child: Center(
-                              child: Text(
-                                "   Tap here to signin   ",
-                                style: TextStyle(
-                                    fontFamily: 'Clash Grotesk',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                                selectionColor: Colors.black,
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                        ),                      ),
                     ],
                   ),
                 ),

@@ -1,8 +1,9 @@
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/filter_button.dart';
-import 'package:airline_app/screen/app_widgets/nav_button.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -360,20 +361,11 @@ class _LeaderboardFilterScreenState
             // if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
           ],
         ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 4,
-            color: AppStyles.littleBlackColor,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            child: NavButton(
-              text: AppLocalizations.of(context).translate('Apply'),
-              onPressed: () async {
-                try {
+        bottomNavigationBar: BottomButtonBar(
+          child: MainButton(
+            text: AppLocalizations.of(context).translate('Apply'),
+            onPressed: () {
+                             try {
                   showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -427,11 +419,9 @@ class _LeaderboardFilterScreenState
                             'Failed to fetch filtered data: ${e.toString()}')),
                   );
                 }
-              },
-            ),
-          )
-        ],
-      ),
-    );
+            },
+            // color: AppStyles.backgroundColor,
+          ),
+        ));
   }
 }

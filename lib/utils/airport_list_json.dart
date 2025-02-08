@@ -23,13 +23,6 @@ Map<String, dynamic> airportList = {
     'Polynesia'
   ]
 };
-List<Map<String, dynamic>> socialList = [
-  {'Name': 'Linkedin', 'Avatar': 'assets/icons/linkedin.png'},
-  {'Name': 'Telegram', 'Avatar': 'assets/icons/telegram.png'},
-  {'Name': 'Discord', 'Avatar': 'assets/icons/discord.png'},
-  {'Name': 'Whatsapp', 'Avatar': 'assets/icons/whatsapp.png'},
-  {'Name': 'Twitter', 'Avatar': 'assets/icons/twitter.png'},
-];
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
     'mainCategory': 'Boarding and Arrival Experience',

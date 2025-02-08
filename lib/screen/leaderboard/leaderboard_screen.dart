@@ -1,13 +1,10 @@
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
-import 'package:airline_app/screen/app_widgets/divider_widget.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/app_widgets/search_field.dart';
+import 'package:airline_app/screen/leaderboard/widgets/airline_airport_list_widget.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
-import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
-import 'package:airline_app/screen/leaderboard/widgets/mainButton.dart';
 import 'package:airline_app/screen/leaderboard/widgets/scoring_info_dialog.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -199,8 +196,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _onWillPop;
+        }
+      },      
       child: Scaffold(
         appBar: CustomSearchAppBar(
           searchController: _searchController,

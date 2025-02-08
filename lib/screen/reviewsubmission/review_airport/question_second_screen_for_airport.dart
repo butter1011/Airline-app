@@ -32,10 +32,12 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
-        return false;
+    return PopScope(
+     canPop: false, // Prevents the default pop action
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -59,7 +61,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
               ),
               BuildNavigationButtonsWidget(onBackPressed: () {
                 Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-                                ref.read(aviationInfoProvider.notifier).resetState();
+                ref.read(aviationInfoProvider.notifier).resetState();
                 ref
                     .read(reviewFeedBackProviderForAirline.notifier)
                     .resetState();
@@ -67,8 +69,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
                     .read(reviewFeedBackProviderForAirport.notifier)
                     .resetState();
               }, onNextPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutes.submitscreen);
+                Navigator.pushNamed(context, AppRoutes.submitscreen);
               })
             ],
           ),
@@ -114,8 +115,7 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
                   numForIdentifyOfParent: 2,
                   iconUrl: feedbackOptions[index]['iconUrl'],
                   label: index,
-                  selectedNumberOfSubcategory: selections[index]
-                          ['subCategory']
+                  selectedNumberOfSubcategory: selections[index]['subCategory']
                       .values
                       .where((s) => s == false)
                       .length,
@@ -127,6 +127,4 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
       ),
     );
   }
-
-
 }

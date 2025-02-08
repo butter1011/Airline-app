@@ -58,7 +58,7 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.5.0
   flutter_emoji_feedback: ^0.4.0
-  shared_preferences: ^2.3.3  
+  shared_preferences: ^2.3.3
   cached_network_image: ^3.4.1
   mobile_scanner: ^6.0.2
   country_flags: ^3.0.0
@@ -85,7 +85,7 @@ dependencies:
   animated_flip_counter: ^0.3.4
   aws_s3_api: ^2.0.0
   convex_bottom_bar: ^3.2.0
-
+  shimmer: ^3.0.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -135,20 +135,26 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Clash Grotesk
+    - family: SF Pro
       fonts:
-        # - asset: fonts/ClashGrotesk-variable.ttf
-        - asset: fonts/ClashGrotesk-Regular.otf
-        - asset: fonts/ClashGrotesk-Light.otf
-        - asset: fonts/ClashGrotesk-Extralight.otf
-        - asset: fonts/ClashGrotesk-Medium.otf
-        - asset: fonts/ClashGrotesk-Semibold.otf
-        - asset: fonts/ClashGrotesk-Bold.otf
-    
-    - family: ArialBlack
-      fonts:
-       - asset: fonts/ariblk.ttf
-
+        - asset: fonts/SF-Pro-Display-Black.otf
+        - asset: fonts/SF-Pro-Display-BlackItalic.otf
+        - asset: fonts/SF-Pro-Display-Bold.otf
+        - asset: fonts/SF-Pro-Display-BoldItalic.otf
+        - asset: fonts/SF-Pro-Display-Heavy.otf
+        - asset: fonts/SF-Pro-Display-HeavyItalic.otf
+        - asset: fonts/SF-Pro-Display-Light.otf
+        - asset: fonts/SF-Pro-Display-LightItalic.otf
+        - asset: fonts/SF-Pro-Display-Medium.otf
+        - asset: fonts/SF-Pro-Display-MediumItalic.otf
+        - asset: fonts/SF-Pro-Display-Regular.otf
+        - asset: fonts/SF-Pro-Display-RegularItalic.otf
+        - asset: fonts/SF-Pro-Display-Semibold.otf
+        - asset: fonts/SF-Pro-Display-SemiboldItalic.otf
+        - asset: fonts/SF-Pro-Display-Thin.otf
+        - asset: fonts/SF-Pro-Display-ThinItalic.otf
+        - asset: fonts/SF-Pro-Display-Ultralight.otf
+        - asset: fonts/SF-Pro-Display-UltralightItalic.otf
 
   # fonts:
   #   - family: Schyler

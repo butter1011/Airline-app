@@ -2,8 +2,9 @@ import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_navigation_buttons_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/subcategory_button_widget.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -23,7 +24,6 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
     for (var category in mainCategoryAndSubcategoryForAirport) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
-    // Ensure subCategoryList is not null
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
 
@@ -41,65 +41,45 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
 
     final selectedClassOfTravel = airlinData.selectedClassOfTravel;
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-            flexibleSpace: BuildQuestionHeaderForAirport(
-              airportName: airportname,
-              title: "Tell us about your airport experience",
-              subTitle: "What did you dislike about your experience?",
-              logoImage: logoImage,
-              backgroundImage: backgroundImage,
-              selecetedOfCalssLevel: selectedClassOfTravel,
-              parent: 2,
-            )),
-        body: SafeArea(
-            child: Column(
-          children: [
-            _buildFeedbackOptions(
-                ref, singleIndex, subCategoryList, selections),
-            BuildNavigationButtonsWidget(
-              onBackPressed: () {
-                Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-                ref.read(aviationInfoProvider.notifier).resetState();
-                ref
-                    .read(reviewFeedBackProviderForAirline.notifier)
-                    .resetState();
-                ref
-                    .read(reviewFeedBackProviderForAirport.notifier)
-                    .resetState();
-              },
-              onNextPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        )));
-  }
-
-  Widget _buildFeedbackOptions(
-      WidgetRef ref, int singleIndex, subCategoryList, selections) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${selections[singleIndex]['mainCategory']}",
-              style: AppStyles.textStyle_14_600,
-            ),
-            SizedBox(height: 16),
-            Expanded(
-                child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+        flexibleSpace: BuildQuestionHeaderForAirport(
+          airportName: airportname,
+          title: "Tell us about your airport experience",
+          subTitle: "What did you dislike about your experience?",
+          logoImage: logoImage,
+          backgroundImage: backgroundImage,
+          selecetedOfCalssLevel: selectedClassOfTravel,
+          parent: 1,
+        ),
+      ),
+      body: Column(children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${selections[singleIndex]['mainCategory']}",
+                style: AppStyles.textStyle_14_600,
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
               ),
-              itemCount: subCategoryList.length, // Use the length of the list
+              itemCount: subCategoryList.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> items =
                     selections[singleIndex]['subCategory'];
@@ -119,13 +99,45 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
                           : ref
                               .read(reviewFeedBackProviderForAirport.notifier)
                               .selectDislike(singleIndex, key);
-                      print("selected dislike is $value");
                     },
                     imagePath: imagePath,
                   ),
                 );
               },
-            )),
+            ),
+          ),
+        ),
+      ]),
+      bottomNavigationBar: BottomButtonBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: MainButton(
+                text: "Back",
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                  ref.read(aviationInfoProvider.notifier).resetState();
+                  ref
+                      .read(reviewFeedBackProviderForAirline.notifier)
+                      .resetState();
+                  ref
+                      .read(reviewFeedBackProviderForAirport.notifier)
+                      .resetState();
+                },
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: MainButton(
+                text: "Next",
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
           ],
         ),
       ),

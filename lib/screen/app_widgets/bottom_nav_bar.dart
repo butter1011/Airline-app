@@ -1,5 +1,6 @@
 import 'package:airline_app/screen/profile/profile_screen.dart';
 import 'package:airline_app/utils/app_routes.dart';
+import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,19 +66,25 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade300,
+            width: 1.0,
           ),
-        ],
+        )
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.4),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -2),
+        //   ),
+        // ],
       ),
       child: ConvexAppBar(
         style: TabStyle.react,
-        backgroundColor: Colors.white,
+        backgroundColor: AppStyles.appBarColor,
         color: Colors.grey.shade500,
-        activeColor: Colors.black,      
+        activeColor: Colors.black,
         elevation: 0,
         height: 70,
         curveSize: 100,
@@ -119,16 +126,13 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           ),
           TabItem(
             icon: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color:
-                      _selectedIndex == 3 ? Colors.black : Colors.transparent,
-                  width: 2,
-                ),
+              decoration: 
+              AppStyles.avatarDecoration.copyWith(
+                border: Border.all(width: 2, color: Colors.white),                
               ),
               child: CircleAvatar(
                 radius: 13,
+                backgroundColor: Colors.white,
                 backgroundImage: userData?['userData']['profilePhoto'] != null
                     ? NetworkImage(userData?['userData']['profilePhoto'])
                     : const AssetImage("assets/images/avatar_1.png")
