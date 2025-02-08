@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';

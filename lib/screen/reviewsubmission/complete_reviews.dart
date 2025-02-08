@@ -13,6 +13,10 @@ class CompleteReviews extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
+    var scores = ModalRoute.of(context)!.settings.arguments as Map;
+
+    final airlineScore = scores['airlineScore'];
+    final airportScore = scores['airportScore'];
 
     return PopScope(
       canPop: false, // Prevents the default pop action
@@ -88,12 +92,12 @@ class CompleteReviews extends ConsumerWidget {
                         children: [
                           _buildScoreCard(
                             "Airline Score",
-                            (scores['airlineScore'] ?? 0).toStringAsFixed(1),
+                            (airlineScore ?? 0).toStringAsFixed(1),
                             Icons.flight,
                           ),
                           _buildScoreCard(
                             "Airport Score",
-                            (scores['airportScore'] ?? 0).toStringAsFixed(1),
+                            (airportScore ?? 0).toStringAsFixed(1),
                             Icons.airplane_ticket,
                           ),
                         ],

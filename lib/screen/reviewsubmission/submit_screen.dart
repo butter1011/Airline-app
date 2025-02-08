@@ -11,7 +11,6 @@ import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/provider/airline_airport_review_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
@@ -133,6 +132,9 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
       if (resultOfAirline['success'] && resultOfAirport['success']) {
         final updatedUserData = await _reviewAirlineController
             .increaseUserPoints(userData['userData']['_id'], 500);
+
+        final double airlineScore = resultOfAirline['data']['data']['score'];
+        final double airportScore = resultOfAirport['data']['data']['score'];
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);
@@ -142,6 +144,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           resultOfAirport: resultOfAirport,
           index: index,
           boardingPassController: boardingPassController,
+          airlineScore: airlineScore,
+          airportScore: airportScore,
         );
       } else {
         _handleFailedSubmission(context);
@@ -263,6 +267,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required Map<String, dynamic> resultOfAirport,
     required int? index,
     required BoardingPassController boardingPassController,
+    required double airlineScore,
+    required double airportScore,
   }) async {
     if (index != null) {
       final updatedBoardingPass =
@@ -278,7 +284,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
 
     if (!mounted) return;
 
-    Navigator.pushNamed(context, AppRoutes.completereviews);
+    Navigator.pushNamed(context, AppRoutes.completereviews, arguments: {
+      airlineScore: airlineScore,
+      airportScore: airportScore,
+    });
   }
 
   void _handleFailedSubmission(BuildContext context) {
