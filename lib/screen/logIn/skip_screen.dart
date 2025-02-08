@@ -127,7 +127,7 @@ class _SkipScreenState extends State<SkipScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 22),
                 Text(
                   titleList[selectedIndex],
                   style: AppStyles.textStyle_24_600.copyWith(
@@ -136,7 +136,7 @@ class _SkipScreenState extends State<SkipScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 16),
                 Text(
                   contentList[selectedIndex],
                   style: AppStyles.textStyle_15_400.copyWith(
@@ -170,7 +170,9 @@ class _SkipScreenState extends State<SkipScreen> {
           height: 6,
           width: selectedIndex == index ? 32 : 6,
           decoration: BoxDecoration(
-            color: selectedIndex == index ? AppStyles.mainColor : Colors.grey.shade200,
+            color: selectedIndex == index
+                ? AppStyles.mainColor
+                : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(4),
             boxShadow: selectedIndex == index
                 ? [

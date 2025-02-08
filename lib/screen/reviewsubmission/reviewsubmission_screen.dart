@@ -132,7 +132,7 @@ class _ReviewsubmissionScreenState
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 16),
+                            horizontal: 32, vertical: 28),
                         child: Column(
                           children: [
                             MainButton(

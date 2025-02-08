@@ -19,7 +19,7 @@ class BottomButtonBar extends StatelessWidget {
             ),
           )),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: child,
       ),
     );
