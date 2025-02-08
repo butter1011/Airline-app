@@ -14,7 +14,6 @@ import 'package:airline_app/screen/profile/edit_profile_screen.dart';
 import 'package:airline_app/screen/profile/help_faq.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
 import 'package:airline_app/screen/profile/profile_screen.dart';
-import 'package:airline_app/screen/profile/support_screen.dart';
 import 'package:airline_app/screen/profile/terms_of_service.dart';
 import 'package:airline_app/screen/reviewsubmission/complete_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/detail_first_screen_for_airline.dart';
@@ -136,7 +135,6 @@ class MyApp extends ConsumerWidget {
         AppRoutes.submitscreen: (context) => SubmitScreen(),
         AppRoutes.completereviews: (context) => CompleteReviews(),
         
-        AppRoutes.profilesupportscreen: (context) => SupportScreen(),
         AppRoutes.eidtprofilescreen: (context) => EditProfileScreen(),
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),

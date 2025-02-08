@@ -93,11 +93,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'assets/icons/alert.png',
-                        width: 20,
-                        height: 20,
-                      ),
+                      Icon(Icons.check_circle_outline),
                       SizedBox(
                         width: 10,
                       ),
@@ -108,16 +104,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       ),
                     ],
                   ),
-                ),
-              ),
+                ),              ),
               Positioned(
                   right: 8,
                   top: 8,
-                  child: Image.asset(
-                    "assets/icons/closeButton.png",
-                    width: 32,
-                    height: 32,
-                  ))
+                  child: Icon(Icons.close, size: 32,))
             ]),
           ),
         ),
@@ -342,8 +333,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
         if (isLoading)
           Container(
-              color: Colors.black.withAlpha(127),
-              child: const LoadingWidget()),
+              color: Colors.black.withAlpha(127), child: const LoadingWidget()),
       ],
     );
   }

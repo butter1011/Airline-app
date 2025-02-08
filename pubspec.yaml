@@ -85,6 +85,7 @@ dependencies:
   animated_flip_counter: ^0.3.4
   aws_s3_api: ^2.0.0
   convex_bottom_bar: ^3.2.0
+  shimmer: ^3.0.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

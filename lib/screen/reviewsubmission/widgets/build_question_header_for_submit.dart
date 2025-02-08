@@ -28,7 +28,7 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/images/header.jpg",
+            "assets/images/header.png",
             fit: BoxFit.cover,
           ),
         ),
