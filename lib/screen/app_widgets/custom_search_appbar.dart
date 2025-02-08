@@ -58,7 +58,13 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 borderRadius: BorderRadius.circular(20),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                    if (ModalRoute.of(context)?.settings.name ==
+                        AppRoutes.leaderboardscreen) {
+                      Navigator.pushNamed(context, AppRoutes.filterscreen);
+                    } else if (ModalRoute.of(context)?.settings.name ==
+                        AppRoutes.feedscreen) {
+                      Navigator.pushNamed(context, AppRoutes.feedfilterscreen);
+                    }
                   },
                   borderRadius: BorderRadius.circular(20),
                   child: Container(

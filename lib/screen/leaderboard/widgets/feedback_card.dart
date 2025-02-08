@@ -36,6 +36,31 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   final Map<String, Duration> _videoPositions = {};
 
   @override
+  void initState() {
+    super.initState();
+    initializeVideoPlayer();
+  }
+
+  @override
+  void didUpdateWidget(FeedbackCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Re-initialize video players when feedback data changes
+    if (oldWidget.singleFeedback != widget.singleFeedback) {
+      // Clean up old video controllers
+      for (var controller in _videoControllers.values) {
+        controller.pause();
+        controller.dispose();
+      }
+      _videoControllers.clear();
+      _videoPositions.clear();
+
+      // Initialize new video controllers
+      initializeVideoPlayer();
+    }
+  }
+
+  @override
   void dispose() {
     for (var controller in _videoControllers.values) {
       // Store position before disposing
@@ -51,31 +76,37 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    for (var media in widget.singleFeedback['imageUrls'] ?? []) {
-      if (media
-          .toString()
-          .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
-        _videoControllers[media] = VideoPlayerController.networkUrl(
-          Uri.parse(media),
-          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        )..initialize().then((_) {
-            if (mounted) {
-              setState(() {
-                _videoControllers[media]?.setLooping(true);
-                _handleVideoState();
-              });
-            }
-          });
+  void initializeVideoPlayer() {
+    if (widget.singleFeedback['imageUrls'] == null) return;
+
+    for (var media in widget.singleFeedback['imageUrls']) {
+      if (media != null &&
+          media
+              .toString()
+              .toLowerCase()
+              .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
+        try {
+          _videoControllers[media] = VideoPlayerController.network(
+            media,
+            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+          )..initialize().then((_) {
+              if (mounted) {
+                setState(() {
+                  _videoControllers[media]?.setLooping(true);
+                  _handleVideoState();
+                });
+              }
+            });
+        } catch (e) {
+          debugPrint('Error creating video controller: $e');
+        }
       }
     }
 
-    // Initialize favorite state and count
     final userId = ref.read(userDataProvider)?['userData']?['_id'];
-    isFavorite = (widget.singleFeedback['rating'] as List).contains(userId);
-    totalFavorites = (widget.singleFeedback['rating'] as List).length;
+    final ratingList = widget.singleFeedback['rating'] as List?;
+    isFavorite = ratingList?.contains(userId) ?? false;
+    totalFavorites = ratingList?.length ?? 0;
   }
 
   void _handleVideoState() {
@@ -404,7 +435,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-
                               } else {
                                 print('Failed to update reaction');
                               }
@@ -459,7 +489,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                               );
 
                               if (response.statusCode == 200) {
-
                               } else {
                                 print('Failed to update reaction');
                               }

@@ -14,6 +14,10 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/provider/feed_data_provider.dart';
+import 'package:airline_app/provider/feed_filter_provider.dart';
+import 'package:airline_app/controller/feed_service.dart';
+import 'package:airline_app/provider/review_filter_button_provider.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -23,40 +27,121 @@ class FeedScreen extends ConsumerStatefulWidget {
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  late bool selectedAll = true;
-  late bool selectedAirline = false;
-  late bool selectedAirport = false;
-  late bool selectedCleanliness = false;
-  late bool selectedOnboard = false;
-  bool isLoading = false;
-  String filterType = 'All';
+  final ScrollController _scrollController = ScrollController();
   Map<String, bool> buttonStates = {
     // "All": true,
-    "Airline": false,
+    "Airline": true,
     "Airport": false,
   };
+
+  String filterType = 'Airline';
+  bool hasMore = true;
+  bool isLoading = false;
+  late bool selectedAirline = false;
+  late bool selectedAirport = false;
+  late bool selectedAll = true;
+  late bool selectedCleanliness = false;
+  late bool selectedOnboard = false;
+
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void toggleButton(String buttonText) {
     setState(() {
       buttonStates.updateAll((key, value) => false);
       buttonStates[buttonText] = true;
       filterType = buttonText;
     });
+
+    // Update filter type in providers
+    ref.read(reviewFilterButtonProvider.notifier).setFilterType(buttonText);
+    ref.read(feedFilterProvider.notifier).setFilters(
+          airType: buttonText,
+          flyerClass: ref.read(feedFilterProvider).flyerClass,
+          category: ref.read(feedFilterProvider).category,
+          continents: ref.read(feedFilterProvider).continents,
+        );
+
+    // Fetch new data with updated filter
+    fetchFeedData(page: 1);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _initPrefs();
+  Future<void> fetchFeedData({int? page}) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final FeedService _feedService = FeedService();
+    final filterState = ref.read(feedFilterProvider);
+
+    try {
+      final result = await _feedService.getFilteredFeed(
+        airType: filterState.airType,
+        flyerClass: filterState.flyerClass,
+        category: filterState.category,
+        continents: filterState.continents,
+        page: page ?? filterState.currentPage,
+      );
+
+      if (page == 1) {
+        ref.read(feedDataProvider.notifier).setData(result);
+      } else {
+        ref.read(feedDataProvider.notifier).appendData(result);
+      }
+
+      setState(() {
+        hasMore = result['hasMore'] ?? true;
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error fetching feed data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  Future<void> _initPrefs() async {}
+  void loadMoreData() {
+    if (hasMore) {
+      final currentPosition = _scrollController.position.pixels;
+
+      ref.read(feedFilterProvider.notifier).incrementPage();
+      fetchFeedData().then((_) {
+        // After new data is loaded, restore scroll position
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.jumpTo(currentPosition);
+        });
+      });
+    }
+  }
+
+  Future<void> _initializeData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await Future.wait([
+      fetchFeedData(page: 1),
+    ]);
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
-    final reviewList = [];
+    final feedState = ref.watch(feedDataProvider);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamed(context, AppRoutes.leaderboardscreen);
@@ -74,17 +159,19 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             },
             buttonStates: buttonStates,
             onButtonToggle: toggleButton,
-            selectedFilterButton: filterType,
+            selectedFilterButton: ref.watch(reviewFilterButtonProvider),
           ),
           backgroundColor: Colors.white,
           bottomNavigationBar: BottomNavBar(currentIndex: 1),
-          body: Column(
+          body: Stack(
             children: [
-              Expanded(
-                  child: isLoading
-                      ? const LoadingWidget()
-                      : SingleChildScrollView(
-                          child: Column(
+              KeyboardDismissWidget(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
@@ -96,14 +183,15 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                     height: 24,
                                   ),
                                   Column(
-                                    children: reviewList.isEmpty
+                                    children: feedState.allData.isEmpty
                                         ? [
-                                            Text(
-                                              "No reviews available",
-                                              style: AppStyles.textStyle_14_600,
-                                            )
+                                            Text("No reviews available",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500))
                                           ]
-                                        : reviewList
+                                        : feedState.allData
                                             .asMap()
                                             .entries
                                             .map((entry) {
@@ -129,7 +217,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                                     ),
                                                   ),
                                                   if (index !=
-                                                      reviewList.length - 1)
+                                                      feedState.allData.length -
+                                                          1)
                                                     Padding(
                                                       padding: const EdgeInsets
                                                           .symmetric(
@@ -158,11 +247,50 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                                   SizedBox(
                                     height: 18,
                                   ),
+                                  if (feedState.hasMore)
+                                    Center(
+                                      child: GestureDetector(
+                                        onTap: loadMoreData,
+                                        child: IntrinsicWidth(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('Expand more'),
+                                                  style: AppStyles
+                                                      .textStyle_18_600
+                                                      .copyWith(fontSize: 15)),
+                                              const SizedBox(width: 8),
+                                              const Icon(Icons.arrow_downward),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(
+                                    height: 18,
+                                  ),
                                 ],
                               ),
                             ),
                           ],
-                        )))
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (isLoading)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.1),
+                    child: const Center(
+                      child: LoadingWidget(),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

@@ -68,21 +68,6 @@ class AirlineAirportNotifier extends StateNotifier<AirlineAirportState> {
     );
   }
 
-  /// Sets the airline score data
-  void setAirlineScoreData(List<dynamic> value) {
-    state = state.copyWith(
-      airlineScoreData: List<Map<String, dynamic>>.from(value),
-      sortedListCache: {},
-    );
-  }
-
-  /// Sets the airport score data
-  void setAirportScoreData(List<dynamic> value) {
-    state = state.copyWith(
-      airportScoreData: List<Map<String, dynamic>>.from(value),
-    );
-  }
-
   /// Retrieves airport data by IATA code
   Map<String, dynamic> getAirportData(String airportCode) {
     return state.airportCache[airportCode] ?? const <String, dynamic>{};

@@ -24,9 +24,8 @@ class _LeaderboardFilterScreenState
   // Declare continents and selectedStates as instance variables
   final LeaderboardService _leaderboardService = LeaderboardService();
   final List<dynamic> airType = [
-    "All",
-    "Airport",
     "Airline",
+    "Airport",
   ];
 
   final List airlineCategory = [
@@ -49,7 +48,6 @@ class _LeaderboardFilterScreenState
 
   bool categoryIsExpanded = true;
   final List<dynamic> continent = [
-    "All",
     "Africa",
     "Asia",
     "Europe",
@@ -60,20 +58,19 @@ class _LeaderboardFilterScreenState
   bool continentIsExpanded = true;
   List<String> currentCategories = [];
   final List<dynamic> flyerClass = [
-    "All",
     "Business",
-    "Premium economy",
+    "Premium Economy",
     "Economy",
   ];
 
   bool flyerClassIsExpanded = true;
-  String selectedAirType = "All";
+  String selectedAirType = "Airline";
   late List<bool> selectedAirTypeStates;
   String selectedCategory = "";
   late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
   List<dynamic> selectedContinents = [];
-  String selectedFlyerClass = "";
+  String selectedFlyerClass = "Business";
   late List<bool> selectedFlyerClassStates;
   bool typeIsExpanded = true;
 
@@ -358,9 +355,9 @@ class _LeaderboardFilterScreenState
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
             const SizedBox(height: 17),
-            _buildCategoryLeaderboards(),
-            const SizedBox(height: 17),
-            if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
+            // _buildCategoryLeaderboards(),
+            // const SizedBox(height: 17),
+            // if (selectedAirType == 'Airport') _buildContinentLeaderboards(),
           ],
         ),
       ),
@@ -386,9 +383,7 @@ class _LeaderboardFilterScreenState
                   // Save filter options and reset page to 1
                   ref.read(leaderboardFilterProvider.notifier).setFilters(
                         airType: selectedAirType,
-                        flyerClass: selectedFlyerClass == "All"
-                            ? null
-                            : selectedFlyerClass,
+                        flyerClass: selectedFlyerClass  ?? "Business",
                         category:
                             selectedCategory.isEmpty ? null : selectedCategory,
                         continents: selectedContinents.isEmpty ||
@@ -407,7 +402,7 @@ class _LeaderboardFilterScreenState
                       await _leaderboardService.getFilteredLeaderboard(
                     airType: selectedAirType,
                     flyerClass:
-                        selectedFlyerClass == "All" ? null : selectedFlyerClass,
+                        selectedFlyerClass ,
                     category:
                         selectedCategory.isEmpty ? null : selectedCategory,
                     continents: selectedContinents.isEmpty ||

@@ -1,10 +1,11 @@
+
 import 'package:dio/dio.dart';
 import 'package:airline_app/utils/global_variable.dart';
 
-class LeaderboardService {
+class FeedService {
   final Dio _dio = Dio();
 
-  Future<dynamic> getFilteredLeaderboard({
+  Future<dynamic> getFilteredFeed({
     required String airType,
     required String? flyerClass,
     required String? category,
@@ -13,7 +14,7 @@ class LeaderboardService {
   }) async {
     try {
       final response = await _dio.get(
-        '$apiUrl/api/v2/airline-list',
+        '$apiUrl/api/v2/feed-list',
         queryParameters: {
           'airType': airType,
           'flyerClass': flyerClass,
@@ -24,7 +25,7 @@ class LeaderboardService {
       );
       return response.data;
     } catch (e) {
-      throw Exception('Failed to fetch filtered leaderboard data');
+      throw Exception('Failed to fetch filtered feed data');
     }
   }
 }

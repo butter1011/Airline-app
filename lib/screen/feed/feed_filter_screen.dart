@@ -4,6 +4,12 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:airline_app/screen/app_widgets/loading.dart';
+import 'package:airline_app/provider/feed_data_provider.dart';
+import 'package:airline_app/provider/feed_filter_provider.dart';
+import 'package:airline_app/controller/feed_service.dart';
+import 'package:airline_app/provider/feed_filter_button_provider.dart';
+import 'package:airline_app/provider/review_filter_button_provider.dart';
 
 class FeedFilterScreen extends ConsumerStatefulWidget {
   const FeedFilterScreen({super.key});
@@ -14,10 +20,10 @@ class FeedFilterScreen extends ConsumerStatefulWidget {
 
 class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   // Declare continents and selectedStates as instance variables
+  final FeedService _feedService = FeedService();
   final List<dynamic> airType = [
-    "All",
-    "Airport",
     "Airline",
+    "Airport",
   ];
 
   final List airlineCategory = [
@@ -40,7 +46,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
   bool categoryIsExpanded = true;
   final List<dynamic> continent = [
-    "All",
     "Africa",
     "Asia",
     "Europe",
@@ -51,20 +56,19 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   bool continentIsExpanded = true;
   List<String> currentCategories = [];
   final List<dynamic> flyerClass = [
-    "All",
     "Business",
-    "Premium economy",
+    "Premium Economy",
     "Economy",
   ];
 
   bool flyerClassIsExpanded = true;
   bool openedSearchTextField = false;
-  String selectedAirType = "All";
+  String selectedAirType = "Airline";
   String selectedCategory = "";
   late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
   List<dynamic> selectedContinents = [];
-  String selectedFlyerClass = "";
+  String selectedFlyerClass = "Business";
   late List<bool> selectedFlyerClassStates;
   late List<bool> selectedairTypeStates;
   bool typeIsExpanded = true;
@@ -340,8 +344,55 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
+            onTap: () async {
+              try {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const Center(child: LoadingWidget()),
+                );
+
+                ref.read(reviewFilterButtonProvider.notifier).setFilterType(selectedAirType);
+
+                // Save filter options
+                ref.read(feedFilterProvider.notifier).setFilters(
+                      airType: selectedAirType,
+                      flyerClass: selectedFlyerClass ?? "Business",
+                      category:
+                          selectedCategory.isEmpty ? null : selectedCategory,
+                      continents: selectedContinents.isEmpty ||
+                              selectedContinents[0] == "All"
+                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                          : selectedContinents.cast<String>(),
+                    );
+
+                // Fetch first page with new filters
+                final result = await _feedService.getFilteredFeed(
+                  airType: selectedAirType,
+                  flyerClass: selectedFlyerClass,
+                  category: selectedCategory.isEmpty ? null : selectedCategory,
+                  continents: selectedContinents.isEmpty ||
+                          selectedContinents[0] == "All"
+                      ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                      : selectedContinents.cast<String>(),
+                  page: 1,
+                );
+
+                ref
+                    .read(feedFilterButtonProvider.notifier)
+                    .setFilterType(selectedAirType);
+                ref.read(feedDataProvider.notifier).setData(result);
+
+                Navigator.pop(context); // Close loading dialog
+                Navigator.pop(context); // Close filter screen
+              } catch (e) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Failed to fetch filtered data: ${e.toString()}')),
+                );
+              }
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.87,
@@ -374,11 +425,10 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppbarWidget(
-        title: 'Filter',
-        onBackPressed: () {
-          Navigator.of(context).pop();
-        }
-      ),
+          title: 'Filter',
+          onBackPressed: () {
+            Navigator.of(context).pop();
+          }),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -387,10 +437,10 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
             const SizedBox(height: 17),
-            _buildCategoryLeaderboards(),
-            const SizedBox(height: 17),
-            _buildContinentLeaderboards(),
-            const SizedBox(height: 85),
+            // _buildCategoryLeaderboards(),
+            // const SizedBox(height: 17),
+            // _buildContinentLeaderboards(),
+            // const SizedBox(height: 85),
           ],
         ),
       ),

@@ -23,6 +23,7 @@ import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/provider/leaderboard_filter_provider.dart';
 import 'package:airline_app/controller/leaderboard_service.dart';
+import 'package:airline_app/controller/top_review_controller.dart';
 
 bool _isWebSocketConnected = false;
 
@@ -36,6 +37,7 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   List airlineDataSortedByCleanliness = [];
   List airlineDataSortedByOnboardSevice = [];
+  List<dynamic> trendingReviews = [];
   bool hasMore = true;
   bool isLoading = false;
   Map<String, bool> buttonStates = {
@@ -44,19 +46,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   };
 
   int expandedItems = 5;
-  String filterType = 'All';
+  String filterType = 'Airline';
   bool isLeaderboardLoading = true;
   List<Map<String, dynamic>> leaderBoardList = [];
   double leftPadding = 24.0;
 
   late IOWebSocketChannel _channel;
+  final TopReviewService _topReviewService = TopReviewService();
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _mounted = true;
 
-  @override
   void dispose() {
+    _mounted = false;
     _searchController.dispose();
-    // _channel.sink.close();
     super.dispose();
   }
 
@@ -88,9 +91,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Future<void> fetchLeaderboardData({int? page}) async {
+    if (!_mounted) return;
+
     setState(() {
       isLoading = true;
     });
+
     final LeaderboardService _leaderboardService = LeaderboardService();
     final filterState = ref.read(leaderboardFilterProvider);
 
@@ -100,8 +106,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         flyerClass: filterState.flyerClass,
         category: filterState.category,
         continents: filterState.continents,
-        page: page ?? filterState.currentPage, // Use page from provider
+        page: page ?? filterState.currentPage,
       );
+
+      if (!_mounted) return;
 
       if (page == 1) {
         ref.read(airlineAirportProvider.notifier).setData(result);
@@ -114,9 +122,27 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         isLoading = false;
       });
     } catch (e) {
+      if (!_mounted) return;
+
       debugPrint('Error fetching leaderboard data: $e');
       setState(() {
+        hasMore = false;
         isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _initializeData() async {
+    if (!_mounted) return;
+
+    await Future.wait([
+      fetchLeaderboardData(),
+      fetchTrendingReviews(),
+    ]);
+
+    if (_mounted) {
+      setState(() {
+        isLeaderboardLoading = false;
       });
     }
   }
@@ -130,42 +156,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     }
   }
 
-  // Future<void> connectWebSocket() async {
-  //   if (_isWebSocketConnected) return;
-
-  //   try {
-  //     _channel = IOWebSocketChannel.connect(Uri.parse('ws://$backendUrl/ws'));
-  //     _channel.stream.listen(
-  //       (data) {
-  //         final jsonData = jsonDecode(data);
-  //         if (jsonData['type'] == 'airlineAirport') {
-  //           ref
-  //               .read(airlineAirportProvider.notifier)
-  //               .setData(Map<String, dynamic>.from(jsonData));
-  //           setState(() {});
-  //         }
-  //       },
-  //       onError: (_) {
-  //         _isWebSocketConnected = false;
-  //       },
-  //       onDone: () {
-  //         _isWebSocketConnected = false;
-  //       },
-  //     );
-  //     _isWebSocketConnected = true;
-  //   } catch (_) {
-  //     _isWebSocketConnected = false;
-  //   }
-  // }
-
-  Future<void> _initializeData() async {
-    await Future.wait([
-      // connectWebSocket(),
-      fetchLeaderboardData(),
-    ]);
-    setState(() {
-      isLeaderboardLoading = false;
-    });
+  Future<void> fetchTrendingReviews() async {
+    try {
+      final result = await _topReviewService.getTopReviews();
+      setState(() {
+        trendingReviews = result['data'];
+      });
+    } catch (e) {
+      debugPrint('Error fetching trending reviews: $e');
+    }
   }
 
   Future<bool> _onWillPop() async {
@@ -200,8 +199,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final trendingreviews = [];
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -325,7 +322,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: trendingreviews.map(
+                                        children: trendingReviews.map(
                                           (singleFeedback) {
                                             return Padding(
                                               padding: const EdgeInsets.only(
@@ -385,7 +382,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             ),
             if (isLoading)
               Container(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withOpacity(0.1),
                 child: const Center(
                   child: LoadingWidget(),
                 ),
