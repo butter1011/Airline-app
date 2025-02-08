@@ -1,20 +1,21 @@
+import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/models/boarding_pass.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_country_flag.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:country_codes/country_codes.dart';
 
 class ReviewFlightCard extends ConsumerStatefulWidget {
-  const ReviewFlightCard(
-      {super.key,
-      required this.index,
-      required this.singleBoardingPass,
-      required this.isReviewed});
+  const ReviewFlightCard({
+    super.key,
+    required this.index,
+    required this.singleBoardingPass,
+    required this.isReviewed,
+  });
+
   final int index;
   final BoardingPass singleBoardingPass;
   final bool isReviewed;
@@ -24,34 +25,62 @@ class ReviewFlightCard extends ConsumerStatefulWidget {
 }
 
 class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
+  final BoardingPassController _boardingPassController = BoardingPassController();
+
+  Future<void> _handleFlightCardTap() async {
+    try {
+      final response = await _boardingPassController.getBoardingPassDetails(
+        widget.singleBoardingPass.airlineCode,
+        widget.singleBoardingPass.departureAirportCode,
+        widget.singleBoardingPass.arrivalAirportCode,
+      );
+
+      final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
+      aviationInfoNotifier
+        ..updateAirlineData(response["airline"])
+        ..updateDepartureData(response["departure"])
+        ..updateArrivalData(response["arrival"])
+        ..updateClassOfTravel(widget.singleBoardingPass.classOfTravel)
+        ..updateIndex(widget.index);
+
+      if (mounted) {
+        Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairline);
+      }
+    } catch (e) {
+      debugPrint('Error handling flight card tap: $e');
+    }
+  }
+
+  Widget _buildStatusContainer(String text) {
+    return IntrinsicWidth(
+      child: Container(
+        height: 24,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Center(
+            child: Text(
+              text,
+              style: AppStyles.textStyle_14_500.copyWith(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final airlineAirportNotifier = ref.read(airlineAirportProvider.notifier);
-    final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
-    final airlineData = airlineAirportNotifier
-        .getAirlineData(widget.singleBoardingPass.airlineCode);
-    final departureAirportData = airlineAirportNotifier
-        .getAirportData(widget.singleBoardingPass.departureAirportCode);
-    final arrivalAirportData = airlineAirportNotifier
-        .getAirportData(widget.singleBoardingPass.arrivalAirportCode);
-
-    final airlineName = widget.singleBoardingPass.airlineName;
-    final departureCountryCode = widget.singleBoardingPass.departureCountryCode;
-    final originTime = widget.singleBoardingPass.departureTime;
-    final arrivalCountryCode = widget.singleBoardingPass.arrivalCountryCode;
-    final arrivalTime = widget.singleBoardingPass.arrivalTime;
-    final flightNumber = widget.singleBoardingPass.flightNumber;
-    final status = widget.singleBoardingPass.visitStatus;
-    final departureCity = widget.singleBoardingPass.departureCity;
-    final arrivalCity = widget.singleBoardingPass.arrivalCity;
-    final departureAirportCode = widget.singleBoardingPass.departureAirportCode;
-    final arrivalAirportCode = widget.singleBoardingPass.arrivalAirportCode;
-    final String classTravel = widget.singleBoardingPass.classOfTravel;
+    final BoardingPass pass = widget.singleBoardingPass;
     CountryDetails? departureCountry;
     CountryDetails? arrivalCountry;
+
     try {
-      departureCountry = CountryCodes.detailsFromAlpha2(departureCountryCode);
-      arrivalCountry = CountryCodes.detailsFromAlpha2(arrivalCountryCode);
+      departureCountry = CountryCodes.detailsFromAlpha2(pass.departureCountryCode);
+      arrivalCountry = CountryCodes.detailsFromAlpha2(pass.arrivalCountryCode);
     } catch (e) {
       return const SizedBox.shrink();
     }
@@ -61,38 +90,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
       child: Container(
         decoration: AppStyles.cardDecoration,
         child: InkWell(
-          onTap: widget.isReviewed
-              ? null
-              : () {
-                  if (departureAirportData.isEmpty ||
-                      arrivalAirportData.isEmpty ||
-                      airlineData.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'There is no data in the database.',
-                          style: AppStyles.textStyle_16_600,
-                        ),
-                        duration: const Duration(seconds: 1),
-                        backgroundColor: Colors.lightBlue,
-                      ),
-                    );
-                    return;
-                  }
-                  final String fromId = departureAirportData['_id'];
-                  final String toId = arrivalAirportData['_id'];
-                  final String airlineId = airlineData['_id'];
-
-                  aviationInfoNotifier
-                    ..updateFrom(fromId)
-                    ..updateTo(toId)
-                    ..updateClassOfTravel(classTravel)
-                    ..updateAirline(airlineId)
-                    ..updateIndex(widget.index);
-
-                  Navigator.pushNamed(
-                      context, AppRoutes.questionfirstscreenforairline);
-                },
+          onTap: widget.isReviewed ? null : _handleFlightCardTap,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -103,21 +101,21 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   children: [
                     Row(
                       children: [
-                        buildCountryFlag(departureCountryCode),
+                        buildCountryFlag(pass.departureCountryCode),
                         const SizedBox(width: 4),
                         Text(
-                          "${departureCountry.name != null && departureCountry.name!.length > 11 ? '${departureCountry.name!.substring(0, 11)}..' : departureCountry.name ?? 'Unknown'}, $originTime",
+                          "${_truncateText(departureCountry.name, 11)}, ${pass.departureTime}",
                           style: AppStyles.textStyle_13_600,
                         )
                       ],
                     ),
                     Row(
                       children: [
-                        if (arrivalCountryCode.isNotEmpty)
-                          buildCountryFlag(arrivalCountryCode),
+                        if (pass.arrivalCountryCode.isNotEmpty)
+                          buildCountryFlag(pass.arrivalCountryCode),
                         const SizedBox(width: 4),
                         Text(
-                          "${arrivalCountry.name != null && arrivalCountry.name!.length > 11 ? '${arrivalCountry.name!.substring(0, 11)}..' : arrivalCountry.name ?? 'Unknown'}, $arrivalTime",
+                          "${_truncateText(arrivalCountry.name, 11)}, ${pass.arrivalTime}",
                           style: AppStyles.textStyle_13_600,
                         )
                       ],
@@ -131,8 +129,8 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        "${departureCity.length > 12 ? '${departureCity.substring(0, 12)}...' : departureCity}  ($departureAirportCode) -> ${arrivalCity.length > 12 ? '${arrivalCity.substring(0, 12)}...' : arrivalCity} ($arrivalAirportCode)",                        style: AppStyles.textStyle_16_600
-                            .copyWith(color: Colors.black),
+                        "${_truncateText(pass.departureCity, 12)} (${pass.departureAirportCode}) -> ${_truncateText(pass.arrivalCity, 12)} (${pass.arrivalAirportCode})",
+                        style: AppStyles.textStyle_16_600.copyWith(color: Colors.black),
                         overflow: TextOverflow.visible,
                         softWrap: true,
                         maxLines: 2,
@@ -149,57 +147,21 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Class : $classTravel",
+                        Text("Class : ${pass.classOfTravel}",
                             style: AppStyles.textStyle_14_500),
-                        Text("Flight Number : $flightNumber",
+                        Text("Flight Number : ${pass.flightNumber}",
                             style: AppStyles.textStyle_14_500),
                       ],
                     ),
-                    Text(airlineName, style: AppStyles.textStyle_14_500),
+                    Text(pass.airlineName, style: AppStyles.textStyle_14_500),
                   ],
                 ),
                 const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IntrinsicWidth(
-                      child: Container(
-                        height: 24,
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Center(
-                            child: Text(
-                              status,
-                              style: AppStyles.textStyle_14_500
-                                  .copyWith(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (widget.isReviewed)
-                      IntrinsicWidth(
-                        child: Container(
-                          height: 24,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Center(
-                              child: Text(
-                                "Reviewed",
-                                style: AppStyles.textStyle_14_500
-                                    .copyWith(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    _buildStatusContainer(pass.visitStatus),
+                    if (widget.isReviewed) _buildStatusContainer("Reviewed"),
                   ],
                 )
               ],
@@ -208,5 +170,10 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         ),
       ),
     );
+  }
+
+  String _truncateText(String? text, int maxLength) {
+    if (text == null) return 'Unknown';
+    return text.length > maxLength ? '${text.substring(0, maxLength)}..' : text;
   }
 }

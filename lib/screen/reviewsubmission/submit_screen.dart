@@ -5,7 +5,6 @@ import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/models/airline_review_model.dart';
 import 'package:airline_app/models/airport_review_model.dart';
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/boarding_passes_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
@@ -427,15 +426,19 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
   @override
   Widget build(BuildContext context) {
     final boardingPassController = BoardingPassController();
-    final flightData = ref.watch(aviationInfoProvider);
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final airlineData = boardingPassDetail.airlineData;
+    final departureData = boardingPassDetail.departureData;
+    final arrivalData = boardingPassDetail.arrivalData;
+
     final reviewDataForAirline = ref.watch(reviewFeedBackProviderForAirline);
     final reviewDataForAirport = ref.watch(reviewFeedBackProviderForAirport);
     final userData = ref.watch(userDataProvider);
-    final index = flightData.index;
-    final from = flightData.from;
-    final to = flightData.to;
-    final airline = flightData.airline;
-    final classTravel = flightData.selectedClassOfTravel;
+    final index = boardingPassDetail.index;
+    final from = departureData["_id"];
+    final to = arrivalData["_id"];
+    final airline = airlineData["_id"];
+    final classTravel = boardingPassDetail.selectedClassOfTravel;
     final departureArrival = reviewDataForAirline[0]["subCategory"];
     final comfort = reviewDataForAirline[1]["subCategory"];
     final cleanliness = reviewDataForAirline[2]["subCategory"];
@@ -449,19 +452,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
     final amenities = reviewDataForAirport[5]["subCategory"];
 
-    final airlineData = ref.watch(aviationInfoProvider);
-    final airlineName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlineData.airline);
-    final airportName = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlineData.from);
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlineData.airline);
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlineData.airline);
+    final airlineName = airlineData["name"]??"";
+    final airportName = departureData["name"]??"";
+    final logoImage = airlineData["logoImage"]??"";
+
 
     return PopScope(
       canPop: false, // Prevents the default pop action
@@ -479,8 +473,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-                  flexibleSpace: BuildQuestionHeaderForSubmit(
-                    backgroundImage: backgroundImage,
+                  flexibleSpace: BuildQuestionHeaderForSubmit(              
                     title: "Share your experience",
                     subTitle: "Your feedback helps us improve!",
                     logoImage: logoImage,

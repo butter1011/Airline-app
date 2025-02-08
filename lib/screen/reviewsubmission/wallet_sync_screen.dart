@@ -17,7 +17,7 @@ import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 
 class WalletSyncScreen extends ConsumerStatefulWidget {
-  const WalletSyncScreen({Key? key}) : super(key: key);
+  const WalletSyncScreen({super.key});
 
   @override
   ConsumerState<WalletSyncScreen> createState() => _WalletSyncScreenState();
@@ -334,10 +334,11 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 2,
-                color: Colors.black,
+                height: 1,
+                color: Colors.grey.shade300,
               ),
               Padding(
+                
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(

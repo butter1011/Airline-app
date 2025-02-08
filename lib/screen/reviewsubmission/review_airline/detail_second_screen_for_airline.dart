@@ -28,33 +28,19 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirline[singleIndex]['subCategory'];
 
-    final airlinData = ref.watch(aviationInfoProvider);
-    final from = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.from);
-
-    final to = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirportName(airlinData.to);
-
-    final airline = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineName(airlinData.airline);
-
-    final logoImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineLogoImage(airlinData.airline);
-    final selectedClassOfTravel = airlinData.selectedClassOfTravel;
-    final backgroundImage = ref
-        .watch(airlineAirportProvider.notifier)
-        .getAirlineBackgroundImage(airlinData.airline);
+    final boardingPassDetail = ref.watch(aviationInfoProvider);
+    final String from = boardingPassDetail.departureData["name"];
+    final String to = boardingPassDetail.arrivalData["name"];
+    final String airline = boardingPassDetail.airlineData["name"];
+    final logoImage = boardingPassDetail.airlineData["logoImage"]??"";
+    final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
+    final backgroundImage = boardingPassDetail.airlineData["backgroundImage"];
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirline(
-          backgroundImage: backgroundImage,
           title: "Tell us about your airline experience",
           subTitle: "What did you dislike about your experience?",
           logoImage: logoImage,
@@ -126,7 +112,8 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
               child: MainButton(
                 text: "Back",
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+                  Navigator.pushNamed(
+                      context, AppRoutes.reviewsubmissionscreen);
                   ref.read(aviationInfoProvider.notifier).resetState();
                   ref
                       .read(reviewFeedBackProviderForAirline.notifier)

@@ -22,8 +22,6 @@ import 'package:airline_app/screen/reviewsubmission/review_airline/question_firs
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_second_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airport/question_second_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/start_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/submit_screen.dart';
@@ -122,12 +120,9 @@ class MyApp extends ConsumerWidget {
  
 
         // Airports routes  
-        AppRoutes.questionfirstscreenforairport: (context) =>
-            QuestionFirstScreenForAirport(),
+
         AppRoutes.detailfirstscreenforairport: (context) =>
             DetailFirstScreenForAirport(),
-        AppRoutes.questionsecondscreenforairport: (context) =>
-            QuestionSecondScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
    

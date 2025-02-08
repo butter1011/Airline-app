@@ -10,14 +10,12 @@ class BuildQuestionHeaderForSubmit extends StatelessWidget {
     required this.airlineName,
     required this.airportName,
     required this.logoImage,
-    required this.backgroundImage,
     required this.parent,
   });
   final String subTitle;
   final String airlineName;
   final String airportName;
   final String logoImage;
-  final String backgroundImage;
   final String title;
   final int parent;
 

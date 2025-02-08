@@ -9,14 +9,12 @@ class BuildQuestionHeaderForAirport extends StatelessWidget {
     required this.title,
     required this.airportName,
     required this.logoImage,
-    required this.backgroundImage,
     required this.selecetedOfCalssLevel,
     required this.parent,
   });
   final String subTitle;
   final String airportName;
   final String logoImage;
-  final String backgroundImage;
   final String selecetedOfCalssLevel;
   final String title;
   final int parent;

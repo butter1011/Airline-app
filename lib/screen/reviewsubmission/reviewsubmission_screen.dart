@@ -27,7 +27,7 @@ class ReviewsubmissionScreen extends ConsumerStatefulWidget {
 class _ReviewsubmissionScreenState
     extends ConsumerState<ReviewsubmissionScreen> {
   bool isLoading = true;
-  String selectedType = "All";
+  
 
   final _boardingPassController = BoardingPassController();
 
@@ -37,12 +37,7 @@ class _ReviewsubmissionScreenState
     _loadData();
   }
 
-  void onTypeSelected(String type) {
-    setState(() {
-      selectedType = type;
-    });
-  }
-
+ 
   Future<void> _loadData() async {
     try {
       await Future.wait([
@@ -84,8 +79,7 @@ class _ReviewsubmissionScreenState
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
-        children: [
-          if (selectedType == "All" || selectedType == "Flights")
+        children: [          
             ReviewFlightCard(
               singleBoardingPass: singleBoardingPass,
               index: index,
@@ -98,7 +92,7 @@ class _ReviewsubmissionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);
+    final List<BoardingPass> boardingPasses = ref.watch(boardingPassesProvider);  
     return PopScope(
       canPop: false, // Prevents the default pop action
       onPopInvokedWithResult: (didPop, result) {
