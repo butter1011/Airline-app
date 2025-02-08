@@ -5,6 +5,7 @@ import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
+import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
-    final reviewList = ref.watch(reviewsAirlineAirportProvider).filteredReviews;
+    final feedState = ref.watch(feedDataProvider);
     return PopScope(
       canPop: false, // Prevents the default pop action
       onPopInvokedWithResult: (didPop, result) {
