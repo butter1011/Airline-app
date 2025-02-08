@@ -132,8 +132,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         final updatedUserData = await _reviewAirlineController
             .increaseUserPoints(userData['userData']['_id'], 500);
 
-        final  airlineScore = resultOfAirline['data']['data']['score'];
-        final  airportScore = resultOfAirport['data']['data']['score'];
+        final airlineScore = resultOfAirline['data']['data']['score'];
+        final airportScore = resultOfAirport['data']['data']['score'];
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);

@@ -32,7 +32,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
     final String from = boardingPassDetail.departureData["name"];
     final String to = boardingPassDetail.arrivalData["name"];
     final String airline = boardingPassDetail.airlineData["name"];
-    final logoImage = boardingPassDetail.airlineData["logoImage"]??"";
+    final logoImage = boardingPassDetail.airlineData["logoImage"] ?? "";
     final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
     final backgroundImage = boardingPassDetail.airlineData["backgroundImage"];
     return Scaffold(
@@ -59,7 +59,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
             children: [
               Text(
                 "${selections[singleIndex]['mainCategory']}",
-                style: AppStyles.textStyle_14_600,
+                style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),
             ],
