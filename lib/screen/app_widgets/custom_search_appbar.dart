@@ -34,21 +34,21 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
       elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          color: AppStyles.appBarColor,
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey.shade300,
-              width: 1.0,
+            color: AppStyles.appBarColor,
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey.shade300,
+                width: 1.0,
+              ),
+            )
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withOpacity(0.1),
+            //     spreadRadius: 5,
+            //     blurRadius: 15,
+            //   ),
+            // ],
             ),
-          )
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.1),
-          //     spreadRadius: 5,
-          //     blurRadius: 15,
-          //   ),
-          // ],
-        ),
       ),
       title: Column(
         children: [
@@ -60,9 +60,18 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 filterType: filterType,
                 onSearchChanged: onSearchChanged,
               ),
-              CustomIconButton(icon:Icons.tune_rounded, onTap: (){
-                Navigator.pushNamed(context, AppRoutes.filterscreen);
-              }),
+              CustomIconButton(
+                icon: Icons.tune_rounded,
+                onTap: () {
+                  if (ModalRoute.of(context)?.settings.name ==
+                      AppRoutes.leaderboardscreen) {
+                    Navigator.pushNamed(context, AppRoutes.filterscreen);
+                  } else if (ModalRoute.of(context)?.settings.name ==
+                      AppRoutes.feedscreen) {
+                    Navigator.pushNamed(context, AppRoutes.feedfilterscreen);
+                  }
+                },
+              ),
             ],
           ),
           Column(

@@ -277,12 +277,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 ),
               ),
               if (isLoading)
-                Positioned.fill(
-                  child: Container(
-                    color: Colors.grey.withOpacity(0.1),
-                    child: const Center(
-                      child: LoadingWidget(),
-                    ),
+                Container(
+                  color: Colors.white.withOpacity(0.7),
+                  child: const Center(
+                    child: LoadingWidget(),
                   ),
                 ),
             ],

@@ -10,6 +10,8 @@ import 'package:airline_app/provider/feed_filter_provider.dart';
 import 'package:airline_app/controller/feed_service.dart';
 import 'package:airline_app/provider/feed_filter_button_provider.dart';
 import 'package:airline_app/provider/review_filter_button_provider.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/main_button.dart';
 
 class FeedFilterScreen extends ConsumerStatefulWidget {
   const FeedFilterScreen({super.key});
@@ -333,102 +335,14 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     );
   }
 
-  Widget _buildApplyButton() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 4,
-          color: AppStyles.littleBlackColor,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: InkWell(
-            onTap: () async {
-              try {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => const Center(child: LoadingWidget()),
-                );
-
-                ref.read(reviewFilterButtonProvider.notifier).setFilterType(selectedAirType);
-
-                // Save filter options
-                ref.read(feedFilterProvider.notifier).setFilters(
-                      airType: selectedAirType,
-                      flyerClass: selectedFlyerClass ?? "Business",
-                      category:
-                          selectedCategory.isEmpty ? null : selectedCategory,
-                      continents: selectedContinents.isEmpty ||
-                              selectedContinents[0] == "All"
-                          ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-                          : selectedContinents.cast<String>(),
-                    );
-
-                // Fetch first page with new filters
-                final result = await _feedService.getFilteredFeed(
-                  airType: selectedAirType,
-                  flyerClass: selectedFlyerClass,
-                  category: selectedCategory.isEmpty ? null : selectedCategory,
-                  continents: selectedContinents.isEmpty ||
-                          selectedContinents[0] == "All"
-                      ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
-                      : selectedContinents.cast<String>(),
-                  page: 1,
-                );
-
-                ref
-                    .read(feedFilterButtonProvider.notifier)
-                    .setFilterType(selectedAirType);
-                ref.read(feedDataProvider.notifier).setData(result);
-
-                Navigator.pop(context); // Close loading dialog
-                Navigator.pop(context); // Close filter screen
-              } catch (e) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          'Failed to fetch filtered data: ${e.toString()}')),
-                );
-              }
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.87,
-              height: 56,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border:
-                      Border.all(width: 2, color: AppStyles.littleBlackColor),
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppStyles.littleBlackColor, offset: Offset(2, 2))
-                  ]),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context).translate('Apply'),
-                  style:
-                      AppStyles.textStyle_15_600.copyWith(color: Colors.black),
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppbarWidget(
-          title: 'Filter',
-          onBackPressed: () {
-            Navigator.of(context).pop();
-          }),
+        title: "Filter",
+        onBackPressed: () => Navigator.pop(context),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -437,14 +351,64 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
             const SizedBox(height: 17),
             _buildFlyerClassLeaderboards(),
             const SizedBox(height: 17),
-            // _buildCategoryLeaderboards(),
-            // const SizedBox(height: 17),
-            // _buildContinentLeaderboards(),
-            // const SizedBox(height: 85),
           ],
         ),
       ),
-      bottomSheet: _buildApplyButton(),
+      bottomNavigationBar: BottomButtonBar(
+        child: MainButton(
+          text: AppLocalizations.of(context).translate('Apply'),
+          onPressed: () async {
+            try {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(child: LoadingWidget()),
+              );
+
+              ref
+                  .read(reviewFilterButtonProvider.notifier)
+                  .setFilterType(selectedAirType);
+
+              ref.read(feedFilterProvider.notifier).setFilters(
+                    airType: selectedAirType,
+                    flyerClass: selectedFlyerClass ?? "Business",
+                    category:
+                        selectedCategory.isEmpty ? null : selectedCategory,
+                    continents: selectedContinents.isEmpty ||
+                            selectedContinents[0] == "All"
+                        ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                        : selectedContinents.cast<String>(),
+                  );
+
+              final result = await _feedService.getFilteredFeed(
+                airType: selectedAirType,
+                flyerClass: selectedFlyerClass,
+                category: selectedCategory.isEmpty ? null : selectedCategory,
+                continents:
+                    selectedContinents.isEmpty || selectedContinents[0] == "All"
+                        ? ["Africa", "Asia", "Europe", "Americas", "Oceania"]
+                        : selectedContinents.cast<String>(),
+                page: 1,
+              );
+
+              ref
+                  .read(feedFilterButtonProvider.notifier)
+                  .setFilterType(selectedAirType);
+              ref.read(feedDataProvider.notifier).setData(result);
+
+              Navigator.pop(context);
+              Navigator.pop(context);
+            } catch (e) {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content:
+                        Text('Failed to fetch filtered data: ${e.toString()}')),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }
