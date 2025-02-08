@@ -70,7 +70,7 @@ class _CLeaderboardScreenState extends ConsumerState<CLeaderboardScreen> {
           const Center(child: LoadingWidget())
         else if (userReviews.isEmpty)
           const Padding(
-            padding: EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(top: 2.0),
             child: Center(child: Text("No reviews found")),
           )
         else

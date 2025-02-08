@@ -118,24 +118,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(
-                      height: 21,
+                      height: 8,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${userData?['userData']['name']}',
+                        '${(userData?['userData']['name'] ?? '').length > 20 ? '${userData?['userData']['name']?.substring(0, 20)}...' : userData?['userData']['name']}',
                         style: AppStyles.textStyle_24_600,
                       ),
                     ),
+                    const SizedBox(
+                      height: 4,
+                    ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '         ${userData?['userData']['bio']}',
+                        '${(userData?['userData']['bio'] ?? '').length > 50 ? '${userData?['userData']['bio']?.substring(0, 50)}...' : userData?['userData']['bio']}',
                         style: AppStyles.textStyle_14_400,
                       ),
                     ),
                     const SizedBox(
-                      height: 14,
+                      height: 8,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,

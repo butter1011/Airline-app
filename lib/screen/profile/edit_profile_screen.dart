@@ -37,6 +37,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   String? _selectedAirline;
   XFile? _selectedImage;
+  String initialName = '';
+  String initialBio = '';
 
   @override
   void dispose() {
@@ -48,6 +50,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
+    final userData = ref.read(userDataProvider);
+    initialName = userData?['userData']['name'] ?? '';
+    initialBio = userData?['userData']['bio'] ?? '';
+    _nameController.text = initialName;
+    _bioController.text = initialBio;
   }
 
   void reloadProfileImage() {
@@ -93,11 +100,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       ),
                     ],
                   ),
-                ),              ),
+                ),
+              ),
               Positioned(
                   right: 8,
                   top: 8,
-                  child: Icon(Icons.close, size: 32,))
+                  child: Icon(
+                    Icons.close,
+                    size: 32,
+                  ))
             ]),
           ),
         ),
@@ -169,66 +180,69 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void _editProfileFunction() async {
+    if (!mounted) return;
+
     setState(() {
-      isLoading = true; // Show loading indicator
+      isLoading = true;
     });
 
-    reloadProfileImage();
-    final userData = ref.watch(userDataProvider);
-
     try {
+      final userData = ref.read(userDataProvider);
       String uploadedProfilePhoto = userData?['userData']['profilePhoto'] ?? '';
+
       if (_selectedImage != null) {
-        uploadedProfilePhoto = await _uploadImages(_selectedImage) ?? '';
+        uploadedProfilePhoto = await _uploadImages(_selectedImage);
       }
 
-      final userInformationResponse = await http.post(
+      final updateData = {
+        'name': _nameController.text,
+        'bio': _bioController.text,
+        '_id': userData?['userData']['_id'],
+        'favoriteAirline':
+            _selectedAirline ?? userData?['userData']['favoriteAirline'],
+        'profilePhoto': uploadedProfilePhoto,
+      };
+
+      final response = await http.post(
         Uri.parse('$apiUrl/api/v1/editUser'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({
-          'name': _nameController.text,
-          'bio': _bioController.text,
-          '_id': userData?['userData']['_id'],
-          'favoriteAirline': _selectedAirline,
-          'profilePhoto': uploadedProfilePhoto,
-        }),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: json.encode(updateData),
       );
 
-      if (userInformationResponse.statusCode == 200) {
-        final responseData = jsonDecode(userInformationResponse.body);
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userData', json.encode(responseData));
 
         ref.read(userDataProvider.notifier).setUserData(responseData);
 
-        final prefs = await SharedPreferences.getInstance();
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
 
-        await prefs.setString('userData', json.encode(responseData));
-        setState(() {
-          isLoading = false; // Hide loading indicator
-        });
-
-        Navigator.pushNamed(context, AppRoutes.profilescreen);
-        showCustomSnackbar(context);
+          Navigator.pushReplacementNamed(context, AppRoutes.profilescreen);
+          showCustomSnackbar(context);
+        }
       } else {
-        setState(() {
-          isLoading = false; // Hide loading indicator on error
-        });
-        print('Failed to update user profile: ${userInformationResponse.body}');
+        throw Exception('Failed to update profile');
       }
     } catch (e) {
-      setState(() {
-        isLoading = false; // Hide loading indicator on error
-      });
-      print('Error updating profile: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Update failed: ${e.toString()}')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final UserData = ref.watch(userDataProvider);
-    _nameController.text = '${UserData?['userData']['name']}';
-    _bioController.text = '${UserData?['userData']['bio']}';
+    final userData = ref.read(userDataProvider);
     return Stack(
       children: [
         KeyboardDismissWidget(
@@ -254,9 +268,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           child: CircleAvatar(
                             backgroundImage: _selectedImage != null
                                 ? FileImage(File(_selectedImage!.path))
-                                : UserData?['userData']['profilePhoto'] != null
+                                : userData?['userData']['profilePhoto'] != null
                                     ? NetworkImage(
-                                        UserData?['userData']['profilePhoto'])
+                                        userData?['userData']['profilePhoto'])
                                     : AssetImage("assets/images/avatar_1.png")
                                         as ImageProvider,
                             radius: 48,
@@ -298,7 +312,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ),
                     EditCustomDropdownButton(
                       labelText: "Your Favorite Airline",
-                      hintText: "${UserData?['userData']['favoriteairlines']}",
+                      hintText: "${userData?['userData']['favoriteairlines']}",
                       onChanged: (value) => setState(() {
                         _selectedAirline = value;
                       }),
