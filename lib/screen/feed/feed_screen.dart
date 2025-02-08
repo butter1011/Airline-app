@@ -88,6 +88,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         category: filterState.category,
         continents: filterState.continents,
         page: page ?? filterState.currentPage,
+        searchQuery: _searchQuery,
       );
 
       if (page == 1) {
@@ -134,6 +135,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     });
   }
 
+  void _handleSearchSubmit() {
+    fetchFeedData(page: 1);
+  }
+
   @override
   // ignore: unused_element
   Widget build(BuildContext context) {
@@ -155,6 +160,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 _searchQuery = value.toLowerCase();
               });
             },
+            onSearchSubmit: _handleSearchSubmit,
             buttonStates: buttonStates,
             onButtonToggle: toggleButton,
             selectedFilterButton: ref.watch(reviewFilterButtonProvider),

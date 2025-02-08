@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:airline_app/utils/global_variable.dart';
 
@@ -9,6 +8,7 @@ class FeedService {
     required String airType,
     required String? flyerClass,
     required String? category,
+    String? searchQuery,
     required List<String> continents,
     int page = 1,
   }) async {
@@ -19,6 +19,7 @@ class FeedService {
           'airType': airType,
           'flyerClass': flyerClass,
           'category': category,
+          'searchQuery': searchQuery,
           'continents': continents.join(','),
           'page': page,
         },

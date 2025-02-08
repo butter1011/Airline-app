@@ -103,6 +103,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         airType: filterState.airType,
         flyerClass: filterState.flyerClass,
         category: filterState.category,
+        searchQuery: _searchQuery,
         continents: filterState.continents,
         page: page ?? filterState.currentPage,
       );
@@ -128,6 +129,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         isLoading = false;
       });
     }
+  }
+
+  void _handleSearchSubmit() {
+    fetchLeaderboardData(page: 1);
   }
 
   Future<void> _initializeData() async {
@@ -203,7 +208,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         if (!didPop) {
           _onWillPop;
         }
-      },      
+      },
       child: Scaffold(
         appBar: CustomSearchAppBar(
           searchController: _searchController,
@@ -213,6 +218,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               _searchQuery = value.toLowerCase();
             });
           },
+          onSearchSubmit: _handleSearchSubmit,
           buttonStates: buttonStates,
           onButtonToggle: toggleButton,
           selectedFilterButton: ref.watch(filterButtonProvider),
@@ -412,35 +418,53 @@ class _AirportListSection extends StatelessWidget {
   final bool hasMore;
   final VoidCallback loadMoreData;
 
+  // In the _AirportListSection widget, update the build method:
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Column(
-          children: leaderBoardList.map((singleAirport) {
-            return AirportList(
-              airportData: singleAirport,
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 19),
-        if (hasMore)
+        if (leaderBoardList.isEmpty)
           Center(
-            child: GestureDetector(
-              onTap: loadMoreData,
-              child: IntrinsicWidth(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocalizations.of(context).translate('Expand more'),
-                        style:
-                            AppStyles.textStyle_18_600.copyWith(fontSize: 15)),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.arrow_downward),
-                  ],
-                ),
+            child: Text(
+              "No data found",
+              style: AppStyles.textStyle_16_600.copyWith(
+                color: const Color(0xff38433E),
               ),
             ),
+          )
+        else
+          Column(
+            children: [
+              Column(
+                children: leaderBoardList.map((singleAirport) {
+                  return AirportList(
+                    airportData: singleAirport,
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 19),
+              if (hasMore)
+                Center(
+                  child: GestureDetector(
+                    onTap: loadMoreData,
+                    child: IntrinsicWidth(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              AppLocalizations.of(context)
+                                  .translate('Expand more'),
+                              style: AppStyles.textStyle_18_600
+                                  .copyWith(fontSize: 15)),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_downward),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
       ],
     );

@@ -8,6 +8,7 @@ class LeaderboardService {
     required String airType,
     required String? flyerClass,
     required String? category,
+    String? searchQuery,
     required List<String> continents,
     int page = 1,
   }) async {
@@ -17,6 +18,7 @@ class LeaderboardService {
         queryParameters: {
           'airType': airType,
           'flyerClass': flyerClass,
+          'searchQuery': searchQuery,
           'category': category,
           'continents': continents.join(','),
           'page': page,

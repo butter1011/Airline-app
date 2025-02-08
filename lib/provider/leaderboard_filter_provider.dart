@@ -4,6 +4,7 @@ class LeaderboardFilterState {
   final String airType;
   final String? flyerClass;
   final String? category;
+  String? searchQuery;
   final List<String> continents;
   final int currentPage; // Add currentPage to state
 
@@ -11,6 +12,7 @@ class LeaderboardFilterState {
     required this.airType,
     this.flyerClass,
     this.category,
+    this.searchQuery,
     required this.continents,
     this.currentPage = 1, // Default to page 1
   });
@@ -26,12 +28,14 @@ class LeaderboardFilterNotifier extends StateNotifier<LeaderboardFilterState> {
     required String airType,
     String? flyerClass,
     String? category,
+    String? searchQuery,
     required List<String> continents,
   }) {
     state = LeaderboardFilterState(
       airType: airType,
       flyerClass: flyerClass,
       category: category,
+      searchQuery: searchQuery,
       continents: continents,
     );
   }
@@ -41,6 +45,7 @@ class LeaderboardFilterNotifier extends StateNotifier<LeaderboardFilterState> {
       airType: state.airType,
       flyerClass: state.flyerClass,
       category: state.category,
+      searchQuery: state.searchQuery,
       continents: state.continents,
       currentPage: state.currentPage + 1, // Increment page number
     );
