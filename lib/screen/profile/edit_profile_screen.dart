@@ -35,7 +35,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   bool isLoading = false;
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  String? _selectedAirline;
+  final TextEditingController _airlineController = TextEditingController();
   XFile? _selectedImage;
   String initialName = '';
   String initialBio = '';
@@ -44,6 +44,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   void dispose() {
     _nameController.dispose();
     _bioController.dispose();
+    _airlineController.dispose();
     super.dispose();
   }
 
@@ -55,6 +56,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     initialBio = userData?['userData']['bio'] ?? '';
     _nameController.text = initialName;
     _bioController.text = initialBio;
+    _airlineController.text = userData?['userData']['favoriteAirlines'] ?? '';
   }
 
   void reloadProfileImage() {
@@ -198,8 +200,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         'name': _nameController.text,
         'bio': _bioController.text,
         '_id': userData?['userData']['_id'],
-        'favoriteAirline':
-            _selectedAirline ?? userData?['userData']['favoriteAirline'],
+        'favoriteAirline': _airlineController.text,
         'profilePhoto': uploadedProfilePhoto,
       };
 
@@ -310,14 +311,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     SizedBox(
                       height: 32,
                     ),
-                    EditCustomDropdownButton(
-                      labelText: "Your Favorite Airline",
-                      hintText: "${userData?['userData']['favoriteairlines']}",
-                      onChanged: (value) => setState(() {
-                        _selectedAirline = value;
-                      }),
-                      airlineNames: airlineData,
-                    ),
+                    CommentInputField(
+                        commentController: _airlineController,
+                        title: "Your Favorite Airline",
+                        onChange: (value) {
+                          _airlineController.text = value;
+                        },
+                        hintText: "",
+                        height: 0.06),
                   ],
                 ),
               ),
