@@ -30,16 +30,17 @@ class AirlineAirportListWidget extends StatelessWidget {
         : Column(
             children: [
               Column(
-                children: leaderBoardList.asMap().entries.map((entry) {
+                children: leaderBoardList.asMap().entries.map<Widget>((entry) {
                   int index = entry.key;
-
                   Map<String, dynamic> singleAirport = entry.value;
                   if (index < expandedItems) {
                     return AirportList(
                       airportData: {
                         ...singleAirport,
+                        'rank': index + 1,
                         'index': index,
                       },
+                      rank: index + 1,
                     );
                   }
                   return const SizedBox.shrink();

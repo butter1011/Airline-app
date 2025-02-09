@@ -4,7 +4,11 @@ import 'package:airline_app/utils/global_variable.dart';
 class UserReviewService {
   final Dio _dio = Dio();
 
-  Future<dynamic> getUserReviews(String userId) async {
+  Future<dynamic> getUserReviews(String? userId) async {
+    if (userId == null || userId.isEmpty) {
+      return [];
+    }
+
     try {
       final response = await _dio.get(
         '$apiUrl/api/v2/user-reviews',
@@ -16,12 +20,10 @@ class UserReviewService {
       if (response.data['success']) {
         return response.data['data'];
       } else {
-        throw Exception(response.data['message']);
+        return [];
       }
     } catch (e) {
-      throw Exception(e is DioException
-          ? e.response?.data['message'] ?? 'Failed to fetch user reviews data'
-          : 'Failed to fetch user reviews data');
+      return [];
     }
   }
 }

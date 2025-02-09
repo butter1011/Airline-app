@@ -5,12 +5,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AirportList extends ConsumerWidget {
+  
   const AirportList({
     super.key,
     required this.airportData,
+    required this.rank,
   });
 
   final Map<String, dynamic> airportData;
+  final int rank;
+
   (List<FlSpot>, double) _getSpots() {
     final scoreHistory =
         List<Map<String, dynamic>>.from(airportData['scoreHistory'] ?? []);
@@ -110,7 +114,13 @@ class AirportList extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
+                    width: 30,
+                    child: Text(
+                      '$rank. ',
+                      style: AppStyles.textStyle_14_600,
+                    ),
+                  ),                  Container(
                     height: 40,
                     width: 40,
                     decoration: AppStyles.circleDecoration,

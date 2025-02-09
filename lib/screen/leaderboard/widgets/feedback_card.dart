@@ -37,9 +37,13 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
   final Map<String, Duration> _videoPositions = {};
 
   @override
-  void initState() {
-    super.initState();
-    initializeVideoPlayer();
+  void deactivate() {
+    // Pause and clear cache when widget is not visible
+    for (var controller in _videoControllers.values) {
+      controller.pause();
+      controller.setVolume(0);
+    }
+    super.deactivate();
   }
 
   @override
@@ -77,6 +81,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    initializeVideoPlayer();
+  }
+
   void initializeVideoPlayer() {
     if (widget.singleFeedback['imageUrls'] == null) return;
 
@@ -108,6 +118,10 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final ratingList = widget.singleFeedback['rating'] as List?;
     isFavorite = ratingList?.contains(userId) ?? false;
     totalFavorites = ratingList?.length ?? 0;
+  }
+
+  void sharedFunction(String url) {
+    Share.share(url);
   }
 
   void _handleVideoState() {
@@ -143,20 +157,6 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
         color: Colors.grey,
       ),
     );
-  }
-
-  @override
-  void deactivate() {
-    // Pause and clear cache when widget is not visible
-    for (var controller in _videoControllers.values) {
-      controller.pause();
-      controller.setVolume(0);
-    }
-    super.deactivate();
-  }
-
-  void sharedFunction(String url) {
-    Share.share(url);
   }
 
   @override
@@ -260,7 +260,33 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                   ],
                 ),
           SizedBox(height: 11),
-          if (imageUrls.isNotEmpty)
+          if (imageUrls.isEmpty)
+              Container(
+                height: 189,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.photo_library_outlined,
+                        size: 40,
+                        color: Colors.grey[400],
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'No medias given',
+                        style: AppStyles.textStyle_14_400_grey,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else
             Stack(
               children: [
                 widget.singleFeedback['from'] != null
