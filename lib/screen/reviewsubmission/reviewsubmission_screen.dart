@@ -125,67 +125,74 @@ class _ReviewsubmissionScreenState
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
                 builder: (BuildContext context) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 28),
-                        child: Column(
-                          children: [
-                            MainButton(
-                              text: AppLocalizations.of(context)
-                                  .translate('Sync from Your Wallet'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const WalletSyncScreen(),
-                                  ),
-                                );
-                              },
-                              // color: Colors.white,
-                            ),
-                            const SizedBox(height: 12),
-                            MainButton(
-                              text: AppLocalizations.of(context)
-                                  .translate('Sync from Google Calendar'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        GoogleCalendarScreen(),
-                                  ),
-                                );
-                              },
-                              // color: Colors.white,
-                            ),
-                            const SizedBox(height: 12),
-                            MainButton(
-                              text: AppLocalizations.of(context)
-                                  .translate('Scan'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ScannerScreen(),
-                                  ),
-                                );
-                              },
-                              // color: Colors.white,
-                            ),
-                          ],
-                        ),
+                  return SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 28),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate('Choose Sync Option'),
+                            style: AppStyles.textStyle_24_600,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 24),
+                          MainButton(
+                            text: AppLocalizations.of(context)
+                                .translate('Sync from Your Wallet'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const WalletSyncScreen(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.account_balance_wallet, color: Colors.white),
+                          ),
+                          const SizedBox(height: 12),
+                          MainButton(
+                            text: AppLocalizations.of(context)
+                                .translate('Sync from Google Calendar'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      GoogleCalendarScreen(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.calendar_today, color: Colors.white),
+                          ),
+                          const SizedBox(height: 12),
+                          MainButton(
+                            text: AppLocalizations.of(context)
+                                .translate('Scan your boarding pass'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ScannerScreen(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   );
                 },
-              );
-            },
+              );            },
           ),
         ),
       ),

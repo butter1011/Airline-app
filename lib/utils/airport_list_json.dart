@@ -26,7 +26,7 @@ Map<String, dynamic> airportList = {
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
     'mainCategory': 'Boarding and Arrival Experience',
-    'iconUrl': 'assets/icons/review_icon_boarding.png',
+    'iconUrl': 'assets/icons/review_icon_boarding.svg',
     'subCategory': {
       'Check-In Process': null,
       'Boarding Efficiency': null,
@@ -36,7 +36,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Comfort',
-    'iconUrl': 'assets/icons/review_icon_comfort.png',
+    'iconUrl': 'assets/icons/review_icon_comfort.svg',
     'subCategory': {
       'Seat Width': null,
       'Legroom': null,
@@ -47,7 +47,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Cleanliness',
-    'iconUrl': 'assets/icons/review_icon_cleanliness.png',
+    'iconUrl': 'assets/icons/review_icon_cleanliness.svg',
     'subCategory': {
       'Cabin': null,
       'Toilet': null,
@@ -55,7 +55,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Onboard Service',
-    'iconUrl': 'assets/icons/review_icon_onboard.png',
+    'iconUrl': 'assets/icons/review_icon_onboard.svg',
     'subCategory': {
       'Responsiveness': null,
       'Helpfulness': null,
@@ -63,7 +63,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Airline Food',
-    'iconUrl': 'assets/icons/review_icon_food.png',
+    'iconUrl': 'assets/icons/review_icon_food.svg',
     'subCategory': {
       'Choice': null,
       'Taste': null,
@@ -74,7 +74,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   },
   {
     'mainCategory': 'Entertainment and Wi-Fi',
-    'iconUrl': 'assets/icons/review_icon_entertainment.png',
+    'iconUrl': 'assets/icons/review_icon_entertainment.svg',
     'subCategory': {
       'IFE Availability': null,
       'IFE Choices': null,
@@ -86,7 +86,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   {
     'mainCategory': 'Accessibility',
-    'iconUrl': 'assets/icons/review_icon_access.png',
+    'iconUrl': 'assets/icons/review_icon_access.svg',
     'subCategory': {
       'Ease of Access': null,
       'Parking Availability': null,
@@ -96,7 +96,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   },
   {
     'mainCategory': 'Wait Times',
-    'iconUrl': 'assets/icons/review_icon_wait.png',
+    'iconUrl': 'assets/icons/review_icon_wait.svg',
     'subCategory': {
       'Security': null,
       'Baggage Delivery Time': null,
@@ -104,7 +104,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   },
   {
     'mainCategory': 'Helpfulness/Easy Travel',
-    'iconUrl': 'assets/icons/review_icon_help.png',
+    'iconUrl': 'assets/icons/review_icon_help.svg',
     'subCategory': {
       'Helpfulness of Airport Staff': null,
       'Signage Clarity': null,
@@ -113,7 +113,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   },
   {
     'mainCategory': 'Ambience/Comfort',
-    'iconUrl': 'assets/icons/review_icon_ambience.png',
+    'iconUrl': 'assets/icons/review_icon_ambience.svg',
     'subCategory': {
       'Ability to Relax/Work': null,
       'Cleanliness': null,
@@ -122,7 +122,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   },
   {
     'mainCategory': 'Airport Food and Shopping',
-    'iconUrl': 'assets/icons/review_icon_food.png',
+    'iconUrl': 'assets/icons/review_icon_food.svg',
     'subCategory': {
       'Value of Shops': null,
       'Choice of Shops': null,
@@ -132,7 +132,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
   },
   {
     'mainCategory': 'Amenities and Facilities',
-    'iconUrl': 'assets/icons/review_icon_entertainment.png',
+    'iconUrl': 'assets/icons/review_icon_entertainment.svg',
     'subCategory': {
       'Wi-Fi': null,
       'Restroom Facilities': null,

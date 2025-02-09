@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:airline_app/provider/user_data_provider.dart';
-import 'package:airline_app/screen/app_widgets/main_button.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -164,7 +164,7 @@ class _LoginState extends ConsumerState<Login> {
         Navigator.pop(context); // Remove loading dialog
       }
     } else {
-      _showErrorSnackBar('Login failed. Please try again.');
+      CustomSnackBar.error(context, 'Login failed. Please try again.');
     }
   }
 
@@ -173,8 +173,8 @@ class _LoginState extends ConsumerState<Login> {
       Map<String, dynamic> arg = {'appId': appId};
       await _otplessFlutterPlugin.openLoginPage(onHeadlessResult, arg);
     } catch (e) {
-      print("Login error: $e");
-      _showErrorSnackBar('WhatsApp login failed. Please try again.');
+      if (!mounted) return;
+      CustomSnackBar.error(context, 'WhatsApp login failed. Please try again.');
     }
   }
 
@@ -210,39 +210,38 @@ class _LoginState extends ConsumerState<Login> {
               child: Column(
                 children: [
                   Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withOpacity(0.1),
-                          Colors.white.withOpacity(0.05),
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.3),
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
                         ],
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.white.withOpacity(0.1),
+                            Colors.white.withOpacity(0.05),
+                          ],
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 10),
-                    child: SvgPicture.asset(
-                      'assets/icons/logo.svg',
-                      width: 100,
-                      height: 100,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white.withOpacity(0.9),
-                        BlendMode.srcIn,
-                      ),
-                    )
-                  ),
+                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 10),
+                      child: SvgPicture.asset(
+                        'assets/icons/logo.svg',
+                        width: 100,
+                        height: 100,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withOpacity(0.9),
+                          BlendMode.srcIn,
+                        ),
+                      )),
                   Text(
                     "Exp.aero",
                     style: AppStyles.textStyle_24_600.copyWith(
@@ -303,21 +302,12 @@ class _LoginState extends ConsumerState<Login> {
                               ),
                             ),
                           ),
-                        ),                      ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
         ],
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Center(child: Text(message, style: AppStyles.textStyle_14_600)),
-        backgroundColor: AppStyles.notifyColor,
       ),
     );
   }

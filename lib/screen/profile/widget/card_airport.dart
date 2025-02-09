@@ -35,25 +35,23 @@ class _CLeaderboardScreenState extends ConsumerState<CLeaderboardScreen> {
     final userData = ref.read(userDataProvider);
     if (userData != null) {
       final userId = userData['userData']['_id'].toString();
-      if (userId != null) {
-        try {
-          final reviews = await _userReviewService.getUserReviews(userId);
-          if (_mounted) {
-            setState(() {
-              userReviews = reviews;
-              isLoading = false;
-            });
-          }
-        } catch (e) {
-          debugPrint('Error fetching user reviews: $e');
-          if (_mounted) {
-            setState(() {
-              isLoading = false;
-            });
-          }
+      try {
+        final reviews = await _userReviewService.getUserReviews(userId);
+        if (_mounted) {
+          setState(() {
+            userReviews = reviews;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        debugPrint('Error fetching user reviews: $e');
+        if (_mounted) {
+          setState(() {
+            isLoading = false;
+          });
         }
       }
-    }
+        }
   }
 
   @override

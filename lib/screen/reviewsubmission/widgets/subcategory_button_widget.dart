@@ -1,5 +1,6 @@
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SubcategoryButtonWidget extends StatelessWidget {
   final String labelName;
@@ -69,12 +70,11 @@ class SubcategoryButtonWidget extends StatelessWidget {
               ),
               child: Padding(
                 padding: EdgeInsets.all(8),
-                child: Image.asset(
+                child: SvgPicture.asset(
                   imagePath,
                   height: 40,
                   fit: BoxFit.contain,
-                ),
-              ),
+                ),              ),
             ),
             SizedBox(height: 12),
             Text(

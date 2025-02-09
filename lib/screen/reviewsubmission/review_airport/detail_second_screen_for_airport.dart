@@ -1,4 +1,3 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -25,11 +24,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     final Map<String, dynamic> subCategoryList =
-        mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
-    final boardingPassDetail = ref.watch(aviationInfoProvider);
-    final airportname = boardingPassDetail.departureData["name"];
-    final logoImage = boardingPassDetail.departureData["logoImage"] ?? "";
-    final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
+        mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory']; 
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -37,12 +32,9 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirport(
-          airportName: airportname,
           title: "Tell us about your airport experience",
           subTitle: "What did you dislike about your experience?",
-          logoImage: logoImage,
-          selecetedOfCalssLevel: selectedClassOfTravel,
-          parent: 1,
+
         ),
       ),
       body: Column(children: [
@@ -52,7 +44,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${selections[singleIndex]['mainCategory']}",
+                "Details for ${selections[singleIndex]['mainCategory']}",
                 style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),

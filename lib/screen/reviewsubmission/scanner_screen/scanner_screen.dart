@@ -3,6 +3,8 @@ import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -14,7 +16,7 @@ import 'scanner_button_widgets.dart';
 import 'scanner_error_widget.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
-  const ScannerScreen({Key? key}) : super(key: key);
+  const ScannerScreen({super.key});
 
   @override
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
@@ -94,7 +96,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
   Future<void> parseIataBarcode(String rawValue) async {
     setState(() => isLoading = true);
-    print("rawValue 🎎 =====================> $rawValue");
+    debugPrint("rawValue 🎎 =====================> $rawValue");
     try {
       final regex = RegExp(
           r'([A-Z0-9]{5,7})\s+([A-Z]{6}[A-Z0-9]{2})\s+(\d{4})\s+(\d{3}[A-Z])');
@@ -116,13 +118,15 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
       final baseDate = DateTime(DateTime.now().year, 1, 0);
       final date = baseDate.add(Duration(days: int.parse(julianDate)));
 
-      print("This is scanned date ✨ ============ > $date");
+      debugPrint("This is scanned date ✨ ============ > $date");
 
       final pnrExists = await _boardingPassController.checkPnrExists(pnr);
       if (pnrExists) {
-        _showSnackBar(
-            'Boarding pass has already been reviewed', AppStyles.mainColor);
-        Navigator.pop(context);
+        if (mounted) {
+          CustomSnackBar.info(
+              context, 'Boarding pass has already been reviewed');
+          Navigator.pop(context);
+        }
       }
 
       Map<String, dynamic> flightInfo = await _fetchFlightInfo.fetchFlightInfo(
@@ -143,19 +147,21 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
         );
 
         if (flightInfo['flightStatuses']?.isEmpty ?? true) {
-          _showSnackBar(
-              'Oops! We had trouble processing your boarding pass. Please try again.',
-              AppStyles.notifyColor);
-          Navigator.pop(context);
+          if (mounted) {
+            CustomSnackBar.error(context,
+                'Oops! We had trouble processing your boarding pass. Please try again.');
+            Navigator.pop(context);
+          }
         }
       }
 
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar(
-          'Unable to process boarding pass. Please try scanning again.',
-          AppStyles.notifyColor);
-      Navigator.pop(context);
+      if (mounted) {
+        CustomSnackBar.error(context,
+            'Unable to process boarding pass. Please try scanning again.');
+        Navigator.pop(context);
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -184,8 +190,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
   Future<void> _processFetchedFlightInfo(Map<String, dynamic> flightInfo,
       String pnr, String classOfService) async {
     if (flightInfo['flightStatuses']?.isEmpty ?? true) {
-      _showSnackBar(
-          'No flight data found for the boarding pass', AppStyles.notifyColor);
+      CustomSnackBar.error(
+          context, 'No flight data found for the boarding pass');
       Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
       return;
     }
@@ -227,22 +233,15 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
     final result = await _boardingPassController.saveBoardingPass(newPass);
     if (result) {
-      Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-      _showSnackBar('Boarding pass saved successfully', AppStyles.mainColor);
+      if (mounted) {
+        Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        CustomSnackBar.success(context, 'Boarding pass saved successfully');
+      }
     }
   }
 
   String _formatTime(DateTime time) =>
       "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
-
-  void _showSnackBar(String message, Color backgroundColor) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: AppStyles.textStyle_16_600),
-        backgroundColor: backgroundColor,
-      ),
-    );
-  }
 
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
@@ -261,29 +260,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            toolbarHeight: screenSize.height * 0.08,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_sharp),
-              onPressed: () => Navigator.pop(context),
-            ),
-            centerTitle: true,
-            title: Text(
-              AppLocalizations.of(context).translate('Boarding Pass Scanner'),
-              style: AppStyles.textStyle_16_600,
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(4.0),
-              child: Container(
-                color: Colors.black,
-                height: 4.0,
-              ),
-            ),
+          appBar: AppbarWidget(
+            title:
+                AppLocalizations.of(context).translate('Boarding Pass Scanner'),
+            onBackPressed: () => Navigator.pop(context),
           ),
           backgroundColor: Colors.black,
           body: Stack(
@@ -299,7 +282,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen>
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   height: 150,
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withAlpha(100),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

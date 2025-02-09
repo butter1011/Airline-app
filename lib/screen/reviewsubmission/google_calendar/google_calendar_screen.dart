@@ -2,6 +2,9 @@ import 'package:airline_app/controller/boarding_pass_controller.dart';
 import 'package:airline_app/controller/fetch_flight_info_by_cirium.dart';
 import 'package:airline_app/models/boarding_pass.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
+import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -77,83 +80,51 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
         _error = e.toString();
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $_error')),
-      );
+      if (mounted) {
+        CustomSnackBar.error(context, 'Error: $_error');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 52.2,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_sharp),
-          onPressed: () => Navigator.pop(context), // Navigate back when pressed
+        appBar: AppbarWidget(
+          title: AppLocalizations.of(context).translate('Calendar Events'),
+          onBackPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.of(context).translate('Calendar Events'),
-          style: AppStyles.textStyle_18_600,
+        body: RefreshIndicator(
+          onRefresh: _fetchEvents,
+          child: _isLoading
+              ? const Center(child: LoadingWidget())
+              : _error != null
+                  ? Center(child: Text('Error: $_error'))
+                  : _events.isEmpty
+                      ? Center(
+                          child: Text(
+                          'No upcoming events',
+                          style: AppStyles.textStyle_14_600,
+                        ))
+                      : ListView.builder(
+                          itemCount: _events.length,
+                          itemBuilder: (context, index) {
+                            final event = _events[index];
+                            return EventCard(event: event);
+                          },
+                        ),
         ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: Container(
-            color: Colors.black,
-            height: 4.0,
-          ),
-        ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _fetchEvents,
-        child: _isLoading
-            ? const Center(child: LoadingWidget())
-            : _error != null
-                ? Center(child: Text('Error: $_error'))
-                : _events.isEmpty
-                    ? Center(
-                        child: Text(
-                        'No upcoming events',
-                        style: AppStyles.textStyle_14_600,
-                      ))
-                    : ListView.builder(
-                        itemCount: _events.length,
-                        itemBuilder: (context, index) {
-                          final event = _events[index];
-                          return EventCard(event: event);
-                        },
-                      ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 2,
-            color: Colors.black,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Column(
-              children: [
-                MainButton(
-                  text: AppLocalizations.of(context).translate('Fetch Events'),
-                  onPressed: _fetchEvents,
-                  // color: Colors.white,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        bottomNavigationBar: BottomButtonBar(
+            child: MainButton(
+          text: AppLocalizations.of(context).translate('Fetch Events'),
+          onPressed: _fetchEvents,
+        )));
   }
 }
 
 class EventCard extends ConsumerStatefulWidget {
-  EventCard({super.key, required this.event});
+  const EventCard({super.key, required this.event});
   final calendar.Event event;
 
   @override
@@ -166,16 +137,6 @@ class _EventCardState extends ConsumerState<EventCard> {
   final BoardingPassController _boardingPassController =
       BoardingPassController();
   bool _isLoading = false;
-
-  void _showSnackBar(String message, Color backgroundColor) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: AppStyles.textStyle_16_600),
-        backgroundColor: backgroundColor,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
 
   Future<void> parseEvent(calendar.Event event) async {
     setState(() => _isLoading = true);
@@ -201,8 +162,11 @@ class _EventCardState extends ConsumerState<EventCard> {
 
       final bool pnrExists = await _boardingPassController.checkPnrExists(pnr);
       if (pnrExists) {
-        _showSnackBar(
-            'Boarding pass has already been reviewed', AppStyles.mainColor);
+        if (mounted) {
+          CustomSnackBar.info(
+              context, 'Boarding pass has already been reviewed');
+        }
+
         return;
       }
 
@@ -216,9 +180,10 @@ class _EventCardState extends ConsumerState<EventCard> {
 
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar(
-          'Oops! We had trouble processing your boarding pass. Please try again.',
-          AppStyles.warnningColor);
+      if (mounted) {
+        CustomSnackBar.error(context,
+            'Oops! We had trouble processing your boarding pass. Please try again.');
+      }
     } finally {
       setState(() => _isLoading = false);
     }
@@ -227,8 +192,8 @@ class _EventCardState extends ConsumerState<EventCard> {
   Future<void> _processFetchedFlightInfo(Map<String, dynamic> flightInfo,
       String pnr, String classOfService) async {
     if (flightInfo['flightStatuses']?.isEmpty ?? true) {
-      _showSnackBar(
-          'No flight data found for the boarding pass', AppStyles.notifyColor);
+      CustomSnackBar.info(
+          context, 'No flight data found for the boarding pass.');
       return;
     }
     final flightStatus = flightInfo['flightStatuses'][0];
@@ -266,8 +231,10 @@ class _EventCardState extends ConsumerState<EventCard> {
 
     final bool result = await _boardingPassController.saveBoardingPass(newPass);
     if (result) {
-      Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-      _showSnackBar('Boarding pass saved successfully', AppStyles.mainColor);
+      if (mounted) {
+        Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        CustomSnackBar.success(context, 'Boarding pass saved successfully.');
+      }
     }
   }
 

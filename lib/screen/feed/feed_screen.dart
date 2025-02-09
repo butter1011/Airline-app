@@ -1,5 +1,3 @@
-import 'package:airline_app/controller/get_review_airline_controller.dart';
-import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';

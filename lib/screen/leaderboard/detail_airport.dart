@@ -269,7 +269,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                         ),
                         IconButton(
                             onPressed: () {},
-                            icon: Image.asset('assets/icons/switch.png'))
+                            icon: Icon(Icons.switch_access_shortcut_sharp))
                       ],
                     ),
                     SizedBox(

@@ -1,4 +1,5 @@
-import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
+import 'package:airline_app/screen/leaderboard/widgets/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
@@ -201,7 +202,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     ),
                     Text(
                       'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                      style: AppStyles.textStyle_14_400_grey,
+                      style: AppStyles.textStyle_14_400
+                          .copyWith(color: Colors.grey),
                     )
                   ],
                 ),
@@ -219,7 +221,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           ),
           Row(
             children: [
-              Text('Flex with', style: AppStyles.textStyle_14_400_littleGrey),
+              Text('Flex with',
+                  style: AppStyles.textStyle_14_400
+                      .copyWith(color: Color(0xFF38433E))),
               SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -233,7 +237,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               ? Row(
                   children: [
                     Text('Flex from',
-                        style: AppStyles.textStyle_14_400_littleGrey),
+                        style: AppStyles.textStyle_14_400
+                            .copyWith(color: Color(0xFF38433E))),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
@@ -245,7 +250,8 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
               : Row(
                   children: [
                     Text('Flex in',
-                        style: AppStyles.textStyle_14_400_littleGrey),
+                        style: AppStyles.textStyle_14_400
+                            .copyWith(color: Color(0xFF38433E))),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text('${widget.singleFeedback['airport']['city']}',
@@ -470,9 +476,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                                 print('Failed to update reaction');
                               }
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Something went wrong')),
-                              );
+                              if (!context.mounted) return;
+                              CustomSnackBar.error(
+                                  context, "Something went wrong");
                             }
                           },
                           icon: isFavorite
@@ -518,12 +524,15 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                               if (response.statusCode == 200) {
                               } else {
-                                print('Failed to update reaction');
+                                if (!context.mounted) return;
+                                CustomSnackBar.error(
+                                    context, "Something went wrong");
+                                debugPrint('Failed to update reaction');
                               }
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Something went wrong')),
-                              );
+                              if (!context.mounted) return;
+                              CustomSnackBar.error(
+                                  context, "Something went wrong");
                             }
                           },
                           icon: isFavorite

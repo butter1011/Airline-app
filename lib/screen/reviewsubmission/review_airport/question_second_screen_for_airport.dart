@@ -3,9 +3,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
-import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/build_question_header_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -13,14 +11,15 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuestionSecondScreenForAirline extends ConsumerWidget {
-  const QuestionSecondScreenForAirline({super.key});
+class QuestionSecondScreenForAirport extends ConsumerWidget {
+  const QuestionSecondScreenForAirport({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline);
-    final List<Map<String, dynamic>> feedbackOptionsForAirline =
-        mainCategoryAndSubcategoryForAirline;
+    final selectionsForAirport = ref.watch(reviewFeedBackProviderForAirport);
+
+    final List<Map<String, dynamic>> feedbackOptionsForAirport =
+        mainCategoryAndSubcategoryForAirport;
 
     return PopScope(
       canPop: false, // Prevents the default pop action
@@ -33,10 +32,9 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: MediaQuery.of(context).size.height * 0.3,
-            flexibleSpace: BuildQuestionHeaderForAirline(
+            flexibleSpace: BuildQuestionHeaderForAirport(
               title: "Lets go into more detail about this?",
               subTitle: "Your feedback helps make every journey better!",
-  
             ),
           ),
           body: Column(children: [
@@ -53,34 +51,34 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                       Divider(height: 1, color: Colors.grey.withAlpha(51)),
                     ])),
             Expanded(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
-              ),
-              child: SingleChildScrollView(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.4,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: feedbackOptionsForAirline.length,
-                  itemBuilder: (context, index) => FeedbackOptionForAirline(
-                    numForIdentifyOfParent: 2,
-                    iconUrl: feedbackOptionsForAirline[index]['iconUrl'],
-                    label: index,
-                    selectedNumberOfSubcategory: selectionsForAirline[index]
-                            ['subCategory']
-                        .values
-                        .where((s) => s == false)
-                        .length,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.4,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: feedbackOptionsForAirport.length,
+                      itemBuilder: (context, index) => FeedbackOptionForAirport(
+                        numForIdentifyOfParent: 2,
+                        iconUrl: feedbackOptionsForAirport[index]['iconUrl'],
+                        label: index,
+                        selectedNumberOfSubcategory: selectionsForAirport[index]
+                                ['subCategory']
+                            .values
+                            .where((s) => s == false)
+                            .length,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            )),
+            ),
           ]),
           bottomNavigationBar: BottomButtonBar(
               child: Row(
@@ -105,7 +103,8 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                   child: MainButton(
                       text: "Next",
                       onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.submitscreen);
+                        Navigator.pushNamed(
+                            context, AppRoutes.questionfirstscreenforairline);
                       }))
             ],
           ))),

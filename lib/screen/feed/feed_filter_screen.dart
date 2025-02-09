@@ -1,4 +1,5 @@
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/filter_button.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -96,43 +97,6 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
         List.generate(currentCategories.length, (index) => false);
   }
 
-  void _toggleFilter(int index, List selectedStates) {
-    setState(() {
-      if (index == 0) {
-        selectedStates[0] = !selectedStates[0];
-        if (selectedStates[0]) {
-          for (int i = 1; i < selectedStates.length; i++) {
-            selectedStates[i] = false;
-          }
-        }
-      } else {
-        selectedStates[index] = !selectedStates[index];
-        selectedStates[0] = false;
-
-        bool allOthersSelected = true;
-        for (int i = 1; i < selectedStates.length; i++) {
-          if (!selectedStates[i]) {
-            allOthersSelected = false;
-            break;
-          }
-        }
-
-        if (allOthersSelected) {
-          selectedStates[0] = true;
-          for (int i = 1; i < selectedStates.length; i++) {
-            selectedStates[i] = false;
-          }
-        }
-      }
-
-      selectedContinents = [];
-      for (int i = 0; i < selectedContinentStates.length; i++) {
-        if (selectedContinentStates[i]) {
-          selectedContinents.add(continent[i]);
-        }
-      }
-    });
-  }
 
   void _toggleOnlyOneFilter(int index, List selectedStates) {
     setState(() {
@@ -239,101 +203,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
     );
   }
 
-  Widget _buildCategoryLeaderboards() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(AppLocalizations.of(context).translate('Categories'),
-                style: AppStyles.textStyle_18_600),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    categoryIsExpanded = !categoryIsExpanded;
-                  });
-                },
-                icon: Icon(categoryIsExpanded
-                    ? Icons.expand_more
-                    : Icons.expand_less)),
-          ],
-        ),
-        Visibility(
-          visible: categoryIsExpanded,
-          child: Column(
-            children: [
-              selectedAirType == "All"
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "To access this feature, please select an airline or airport.",
-                        style: AppStyles.textStyle_15_600,
-                      ),
-                    )
-                  : Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: List.generate(
-                          currentCategories.length,
-                          (index) => FilterButton(
-                                text: AppLocalizations.of(context)
-                                    .translate(currentCategories[index]),
-                                isSelected: selectedCategoryStates[index],
-                                onTap: () => _toggleOnlyOneFilter(
-                                    index, selectedCategoryStates),
-                              )),
-                    ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildContinentLeaderboards() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(AppLocalizations.of(context).translate('Best by Continents'),
-                style: AppStyles.textStyle_16_600),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    continentIsExpanded = !continentIsExpanded;
-                  });
-                },
-                icon: Icon(continentIsExpanded
-                    ? Icons.expand_more
-                    : Icons.expand_less)),
-          ],
-        ),
-        Visibility(
-            visible: continentIsExpanded,
-            child: Column(
-              children: [
-                const SizedBox(height: 17),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(
-                      continent.length,
-                      (index) => FilterButton(
-                            text: AppLocalizations.of(context)
-                                .translate('${continent[index]}'),
-                            isSelected: selectedContinentStates[index],
-                            onTap: () =>
-                                _toggleFilter(index, selectedContinentStates),
-                          )),
-                ),
-              ],
-            ))
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -359,6 +229,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           text: AppLocalizations.of(context).translate('Apply'),
           onPressed: () async {
             try {
+              if (!context.mounted) return;
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -371,7 +242,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
 
               ref.read(feedFilterProvider.notifier).setFilters(
                     airType: selectedAirType,
-                    flyerClass: selectedFlyerClass ?? "Business",
+                    flyerClass: selectedFlyerClass,
                     category:
                         selectedCategory.isEmpty ? null : selectedCategory,
                     continents: selectedContinents.isEmpty ||
@@ -396,15 +267,14 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
                   .setFilterType(selectedAirType);
               ref.read(feedDataProvider.notifier).setData(result);
 
+              if (!context.mounted) return;
               Navigator.pop(context);
               Navigator.pop(context);
             } catch (e) {
+              if (!context.mounted) return;
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content:
-                        Text('Failed to fetch filtered data: ${e.toString()}')),
-              );
+              CustomSnackBar.error(
+                  context, 'Failed to fetch filtered data: ${e.toString()}');
             }
           },
         ),
