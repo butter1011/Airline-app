@@ -2,7 +2,6 @@ import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
-import 'package:airline_app/screen/profile/widget/card_chart.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
@@ -48,12 +47,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ],
         ),
       ),
-      Column(
-        children: [
-          SizedBox(height: 24),
-          CardChart(),
-        ],
-      ),
+     
       CardNotifications(),
     ];
 
@@ -109,7 +103,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                         CustomIconButton(
                           onTap: () {
-                            ref.read(selectedIndexProvider.notifier).state = 3;
+                            ref.read(selectedIndexProvider.notifier).state = 2;
                           },
                           icon: Icons.settings,
                         ),

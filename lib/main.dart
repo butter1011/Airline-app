@@ -8,8 +8,6 @@ import 'package:airline_app/screen/logIn/skip_screen.dart';
 import 'package:airline_app/screen/leaderboard/detail_airport.dart';
 import 'package:airline_app/screen/leaderboard/leaderboard_screen.dart';
 import 'package:airline_app/screen/profile/about_app.dart';
-import 'package:airline_app/screen/profile/book_mark_screen.dart';
-import 'package:airline_app/screen/profile/calender_sync_screen.dart';
 import 'package:airline_app/screen/profile/edit_profile_screen.dart';
 import 'package:airline_app/screen/profile/help_faq.dart';
 import 'package:airline_app/screen/profile/notifications_screen.dart';
@@ -22,6 +20,8 @@ import 'package:airline_app/screen/reviewsubmission/review_airline/question_firs
 import 'package:airline_app/screen/reviewsubmission/review_airline/question_second_screen_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_first_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airport/detail_second_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_first_screen_for_airport.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airport/question_second_screen_for_airport.dart';
 import 'package:airline_app/screen/reviewsubmission/reviewsubmission_screen.dart';
 import 'package:airline_app/screen/reviewsubmission/start_reviews.dart';
 import 'package:airline_app/screen/reviewsubmission/submit_screen.dart';
@@ -105,7 +105,6 @@ class MyApp extends ConsumerWidget {
         AppRoutes.mediafullscreen: (context) => const MediaFullScreen(),
         AppRoutes.profilescreen: (context) => const ProfileScreen(),
         AppRoutes.filterscreen: (context) => const LeaderboardFilterScreen(),
-        AppRoutes.bookmarkprofilescreen: (context) => BookMarkScreen(),
         AppRoutes.cardnotificationscreen: (context) => NotificationsScreen(),
         //Airlines routes
 
@@ -117,8 +116,14 @@ class MyApp extends ConsumerWidget {
             QuestionSecondScreenForAirline(),
         AppRoutes.detailsecondscreenforairline: (context) =>
             DetailSecondScreenForAirline(),
+
+
+                    AppRoutes.questionfirstscreenforairport: (context) =>
+            QuestionFirstScreenForAirport(),
         AppRoutes.detailfirstscreenforairport: (context) =>
             DetailFirstScreenForAirport(),
+                    AppRoutes.questionsecondscreenforairport: (context) =>
+            QuestionSecondScreenForAirport(),
         AppRoutes.detailsecondscreenforairport: (context) =>
             DetailSecondScreenForAirport(),
 
@@ -129,7 +134,6 @@ class MyApp extends ConsumerWidget {
         AppRoutes.aboutapp: (context) => AboutApp(),
         AppRoutes.helpFaqs: (context) => HelpFaq(),
         AppRoutes.termsofservice: (context) => TermsOfService(),
-        AppRoutes.calendersyncscreen: (context) => CalenderSyncScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

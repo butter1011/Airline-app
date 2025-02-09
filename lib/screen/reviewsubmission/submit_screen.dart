@@ -15,6 +15,7 @@ import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
+import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/comment_input_field.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/media_upload_widget.dart';
@@ -312,22 +313,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           const SizedBox(height: 10),
           MediaUploadWidget(
             onTap: () {
-              _pickMedia(_imageOfAirline);
-            },
-            title: 'Airline',
-          ),
-          const SizedBox(height: 22),
-          if (_imageOfAirline.isNotEmpty)
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: _imageOfAirline
-                  .map((file) => _buildImageTile(file, _imageOfAirline))
-                  .toList(),
-            ),
-          const SizedBox(height: 24),
-          MediaUploadWidget(
-            onTap: () {
               _pickMedia(_imageOfAirport);
             },
             title: 'Airport',
@@ -341,24 +326,40 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                   .map((file) => _buildImageTile(file, _imageOfAirport))
                   .toList(),
             ),
+          const SizedBox(height: 24),
+          MediaUploadWidget(
+            onTap: () {
+              _pickMedia(_imageOfAirline);
+            },
+            title: 'Airline',
+          ),
+          const SizedBox(height: 22),
+          if (_imageOfAirline.isNotEmpty)
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: _imageOfAirline
+                  .map((file) => _buildImageTile(file, _imageOfAirline))
+                  .toList(),
+            ),
           const SizedBox(height: 20),
           CommentInputField(
               commentController: _commentOfAirlineController,
-              title: "Airline Comments (Optional)",
-              hintText: "Share your experience with airline...",
-              onChange: (value) {
-                setState(() {
-                  commentOfAirline = value;
-                });
-              }),
-          SizedBox(height: 20),
-          CommentInputField(
-              commentController: _commentOfAirportController,
               title: "Airport Comments (Optional)",
               hintText: "Share your experience with airport...",
               onChange: (value) {
                 setState(() {
                   commentOfAirport = value;
+                });
+              }),
+          SizedBox(height: 20),
+          CommentInputField(
+              commentController: _commentOfAirportController,
+              title: "Airline Comments (Optional)",
+              hintText: "Share your experience with airline...",
+              onChange: (value) {
+                setState(() {
+                  commentOfAirline = value;
                 });
               }),
           SizedBox(height: 20),
@@ -384,12 +385,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
               ? Stack(
                   alignment: Alignment.center,
                   children: [
-                    Container(
-                      child: const Icon(
-                        Icons.play_arrow,
-                        color: Colors.black,
-                        size: 30,
-                      ),
+                    const Icon(
+                      Icons.play_arrow,
+                      color: Colors.black,
+                      size: 30,
                     ),
                   ],
                 )
@@ -451,10 +450,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     final foodBeverageForAirport = reviewDataForAirport[4]["subCategory"];
     final amenities = reviewDataForAirport[5]["subCategory"];
 
-    final airlineName = airlineData["name"] ?? "";
-    final airportName = departureData["name"] ?? "";
-    final logoImage = airlineData["logoImage"] ?? "";
-
     return PopScope(
       canPop: false, // Prevents the default pop action
       onPopInvokedWithResult: (didPop, result) {
@@ -474,10 +469,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                   flexibleSpace: BuildQuestionHeaderForSubmit(
                     title: "Share your experience",
                     subTitle: "Your feedback helps us improve!",
-                    logoImage: logoImage,
-                    airlineName: airlineName,
-                    airportName: airportName,
-                    parent: 2,
                   ),
                 ),
                 body: SafeArea(
@@ -502,10 +493,21 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                   children: [
                     Expanded(
                       child: MainButton(
-                        text: "Back",
-                        onPressed: () => Navigator.pushNamed(
-                            context, AppRoutes.reviewsubmissionscreen),
-                      ),
+                          text: "Back",
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.reviewsubmissionscreen);
+
+                            ref
+                                .read(aviationInfoProvider.notifier)
+                                .resetState();
+                            ref
+                                .read(reviewFeedBackProviderForAirline.notifier)
+                                .resetState();
+                            ref
+                                .read(reviewFeedBackProviderForAirport.notifier)
+                                .resetState();
+                          }),
                     ),
                     SizedBox(
                       width: 10,

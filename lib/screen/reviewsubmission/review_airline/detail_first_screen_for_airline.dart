@@ -23,15 +23,9 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
     for (var category in mainCategoryAndSubcategoryForAirline) {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
-
     final Map<String, dynamic> subCategoryList =
         mainCategoryAndSubcategoryForAirline[singleIndex]['subCategory'];
-    final boardingPassDetail = ref.watch(aviationInfoProvider);
-    final String from = boardingPassDetail.departureData["name"];
-    final String to = boardingPassDetail.arrivalData["name"];
-    final String airline = boardingPassDetail.airlineData["name"];
-    final logoImage = boardingPassDetail.airlineData["logoImage"] ?? "";
-    final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -40,12 +34,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
         flexibleSpace: BuildQuestionHeaderForAirline(
           title: "Tell us about your airline experience",
           subTitle: "What did you like about your experience?",
-          logoImage: logoImage,
-          classes: selectedClassOfTravel,
-          airlineName: airline,
-          from: from,
-          to: to,
-          parent: 0,
+    
         ),
       ),
       body: Column(children: [
@@ -55,7 +44,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${selections[singleIndex]['mainCategory']}",
+                "Details for ${selections[singleIndex]['mainCategory']}",
                 style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),

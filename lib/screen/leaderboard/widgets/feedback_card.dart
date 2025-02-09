@@ -1,5 +1,5 @@
 import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
-import 'package:airline_app/screen/profile/widget/basic_black_button.dart';
+import 'package:airline_app/screen/leaderboard/widgets/basic_black_button.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/global_variable.dart';
