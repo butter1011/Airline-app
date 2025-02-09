@@ -437,9 +437,12 @@ class _AirportListSection extends StatelessWidget {
           Column(
             children: [
               Column(
-                children: leaderBoardList.map((singleAirport) {
+                children: leaderBoardList.asMap().entries.map((entry) {
+                  final int index = entry.key;
+                  final Map<String, dynamic> singleAirport = entry.value;
                   return AirportList(
                     airportData: singleAirport,
+                    rank: index + 1,
                   );
                 }).toList(),
               ),
