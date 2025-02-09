@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
-import 'package:airline_app/screen/profile/edit_custom_dropdown_button.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/comment_input_field.dart';
 import 'package:airline_app/utils/global_variable.dart';
 import 'package:image_picker/image_picker.dart';
@@ -68,63 +68,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
   }
 
-  void showCustomSnackbar(BuildContext context) {
-    OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 45, // Position from top
-        left: 24,
-        right: 24,
-
-        child: Material(
-          // elevation: 4.0,
-          child: ClipRect(
-            child: Stack(children: [
-              Container(
-                height: 60,
-                decoration: AppStyles.cardDecoration.copyWith(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                // padding: EdgeInsets.all(16),
-                // color: Colors.green,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.check_circle_outline),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Successfully saved!',
-                        style: AppStyles.textStyle_16_600.copyWith(
-                            fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Icon(
-                    Icons.close,
-                    size: 32,
-                  ))
-            ]),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry);
-
-    // Remove the overlay after some time
-    Future.delayed(Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }
-
   Future<String> _uploadImages(XFile? image) async {
     if (image == null) return '';
     final _awsUploadService = AwsUploadService(
@@ -139,9 +82,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           await _awsUploadService.uploadFile(File(image.path), 'avatar');
       return uploadedUrl;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e')),
-      );
+      if (mounted) {
+        CustomSnackBar.error(context, "'Upload failed: $e'");
+      }
       return '';
     }
   }
@@ -224,7 +167,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           });
 
           Navigator.pushReplacementNamed(context, AppRoutes.profilescreen);
-          showCustomSnackbar(context);
+          CustomSnackBar.success(context, "Successfully saved!");
         }
       } else {
         throw Exception('Failed to update profile');
@@ -234,9 +177,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         setState(() {
           isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Update failed: ${e.toString()}')),
-        );
+        CustomSnackBar.error(context, 'Update failed: ${e.toString()}');
       }
     }
   }

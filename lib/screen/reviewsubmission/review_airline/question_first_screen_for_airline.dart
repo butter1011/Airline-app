@@ -1,4 +1,3 @@
-
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -41,7 +40,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
         appBar: AppBar(
           toolbarHeight: MediaQuery.of(context).size.height * 0.3,
           automaticallyImplyLeading: false,
-          flexibleSpace: BuildQuestionHeaderForSubmit(  
+          flexibleSpace: BuildQuestionHeaderForSubmit(
             title: "Lets go into more detail about this?",
             subTitle: "Your feedback helps make every journey better!",
             logoImage: logoImage,
@@ -70,45 +69,50 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: SingleChildScrollView(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: List.generate(
-                            feedbackOptionsForAirline.length,
-                            (index) => FeedbackOptionForAirline(
-                              numForIdentifyOfParent: 1,
-                              iconUrl: feedbackOptionsForAirline[index]
-                                  ['iconUrl'],
-                              label: index,
-                              selectedNumberOfSubcategoryForLike:
-                                  selectionsForAirline[index]['subCategory']
-                                      .values
-                                      .where((s) => s == true)
-                                      .length,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              feedbackOptionsForAirline.length,
+                              (index) => FeedbackOptionForAirline(
+                                numForIdentifyOfParent: 1,
+                                iconUrl: feedbackOptionsForAirline[index]
+                                    ['iconUrl'],
+                                label: index,
+                                selectedNumberOfSubcategoryForLike:
+                                    selectionsForAirline[index]['subCategory']
+                                        .values
+                                        .where((s) => s == true)
+                                        .length,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: List.generate(
-                            feedbackOptionsForAirport.length,
-                            (index) => FeedbackOptionForAirport(
-                              numForIdentifyOfParent: 1,
-                              iconUrl: feedbackOptionsForAirport[index]
-                                  ['iconUrl'],
-                              label: index,
-                              selectedNumberOfSubcategory:
-                                  selectionsForAirport[index]['subCategory']
-                                      .values
-                                      .where((s) => s == true)
-                                      .length,
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              feedbackOptionsForAirport.length,
+                              (index) => FeedbackOptionForAirport(
+                                numForIdentifyOfParent: 1,
+                                iconUrl: feedbackOptionsForAirport[index]
+                                    ['iconUrl'],
+                                label: index,
+                                selectedNumberOfSubcategory:
+                                    selectionsForAirport[index]['subCategory']
+                                        .values
+                                        .where((s) => s == true)
+                                        .length,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -150,5 +154,4 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
       ),
     );
   }
-
 }

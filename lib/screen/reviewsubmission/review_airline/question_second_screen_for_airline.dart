@@ -69,45 +69,50 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                 horizontal: 10,
               ),
               child: SingleChildScrollView(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: List.generate(
-                          feedbackOptionsForAirline.length,
-                          (index) => FeedbackOptionForAirline(
-                            numForIdentifyOfParent: 2,
-                            iconUrl: feedbackOptionsForAirline[index]
-                                ['iconUrl'],
-                            label: index,
-                            selectedNumberOfSubcategoryForLike:
-                                selectionsForAirline[index]['subCategory']
-                                    .values
-                                    .where((s) => s == false)
-                                    .length,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical:10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: List.generate(
+                            feedbackOptionsForAirline.length,
+                            (index) => FeedbackOptionForAirline(
+                              numForIdentifyOfParent: 2,
+                              iconUrl: feedbackOptionsForAirline[index]
+                                  ['iconUrl'],
+                              label: index,
+                              selectedNumberOfSubcategoryForLike:
+                                  selectionsForAirline[index]['subCategory']
+                                      .values
+                                      .where((s) => s == false)
+                                      .length,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: List.generate(
-                          feedbackOptionsForAirport.length,
-                          (index) => FeedbackOptionForAirport(
-                            numForIdentifyOfParent: 2,
-                            iconUrl: feedbackOptionsForAirport[index]
-                                ['iconUrl'],
-                            label: index,
-                            selectedNumberOfSubcategory:
-                                selectionsForAirport[index]['subCategory']
-                                    .values
-                                    .where((s) => s == false)
-                                    .length,
+                      Expanded(
+                        child: Column(
+                          children: List.generate(
+                            feedbackOptionsForAirport.length,
+                            (index) => FeedbackOptionForAirport(
+                              numForIdentifyOfParent: 2,
+                              iconUrl: feedbackOptionsForAirport[index]
+                                  ['iconUrl'],
+                              label: index,
+                              selectedNumberOfSubcategory:
+                                  selectionsForAirport[index]['subCategory']
+                                      .values
+                                      .where((s) => s == false)
+                                      .length,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
             )),

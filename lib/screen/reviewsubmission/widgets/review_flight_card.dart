@@ -105,7 +105,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                         const SizedBox(width: 4),
                         Text(
                           "${_truncateText(departureCountry.name, 11)}, ${pass.departureTime}",
-                          style: AppStyles.textStyle_13_600,
+                          style: AppStyles.textStyle_14_600,
                         )
                       ],
                     ),
@@ -116,7 +116,7 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                         const SizedBox(width: 4),
                         Text(
                           "${_truncateText(arrivalCountry.name, 11)}, ${pass.arrivalTime}",
-                          style: AppStyles.textStyle_13_600,
+                          style: AppStyles.textStyle_14_600,
                         )
                       ],
                     ),

@@ -90,7 +90,7 @@ class _CalenderSyncScreenState extends State<CalenderSyncScreen> {
                     const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                 child: Container(
                   width: double.infinity, // Use full width available
-                  decoration: AppStyles.notificationDecoration,
+                  decoration: AppStyles.cardDecoration,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(

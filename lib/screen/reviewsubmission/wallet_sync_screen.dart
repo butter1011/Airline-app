@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/appbar_widget.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,14 +49,16 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       if (rawValue != null) {
         await parseIataBarcode(rawValue);
       } else {
-        _showSnackBar(
-            "This boarding pass cannot be scanned due to poor quality",
-            AppStyles.notifyColor);
+        if (mounted) {
+          CustomSnackBar.error(context,
+              "This boarding pass cannot be scanned due to poor quality.");
+        }
       }
     } catch (e) {
-      _showSnackBar(
-          'Unable to scan the boarding pass. Please try again with a clearer image.',
-          AppStyles.warnningColor);
+      if (mounted) {
+        CustomSnackBar.info(context,
+            'Unable to scan the boarding pass. Please try again with a clearer image.');
+      }
     } finally {
       setState(() => isLoading = false);
     }
@@ -89,8 +92,10 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
 
       final bool pnrExists = await _boardingPassController.checkPnrExists(pnr);
       if (pnrExists) {
-        _showSnackBar(
-            'Boarding pass has already been reviewed', AppStyles.mainColor);
+        if (mounted) {
+          CustomSnackBar.info(
+              context, "Boading pass has already been reviewed.");
+        }
         return;
       }
 
@@ -113,18 +118,20 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
         );
 
         if (flightInfo['flightStatuses']?.isEmpty ?? true) {
-          _showSnackBar(
-              'Flight data is only available for up to one year in the past',
-              AppStyles.notifyColor);
+          if (mounted) {
+            CustomSnackBar.info(context,
+                "Flight data is only available for up to one year in the past.");
+          }
           return;
         }
       }
 
       await _processFetchedFlightInfo(flightInfo, pnr, classOfService);
     } catch (e) {
-      _showSnackBar(
-          'Oops! We had trouble processing your boarding pass. Please try again.',
-          AppStyles.warnningColor);
+      if (mounted) {
+        CustomSnackBar.info(context,
+            "Oops! We had trouble processing your boarding pass. Please try again.");
+      }
     } finally {
       setState(() => isLoading = false);
     }
@@ -148,8 +155,9 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
   Future<void> _processFetchedFlightInfo(Map<String, dynamic> flightInfo,
       String pnr, String classOfService) async {
     if (flightInfo['flightStatuses']?.isEmpty ?? true) {
-      _showSnackBar(
-          'No flight data found for the boarding pass', AppStyles.notifyColor);
+      CustomSnackBar.error(
+          context, "No flight data found for the boarding pass.");
+
       return;
     }
     final flightStatus = flightInfo['flightStatuses'][0];
@@ -188,8 +196,10 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
 
     final bool result = await _boardingPassController.saveBoardingPass(newPass);
     if (result) {
-      Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
-      _showSnackBar('Boarding pass saved successfully', AppStyles.mainColor);
+      if (mounted) {
+        Navigator.pushNamed(context, AppRoutes.reviewsubmissionscreen);
+        CustomSnackBar.success(context, 'Boarding pass saved successfully.');
+      }
     }
   }
 
@@ -235,16 +245,6 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
     } else {
       throw 'Could not launch wallet on ${Platform.operatingSystem}';
     }
-  }
-
-  void _showSnackBar(String message, Color backgroundColor) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: AppStyles.textStyle_16_600),
-        backgroundColor: backgroundColor,
-        duration: const Duration(seconds: 2),
-      ),
-    );
   }
 
   @override

@@ -2,7 +2,6 @@ import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_icon_button.dart';
 import 'package:airline_app/screen/profile/widget/card_airport.dart';
-import 'package:airline_app/screen/profile/widget/card_bookmark.dart';
 import 'package:airline_app/screen/profile/widget/card_chart.dart';
 import 'package:airline_app/screen/profile/widget/card_notifications.dart';
 import 'package:airline_app/utils/app_localizations.dart';
@@ -55,7 +54,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           CardChart(),
         ],
       ),
-      CardBookMark(),
       CardNotifications(),
     ];
 
@@ -111,7 +109,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                         CustomIconButton(
                           onTap: () {
-                            ref.read(selectedIndexProvider.notifier).state = 4;
+                            ref.read(selectedIndexProvider.notifier).state = 3;
                           },
                           icon: Icons.settings,
                         ),
@@ -164,14 +162,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       child: Container(
                         width: 227,
                         height: 40,
-                        decoration: AppStyles.cardDecoration.copyWith(borderRadius: BorderRadius.circular(24), color: Colors.white),
+                        decoration: AppStyles.cardDecoration.copyWith(
+                            borderRadius: BorderRadius.circular(24),
+                            color: Colors.white),
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Row(
                               children: [
                                 Icon(Icons.rocket_sharp),
-                                SizedBox(width: 4,),
+                                SizedBox(
+                                  width: 4,
+                                ),
                                 Expanded(
                                   child: Text(
                                     '${AppLocalizations.of(context).translate('Flyer type')}: ${userData?['userData']['flyertype']}',

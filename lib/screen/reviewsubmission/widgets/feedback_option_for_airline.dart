@@ -2,6 +2,7 @@ import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class FeedbackOptionForAirline extends StatelessWidget {
   final int numForIdentifyOfParent;
@@ -95,7 +96,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(10),
-                        child: Image.asset(
+                        child: SvgPicture.asset(
                           iconUrl,
                           fit: BoxFit.contain,
                         ),

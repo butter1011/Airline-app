@@ -11,6 +11,7 @@ import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/provider/user_data_provider.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
+import 'package:airline_app/screen/app_widgets/custom_snackbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
@@ -155,7 +156,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
   }
 
   Future<Map<String, dynamic>> _uploadImages(image) async {
-    final _awsUploadService = AwsUploadService(
+    final awsUploadService = AwsUploadService(
       accessKeyId: aws_credentials.ACCESS_KEY_ID,
       secretAccessKey: aws_credentials.SECRET_ACCESS_KEY,
       region: aws_credentials.REGION,
@@ -165,14 +166,14 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     try {
       Map<String, dynamic> uploadedUrls = {};
       for (var file in image) {
-        final uploadedUrl = await _awsUploadService.uploadFile(file, 'reviews');
+        final uploadedUrl = await awsUploadService.uploadFile(file, 'reviews');
         uploadedUrls[file.path] = uploadedUrl;
       }
       return uploadedUrls;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Upload failed: $e')),
-      );
+      if (mounted) {
+        CustomSnackBar.error(context, "Upload image failed");
+      }
       return {};
     }
   }
@@ -236,11 +237,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
             mediaType == 'image' ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
 
         if (fileSize > maxSize) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'File too large. Maximum size is ${maxSize ~/ (1024 * 1024)}MB')),
-          );
+          if (mounted) {
+            CustomSnackBar.info(context,
+                "File too large. Maximum size is ${maxSize ~/ (1024 * 1024)}MB");
+          }
           return;
         }
 
@@ -249,10 +249,10 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         });
       }
     } catch (e) {
-      print('Error picking media: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking media: $e')),
-      );
+      debugPrint('Error picking media: $e');
+      if (mounted) {
+        CustomSnackBar.error(context, 'Error picking media: $e');
+      }
     } finally {
       setState(() {
         _isPickingImage = false;
@@ -293,17 +293,15 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
   void _handleFailedSubmission(BuildContext context) {
     setState(() => _isLoading = false);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Failed to submit review')),
-    );
+
+    CustomSnackBar.error(context, "Failed to submit review");
   }
 
   void _handleSubmissionError(BuildContext context, Object error) {
     setState(() => _isLoading = false);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: ${error.toString()}')),
-    );
+
+    CustomSnackBar.error(context, "Error: ${error.toString()}");
   }
 
   Widget _buildFeedbackOptions(BuildContext context) {

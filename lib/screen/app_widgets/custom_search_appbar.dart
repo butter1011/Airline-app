@@ -6,7 +6,6 @@ import 'package:airline_app/utils/app_styles.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/screen/app_widgets/search_field.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final TextEditingController searchController;

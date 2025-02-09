@@ -1,4 +1,3 @@
-import 'package:airline_app/provider/airline_airport_data_provider.dart';
 import 'package:airline_app/provider/aviation_info_provider.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airline.dart';
 import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
@@ -34,7 +33,6 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
     final String airline = boardingPassDetail.airlineData["name"];
     final logoImage = boardingPassDetail.airlineData["logoImage"] ?? "";
     final selectedClassOfTravel = boardingPassDetail.selectedClassOfTravel;
-    final backgroundImage = boardingPassDetail.airlineData["backgroundImage"];
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

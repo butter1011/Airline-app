@@ -1,29 +1,21 @@
-import 'package:airline_app/controller/get_review_airport_controller.dart';
 import 'package:airline_app/screen/app_widgets/bottom_nav_bar.dart';
 import 'package:airline_app/screen/app_widgets/custom_search_appbar.dart';
 import 'package:airline_app/screen/app_widgets/keyboard_dismiss_widget.dart';
 import 'package:airline_app/screen/app_widgets/loading.dart';
-import 'package:airline_app/screen/leaderboard/widgets/airline_airport_list_widget.dart';
 import 'package:airline_app/screen/leaderboard/widgets/airport_list.dart';
 import 'package:airline_app/screen/leaderboard/widgets/feedback_card.dart';
 import 'package:airline_app/screen/leaderboard/widgets/scoring_info_dialog.dart';
 import 'package:airline_app/utils/app_localizations.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:airline_app/utils/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:web_socket_channel/io.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:airline_app/provider/airline_airport_data_provider.dart';
-import 'package:airline_app/controller/get_review_airline_controller.dart';
 import 'package:airline_app/provider/filter_button_provider.dart';
 import 'package:airline_app/provider/leaderboard_filter_provider.dart';
 import 'package:airline_app/controller/leaderboard_service.dart';
 import 'package:airline_app/controller/top_review_controller.dart';
-
-bool _isWebSocketConnected = false;
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -49,7 +41,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   List<Map<String, dynamic>> leaderBoardList = [];
   double leftPadding = 24.0;
 
-  late IOWebSocketChannel _channel;
   final TopReviewService _topReviewService = TopReviewService();
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -260,7 +251,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                                 .copyWith(
                                               color: const Color(0xff38433E),
                                             ),
-                                          ),
+                                          ),                                          
                                           IconButton(
                                             icon:
                                                 const Icon(Icons.info_outline),
