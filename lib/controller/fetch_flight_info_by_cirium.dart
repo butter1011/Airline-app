@@ -24,7 +24,7 @@ class FetchFlightInforByCirium {
       return {'error': 'Failed to fetch flight data'};
     } catch (e) {
       // Handle any errors that occur during the API call
-      print('Error confirming flight: $e');
+      debugPrint('Error confirming flight: $e');
       return {'error': e.toString()};
     }
   }

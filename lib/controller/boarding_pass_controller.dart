@@ -22,7 +22,7 @@ class BoardingPassController {
         throw Exception('Error: $errorMessage');
       }
     } catch (e) {
-      print('Error saving boading pass: $e');
+      debugPrint('Error saving boading pass: $e');
       return false;
     }
   }
@@ -39,11 +39,11 @@ class BoardingPassController {
             .map<BoardingPass>((json) => BoardingPass.fromJson(json))
             .toList();
       } else {
-        print('Error: ${response.statusCode}');
+        debugPrint('Error: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      print('Error fetching boarding passes: $e');
+      debugPrint('Error fetching boarding passes: $e');
       return [];
     }
   }
@@ -66,7 +66,7 @@ class BoardingPassController {
         throw Exception('Error: $errorMessage');
       }
     } catch (e) {
-      print('Error updating boarding pass: $e');
+      debugPrint('Error updating boarding pass: $e');
       return false;
     }
   }
@@ -81,11 +81,11 @@ class BoardingPassController {
         final data = jsonDecode(response.body);
         return data['exists'];
       } else {
-        print('Error: ${response.statusCode}');
+        debugPrint('Error: ${response.statusCode}');
         return false;
       }
     } catch (e) {
-      print('Error checking PNR: $e');
+      debugPrint('Error checking PNR: $e');
       return false;
     }
   }
@@ -102,11 +102,11 @@ class BoardingPassController {
         final data = jsonDecode(response.body);
         return data;
       } else {
-        print('Error: ${response.statusCode}');
+        debugPrint('Error: ${response.statusCode}');
         return {};
       }
     } catch (e) {
-      print('Error fetching boarding pass details: $e');
+      debugPrint('Error fetching boarding pass details: $e');
       return {};
     }
   }

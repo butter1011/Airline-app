@@ -113,14 +113,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     } on PlatformException catch (e) {
       if (e.code == 'already_active') {
         // Handle the case where image picker is already active
-        print('Image picker is already active');
+        debugPrint('Image picker is already active');
         return;
       }
       // Handle other platform exceptions
-      print('Failed to pick image: ${e.message}');
+      debugPrint('Failed to pick image: ${e.message}');
     } catch (e) {
       // Handle other exceptions
-      print('Error picking image: $e');
+      debugPrint('Error picking image: $e');
     }
   }
 

@@ -24,7 +24,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
       mainCategoryNames.add(category['mainCategory'] as String);
     }
     final Map<String, dynamic> subCategoryList =
-        mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory']; 
+        mainCategoryAndSubcategoryForAirport[singleIndex]['subCategory'];
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -34,7 +34,6 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
         flexibleSpace: BuildQuestionHeaderForAirport(
           title: "Tell us about your airport experience",
           subTitle: "What did you dislike about your experience?",
-
         ),
       ),
       body: Column(children: [
@@ -77,7 +76,7 @@ class DetailSecondScreenForAirport extends ConsumerWidget {
                     isSelected: value == false ? true : false,
                     onTap: () {
                       value == true
-                          ? print("Value is false, no action performed.")
+                          ? debugPrint("Value is false, no action performed.")
                           : ref
                               .read(reviewFeedBackProviderForAirport.notifier)
                               .selectDislike(singleIndex, key);

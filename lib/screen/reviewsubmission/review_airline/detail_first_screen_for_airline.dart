@@ -34,7 +34,6 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
         flexibleSpace: BuildQuestionHeaderForAirline(
           title: "Tell us about your airline experience",
           subTitle: "What did you like about your experience?",
-    
         ),
       ),
       body: Column(children: [
@@ -77,7 +76,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
                     isSelected: value == true ? true : false,
                     onTap: () {
                       value == false
-                          ? print("Value is false, no action performed.")
+                          ? debugPrint("Value is false, no action performed.")
                           : ref
                               .read(reviewFeedBackProviderForAirline.notifier)
                               .selectLike(singleIndex, key);

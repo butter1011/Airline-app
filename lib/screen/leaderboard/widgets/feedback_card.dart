@@ -261,34 +261,32 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                 ),
           SizedBox(height: 11),
           if (imageUrls.isEmpty)
-              Container(
-                height: 189,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.photo_library_outlined,
-                        size: 40,
-                        color: Colors.grey[400],
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'No medias given',
+            Container(
+              height: 189,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.photo_library_outlined,
+                      size: 40,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(height: 8),
+                    Text('No medias given',
                         style: AppStyles.textStyle_14_400.copyWith(
                           color: Colors.grey[400],
-                        )
-                      ),
-                    ],
-                  ),
+                        )),
+                  ],
                 ),
-              )
-            else
+              ),
+            )
+          else
             Stack(
               children: [
                 widget.singleFeedback['from'] != null
@@ -475,7 +473,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
 
                               if (response.statusCode == 200) {
                               } else {
-                                print('Failed to update reaction');
+                                debugPrint('Failed to update reaction');
                               }
                             } catch (e) {
                               if (!context.mounted) return;

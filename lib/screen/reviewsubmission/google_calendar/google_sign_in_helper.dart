@@ -28,7 +28,7 @@ class GoogleSignInHelper {
 
       return calendar.CalendarApi(httpClient);
     } catch (error) {
-      print('Error signing in: $error');
+      debugPrint('Error signing in: $error');
       rethrow; // Rethrow to handle in UI
     }
   }
