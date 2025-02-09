@@ -207,8 +207,57 @@ class _LeaderboardFilterScreenState
     );
   }
 
-
- 
+Widget _buildCategoryLeaderboards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context).translate('Categories'),
+                style: AppStyles.textStyle_18_600),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    categoryIsExpanded = !categoryIsExpanded;
+                  });
+                },
+                icon: Icon(categoryIsExpanded
+                    ? Icons.expand_more
+                    : Icons.expand_less)),
+          ],
+        ),
+        Visibility(
+          visible: categoryIsExpanded,
+          child: Column(
+            children: [
+              selectedAirType == "All"
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "To access this feature, please select an airline or airport.",
+                        style: AppStyles.textStyle_15_600,
+                      ),
+                    )
+                  : Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(
+                          currentCategories.length,
+                          (index) => FilterButton(
+                                text: AppLocalizations.of(context)
+                                    .translate(currentCategories[index]),
+                                isSelected: selectedCategoryStates[index],
+                                onTap: () => _toggleOnlyOneFilter(
+                                    index, selectedCategoryStates),
+                              )),
+                    ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
