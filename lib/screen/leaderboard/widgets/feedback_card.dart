@@ -280,7 +280,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       SizedBox(height: 8),
                       Text(
                         'No medias given',
-                        style: AppStyles.textStyle_14_400_grey,
+                        style: AppStyles.textStyle_14_400.copyWith(
+                          color: Colors.grey[400],
+                        )
                       ),
                     ],
                   ),
