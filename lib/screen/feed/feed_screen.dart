@@ -14,7 +14,7 @@ import 'package:airline_app/controller/feed_service.dart';
 import 'package:airline_app/provider/review_filter_button_provider.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
-  const FeedScreen({Key? key}) : super(key: key);
+  const FeedScreen({super.key});
 
   @override
   ConsumerState<FeedScreen> createState() => _FeedScreenState();
@@ -46,6 +46,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     _initializeData();
   }
 
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
@@ -78,11 +79,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
       isLoading = true;
     });
 
-    final FeedService _feedService = FeedService();
+    final FeedService feedService = FeedService();
     final filterState = ref.read(feedFilterProvider);
 
     try {
-      final result = await _feedService.getFilteredFeed(
+      final result = await feedService.getFilteredFeed(
         airType: filterState.airType,
         flyerClass: filterState.flyerClass,
         category: filterState.category,
@@ -294,7 +295,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               ),
               if (isLoading)
                 Container(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withAlpha(178),
                   child: const Center(
                     child: LoadingWidget(),
                   ),

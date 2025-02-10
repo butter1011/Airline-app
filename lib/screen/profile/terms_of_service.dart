@@ -54,7 +54,7 @@ class TermsOfService extends StatelessWidget {
                 height: 12,
               ),
             ]);
-          }).toList(),
+          }),
         ],
       ),
     );

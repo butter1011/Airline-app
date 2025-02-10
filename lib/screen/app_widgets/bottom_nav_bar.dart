@@ -65,21 +65,21 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1.0,
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
+            ),
+          )
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withAlpha(0.4),
+          //     blurRadius: 10,
+          //     offset: const Offset(0, -2),
+          //   ),
+          // ],
           ),
-        )
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.black.withOpacity(0.4),
-        //     blurRadius: 10,
-        //     offset: const Offset(0, -2),
-        //   ),
-        // ],
-      ),
       child: ConvexAppBar(
         style: TabStyle.react,
         backgroundColor: AppStyles.appBarColor,
@@ -95,7 +95,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
               Icons.leaderboard,
               color: _selectedIndex == 0
                   ? Colors.black
-                  : theme.colorScheme.onSurface.withOpacity(0.6),
+                  : theme.colorScheme.onSurface.withAlpha(153),
             ),
             title: 'Ranking',
           ),
@@ -104,7 +104,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
               Icons.feed,
               color: _selectedIndex == 1
                   ? Colors.black
-                  : theme.colorScheme.onSurface.withOpacity(0.6),
+                  : theme.colorScheme.onSurface.withAlpha(153),
             ),
             title: 'Feed',
           ),
@@ -113,7 +113,7 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
               decoration: BoxDecoration(
                 color: _selectedIndex == 2
                     ? Colors.black
-                    : theme.colorScheme.onSurface.withOpacity(0.6),
+                    : theme.colorScheme.onSurface.withAlpha(153),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -126,9 +126,8 @@ class _BottomNavBarState extends ConsumerState<BottomNavBar> {
           ),
           TabItem(
             icon: Container(
-              decoration: 
-              AppStyles.avatarDecoration.copyWith(
-                border: Border.all(width: 2, color: Colors.white),                
+              decoration: AppStyles.avatarDecoration.copyWith(
+                border: Border.all(width: 2, color: Colors.white),
               ),
               child: CircleAvatar(
                 radius: 13,

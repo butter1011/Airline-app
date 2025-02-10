@@ -33,7 +33,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
           // ),\
           // boxShadow: [
           //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.1),
+          //     color: Colors.black.withAlpha(0.1),
           //     spreadRadius: 5,
           //     blurRadius: 15,
           //   ),
@@ -47,9 +47,9 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       centerTitle: true,
-      title: Text(
-        title,
-        style: AppStyles.textStyle_18_600.copyWith(fontWeight:FontWeight.w700 )    ),
+      title: Text(title,
+          style:
+              AppStyles.textStyle_18_600.copyWith(fontWeight: FontWeight.w700)),
     );
   }
 

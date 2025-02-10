@@ -46,6 +46,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   String _searchQuery = '';
   bool _mounted = true;
 
+  @override
   void dispose() {
     _mounted = false;
     _searchController.dispose();
@@ -86,11 +87,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       isLoading = true;
     });
 
-    final LeaderboardService _leaderboardService = LeaderboardService();
+    final LeaderboardService leaderboardService = LeaderboardService();
     final filterState = ref.read(leaderboardFilterProvider);
 
     try {
-      final result = await _leaderboardService.getFilteredLeaderboard(
+      final result = await leaderboardService.getFilteredLeaderboard(
         airType: filterState.airType,
         flyerClass: filterState.flyerClass,
         category: filterState.category,
@@ -382,7 +383,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             ),
             if (isLoading)
               Container(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withAlpha(25),
                 child: const Center(
                   child: LoadingWidget(),
                 ),

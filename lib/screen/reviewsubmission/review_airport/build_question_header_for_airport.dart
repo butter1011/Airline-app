@@ -16,7 +16,6 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final String airportName = boardingPassDetail.departureData["name"] ?? "";
-
     return Stack(
       children: [
         Positioned.fill(
@@ -45,7 +44,7 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
                         color: Colors.white24,
                         width: 2,
                       ),
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withAlpha(128),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -59,7 +58,7 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
                               Shadow(
                                 offset: Offset(0, 1),
                                 blurRadius: 3.0,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withAlpha(128),
                               ),
                             ],
                           ),

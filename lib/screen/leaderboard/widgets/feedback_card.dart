@@ -93,13 +93,12 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     for (var media in widget.singleFeedback['imageUrls']) {
       if (media != null && media.toString().toLowerCase().contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         try {
-          _videoControllers[media] = VideoPlayerController.network(
-            media,
+          _videoControllers[media] = VideoPlayerController.networkUrl(
+            Uri.parse(media), // Convert String to Uri
             videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
           )..initialize().then((_) {
             if (mounted) {
               setState(() {
-                // Set volume to 0 to mute
                 _videoControllers[media]?.setVolume(0.0);
                 _videoControllers[media]?.setLooping(true);
                 _handleVideoState();
@@ -165,6 +164,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     }
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
     final List<dynamic> imageUrls = widget.singleFeedback['imageUrls'] ?? [];
+
+  print("This is the feedback card ==🧨✨===========> ${widget.singleFeedback}");
+
 
     return SizedBox(
       child: Column(
@@ -323,7 +325,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
+                                child: SizedBox(
                                   height: 189,
                                   child: mediaItem
                                           .toString()

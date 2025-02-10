@@ -47,7 +47,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ],
         ),
       ),
-     
       CardNotifications(),
     ];
 
@@ -62,7 +61,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(screenSize.height * 0.3),
+          preferredSize: Size.fromHeight(screenSize.height * 0.32),
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
@@ -202,7 +201,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       color: AppStyles.customIconColor,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withAlpha(51),
                           spreadRadius: 2,
                           blurRadius: 4,
                           offset: Offset(0, 2),

@@ -117,6 +117,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         comment: commentOfAirport,
         imageUrls: [],
       );
+      debugPrint("reviewForAirport.airport  🎏🎏🎏🎏: ${reviewForAirport.airport}");
 
       var imageAirlineUrls = await _uploadImages(imageOfAirline);
       var imageAirportUrls = await _uploadImages(imageOfAirport);
@@ -138,6 +139,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         ref
             .read(userDataProvider.notifier)
             .setUserData(updatedUserData["data"]);
+        if (!context.mounted) return;
         await _handleSuccessfulSubmission(
           context: context,
           resultOfAirline: resultOfAirline,
@@ -148,19 +150,21 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           airportScore: airportScore,
         );
       } else {
+        if (!context.mounted) return;
         _handleFailedSubmission(context);
       }
     } catch (e) {
+      if (!context.mounted) return;
       _handleSubmissionError(context, e);
     }
   }
 
   Future<Map<String, dynamic>> _uploadImages(image) async {
     final awsUploadService = AwsUploadService(
-      accessKeyId: aws_credentials.ACCESS_KEY_ID,
-      secretAccessKey: aws_credentials.SECRET_ACCESS_KEY,
-      region: aws_credentials.REGION,
-      bucketName: aws_credentials.BUCKET_NAME,
+      accessKeyId: aws_credentials.accessKeyId,
+      secretAccessKey: aws_credentials.secretAccessKey,
+      region: aws_credentials.region,
+      bucketName: aws_credentials.bucketName,
     );
 
     try {
@@ -266,8 +270,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required Map<String, dynamic> resultOfAirport,
     required int? index,
     required BoardingPassController boardingPassController,
-    required double airlineScore,
-    required double airportScore,
+    required airlineScore,
+    required airportScore,
   }) async {
     if (index != null) {
       final updatedBoardingPass =
@@ -282,8 +286,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
 
     setState(() => _isLoading = false);
 
-    if (!mounted) return;
-
+    if (!context.mounted) return;
     Navigator.pushNamed(context, AppRoutes.completereviews, arguments: {
       "airlineScore": airlineScore,
       "airportScore": airportScore,
@@ -466,7 +469,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                   automaticallyImplyLeading: false,
                   toolbarHeight: MediaQuery.of(context).size.height * 0.3,
                   flexibleSpace: BuildQuestionHeaderForSubmit(
-                    title: "Upload Content",           
+                    title: "Upload Content",
                   ),
                 ),
                 body: SafeArea(
@@ -477,7 +480,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                       children: [
                         Text('Share your experience with other users',
                             style: AppStyles.textStyle_18_600),
-                        Divider(height: 1, color: Colors.grey.withOpacity(0.2)),
+                        Divider(height: 1, color: Colors.grey.withAlpha(51)),
                         Expanded(
                           child: _buildFeedbackOptions(context),
                         ),
@@ -546,7 +549,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
           ),
           if (_isLoading)
             Container(
-                color: Colors.black.withOpacity(0.50),
+                color: Colors.black.withAlpha(127),
                 child: const LoadingWidget()),
         ],
       ),

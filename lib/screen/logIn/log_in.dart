@@ -87,7 +87,7 @@ class _LoginState extends ConsumerState<Login> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return Container(
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withAlpha(229),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: const Center(
@@ -152,16 +152,25 @@ class _LoginState extends ConsumerState<Login> {
         await prefs.setString('token', userData.idToken);
         await prefs.setString('userData', json.encode(responseData));
         await prefs.setInt('lastAccessTime', lastAccessTime);
-
-        Navigator.pop(context); // Remove loading dialog
+        if (mounted) {
+          Navigator.pop(context);
+        }
+        // Remove loading dialog
 
         if (responseData['userState'] == 0) {
-          Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, AppRoutes.skipscreen);
+          }
         } else {
-          Navigator.pushReplacementNamed(context, AppRoutes.leaderboardscreen);
+          if (mounted) {
+            Navigator.pushReplacementNamed(
+                context, AppRoutes.leaderboardscreen);
+          }
         }
       } else {
-        Navigator.pop(context); // Remove loading dialog
+        if (mounted) {
+          Navigator.pop(context);
+        }
       }
     } else {
       CustomSnackBar.error(context, 'Login failed. Please try again.');
@@ -191,8 +200,8 @@ class _LoginState extends ConsumerState<Login> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.3),
-                  Colors.black.withOpacity(0.1)
+                  Colors.black.withAlpha(76),
+                  Colors.black.withAlpha(25)
                 ],
               ).createShader(bounds);
             },
@@ -217,7 +226,7 @@ class _LoginState extends ConsumerState<Login> {
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withAlpha(76),
                             spreadRadius: 2,
                             blurRadius: 10,
                             offset: const Offset(0, 2),
@@ -227,8 +236,8 @@ class _LoginState extends ConsumerState<Login> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            Colors.white.withOpacity(0.1),
-                            Colors.white.withOpacity(0.05),
+                            Colors.white.withAlpha(25),
+                            Colors.white.withAlpha(13),
                           ],
                         ),
                       ),
@@ -238,7 +247,7 @@ class _LoginState extends ConsumerState<Login> {
                         width: 100,
                         height: 100,
                         colorFilter: ColorFilter.mode(
-                          Colors.white.withOpacity(0.9),
+                          Colors.white.withAlpha(229),
                           BlendMode.srcIn,
                         ),
                       )),
@@ -258,7 +267,7 @@ class _LoginState extends ConsumerState<Login> {
                       color: Colors.white,
                       shadows: [
                         Shadow(
-                          color: Colors.black.withOpacity(0.6),
+                          color: Colors.black.withAlpha(153),
                           offset: const Offset(2, 3),
                           blurRadius: 5,
                         ),
@@ -281,8 +290,8 @@ class _LoginState extends ConsumerState<Login> {
                             horizontal: screenSize.width * 0.1,
                             vertical: screenSize.height * 0.08),
                         child: Shimmer.fromColors(
-                          baseColor: Colors.white.withOpacity(0.5),
-                          highlightColor: Colors.white.withOpacity(0.9),
+                          baseColor: Colors.white.withAlpha(127),
+                          highlightColor: Colors.white.withAlpha(229),
                           child: InkWell(
                             onTap: () {
                               _openLoginPage();
@@ -294,7 +303,7 @@ class _LoginState extends ConsumerState<Login> {
                                 letterSpacing: 0.5,
                                 shadows: [
                                   Shadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withAlpha(76),
                                     offset: const Offset(1, 1),
                                     blurRadius: 2,
                                   ),

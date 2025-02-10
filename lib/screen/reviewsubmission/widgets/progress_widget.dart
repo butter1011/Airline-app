@@ -1,6 +1,7 @@
 import 'package:airline_app/screen/reviewsubmission/widgets/emphasize_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProgressWidget extends StatelessWidget {
   const ProgressWidget({super.key, required this.parent});
@@ -18,8 +19,8 @@ class ProgressWidget extends StatelessWidget {
             : Text("1",
                 style:
                     AppStyles.textStyle_18_600.copyWith(color: Colors.white)),
-        Image.asset(
-          "assets/images/progress_flight.png",
+        SvgPicture.asset(
+          "assets/icons/progress_flight.svg",
           width: screenSize.width * 0.3,
           fit: BoxFit.fitWidth,
         ),
@@ -28,8 +29,8 @@ class ProgressWidget extends StatelessWidget {
             : Text("2",
                 style:
                     AppStyles.textStyle_18_600.copyWith(color: Colors.white)),
-        Image.asset(
-          "assets/images/progress_trunk.png",
+        SvgPicture.asset(
+          "assets/icons/progress_trunk.svg",
           width: screenSize.width * 0.3,
           fit: BoxFit.fitWidth,
         ),

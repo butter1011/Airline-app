@@ -38,7 +38,7 @@ class BasicButton extends StatelessWidget {
             //   child:
             Center(
           child: Text(
-            '$btntext',
+            btntext,
             style: AppStyles.textStyle_14_600,
           ),
         ),
