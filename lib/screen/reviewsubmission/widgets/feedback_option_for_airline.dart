@@ -48,8 +48,7 @@ class FeedbackOptionForAirline extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: selectedNumberOfSubcategory > 0
                   ? LinearGradient(
-                      colors: [AppStyles.blackColor, Color(0xFF2C2C2C)],
-                      begin: Alignment.topLeft,
+                      colors: [Color(0xFF4A4A4A), Color(0xFF2C2C2C)],                      begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
                   : null,

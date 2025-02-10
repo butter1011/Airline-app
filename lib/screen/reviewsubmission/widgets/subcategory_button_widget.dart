@@ -29,8 +29,7 @@ class SubcategoryButtonWidget extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppStyles.blackColor,
-                    Color(0xFF2C2C2C),
+                      Color(0xFF4A4A4A), Color(0xFF2C2C2C), 
                   ],
                 )
               : null,
