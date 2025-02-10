@@ -8,10 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BuildQuestionHeaderForSubmit extends ConsumerWidget {
   const BuildQuestionHeaderForSubmit({
     super.key,
-    required this.subTitle,
+
     required this.title,
   });
-  final String subTitle;
+
   final String title;
 
   @override
@@ -77,22 +77,8 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                subTitle,
-                style: AppStyles.textStyle_15_600.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 2.0,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
+              ),         
+       
               Spacer(),
               ProgressWidget(
                 parent: 2,
