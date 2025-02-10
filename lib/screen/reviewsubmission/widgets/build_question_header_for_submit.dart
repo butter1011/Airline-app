@@ -7,16 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BuildQuestionHeaderForSubmit extends ConsumerWidget {
   const BuildQuestionHeaderForSubmit({
     super.key,
-    required this.subTitle,
     required this.title,
   });
-  final String subTitle;
+
   final String title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final String airlineName = boardingPassDetail.airlineData["name"] ?? "";
+    final String airportName = boardingPassDetail.departureData["name"] ?? "";
     final String departureCode =
         boardingPassDetail.departureData["iataCode"] ?? "";
     final String arrivalCode = boardingPassDetail.arrivalData["iataCode"] ?? "";
@@ -29,7 +29,7 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
           ),
         ),
         Container(
-          color: Colors.black.withAlpha(180),
+          color: Colors.black.withAlpha(20),
         ),
         Padding(
           padding:
@@ -38,60 +38,54 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 10,
+                height: 5,
               ),
-              Text(
-                airlineName,
-                style: AppStyles.italicTextStyle.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 3.0,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ],
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white24,
+                    width: 2,
+                  ),
+                  color: Colors.black.withOpacity(0.5),
                 ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 32),
-              Text("$departureCode - $arrivalCode",
-                  style: AppStyles.textStyle_15_600
-                      .copyWith(color: Colors.white, shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                    )
-                  ])),
-              Text(
-                title,
-                style: AppStyles.textStyle_18_600.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 2.0,
-                      color: Colors.black.withOpacity(0.5),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Text(
+                      "$airportName      X      $airlineName",
+                      style: AppStyles.italicTextStyle.copyWith(
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 3.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                subTitle,
-                style: AppStyles.textStyle_15_600.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 2.0,
-                      color: Colors.black.withOpacity(0.5),
+                    SizedBox(height: 22),
+                    Text(
+                      title,
+                      style: AppStyles.textStyle_18_600.copyWith(
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 2.0,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 16),
               Spacer(),
               ProgressWidget(
                 parent: 2,

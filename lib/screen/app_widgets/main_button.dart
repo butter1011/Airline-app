@@ -10,6 +10,7 @@ class MainButton extends StatelessWidget {
     this.height = 56.0,
     this.isLoading = false,
     this.icon,
+    this.color=const Color(0xFF757575),
   });
 
   final String text;
@@ -18,6 +19,7 @@ class MainButton extends StatelessWidget {
   final double height;
   final bool isLoading;
   final Widget? icon;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +29,15 @@ class MainButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey.shade600,
+          backgroundColor: color,
           foregroundColor: Colors.white,
           elevation: 0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          //side: BorderSide(
-          //color: Colors.black87,
-          //width: 1.0,
-          // ),
+          side: color == Colors.white ? const BorderSide(
+            color: Colors.black87,
+            width: 1.0,
+          ) : null,
           padding: const EdgeInsets.symmetric(horizontal: 24),
         ),
         child: AnimatedSwitcher(
@@ -70,7 +72,7 @@ class MainButton extends StatelessWidget {
                     Text(
                       text,
                       style: AppStyles.textStyle_18_600.copyWith(
-                        color: Colors.white,
+                        color: color == Colors.white ? Colors.black : Colors.white,
                       )
                     ),
                   ],

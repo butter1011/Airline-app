@@ -7,10 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BuildQuestionHeaderForAirport extends ConsumerWidget {
   const BuildQuestionHeaderForAirport({
     super.key,
-    required this.subTitle,
     required this.title,
   });
-  final String subTitle;
+
   final String title;
 
   @override
@@ -24,12 +23,12 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/images/airport.jpg",
+            "assets/images/airport.png",
             fit: BoxFit.cover,
           ),
         ),
         Container(
-          color: Colors.black.withAlpha(180),
+          color: Colors.black.withAlpha(50),
         ),
         Padding(
           padding:
@@ -40,55 +39,51 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
-                  Text(
-                    airportName,
-                    style: AppStyles.italicTextStyle.copyWith(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 3.0,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ],
+                  SizedBox(height: 5),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.white24,
+                        width: 2,
+                      ),
+                      color: Colors.black.withOpacity(0.5),
                     ),
-                    overflow: TextOverflow.visible,
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 4),
-                  Text("$departureCode - $arrivalCode",
-                      style: AppStyles.textStyle_15_600
-                          .copyWith(color: Colors.white, shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                        )
-                      ])),
-                  SizedBox(height: 32),
-                  Text(
-                    title,
-                    style: AppStyles.textStyle_18_600.copyWith(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2.0,
-                          color: Colors.black.withAlpha(127),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Text(
+                          airportName,
+                          style: AppStyles.italicTextStyle.copyWith(
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(0, 1),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          textAlign: TextAlign.center,
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    subTitle,
-                    style: AppStyles.textStyle_15_600.copyWith(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2.0,
-                          color: Colors.black.withOpacity(0.5),
+                        SizedBox(height: 22),
+                        Text(
+                          title,
+                          style: AppStyles.textStyle_18_600.copyWith(
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(0, 1),
+                                blurRadius: 2.0,
+                                color: Colors.black.withAlpha(127),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

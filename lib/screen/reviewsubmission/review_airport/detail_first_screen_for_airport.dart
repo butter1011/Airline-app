@@ -31,8 +31,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirport(
-          title: "Tell us about your airport experience",
-          subTitle: "What did you like about your experience?",
+          title: "What did you like about your airline experience?",
         ),
       ),
       body: Column(children: [
@@ -42,7 +41,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Details for ${selections[singleIndex]['mainCategory']}",
+                "${selections[singleIndex]['mainCategory']}",
                 style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),

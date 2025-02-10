@@ -32,8 +32,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirline(
-          title: "Tell us about your airline experience",
-          subTitle: "What did you dislike about your experience?",
+          title: "What didn't you like about your airline experience?",
         ),
       ),
       body: Column(children: [
@@ -43,7 +42,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Details for ${selections[singleIndex]['mainCategory']}",
+                "${selections[singleIndex]['mainCategory']}",
                 style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),

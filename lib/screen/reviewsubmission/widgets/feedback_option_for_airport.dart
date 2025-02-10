@@ -43,12 +43,11 @@ class FeedbackOptionForAirport extends StatelessWidget {
           elevation: selectedNumberOfSubcategory > 0 ? 4 : 2,
           borderRadius: BorderRadius.circular(20),
           child: Container(
-
             width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
               gradient: selectedNumberOfSubcategory > 0
                   ? LinearGradient(
-                      colors: [AppStyles.blackColor, Color(0xFF2C2C2C)],
+                      colors: [Color(0xFF4A4A4A), Color(0xFF2C2C2C)], 
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
@@ -77,7 +76,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,                  
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Center(
                       child: Container(

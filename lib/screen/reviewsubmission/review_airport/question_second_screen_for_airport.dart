@@ -33,8 +33,8 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
             automaticallyImplyLeading: false,
             toolbarHeight: MediaQuery.of(context).size.height * 0.3,
             flexibleSpace: BuildQuestionHeaderForAirport(
-              title: "Lets go into more detail about this?",
-              subTitle: "Your feedback helps make every journey better!",
+              title: "What didn't you like about your airline experience?",
+      
             ),
           ),
           body: Column(children: [
@@ -86,6 +86,8 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
             children: [
               Expanded(
                   child: MainButton(
+                color:Colors.white,
+
                       text: "Back",
                       onPressed: () {
                         Navigator.pushNamed(
@@ -101,6 +103,8 @@ class QuestionSecondScreenForAirport extends ConsumerWidget {
               SizedBox(width: 10),
               Expanded(
                   child: MainButton(
+                color:Colors.white,
+
                       text: "Next",
                       onPressed: () {
                         Navigator.pushNamed(

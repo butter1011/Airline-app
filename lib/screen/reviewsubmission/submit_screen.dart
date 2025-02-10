@@ -466,8 +466,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                   automaticallyImplyLeading: false,
                   toolbarHeight: MediaQuery.of(context).size.height * 0.3,
                   flexibleSpace: BuildQuestionHeaderForSubmit(
-                    title: "Share your experience",
-                    subTitle: "Your feedback helps us improve!",
+                    title: "Upload Content",           
                   ),
                 ),
                 body: SafeArea(
