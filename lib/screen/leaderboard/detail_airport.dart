@@ -164,7 +164,7 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.black.withOpacity(0.8),
+                            Colors.black.withAlpha(204),
                             Colors.transparent,
                           ],
                           stops: const [0.1, 1],

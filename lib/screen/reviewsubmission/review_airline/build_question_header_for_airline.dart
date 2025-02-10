@@ -47,7 +47,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
                           color: Colors.white24,
                           width: 2,
                         ),
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withAlpha(127),
                       ),
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 16),
@@ -61,7 +61,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
                               Shadow(
                                 offset: Offset(0, 1),
                                 blurRadius: 3.0,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withAlpha(127),
                               ),
                             ],
                           ),
@@ -87,7 +87,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
                               Shadow(
                                 offset: Offset(0, 1),
                                 blurRadius: 2.0,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withAlpha(127),
                               ),
                             ],
                           ),

@@ -44,7 +44,7 @@ class CompleteReviews extends ConsumerWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withAlpha(25),
                           spreadRadius: 5,
                           blurRadius: 15,
                         ),
@@ -66,7 +66,7 @@ class CompleteReviews extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withAlpha(25),
                         spreadRadius: 2,
                         blurRadius: 10,
                       ),

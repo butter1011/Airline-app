@@ -93,7 +93,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     for (var media in widget.singleFeedback['imageUrls']) {
       if (media != null && media.toString().toLowerCase().contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         try {
-          _videoControllers[media] = VideoPlayerController.network(
+          _videoControllers[media] = VideoPlayerController.networkUrl(
             media,
             videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
           )..initialize().then((_) {
@@ -323,7 +323,7 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                             return Builder(builder: (BuildContext context) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
+                                child: SizedBox(
                                   height: 189,
                                   child: mediaItem
                                           .toString()

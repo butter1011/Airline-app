@@ -106,7 +106,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
         child: VideoPlayer(controller..play()),
       );
     }
-    return Container(
+    return SizedBox(
       height: 594.0,
       child: Center(
         child: CircularProgressIndicator(
@@ -157,7 +157,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                         if (media.toString().contains(RegExp(
                             r'\.(mp4|mov|avi|wmv)',
                             caseSensitive: false))) {
-                          return Container(
+                          return SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: _buildVideoPlayer(media),
                           );

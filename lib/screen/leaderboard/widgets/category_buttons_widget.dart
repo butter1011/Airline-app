@@ -195,7 +195,7 @@ class _CategoryButtonsWidgetState extends State<CategoryButtonsWidget> {
         ),
         if (isLoading)
           Container(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withAlpha(51),
             child: const Center(
               child: LoadingWidget(),
             ),

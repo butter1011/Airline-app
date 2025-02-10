@@ -47,7 +47,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: selectedNumberOfSubcategory > 0
                   ? LinearGradient(
-                      colors: [Color(0xFF4A4A4A), Color(0xFF2C2C2C)], 
+                      colors: [Color(0xFF4A4A4A), Color(0xFF2C2C2C)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
@@ -63,7 +63,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
               boxShadow: selectedNumberOfSubcategory > 0
                   ? [
                       BoxShadow(
-                        color: AppStyles.blackColor.withOpacity(0.51),
+                        color: AppStyles.blackColor.withAlpha(127),
                         blurRadius: 8,
                         offset: Offset(0, 4),
                       ),
@@ -133,7 +133,7 @@ class FeedbackOptionForAirport extends StatelessWidget {
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.38),
+                            color: Colors.black.withAlpha(104),
                             blurRadius: 6,
                             offset: Offset(0, 3),
                           ),

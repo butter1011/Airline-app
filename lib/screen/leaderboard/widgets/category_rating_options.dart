@@ -1,6 +1,5 @@
 import 'package:airline_app/screen/reviewsubmission/widgets/subcategory_button_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CategoryRatingOptions extends StatefulWidget {
@@ -41,11 +40,13 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
               height: 20,
               width: 45,
               decoration: BoxDecoration(
-                  color: _isClicked? Colors.black: Colors.white,
-                  border: Border.all(color:_isClicked? Colors.white: Colors.black, width: 2),
+                  color: _isClicked ? Colors.black : Colors.white,
+                  border: Border.all(
+                      color: _isClicked ? Colors.white : Colors.black,
+                      width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.38),
+                      color: Colors.black.withAlpha(104),
                       blurRadius: 6,
                       offset: Offset(0, 3),
                     ),
@@ -55,7 +56,7 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
                 child: Text(
                   "${widget.badgeScore}/10",
                   style: AppStyles.textStyle_12_600.copyWith(
-                    color: _isClicked?Colors.white :Colors.black,
+                    color: _isClicked ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -63,49 +64,3 @@ class _CategoryRatingOptionsState extends State<CategoryRatingOptions> {
     ]);
   }
 }
-
-
-
-
-
-// GestureDetector(
-//       onTap: _toggleClick, // Change color on tap
-//       child: Stack(
-//         children: [
-//           Container(
-//             height: 126,
-//             width: MediaQuery.of(context).size.width * 0.41,
-//             decoration: AppStyles.cardDecoration.copyWith(
-//               color: _isClicked
-//                   ? Colors.black
-//                   : Colors.white, // Change color based on click state
-//             ),
-//             padding: EdgeInsets.only(
-//                 bottom: 10, top: 16), // Add padding for better spacing
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 Container(
-//                   height: 48,
-//                   width: 48,
-//                   decoration: AppStyles.cardDecoration.copyWith(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(16),
-//                   ),
-//                   child: Image.asset(widget.iconUrl, height: 40),
-//                 ),
-//                 SizedBox(height: 6),
-//                 Text(
-//                   widget.label,
-//                   textAlign: TextAlign.center,
-//                   style: AppStyles.textStyle_14_600.copyWith(
-//                     color: _isClicked ? Colors.white : Colors.black,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-        
-//         ],
-//       ),
-//     );

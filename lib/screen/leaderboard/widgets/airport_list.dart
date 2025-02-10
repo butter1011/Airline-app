@@ -177,7 +177,7 @@ class AirportList extends ConsumerWidget {
                               color: (airportData['isIncreasing']
                                       ? Color(0xFF3FEA9C)
                                       : Color(0xFFFFA500))
-                                  .withOpacity(0.1),
+                                  .withAlpha(25),
                             ),
                             showingIndicators: [],
                           ),

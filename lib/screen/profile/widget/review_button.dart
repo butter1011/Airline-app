@@ -8,7 +8,7 @@ class ReviewButton extends StatelessWidget {
   final bool isLocked;
   final VoidCallback onTap;
 
-  ReviewButton({
+  const ReviewButton({super.key, 
     required this.iconUrl,
     required this.label,
     required this.isSelected,
@@ -56,7 +56,7 @@ class ReviewButton extends StatelessWidget {
               height: double.infinity,
               width: double.infinity,
               decoration: AppStyles.cardDecoration
-                  .copyWith(color: Colors.black.withOpacity(0.5)),
+                  .copyWith(color: Colors.black.withAlpha(127)),
               child: Center(
                 child: Icon(
                   Icons.lock,

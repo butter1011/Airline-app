@@ -55,7 +55,7 @@ class AboutApp extends StatelessWidget {
                 height: 12,
               ),
             ]);
-          }).toList(),
+          }),
         ],
       ),
     );
