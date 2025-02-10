@@ -75,7 +75,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
                     isSelected: value == true ? true : false,
                     onTap: () {
                       value == false
-                          ? print("Value is false, no action performed.")
+                          ? debugPrint("Value is false, no action performed.")
                           : ref
                               .read(reviewFeedBackProviderForAirline.notifier)
                               .selectLike(singleIndex, key);

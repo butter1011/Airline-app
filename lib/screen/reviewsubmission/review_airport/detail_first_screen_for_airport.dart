@@ -31,10 +31,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirport(
-
           title: "What did you like about your airline experience?",
-
-
         ),
       ),
       body: Column(children: [
@@ -77,7 +74,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
                     isSelected: value == true ? true : false,
                     onTap: () {
                       value == false
-                          ? print("Value is false, no action performed.")
+                          ? debugPrint("Value is false, no action performed.")
                           : ref
                               .read(reviewFeedBackProviderForAirport.notifier)
                               .selectLike(singleIndex, key);

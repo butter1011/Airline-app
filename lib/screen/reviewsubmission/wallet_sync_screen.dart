@@ -45,7 +45,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
       final BarcodeCapture? barcodeCapture =
           await _controller.analyzeImage(file.path);
       final String? rawValue = barcodeCapture?.barcodes.firstOrNull?.rawValue;
-      print("This is scanned barcode ========================> $rawValue");
+      debugPrint("This is scanned barcode ========================> $rawValue");
       if (rawValue != null) {
         await parseIataBarcode(rawValue);
       } else {
@@ -67,7 +67,7 @@ class _WalletSyncScreenState extends ConsumerState<WalletSyncScreen> {
   Future<void> parseIataBarcode(String rawValue) async {
     setState(() => isLoading = true);
     try {
-      print("This is scanned barcode ========================> $rawValue");
+      debugPrint("This is scanned barcode ========================> $rawValue");
 
       final RegExp regex = RegExp(
           r'([A-Z0-9]{5,7})\s+([A-Z]{6}[A-Z0-9]{2})\s+(\d{4})\s+(\d{3}[A-Z])');

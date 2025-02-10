@@ -60,19 +60,19 @@ class _GoogleCalendarScreenState extends State<GoogleCalendarScreen> {
         _isLoading = false;
       });
       for (var event in _events) {
-        print("Event Details:");
-        print("Summary: ${event.summary}");
-        print("Description: ${event.description}");
-        print("Start Time: ${event.start?.dateTime ?? event.start?.date}");
-        print("End Time: ${event.end?.dateTime ?? event.end?.date}");
-        print("Location: ${event.location}");
-        print("Creator: ${event.creator?.email}");
-        print("Created: ${event.created}");
-        print("Updated: ${event.updated}");
-        print("Status: ${event.status}");
-        print("Event Keys:");
+        debugPrint("Event Details:");
+        debugPrint("Summary: ${event.summary}");
+        debugPrint("Description: ${event.description}");
+        debugPrint("Start Time: ${event.start?.dateTime ?? event.start?.date}");
+        debugPrint("End Time: ${event.end?.dateTime ?? event.end?.date}");
+        debugPrint("Location: ${event.location}");
+        debugPrint("Creator: ${event.creator?.email}");
+        debugPrint("Created: ${event.created}");
+        debugPrint("Updated: ${event.updated}");
+        debugPrint("Status: ${event.status}");
+        debugPrint("Event Keys:");
         event.toJson().keys.forEach((key) {
-          print(key);
+          debugPrint(key);
         });
       }
     } catch (e) {
@@ -141,7 +141,7 @@ class _EventCardState extends ConsumerState<EventCard> {
   Future<void> parseEvent(calendar.Event event) async {
     setState(() => _isLoading = true);
     try {
-      print("This is scanned barcode ========================> $event");
+      debugPrint("This is scanned barcode ========================> $event");
 
       final RegExp regexSummary = RegExp(r'\([A-Z]{2} \d+\)');
       final Match? match = regexSummary.firstMatch(event.summary!);

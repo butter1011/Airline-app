@@ -4,9 +4,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -34,8 +32,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
             automaticallyImplyLeading: false,
             toolbarHeight: MediaQuery.of(context).size.height * 0.3,
             flexibleSpace: BuildQuestionHeaderForAirline(
-              title: "What didn't you like about your airline experience?",   
-  
+              title: "What didn't you like about your airline experience?",
             ),
           ),
           body: Column(children: [
@@ -87,8 +84,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
             children: [
               Expanded(
                   child: MainButton(
-                color:Colors.white,
-
+                      color: Colors.white,
                       text: "Back",
                       onPressed: () {
                         Navigator.pushNamed(
@@ -104,8 +100,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
               SizedBox(width: 10),
               Expanded(
                   child: MainButton(
-                color:Colors.white,
-
+                      color: Colors.white,
                       text: "Next",
                       onPressed: () {
                         Navigator.pushNamed(context, AppRoutes.submitscreen);

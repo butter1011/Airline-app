@@ -62,7 +62,7 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
             _videoControllers[media] = controller;
           });
         } catch (e) {
-          print('Error initializing video $media: $e');
+          debugPrint('Error initializing video $media: $e');
         }
       }
     }

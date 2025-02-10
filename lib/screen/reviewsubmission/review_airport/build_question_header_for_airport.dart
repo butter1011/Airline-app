@@ -1,5 +1,4 @@
 import 'package:airline_app/provider/aviation_info_provider.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/emphasize_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/progress_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
