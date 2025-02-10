@@ -4,9 +4,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -18,7 +16,7 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline); 
+    final selectionsForAirline = ref.watch(reviewFeedBackProviderForAirline);
     final List<Map<String, dynamic>> feedbackOptionsForAirline =
         mainCategoryAndSubcategoryForAirline;
 
@@ -36,7 +34,6 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
           flexibleSpace: BuildQuestionHeaderForAirline(
             title: "Lets go into more detail about this?",
             subTitle: "Your feedback helps make every journey better!",
-
           ),
         ),
         body: Column(
@@ -59,26 +56,25 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
-                  child:  GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1.4,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemCount: feedbackOptionsForAirline.length,
-                      itemBuilder: (context, index) => FeedbackOptionForAirline(
-                        numForIdentifyOfParent: 1,
-                        iconUrl: feedbackOptionsForAirline[index]['iconUrl'],
-                        label: index,
-                        selectedNumberOfSubcategory: selectionsForAirline[index]
-                                ['subCategory']
-                            .values
-                            .where((s) => s == true)
-                            .length,
-                      ),
-                    
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.4,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: feedbackOptionsForAirline.length,
+                    itemBuilder: (context, index) => FeedbackOptionForAirline(
+                      numForIdentifyOfParent: 1,
+                      iconUrl: feedbackOptionsForAirline[index]['iconUrl'],
+                      label: index,
+                      selectedNumberOfSubcategory: selectionsForAirline[index]
+                              ['subCategory']
+                          .values
+                          .where((s) => s == true)
+                          .length,
+                    ),
                   ),
                 ),
               ),

@@ -4,9 +4,7 @@ import 'package:airline_app/provider/review_feedback_provider_for_airport.dart';
 import 'package:airline_app/screen/app_widgets/bottom_button_bar.dart';
 import 'package:airline_app/screen/app_widgets/main_button.dart';
 import 'package:airline_app/screen/reviewsubmission/review_airline/build_question_header_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/build_question_header_for_submit.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airline.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/feedback_option_for_airport.dart';
 import 'package:airline_app/utils/airport_list_json.dart';
 import 'package:airline_app/utils/app_routes.dart';
 import 'package:airline_app/utils/app_styles.dart';
@@ -36,7 +34,6 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
             flexibleSpace: BuildQuestionHeaderForAirline(
               title: "Lets go into more detail about this?",
               subTitle: "Your feedback helps make every journey better!",
-  
             ),
           ),
           body: Column(children: [

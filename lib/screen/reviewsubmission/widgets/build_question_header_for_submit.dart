@@ -1,5 +1,4 @@
 import 'package:airline_app/provider/aviation_info_provider.dart';
-import 'package:airline_app/screen/reviewsubmission/widgets/emphasize_widget.dart';
 import 'package:airline_app/screen/reviewsubmission/widgets/progress_widget.dart';
 import 'package:airline_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final String airlineName = boardingPassDetail.airlineData["name"] ?? "";
-    final String airportName = boardingPassDetail.departureData["name"] ?? "";
     final String departureCode =
         boardingPassDetail.departureData["iataCode"] ?? "";
     final String arrivalCode = boardingPassDetail.arrivalData["iataCode"] ?? "";
@@ -39,9 +37,10 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-            
-            SizedBox(height: 10,),
-            Text(
+              SizedBox(
+                height: 10,
+              ),
+              Text(
                 airlineName,
                 style: AppStyles.italicTextStyle.copyWith(
                   color: Colors.white,
