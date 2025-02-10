@@ -35,8 +35,6 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         widget.singleBoardingPass.departureAirportCode,
         widget.singleBoardingPass.arrivalAirportCode,
       );
-      print(
-          "This is airline info  ===========✨✨✨✨✨=======>    ${response["airline"]}");
 
       final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
       aviationInfoNotifier
