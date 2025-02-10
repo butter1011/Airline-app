@@ -9,9 +9,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
   const BuildQuestionHeaderForAirline({
     super.key,
     required this.title,
-    required this.subTitle,
   });
-  final String subTitle;
   final String title;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +23,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            "assets/images/airline.jpg",
+            "assets/images/airline.png",
             fit: BoxFit.cover,
           ),
         ),
@@ -80,21 +78,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    subTitle,
-                    style: AppStyles.textStyle_15_600.copyWith(
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2.0,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ),       
                 ],
               ),
               Spacer(),

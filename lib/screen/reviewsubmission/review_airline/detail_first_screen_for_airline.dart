@@ -32,9 +32,7 @@ class DetailFirstScreenForAirline extends ConsumerWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirline(
-          title: "Tell us about your airline experience",
-          subTitle: "What did you like about your experience?",
-    
+          title: "What did you like about your airline experience?",
         ),
       ),
       body: Column(children: [

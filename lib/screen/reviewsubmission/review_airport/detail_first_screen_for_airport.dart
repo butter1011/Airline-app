@@ -32,8 +32,8 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
         toolbarHeight: MediaQuery.of(context).size.height * 0.3,
         flexibleSpace: BuildQuestionHeaderForAirport(
 
-          title: "Tell us about your airport experience",
-          subTitle: "What did you like about your experience?",
+          title: "What did you like about your airline experience?",
+
 
         ),
       ),
