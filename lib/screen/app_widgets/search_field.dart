@@ -27,12 +27,12 @@ class SearchBarWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         color: Colors.white,
         border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withAlpha(51),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             offset: Offset(0, 4),
             blurRadius: 12,
             spreadRadius: 0,

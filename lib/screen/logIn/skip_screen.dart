@@ -68,7 +68,7 @@ class _SkipScreenState extends State<SkipScreen> {
               image: AssetImage('assets/images/skipscreen$index.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.5),
+                Colors.black.withAlpha(127),
                 BlendMode.darken,
               ),
             ),
@@ -81,7 +81,7 @@ class _SkipScreenState extends State<SkipScreen> {
               end: Alignment.bottomCenter,
               colors: [
                 Colors.transparent,
-                Colors.black.withOpacity(0.5),
+                Colors.black.withAlpha(127),
               ],
               stops: const [0.5, 1.0],
             ),
@@ -107,7 +107,7 @@ class _SkipScreenState extends State<SkipScreen> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withAlpha(51),
             blurRadius: 20,
             offset: const Offset(0, -8),
           ),
@@ -177,7 +177,7 @@ class _SkipScreenState extends State<SkipScreen> {
             boxShadow: selectedIndex == index
                 ? [
                     BoxShadow(
-                      color: AppStyles.mainColor.withOpacity(0.4),
+                      color: AppStyles.mainColor.withAlpha(104),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     )

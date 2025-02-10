@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:airline_app/main.dart';
 import 'package:airline_app/provider/selected_language_provider.dart';
 import 'package:airline_app/screen/profile/widget/show_modal_widget.dart';
@@ -52,6 +51,9 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
               await prefs.remove('userData');
 
               // Close the modal bottom sheet
+              if (!context.mounted) {
+                return;
+              }
               Navigator.pop(context);
 
               // Navigate to login screen and remove all previous routes
@@ -176,7 +178,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withAlpha(51),
                     spreadRadius: 1,
                     blurRadius: 4,
                     offset: const Offset(0, 2),
@@ -186,7 +188,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
         ),
         child: Center(
           child: Text(
-            AppLocalizations.of(context).translate(language),              
+            AppLocalizations.of(context).translate(language),
             style: AppStyles.textStyle_14_600.copyWith(
               color: isSelected ? Colors.white : Colors.black,
             ),
@@ -206,7 +208,7 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
         return ShowModalWidget(
           title: "Change to $language",
           content: AppLocalizations.of(context).translate(
-              "Change to ${language}? Are you sure you want to change to ${language}?"),
+              "Change to $language? Are you sure you want to change to $language?"),
           cancelText: "No, leave",
           onPressed: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -218,13 +220,16 @@ class _CardNotificationsState extends ConsumerState<CardNotifications> {
             await prefs.setString('selectedLanguageSym', lSym);
 
             ref.read(localeProvider.notifier).state =
-                Locale('$_selectedLanguageSym', '');
+                Locale(_selectedLanguageSym, '');
             ref
                 .read(selectedLanguageProvider.notifier)
                 .changeLanguage(_selectedLanguage);
 
             await prefs.setString('selectedLanguage', _selectedLanguage);
             await prefs.setString('selectedLanguageSym', _selectedLanguageSym);
+            if (!context.mounted) {
+              return;
+            }
             Navigator.pop(context);
           },
           confirmText: 'Yes, change',

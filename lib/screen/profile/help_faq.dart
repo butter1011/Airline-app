@@ -54,7 +54,7 @@ class HelpFaq extends StatelessWidget {
                 height: 12,
               ),
             ]);
-          }).toList(),
+          }),
         ],
       ),
     );

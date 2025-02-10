@@ -19,16 +19,15 @@ class ShowModalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [Container(
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha(25),
               blurRadius: 10,
               spreadRadius: 0,
               offset: Offset(0, -2),
@@ -61,7 +60,8 @@ class ShowModalWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
               child: Text(
                 content,
                 style: AppStyles.textStyle_14_400.copyWith(
@@ -75,7 +75,8 @@ class ShowModalWidget extends StatelessWidget {
               color: Colors.grey[200],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,13 +86,14 @@ class ShowModalWidget extends StatelessWidget {
                           onPressed: () => Navigator.pop(context))),
                   SizedBox(width: 10),
                   Expanded(
-                      child: MainButton(text: confirmText, onPressed: onPressed)),
+                      child:
+                          MainButton(text: confirmText, onPressed: onPressed)),
                 ],
               ),
             ),
           ],
         ),
-      ),]
-    );
+      ),
+    ]);
   }
 }

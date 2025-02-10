@@ -47,7 +47,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ],
         ),
       ),
-     
       CardNotifications(),
     ];
 
@@ -202,7 +201,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       color: AppStyles.customIconColor,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withAlpha(51),
                           spreadRadius: 2,
                           blurRadius: 4,
                           offset: Offset(0, 2),

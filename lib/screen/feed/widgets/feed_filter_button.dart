@@ -54,7 +54,7 @@ class _FeedFilterButtonState extends State<FeedFilterButton> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: Text(
-              AppLocalizations.of(context).translate('${widget.text}'),
+              AppLocalizations.of(context).translate(widget.text),
               style: AppStyles.textStyle_14_600,
             ),
           ),

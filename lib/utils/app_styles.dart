@@ -105,7 +105,7 @@ class AppStyles {
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic,
     color: Colors.white,
-    fontSize: 16,   
+    fontSize: 16,
   );
 
   /// Box style
@@ -119,7 +119,7 @@ class AppStyles {
   );
   static BoxDecoration cardDecoration = BoxDecoration(
     color: Colors.grey.shade50,
-    borderRadius: BorderRadius.circular(12),   
+    borderRadius: BorderRadius.circular(12),
     border: Border.all(
       color: Colors.grey.shade100,
       width: 2,
@@ -133,12 +133,11 @@ class AppStyles {
     ),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withAlpha(25),
         spreadRadius: 2,
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
     ],
-  ); 
-  
+  );
 }

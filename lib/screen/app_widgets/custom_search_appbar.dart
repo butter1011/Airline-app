@@ -45,7 +45,7 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
             )
             // boxShadow: [
             //   BoxShadow(
-            //     color: Colors.black.withOpacity(0.1),
+            //     color: Colors.black.withAlpha(0.1),
             //     spreadRadius: 5,
             //     blurRadius: 15,
             //   ),
@@ -61,7 +61,7 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 searchController: searchController,
                 filterType: filterType,
                 onSearchChanged: onSearchChanged,
-                onSearchSubmit: onSearchSubmit,  // Pass it here
+                onSearchSubmit: onSearchSubmit, // Pass it here
               ),
               CustomIconButton(
                 icon: Icons.tune_rounded,

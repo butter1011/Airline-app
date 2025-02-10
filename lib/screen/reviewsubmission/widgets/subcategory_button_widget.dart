@@ -29,7 +29,8 @@ class SubcategoryButtonWidget extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                      Color(0xFF4A4A4A), Color(0xFF2C2C2C), 
+                    Color(0xFF4A4A4A),
+                    Color(0xFF2C2C2C),
                   ],
                 )
               : null,
@@ -37,7 +38,7 @@ class SubcategoryButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withAlpha(127),
               spreadRadius: 2,
               blurRadius: 8,
               offset: Offset(0, 4),
@@ -59,8 +60,8 @@ class SubcategoryButtonWidget extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: isSelected
-                        ? Colors.white.withOpacity(0.3)
-                        : Colors.grey.withOpacity(0.2),
+                        ? Colors.white.withAlpha(76)
+                        : Colors.grey.withAlpha(51),
                     spreadRadius: 1,
                     blurRadius: 4,
                     offset: Offset(0, 2),
@@ -73,7 +74,8 @@ class SubcategoryButtonWidget extends StatelessWidget {
                   imagePath,
                   height: 40,
                   fit: BoxFit.contain,
-                ),              ),
+                ),
+              ),
             ),
             SizedBox(height: 12),
             Text(

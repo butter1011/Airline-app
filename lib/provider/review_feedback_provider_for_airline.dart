@@ -13,7 +13,7 @@ class ReviewFeedBackForAirlineNotifier
             .map((category) => {
                   ...category,
                   'subCategory': category['subCategory']
-                      .map((key, value) => MapEntry(key, value ?? null))
+                      .map((key, value) => MapEntry(key, value))
                       .cast<String, bool?>()
                 })
             .toList());
@@ -100,7 +100,7 @@ class ReviewFeedBackForAirlineNotifier
         .map((category) => {
               ...category,
               'subCategory': category['subCategory']
-                  .map((key, value) => MapEntry(key, value ?? null))
+                  .map((key, value) => MapEntry(key, value))
                   .cast<String, bool?>()
             })
         .toList();

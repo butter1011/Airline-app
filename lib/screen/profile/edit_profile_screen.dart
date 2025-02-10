@@ -70,16 +70,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   Future<String> _uploadImages(XFile? image) async {
     if (image == null) return '';
-    final _awsUploadService = AwsUploadService(
-      accessKeyId: aws_credentials.ACCESS_KEY_ID,
-      secretAccessKey: aws_credentials.SECRET_ACCESS_KEY,
-      region: aws_credentials.REGION,
-      bucketName: aws_credentials.BUCKET_NAME,
+    final awsUploadService = AwsUploadService(
+      accessKeyId: aws_credentials.accessKeyId,
+      secretAccessKey: aws_credentials.secretAccessKey,
+      region: aws_credentials.region,
+      bucketName: aws_credentials.bucketName,
     );
 
     try {
       final uploadedUrl =
-          await _awsUploadService.uploadFile(File(image.path), 'avatar');
+          await awsUploadService.uploadFile(File(image.path), 'avatar');
       return uploadedUrl;
     } catch (e) {
       if (mounted) {
@@ -91,9 +91,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   Future<void> _pickImage() async {
     try {
-      final ImagePicker _picker = ImagePicker();
+      final ImagePicker picker = ImagePicker();
       final XFile? image =
-          await _picker.pickImage(source: ImageSource.gallery).timeout(
+          await picker.pickImage(source: ImageSource.gallery).timeout(
         Duration(seconds: 10),
         onTimeout: () {
           throw TimeoutException('Image picker timed out');

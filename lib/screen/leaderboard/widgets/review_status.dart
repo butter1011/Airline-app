@@ -8,7 +8,7 @@ class ReviewStatus extends StatefulWidget {
     required this.overallScore,
     required this.totalReviews,
   });
-  
+
   final bool reviewStatus;
   final num overallScore;
   final int totalReviews;
@@ -27,7 +27,7 @@ class _ReviewStatusState extends State<ReviewStatus> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withAlpha(25),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -35,7 +35,9 @@ class _ReviewStatusState extends State<ReviewStatus> {
         ],
         border: Border.all(
           width: 1.5,
-          color: widget.reviewStatus ? const Color(0xFF4CAF50) : const Color(0xFFFF5252),
+          color: widget.reviewStatus
+              ? const Color(0xFF4CAF50)
+              : const Color(0xFFFF5252),
         ),
       ),
       child: Row(
@@ -44,7 +46,9 @@ class _ReviewStatusState extends State<ReviewStatus> {
           Icon(
             widget.reviewStatus ? Icons.trending_up : Icons.trending_down,
             size: 18,
-            color: widget.reviewStatus ? const Color(0xFF4CAF50) : const Color(0xFFFF5252),
+            color: widget.reviewStatus
+                ? const Color(0xFF4CAF50)
+                : const Color(0xFFFF5252),
           ),
           const SizedBox(width: 8),
           RichText(
@@ -54,7 +58,9 @@ class _ReviewStatusState extends State<ReviewStatus> {
                 TextSpan(
                   text: widget.overallScore.toStringAsFixed(1),
                   style: AppStyles.textStyle_14_600.copyWith(
-                    color: widget.reviewStatus ? const Color(0xFF4CAF50) : const Color(0xFFFF5252),
+                    color: widget.reviewStatus
+                        ? const Color(0xFF4CAF50)
+                        : const Color(0xFFFF5252),
                   ),
                 ),
                 const TextSpan(text: ' /10 • '),
