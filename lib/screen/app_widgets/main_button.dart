@@ -19,7 +19,7 @@ class MainButton extends StatelessWidget {
   final double height;
   final bool isLoading;
   final Widget? icon;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +34,10 @@ class MainButton extends StatelessWidget {
           elevation: 0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          //side: BorderSide(
-          //color: Colors.black87,
-          //width: 1.0,
-          // ),
+          side: color == Colors.white ? const BorderSide(
+            color: Colors.black87,
+            width: 1.0,
+          ) : null,
           padding: const EdgeInsets.symmetric(horizontal: 24),
         ),
         child: AnimatedSwitcher(
@@ -72,7 +72,7 @@ class MainButton extends StatelessWidget {
                     Text(
                       text,
                       style: AppStyles.textStyle_18_600.copyWith(
-                        color: Colors.white,
+                        color: color == Colors.white ? Colors.black : Colors.white,
                       )
                     ),
                   ],
