@@ -117,6 +117,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         comment: commentOfAirport,
         imageUrls: [],
       );
+      debugPrint("reviewForAirport.airport  🎏🎏🎏🎏: ${reviewForAirport.airport}");
 
       var imageAirlineUrls = await _uploadImages(imageOfAirline);
       var imageAirportUrls = await _uploadImages(imageOfAirport);
@@ -269,8 +270,8 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
     required Map<String, dynamic> resultOfAirport,
     required int? index,
     required BoardingPassController boardingPassController,
-    required double airlineScore,
-    required double airportScore,
+    required airlineScore,
+    required airportScore,
   }) async {
     if (index != null) {
       final updatedBoardingPass =

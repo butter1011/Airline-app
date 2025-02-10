@@ -25,7 +25,8 @@ class ReviewFlightCard extends ConsumerStatefulWidget {
 }
 
 class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
-  final BoardingPassController _boardingPassController = BoardingPassController();
+  final BoardingPassController _boardingPassController =
+      BoardingPassController();
 
   Future<void> _handleFlightCardTap() async {
     try {
@@ -34,6 +35,8 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         widget.singleBoardingPass.departureAirportCode,
         widget.singleBoardingPass.arrivalAirportCode,
       );
+      print(
+          "This is airline info  ===========✨✨✨✨✨=======>    ${response["airline"]}");
 
       final aviationInfoNotifier = ref.read(aviationInfoProvider.notifier);
       aviationInfoNotifier
@@ -79,7 +82,8 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
     CountryDetails? arrivalCountry;
 
     try {
-      departureCountry = CountryCodes.detailsFromAlpha2(pass.departureCountryCode);
+      departureCountry =
+          CountryCodes.detailsFromAlpha2(pass.departureCountryCode);
       arrivalCountry = CountryCodes.detailsFromAlpha2(pass.arrivalCountryCode);
     } catch (e) {
       return const SizedBox.shrink();
@@ -130,7 +134,8 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
                     Expanded(
                       child: Text(
                         "${_truncateText(pass.departureCity, 12)} (${pass.departureAirportCode}) -> ${_truncateText(pass.arrivalCity, 12)} (${pass.arrivalAirportCode})",
-                        style: AppStyles.textStyle_16_600.copyWith(color: Colors.black),
+                        style: AppStyles.textStyle_16_600
+                            .copyWith(color: Colors.black),
                         overflow: TextOverflow.visible,
                         softWrap: true,
                         maxLines: 2,

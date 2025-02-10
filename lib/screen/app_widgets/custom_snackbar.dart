@@ -20,7 +20,7 @@ class CustomSnackBar {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: AppStyles.textStyle_14_600.copyWith(color: textColor),
+        style: AppStyles.textStyle_16_600.copyWith(color: textColor),
       ),
       duration: duration,
       backgroundColor: backgroundColor,
@@ -44,7 +44,7 @@ class CustomSnackBar {
       action: SnackBarAction(
         label: 'OK',
         textColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {Navigator.of(context).pop();},
       ),
     );
   }
@@ -65,5 +65,4 @@ class CustomSnackBar {
       backgroundColor: Colors.blue,
     );
   }
-
 }
