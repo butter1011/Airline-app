@@ -29,7 +29,7 @@ class BuildQuestionHeaderForAirline extends ConsumerWidget {
         ),
         Container(
           color:
-              Colors.black.withAlpha(180), // Darker overlay for better contrast
+              Colors.black.withAlpha(50), // Darker overlay for better contrast
         ),
         Padding(
           padding:

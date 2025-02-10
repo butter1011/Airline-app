@@ -10,6 +10,7 @@ class MainButton extends StatelessWidget {
     this.height = 56.0,
     this.isLoading = false,
     this.icon,
+    this.color=const Color(0xFF757575),
   });
 
   final String text;
@@ -18,6 +19,7 @@ class MainButton extends StatelessWidget {
   final double height;
   final bool isLoading;
   final Widget? icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class MainButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey.shade600,
+          backgroundColor: color,
           foregroundColor: Colors.white,
           elevation: 0,
           shape:

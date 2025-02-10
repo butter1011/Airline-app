@@ -90,6 +90,8 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
           children: [
             Expanded(
               child: MainButton(
+                color:Colors.white,
+
                 text: "Back",
                 onPressed: () {
                   Navigator.pushNamed(
@@ -107,6 +109,8 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
             SizedBox(width: 10),
             Expanded(
               child: MainButton(
+                color:Colors.white,
+
                 text: "Next",
                 onPressed: () {
                   Navigator.pushNamed(

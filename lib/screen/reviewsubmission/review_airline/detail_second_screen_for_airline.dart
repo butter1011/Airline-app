@@ -42,7 +42,7 @@ class DetailSecondScreenForAirline extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Details for ${selections[singleIndex]['mainCategory']}",
+                "${selections[singleIndex]['mainCategory']}",
                 style: AppStyles.textStyle_18_600,
               ),
               const SizedBox(height: 16),

@@ -31,7 +31,7 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
           ),
         ),
         Container(
-          color: Colors.black.withAlpha(180),
+          color: Colors.black.withAlpha(50),
         ),
         Padding(
           padding:

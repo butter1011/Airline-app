@@ -30,7 +30,7 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
           ),
         ),
         Container(
-          color: Colors.black.withAlpha(180),
+          color: Colors.black.withAlpha(50),
         ),
         Padding(
           padding:
@@ -57,17 +57,11 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
                     overflow: TextOverflow.visible,
                     softWrap: true,
                     textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 4),
-                  Text("$departureCode - $arrivalCode",
-                      style: AppStyles.textStyle_15_600
-                          .copyWith(color: Colors.white, shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                        )
-                      ])),
+                  ),        
                   SizedBox(height: 32),
-                  Text(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child:  Text(
                     title,
                     style: AppStyles.textStyle_18_600.copyWith(
                       color: Colors.white,
@@ -79,7 +73,11 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  ),              
+                      textAlign: TextAlign.center,
+
+                  ),  
+                  )
+                            
                 ],
               ),
               Spacer(),
