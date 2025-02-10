@@ -94,12 +94,11 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
       if (media != null && media.toString().toLowerCase().contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         try {
           _videoControllers[media] = VideoPlayerController.networkUrl(
-            media,
+            Uri.parse(media), // Convert String to Uri
             videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
           )..initialize().then((_) {
             if (mounted) {
               setState(() {
-                // Set volume to 0 to mute
                 _videoControllers[media]?.setVolume(0.0);
                 _videoControllers[media]?.setLooping(true);
                 _handleVideoState();

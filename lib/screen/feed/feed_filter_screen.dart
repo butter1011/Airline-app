@@ -59,6 +59,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   bool continentIsExpanded = true;
   List<String> currentCategories = [];
   final List<dynamic> flyerClass = [
+    "All",
     "Business",
     "Premium Economy",
     "Economy",
@@ -71,7 +72,7 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
   late List<bool> selectedCategoryStates;
   late List<bool> selectedContinentStates;
   List<dynamic> selectedContinents = [];
-  String selectedFlyerClass = "Business";
+  String selectedFlyerClass = "All";
   late List<bool> selectedFlyerClassStates;
   late List<bool> selectedairTypeStates;
   bool typeIsExpanded = true;

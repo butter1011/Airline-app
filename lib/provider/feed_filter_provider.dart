@@ -20,7 +20,7 @@ class FeedFilterNotifier extends StateNotifier<FeedFilterState> {
   FeedFilterNotifier()
       : super(FeedFilterState(
             airType: 'Airline',
-            flyerClass: 'Business',
+            flyerClass: 'All',
             continents: ["Africa", "Asia", "Europe", "Americas", "Oceania"]));
 
   void setFilters({
