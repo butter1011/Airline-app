@@ -91,23 +91,21 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     if (widget.singleFeedback['imageUrls'] == null) return;
 
     for (var media in widget.singleFeedback['imageUrls']) {
-      if (media != null &&
-          media
-              .toString()
-              .toLowerCase()
-              .contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
+      if (media != null && media.toString().toLowerCase().contains(RegExp(r'\.(mp4|mov|avi|wmv)', caseSensitive: false))) {
         try {
           _videoControllers[media] = VideoPlayerController.network(
             media,
             videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
           )..initialize().then((_) {
-              if (mounted) {
-                setState(() {
-                  _videoControllers[media]?.setLooping(true);
-                  _handleVideoState();
-                });
-              }
-            });
+            if (mounted) {
+              setState(() {
+                // Set volume to 0 to mute
+                _videoControllers[media]?.setVolume(0.0);
+                _videoControllers[media]?.setLooping(true);
+                _handleVideoState();
+              });
+            }
+          });
         } catch (e) {
           debugPrint('Error creating video controller: $e');
         }

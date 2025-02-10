@@ -130,7 +130,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     if (!_mounted) return;
 
     await Future.wait([
-      fetchLeaderboardData(),
+      fetchLeaderboardData(page: 1),
       fetchTrendingReviews(),
     ]);
 
