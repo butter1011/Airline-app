@@ -165,6 +165,9 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
     final userId = ref.watch(userDataProvider)?['userData']?['_id'];
     final List<dynamic> imageUrls = widget.singleFeedback['imageUrls'] ?? [];
 
+  print("This is the feedback card ==🧨✨===========> ${widget.singleFeedback}");
+
+
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
