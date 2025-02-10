@@ -17,9 +17,7 @@ class BuildQuestionHeaderForSubmit extends ConsumerWidget {
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final String airlineName = boardingPassDetail.airlineData["name"] ?? "";
     final String airportName = boardingPassDetail.departureData["name"] ?? "";
-    final String departureCode =
-        boardingPassDetail.departureData["iataCode"] ?? "";
-    final String arrivalCode = boardingPassDetail.arrivalData["iataCode"] ?? "";
+
     return Stack(
       children: [
         Positioned.fill(

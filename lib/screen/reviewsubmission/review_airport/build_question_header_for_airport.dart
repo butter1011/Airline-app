@@ -16,9 +16,7 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardingPassDetail = ref.watch(aviationInfoProvider);
     final String airportName = boardingPassDetail.departureData["name"] ?? "";
-    final String departureCode =
-        boardingPassDetail.departureData["iataCode"] ?? "";
-    final String arrivalCode = boardingPassDetail.arrivalData["iataCode"] ?? "";
+
     return Stack(
       children: [
         Positioned.fill(
