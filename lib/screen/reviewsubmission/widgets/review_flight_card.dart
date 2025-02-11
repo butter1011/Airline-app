@@ -44,9 +44,9 @@ class _ReviewFlightCardState extends ConsumerState<ReviewFlightCard> {
         ..updateClassOfTravel(widget.singleBoardingPass.classOfTravel)
         ..updateIndex(widget.index);
 
-      if (mounted) {
-        Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
-      }
+      // if (mounted) {
+      Navigator.pushNamed(context, AppRoutes.questionfirstscreenforairport);
+      // }
     } catch (e) {
       debugPrint('Error handling flight card tap: $e');
     }
