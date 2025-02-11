@@ -89,15 +89,14 @@ class QuestionFirstScreenForAirline extends ConsumerWidget {
                 color: Colors.white,
                 text: "Back",
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context, AppRoutes.reviewsubmissionscreen);
-                  ref.read(aviationInfoProvider.notifier).resetState();
-                  ref
-                      .read(reviewFeedBackProviderForAirline.notifier)
-                      .resetState();
-                  ref
-                      .read(reviewFeedBackProviderForAirport.notifier)
-                      .resetState();
+                  Navigator.pop(context);
+                  // ref.read(aviationInfoProvider.notifier).resetState();
+                  // ref
+                  //     .read(reviewFeedBackProviderForAirline.notifier)
+                  //     .resetState();
+                  // ref
+                  //     .read(reviewFeedBackProviderForAirport.notifier)
+                  //     .resetState();
                 },
               ),
             ),

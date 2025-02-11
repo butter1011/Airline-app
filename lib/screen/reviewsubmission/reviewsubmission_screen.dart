@@ -122,6 +122,7 @@ class _ReviewsubmissionScreenState
         bottomNavigationBar: BottomButtonBar(
           child: MainButton(
             text: AppLocalizations.of(context).translate('Next'),
+            color: const Color(0xFF000000),
             onPressed: () {
               showModalBottomSheet(
                 context: context,

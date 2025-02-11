@@ -113,6 +113,7 @@ class StartReviews extends StatelessWidget {
                             const SizedBox(height: 32),
                             MainButton(
                               text: "Begin Your Review",
+                              color: const Color(0xFF000000),
                               onPressed: () {
                                 Navigator.pushNamed(
                                     context, AppRoutes.reviewsubmissionscreen);

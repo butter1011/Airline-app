@@ -91,8 +91,7 @@ class QuestionFirstScreenForAirport extends ConsumerWidget {
                 color:Colors.white,
                 text: "Back",
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context, AppRoutes.reviewsubmissionscreen);
+                  Navigator.pop(context);
                   ref.read(aviationInfoProvider.notifier).resetState();
                   ref
                       .read(reviewFeedBackProviderForAirline.notifier)

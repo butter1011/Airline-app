@@ -117,7 +117,6 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
         comment: commentOfAirport,
         imageUrls: [],
       );
-      debugPrint("reviewForAirport.airport  🎏🎏🎏🎏: ${reviewForAirport.airport}");
 
       var imageAirlineUrls = await _uploadImages(imageOfAirline);
       var imageAirportUrls = await _uploadImages(imageOfAirport);
@@ -496,18 +495,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                       child: MainButton(
                           text: "Back",
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.reviewsubmissionscreen);
-
-                            ref
-                                .read(aviationInfoProvider.notifier)
-                                .resetState();
-                            ref
-                                .read(reviewFeedBackProviderForAirline.notifier)
-                                .resetState();
-                            ref
-                                .read(reviewFeedBackProviderForAirport.notifier)
-                                .resetState();
+                            Navigator.pop(context);
                           }),
                     ),
                     SizedBox(
@@ -516,32 +504,41 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                     Expanded(
                       child: MainButton(
                         text: "Submit",
-                        onPressed: () => _handleSubmission(
-                          context: context,
-                          userData: userData,
-                          from: from,
-                          to: to,
-                          classTravel: classTravel,
-                          airline: airline,
-                          departureArrival: departureArrival,
-                          comfort: comfort,
-                          cleanliness: cleanliness,
-                          onboardService: onboardService,
-                          foodBeverageForAirline: foodBeverageForAirline,
-                          entertainmentWifi: entertainmentWifi,
-                          index: index,
-                          boardingPassController: boardingPassController,
-                          accessibility: accessibility,
-                          waitTimes: waitTimes,
-                          helpfulness: helpfulness,
-                          ambienceComfort: ambienceComfort,
-                          foodBeverageForAirport: foodBeverageForAirport,
-                          amenities: amenities,
-                          commentOfAirline: commentOfAirline,
-                          commentOfAirport: commentOfAirport,
-                          imageOfAirline: _imageOfAirline,
-                          imageOfAirport: _imageOfAirport,
-                        ),
+                        onPressed: () {
+                          ref.read(aviationInfoProvider.notifier).resetState();
+                          ref
+                              .read(reviewFeedBackProviderForAirline.notifier)
+                              .resetState();
+                          ref
+                              .read(reviewFeedBackProviderForAirport.notifier)
+                              .resetState();
+                          _handleSubmission(
+                            context: context,
+                            userData: userData,
+                            from: from,
+                            to: to,
+                            classTravel: classTravel,
+                            airline: airline,
+                            departureArrival: departureArrival,
+                            comfort: comfort,
+                            cleanliness: cleanliness,
+                            onboardService: onboardService,
+                            foodBeverageForAirline: foodBeverageForAirline,
+                            entertainmentWifi: entertainmentWifi,
+                            index: index,
+                            boardingPassController: boardingPassController,
+                            accessibility: accessibility,
+                            waitTimes: waitTimes,
+                            helpfulness: helpfulness,
+                            ambienceComfort: ambienceComfort,
+                            foodBeverageForAirport: foodBeverageForAirport,
+                            amenities: amenities,
+                            commentOfAirline: commentOfAirline,
+                            commentOfAirport: commentOfAirport,
+                            imageOfAirline: _imageOfAirline,
+                            imageOfAirport: _imageOfAirport,
+                          );
+                        },
                       ),
                     )
                   ],
