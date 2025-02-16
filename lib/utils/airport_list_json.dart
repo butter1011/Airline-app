@@ -25,13 +25,13 @@ Map<String, dynamic> airportList = {
 };
 List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
   {
-    'mainCategory': 'Boarding and Arrival Experience',
+    'mainCategory': 'Departure and Arrival Experience',
     'iconUrl': 'assets/icons/review_icon_boarding.svg',
     'subCategory': {
-      'Check-In Process': null,
+      'Check-in': null,
+      'Airline Lounge': null,
       'Boarding Efficiency': null,
       'Baggage Delivery': null,
-      'Lounge Access': null,
     },
   },
   {
@@ -42,7 +42,6 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
       'Legroom': null,
       'Aircraft': null,
       'Accessibility': null,
-      'Amenities': null,
     },
   },
   {
@@ -62,24 +61,22 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirline = [
     },
   },
   {
-    'mainCategory': 'Airline Food',
+    'mainCategory': 'Food and Beverage',
     'iconUrl': 'assets/icons/review_icon_food.svg',
     'subCategory': {
       'Choice': null,
       'Taste': null,
       'Quantity': null,
-      'Duty Free Value': null,
-      'Duty Free Choices': null,
     },
   },
   {
-    'mainCategory': 'Entertainment and Wi-Fi',
+    'mainCategory': 'Inflight Entertainment and Wi-Fi',
     'iconUrl': 'assets/icons/review_icon_entertainment.svg',
     'subCategory': {
       'IFE Availability': null,
       'IFE Choices': null,
+      'Wi-Fi Availability': null,
       'Wi-Fi Speed': null,
-      'Wi-Fi Value': null,
     },
   },
 ];
@@ -99,35 +96,33 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
     'iconUrl': 'assets/icons/review_icon_wait.svg',
     'subCategory': {
       'Security': null,
-      'Baggage Delivery Time': null,
+      'Immigration/Custom formality': null,
     },
   },
   {
-    'mainCategory': 'Helpfulness/Easy Travel',
+    'mainCategory': 'Easy Travel',
     'iconUrl': 'assets/icons/review_icon_help.svg',
     'subCategory': {
       'Helpfulness of Airport Staff': null,
       'Signage Clarity': null,
       'Ease of Connection': null,
-    },
-  },
-  {
-    'mainCategory': 'Ambience/Comfort',
+      'Ability to Relax/Work': null
+    }
+  },  {
+    'mainCategory': 'Cleanliness',
     'iconUrl': 'assets/icons/review_icon_ambience.svg',
     'subCategory': {
-      'Ability to Relax/Work': null,
       'Cleanliness': null,
-      'Availability of Seating Area': null,
     },
   },
   {
     'mainCategory': 'Airport Food and Shopping',
     'iconUrl': 'assets/icons/review_icon_food.svg',
     'subCategory': {
-      'Value of Shops': null,
-      'Choice of Shops': null,
-      'Value of F&B': null,
       'Choice of F&B': null,
+      'Value of F&B': null,
+      'Choice of Shops': null,
+      'Value of Shops': null,
     },
   },
   {
@@ -137,6 +132,7 @@ List<Map<String, dynamic>> mainCategoryAndSubcategoryForAirport = [
       'Wi-Fi': null,
       'Restroom Facilities': null,
       'Lounges': null,
+      'Ability of seating area': null,
     },
   },
 ];
