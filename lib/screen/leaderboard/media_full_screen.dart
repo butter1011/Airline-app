@@ -145,10 +145,10 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                 CarouselSlider(
                   options: CarouselOptions(
                     viewportFraction: 1,
-                    height: 594.0,
+                    height: MediaQuery.of(context).size.height * 0.7,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
-                      _pauseAllVideos(); // Pause videos when sliding
+                      _pauseAllVideos();
                     },
                   ),
                   items: mediaList.map((media) {
@@ -163,10 +163,11 @@ class _MediaFullScreenState extends ConsumerState<MediaFullScreen> {
                           );
                         } else {
                           return Container(
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(media),
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           );
