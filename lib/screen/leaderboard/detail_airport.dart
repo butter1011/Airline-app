@@ -14,6 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:airline_app/utils/global_variable.dart';
 
 class DetailAirport extends ConsumerStatefulWidget {
   const DetailAirport({super.key});
@@ -26,11 +28,19 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
   bool _clickedBookmark = false;
   Map<String, List<dynamic>> _bookmarkItems = {};
   late SharedPreferences _prefs;
+  final dio = Dio();
+  List<dynamic> airlineReviewLists = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _initPrefs();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      fetchReviews(args['_id'], args['isAirline']);
+    });
   }
 
   Future<void> _initPrefs() async {
@@ -80,6 +90,28 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     }
   }
 
+  Future<void> fetchReviews(String id, bool isAirline) async {
+    try {
+      final response = await dio.get(
+        '$apiUrl/api/v2/entity-reviews',
+        queryParameters: {'id': id, 'type': isAirline ? 'airline' : 'airport'},
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          airlineReviewLists = response.data['data'];
+
+          print("Reviews: $airlineReviewLists");
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = ref.watch(userDataProvider)?['userData']['_id'];
@@ -95,8 +127,6 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
     final int totalReviews = args['totalReviews'];
     final bool isIncreasing = args['isIncreasing'];
     final num overallScore = args['overall'];
-
-    final airlineReviewLists = [];
 
     if (userId != null &&
         _bookmarkItems[userId]?.contains(bookMarkId) == true) {
@@ -156,7 +186,8 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                             'assets/images/airline_background.jpg',
                             fit: BoxFit.cover,
                           ),
-                  ),                  Positioned(
+                  ),
+                  Positioned(
                     child: Container(
                       height: 120,
                       decoration: BoxDecoration(
@@ -282,55 +313,47 @@ class _DetailAirportState extends ConsumerState<DetailAirport> {
                   ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: airlineReviewLists.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final singleReview = entry.value;
-                  final reviewer = singleReview['reviewer'];
-                  final airline = singleReview['airline'];
-                  final from = singleReview['from'];
-                  final to = singleReview['to'];
+              isLoading 
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: LoadingWidget(),
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: airlineReviewLists.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final singleReview = entry.value;
+                    final reviewer = singleReview['reviewer'];
 
-                  if (reviewer != null &&
-                      airline != null &&
-                      from != null &&
-                      to != null) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          child: FeedbackCard(
-                            thumbnailHeight: 189,
-                            singleFeedback: singleReview,
-                          ),
-                        ),
-                        if (index != airlineReviewLists.length - 1)
+                    if (reviewer != null) {
+                      return Column(
+                        children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 24.0),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Divider(
-                                  thickness: 2,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  height: 24,
-                                )
-                              ],
+                            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                            child: FeedbackCard(
+                              thumbnailHeight: 189,
+                              singleFeedback: singleReview,
                             ),
                           ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }).toList(),
-              ),
-            ]),
+                          if (index != airlineReviewLists.length - 1)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 16),
+                                  Divider(thickness: 1, color: Colors.grey.shade300),
+                                  SizedBox(height: 24)
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }).toList(),
+                )            ]),
           )
         ],
       ),
