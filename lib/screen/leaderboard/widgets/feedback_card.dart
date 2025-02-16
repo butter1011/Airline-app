@@ -201,10 +201,24 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                       widget.singleFeedback['reviewer']['name'] ?? '',
                       style: AppStyles.textStyle_14_600,
                     ),
-                    Text(
-                      'Rated ${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10 on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
-                      style: AppStyles.textStyle_14_400
-                          .copyWith(color: Colors.grey),
+                    Row(
+                      children: [
+                        Text(
+                          'Rated ',
+                          style: AppStyles.textStyle_14_400
+                              .copyWith(color: Colors.grey),
+                        ),
+                        Text(
+                          '${(widget.singleFeedback['score'] ?? 0).toStringAsFixed(1)}/10',
+                          style: AppStyles.textStyle_14_600
+                              .copyWith(color: Colors.black),
+                        ),
+                        Text(
+                          ' on ${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(8, 10)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(5, 7)}.${DateTime.parse(widget.singleFeedback['date'] ?? DateTime.now().toString()).toLocal().toString().substring(2, 4)}',
+                          style: AppStyles.textStyle_14_400
+                              .copyWith(color: Colors.grey),
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -220,32 +234,18 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
           SizedBox(
             height: 12,
           ),
-          Row(
-            children: [
-              Text('Flex with',
-                  style: AppStyles.textStyle_14_400
-                      .copyWith(color: Color(0xFF38433E))),
-              SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                    '${widget.singleFeedback['airline']['name'].toString().length > 13 ? '${widget.singleFeedback['airline']['name'].toString().substring(0, 13)}..' : widget.singleFeedback['airline']['name']}, ${widget.singleFeedback['classTravel']}',
-                    style: AppStyles.textStyle_14_600),
-              )
-            ],
-          ),
-          SizedBox(height: 7),
           widget.singleFeedback['from'] != null
               ? Row(
                   children: [
-                    Text('Flex from',
+                    Text('Flex with',
                         style: AppStyles.textStyle_14_400
                             .copyWith(color: Color(0xFF38433E))),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                          '${widget.singleFeedback['from']['city'].toString().length > 12 ? '${widget.singleFeedback['from']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city'].toString().length > 12 ? '${widget.singleFeedback['to']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['to']['city']}',
+                          '${widget.singleFeedback['airline']['name'].toString().length > 13 ? '${widget.singleFeedback['airline']['name'].toString().substring(0, 13)}..' : widget.singleFeedback['airline']['name']}, ${widget.singleFeedback['classTravel']}',
                           style: AppStyles.textStyle_14_600),
-                    ),
+                    )
                   ],
                 )
               : Row(
@@ -260,34 +260,23 @@ class _FeedbackCardState extends ConsumerState<FeedbackCard> {
                     ),
                   ],
                 ),
-          SizedBox(height: 11),
-          if (imageUrls.isEmpty)
-            Container(
-              height: 189,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.photo_library_outlined,
-                      size: 40,
-                      color: Colors.grey[400],
-                    ),
-                    SizedBox(height: 8),
-                    Text('No medias given',
-                        style: AppStyles.textStyle_14_400.copyWith(
-                          color: Colors.grey[400],
-                        )),
-                  ],
+          SizedBox(height: 7),
+          if (widget.singleFeedback['from'] != null)
+            Row(
+              children: [
+                Text('Flex from',
+                    style: AppStyles.textStyle_14_400
+                        .copyWith(color: Color(0xFF38433E))),
+                SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                      '${widget.singleFeedback['from']['city'].toString().length > 12 ? '${widget.singleFeedback['from']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['from']['city']} -> ${widget.singleFeedback['to']['city'].toString().length > 12 ? '${widget.singleFeedback['to']['city'].toString().substring(0, 12)}..' : widget.singleFeedback['to']['city']}',
+                      style: AppStyles.textStyle_14_600),
                 ),
-              ),
-            )
-          else
+              ],
+            ),
+          SizedBox(height: 11),
+          if (imageUrls.isNotEmpty)
             Stack(
               children: [
                 widget.singleFeedback['from'] != null
