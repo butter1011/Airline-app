@@ -29,7 +29,7 @@ class DetailFirstScreenForAirport extends ConsumerWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+        toolbarHeight: MediaQuery.of(context).size.height * 0.34,
         flexibleSpace: BuildQuestionHeaderForAirport(
           title: "What did you like about your airline experience?",
         ),

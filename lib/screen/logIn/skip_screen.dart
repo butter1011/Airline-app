@@ -101,7 +101,7 @@ class _SkipScreenState extends State<SkipScreen> {
 
   Widget _buildBottomSheet(Size screenSize) {
     return Container(
-      height: screenSize.height * 0.35,
+      height: screenSize.height * 0.4,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),

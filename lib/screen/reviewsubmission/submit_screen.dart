@@ -466,7 +466,7 @@ class _SubmitScreenState extends ConsumerState<SubmitScreen> {
                 resizeToAvoidBottomInset: true,
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
-                  toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+                  toolbarHeight: MediaQuery.of(context).size.height * 0.34,
                   flexibleSpace: BuildQuestionHeaderForSubmit(
                     title: "Upload Content",
                   ),

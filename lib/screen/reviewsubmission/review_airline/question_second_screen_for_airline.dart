@@ -30,7 +30,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
       child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            toolbarHeight: MediaQuery.of(context).size.height * 0.3,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.34,
             flexibleSpace: BuildQuestionHeaderForAirline(
               title: "What didn't you like about your airline experience?",
             ),
@@ -45,7 +45,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                         'Select negative aspects',
                         style: AppStyles.textStyle_18_600,
                       ),
-                      SizedBox(height: 8),
+                      // SizedBox(height: 8),
                       Divider(height: 1, color: Colors.grey.withAlpha(51)),
                     ])),
             Expanded(
@@ -61,7 +61,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                     crossAxisCount: 2,
                     childAspectRatio: 1.4,
                     crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    mainAxisSpacing: 4,
                   ),
                   itemCount: feedbackOptionsForAirline.length,
                   itemBuilder: (context, index) => FeedbackOptionForAirline(

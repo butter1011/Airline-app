@@ -61,7 +61,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(screenSize.height * 0.32),
+          preferredSize: Size.fromHeight(screenSize.height * 0.37),
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 40,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
