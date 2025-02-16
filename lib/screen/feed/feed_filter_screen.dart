@@ -220,8 +220,10 @@ class _FeedFilterScreenState extends ConsumerState<FeedFilterScreen> {
           children: [
             _buildTypeCategory(),
             const SizedBox(height: 17),
-            _buildFlyerClassLeaderboards(),
-            const SizedBox(height: 17),
+            if (selectedAirType == "Airline") ...[
+              _buildFlyerClassLeaderboards(),
+              const SizedBox(height: 17),
+            ],
           ],
         ),
       ),
