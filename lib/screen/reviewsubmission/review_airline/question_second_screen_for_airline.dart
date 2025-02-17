@@ -59,7 +59,7 @@ class QuestionSecondScreenForAirline extends ConsumerWidget {
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 1.4,
+                    childAspectRatio: 1.3,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 4,
                   ),

@@ -61,7 +61,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(screenSize.height * 0.37),
+          preferredSize: Size.fromHeight(screenSize.height * 0.28),
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(

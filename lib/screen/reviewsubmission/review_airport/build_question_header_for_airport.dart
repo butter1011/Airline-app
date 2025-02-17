@@ -29,14 +29,14 @@ class BuildQuestionHeaderForAirport extends ConsumerWidget {
         ),
         Padding(
           padding:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.052),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
