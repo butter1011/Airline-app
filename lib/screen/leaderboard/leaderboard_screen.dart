@@ -290,67 +290,67 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                         loadMoreData: loadMoreData,
                                       ),
                                       const SizedBox(height: 28),
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .translate('Trending Feedback'),
-                                        style:
-                                            AppStyles.textStyle_16_600.copyWith(
-                                          color: const Color(0xff38433E),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 17),
+                                      // Text(
+                                      //   AppLocalizations.of(context)
+                                      //       .translate('Trending Feedback'),
+                                      //   style:
+                                      //       AppStyles.textStyle_16_600.copyWith(
+                                      //     color: const Color(0xff38433E),
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(height: 17),
                                     ],
                                   ),
                                 ),
-                                NotificationListener<ScrollNotification>(
-                                  onNotification: (scrollNotification) {
-                                    if (scrollNotification
-                                        is ScrollUpdateNotification) {
-                                      setState(() {
-                                        leftPadding =
-                                            scrollNotification.metrics.pixels >
-                                                    0
-                                                ? 0
-                                                : 24.0;
-                                      });
-                                    }
-                                    return true;
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: leftPadding),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: trendingReviews.map(
-                                          (singleFeedback) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 16),
-                                              child: Container(
-                                                width: 299,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  child: FeedbackCard(
-                                                    thumbnailHeight: 189,
-                                                    singleFeedback:
-                                                        singleFeedback,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ).toList(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // NotificationListener<ScrollNotification>(
+                                //   onNotification: (scrollNotification) {
+                                //     if (scrollNotification
+                                //         is ScrollUpdateNotification) {
+                                //       setState(() {
+                                //         leftPadding =
+                                //             scrollNotification.metrics.pixels >
+                                //                     0
+                                //                 ? 0
+                                //                 : 24.0;
+                                //       });
+                                //     }
+                                //     return true;
+                                //   },
+                                //   child: Padding(
+                                //     padding: EdgeInsets.only(left: leftPadding),
+                                //     child: SingleChildScrollView(
+                                //       scrollDirection: Axis.horizontal,
+                                //       child: Row(
+                                //         crossAxisAlignment:
+                                //             CrossAxisAlignment.start,
+                                //         children: trendingReviews.map(
+                                //           (singleFeedback) {
+                                //             return Padding(
+                                //               padding: const EdgeInsets.only(
+                                //                   right: 16),
+                                //               child: Container(
+                                //                 width: 299,
+                                //                 decoration: BoxDecoration(
+                                //                   borderRadius:
+                                //                       BorderRadius.circular(8),
+                                //                 ),
+                                //                 child: ClipRRect(
+                                //                   borderRadius:
+                                //                       BorderRadius.circular(8),
+                                //                   child: FeedbackCard(
+                                //                     thumbnailHeight: 189,
+                                //                     singleFeedback:
+                                //                         singleFeedback,
+                                //                   ),
+                                //                 ),
+                                //               ),
+                                //             );
+                                //           },
+                                //         ).toList(),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                                 const SizedBox(
                                   height: 18,
                                 ),
