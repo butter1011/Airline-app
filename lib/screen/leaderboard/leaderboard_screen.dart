@@ -192,6 +192,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     SystemChannels.platform.invokeMethod('SystemNavigator.home');
   }
 
+  void _handleSearchChanged(String value) {
+    setState(() {
+      _searchQuery = value.toLowerCase();
+    });
+    fetchLeaderboardData(page: 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -205,12 +212,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         appBar: CustomSearchAppBar(
           searchController: _searchController,
           filterType: filterType,
-          onSearchChanged: (value) {
-            setState(() {
-              _searchQuery = value.toLowerCase();
-            });
-          },
-          onSearchSubmit: _handleSearchSubmit,
+          onSearchChanged: _handleSearchChanged,
           buttonStates: buttonStates,
           onButtonToggle: toggleButton,
           selectedFilterButton: ref.watch(filterButtonProvider),
@@ -252,7 +254,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                                 .copyWith(
                                               color: const Color(0xff38433E),
                                             ),
-                                          ),                                          
+                                          ),
                                           IconButton(
                                             icon:
                                                 const Icon(Icons.info_outline),
@@ -351,29 +353,29 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 //     ),
                                 //   ),
                                 // ),
-                                const SizedBox(
-                                  height: 18,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.feedscreen);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .translate('See all feedback'),
-                                        style: AppStyles.textStyle_15_600,
-                                      ),
-                                      const Icon(Icons.arrow_forward)
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                // const SizedBox(
+                                //   height: 18,
+                                // ),
+                                // InkWell(
+                                //   onTap: () {
+                                //     Navigator.pushNamed(
+                                //         context, AppRoutes.feedscreen);
+                                //   },
+                                //   child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: [
+                                //       Text(
+                                //         AppLocalizations.of(context)
+                                //             .translate('See all feedback'),
+                                //         style: AppStyles.textStyle_15_600,
+                                //       ),
+                                //       const Icon(Icons.arrow_forward)
+                                //     ],
+                                //   ),
+                                // ),
+                                // const SizedBox(
+                                //   height: 16,
+                                // ),
                               ],
                             ),
                           ),

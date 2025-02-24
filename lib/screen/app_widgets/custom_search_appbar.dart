@@ -14,7 +14,6 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final Map<String, bool> buttonStates;
   final Function(String) onButtonToggle;
   final String selectedFilterButton;
-  final VoidCallback onSearchSubmit;
 
   const CustomSearchAppBar({
     super.key,
@@ -24,8 +23,7 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
     required this.buttonStates,
     required this.onButtonToggle,
     required this.selectedFilterButton,
-    required this.onSearchSubmit,
-  });
+s  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,7 +59,6 @@ class CustomSearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 searchController: searchController,
                 filterType: filterType,
                 onSearchChanged: onSearchChanged,
-                onSearchSubmit: onSearchSubmit, // Pass it here
               ),
               CustomIconButton(
                 icon: Icons.tune_rounded,

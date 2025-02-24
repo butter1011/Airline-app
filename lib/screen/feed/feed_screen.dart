@@ -73,8 +73,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   }
 
   Future<void> fetchFeedData({int? page}) async {
-    if (!mounted) return;  // Add this check
-  
+    if (!mounted) return; // Add this check
+
     setState(() {
       isLoading = true;
     });
@@ -92,7 +92,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         searchQuery: _searchQuery,
       );
 
-      if (!mounted) return;  // Add this check
+      if (!mounted) return; // Add this check
 
       if (page == 1) {
         ref.read(feedDataProvider.notifier).setData(result);
@@ -105,8 +105,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         isLoading = false;
       });
     } catch (e) {
-      if (!mounted) return;  // Add this check
-    
+      if (!mounted) return; // Add this check
+
       debugPrint('Error fetching feed data: $e');
       setState(() {
         isLoading = false;
@@ -130,23 +130,26 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
 
   Future<void> _initializeData() async {
     if (!mounted) return;
-    
+
     setState(() {
       isLoading = true;
     });
-    
+
     await Future.wait([
       fetchFeedData(page: 1),
     ]);
-    
+
     if (!mounted) return;
-    
+
     setState(() {
       isLoading = false;
     });
   }
 
-  void _handleSearchSubmit() {
+  void _handleSearchChanged(String value) {
+    setState(() {
+      _searchQuery = value.toLowerCase();
+    });
     fetchFeedData(page: 1);
   }
 
@@ -166,12 +169,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           appBar: CustomSearchAppBar(
             searchController: _searchController,
             filterType: filterType,
-            onSearchChanged: (value) {
-              setState(() {
-                _searchQuery = value.toLowerCase();
-              });
-            },
-            onSearchSubmit: _handleSearchSubmit,
+            onSearchChanged: _handleSearchChanged,
             buttonStates: buttonStates,
             onButtonToggle: toggleButton,
             selectedFilterButton: ref.watch(reviewFilterButtonProvider),

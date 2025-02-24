@@ -6,14 +6,12 @@ class SearchBarWidget extends ConsumerWidget {
   final TextEditingController searchController;
   final String filterType;
   final Function(String) onSearchChanged;
-  final VoidCallback onSearchSubmit; // Add this
 
   const SearchBarWidget({
     super.key,
     required this.searchController,
     required this.filterType,
     required this.onSearchChanged,
-    required this.onSearchSubmit, // Add this
   });
 
   @override
@@ -53,11 +51,6 @@ class SearchBarWidget extends ConsumerWidget {
               Icons.search,
               color: Colors.grey.withAlpha(179),
               size: 22,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(Icons.check_circle_outline),
-              onPressed: onSearchSubmit,
-              color: Colors.grey.withAlpha(179),
             ),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
